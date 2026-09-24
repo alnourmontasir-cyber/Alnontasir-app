@@ -1,1 +1,6 @@
-
+{
+  "appId": "com.almuntasir.app",
+  "appName": "المنتصر",
+  "webDir": "www",
+  "android": { "backgroundColor": "#0B1220" }
+}
