@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تطبيق المنتصر</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #1a1a1a;
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0f172a;
+                --card-bg: #1e293b;
+                --text-color: #f8fafc;
+                --primary: #3b82f6;
+                --secondary: #60a5fa;
+                --border: #334155;
+                --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .folder-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.15s ease, background 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .folder-card:active {
+            transform: scale(0.96);
+        }
+
+        .folder-icon {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .folder-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-height: 90vh;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: none;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .saved-items {
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .saved-item {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+        }
+
+        footer span {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>تطبيق المنتصر</h1>
+        <p>alnourmontasir@gmail.com</p>
+    </header>
+
+    <div class="container">
+        <div class="grid" id="foldersGrid"></div>
+    </div>
+
+    <footer>
+        <span onclick="openSettings()">حول التطبيق وإعدادات الناشر</span>
+    </footer>
+
+    <!-- Modal الحافظة -->
+    <div class="modal" id="folderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">حافظة</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <input type="text" id="itemTitle" placeholder="العنوان...">
+            <textarea id="itemContent" placeholder="اكتب الأكواد، الأبيات، أو المعلومات هنا..."></textarea>
+            <input type="file" id="itemImage" accept="image/*" style="margin-bottom: 12px;">
+            <button class="btn" onclick="saveData()">حفظ البيانات</button>
+            <div class="saved-items" id="savedItemsList"></div>
+        </div>
+    </div>
+
+    <!-- Modal الإعدادات -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>حول التطبيق</h2>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+            <div style="line-height: 1.8; font-size: 0.95rem;">
+                <p><strong>اسم التطبيق:</strong> المنتصر</p>
+                <p><strong>المطور والناشر:</strong> منتصر النور</p>
+                <p><strong>البريد الإلكتروني:</strong> alnourmontasir@gmail.com</p>
+                <p><strong>الإصدار:</strong> 2.0 المتطور</p>
+                <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border);">
+                <p style="opacity: 0.8;">هذا التطبيق مخصص بالكامل لإدارة الأكواد، الذكريات، ومشاريع طمبور الشمال، ويتفاعل تلقائياً مع نظام الإيماءات والأوضاع في هاتفك.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const folders = [
+            { id: 'codes', name: 'الأكواد', icon: '💻' },
+            { id: 'memories', name: 'الذكريات', icon: '📸' },
+            { id: 'secret', name: 'ملفات خاصة', icon: '🔒' },
+            { id: 'projects', name: 'مشاريع', icon: '🚀' },
+            { id: 'my_memories', name: 'ذكرياتي', icon: '📖' },
+            { id: 'montasir', name: 'منتصر', icon: '👑' },
+            { id: 'tambour', name: 'طمبور الشمال', icon: '🎵' },
+            { id: 'other', name: 'أخرى', icon: '📁' }
+        ];
+
+        let currentFolder = '';
+        const grid = document.getElementById('foldersGrid');
+        
+        folders.forEach(f => {
+            grid.innerHTML += `
+                <div class="folder-card" onclick="openFolder('${f.id}', '${f.name}')">
+                    <div class="folder-icon">${f.icon}</div>
+                    <div class="folder-title">${f.name}</div>
+                </div>
+            `;
+        });
+
+        function openFolder(id, name) {
+            currentFolder = id;
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemContent').value = '';
+            document.getElementById('itemImage').value = '';
+            loadSavedItems();
+            document.getElementById('folderModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('folderModal').style.display = 'none'; }
+        function openSettings() { document.getElementById('settingsModal').style.display = 'flex'; }
+        function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
+
+        function saveData() {
+            const title = document.getElementById('itemTitle').value;
+            const content = document.getElementById('itemContent').value;
+            const imageInput = document.getElementById('itemImage');
+
+            if (!content && !imageInput.files[0]) {
+                alert('الرجاء إدخال نص أو صورة للحفظ.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const newItem = {
+                    title: title || 'بدون عنوان',
+                    content: content,
+                    image: imageInput.files[0] ? e.target.result : null,
+                    date: new Date().toLocaleDateString('ar-SA')
+                };
+
+                let data = JSON.parse(localStorage.getItem(currentFolder)) || [];
+                data.unshift(newItem);
+                localStorage.setItem(currentFolder, JSON.stringify(data));
+
+                document.getElementById('itemTitle').value = '';
+                document.getElementById('itemContent').value = '';
+                document.getElementById('itemImage').value = '';
+                loadSavedItems();
+            };
+
+            if (imageInput.files[0]) {
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                reader.onload({ target: { result: null } });
+            }
+        }
+
+        function loadSavedItems() {
+            const list = document.getElementById('savedItemsList');
+            let data = JSON.parse(localStorage.getItem(currentFolder)) || [];
+            list.innerHTML = data.length ? '' : '<p style="text-align:center; opacity:0.6; padding:10px;">لا توجد عناصر محفوظة.</p>';
+            
+            data.forEach(item => {
+                let img = item.image ? `<img src="${item.image}" style="max-width:100%; border-radius:8px; margin-top:6px;">` : '';
+                list.innerHTML += `
+                    <div class="saved-item">
+                        <strong>${item.title}</strong> <span style="font-size:0.75rem; opacity:0.6;">(${item.date})</span>
+                        <p style="margin-top:4px; white-space:pre-wrap;">${item.content}</p>
+                        ${img}
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
