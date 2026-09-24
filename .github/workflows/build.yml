@@ -1,1 +1,35 @@
 
+name: Build APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Prepare icon from photo
+        run: |
+          mkdir -p assets
+          convert www/icon.png -resize 1024x1024^ -gravity center -extent 1024x1024 assets/icon.png
+      - run: npm install
+      - run: npx cap add android
+      - run: npx capacitor-assets generate --android --iconBackgroundColor '#0B1220' --iconBackgroundColorDark '#0B1220'
+      - run: npx cap sync android
+      - name: Build debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: almuntasir-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
