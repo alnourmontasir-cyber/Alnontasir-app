@@ -3,241 +3,1094 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B1220">
 <title>المنتصر</title>
+
 <style>
-:root{--bg:#0B1220;--sf:#131C2E;--sf2:#1A2540;--tx:#EFE6D2;--mut:#93A0B8;--ac:#3DDBB0;--gd:#E3BD62;--bd:rgba(255,255,255,.08);--r:22px}
-[data-theme=light]{--bg:#F3EEE2;--sf:#FFFFFF;--sf2:#EAE3D2;--tx:#1B2233;--mut:#6B7488;--ac:#0F9D7A;--gd:#A8801F;--bd:rgba(0,0,0,.08)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Sans Arabic","Noto Naskh Arabic",system-ui,sans-serif}
-body{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
-#app{max-width:620px;margin:0 auto;padding:16px 18px 40px}
-.top{display:flex;align-items:center;gap:14px;margin:6px 0 18px}
-.av{width:62px;height:62px;border-radius:50%;object-fit:cover;border:2px solid var(--gd);box-shadow:0 0 0 5px rgba(227,189,98,.15)}
-.top h1{margin:0;font-size:28px;font-weight:800;letter-spacing:.2px}
-.top p{margin:2px 0 0;color:var(--mut);font-size:14px}
+:root{
+ --bg:#0B1220;
+ --sf:#131C2E;
+ --sf2:#1A2540;
+ --tx:#EFE6D2;
+ --mut:#93A0B8;
+ --ac:#3DDBB0;
+ --gd:#E3BD62;
+ --bd:rgba(255,255,255,.08);
+ --danger:#FF7070;
+ --shadow:0 12px 35px rgba(0,0,0,.22);
+ --r:22px;
+}
+
+[data-theme="light"]{
+ --bg:#F3EEE2;
+ --sf:#FFFFFF;
+ --sf2:#EAE3D2;
+ --tx:#1B2233;
+ --mut:#6B7488;
+ --ac:#0F9D7A;
+ --gd:#A8801F;
+ --bd:rgba(0,0,0,.08);
+ --danger:#D94C4C;
+ --shadow:0 10px 30px rgba(40,30,10,.10);
+}
+
+*{
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+ margin:0;
+ min-height:100%;
+ background:var(--bg);
+ color:var(--tx);
+ font-family:"Noto Sans Arabic","Noto Naskh Arabic",system-ui,sans-serif;
+}
+
+body{
+ min-height:100vh;
+ padding:
+   env(safe-area-inset-top)
+   0
+   env(safe-area-inset-bottom);
+ overscroll-behavior-x:none;
+}
+
+button,input,textarea,select{
+ font:inherit;
+}
+
+button{
+ color:inherit;
+ border:0;
+ background:none;
+ cursor:pointer;
+}
+
+a{
+ color:inherit;
+}
+
+#app{
+ width:100%;
+ max-width:700px;
+ margin:auto;
+ padding:16px 16px 100px;
+}
+
+svg{
+ width:24px;
+ height:24px;
+ fill:none;
+ stroke:currentColor;
+ stroke-width:1.8;
+ stroke-linecap:round;
+ stroke-linejoin:round;
+}
+
+.top{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ margin:5px 0 18px;
+}
+
+.av{
+ width:58px;
+ height:58px;
+ border-radius:50%;
+ object-fit:cover;
+ border:2px solid var(--gd);
+ box-shadow:0 0 0 5px rgba(227,189,98,.13);
+ background:var(--sf2);
+}
+
+.top h1{
+ margin:0;
+ font-size:27px;
+ font-weight:850;
+}
+
+.top p{
+ margin:2px 0 0;
+ color:var(--mut);
+ font-size:13px;
+}
+
 .sp{flex:1}
-.ib{width:44px;height:44px;border-radius:14px;background:var(--sf);border:1px solid var(--bd);display:grid;place-items:center}
-svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.search{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font:inherit;font-size:15px;margin-bottom:18px;outline:none}
-.search:focus,.inp:focus{border-color:var(--ac)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fc{position:relative;text-align:right;padding:18px 16px 16px;border-radius:var(--r);background:var(--sf);border:1px solid var(--bd);overflow:hidden;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s}
-.fc:active{transform:scale(.97)}
-.fc::after{content:"";position:absolute;inset-inline-start:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:var(--c);opacity:.13}
-.fi{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
-.fc b{font-size:17px;display:block;margin-top:14px}
-.fc small{color:var(--mut);font-size:13px}
-.bar{display:flex;align-items:center;gap:12px;margin:6px 0 18px}
-.bar h2{margin:0;font-size:22px;flex:1}
-.list{display:flex;flex-direction:column;gap:10px}
-.it{display:flex;gap:12px;align-items:center;padding:12px;border-radius:18px;background:var(--sf);border:1px solid var(--bd);text-align:right;width:100%}
-.th{width:52px;height:52px;border-radius:14px;background:var(--sf2);display:grid;place-items:center;overflow:hidden;flex:none;color:var(--mut)}
-.th img{width:100%;height:100%;object-fit:cover}
-.it div.t{flex:1;min-width:0}
-.it b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.it small{color:var(--mut);font-size:12px}
-.empty{text-align:center;color:var(--mut);padding:56px 20px;line-height:1.9}
-.fab{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom));inset-inline-start:22px;background:var(--ac);color:#06241C;font-weight:800;padding:15px 22px;border-radius:18px;box-shadow:0 10px 28px rgba(61,219,176,.32);display:flex;gap:8px;align-items:center}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;z-index:20}
-.sh{width:100%;max-width:620px;background:var(--sf);border-radius:28px 28px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;border:1px solid var(--bd)}
-.sh h3{margin:0 0 14px;font-size:19px}
-.inp{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;font-size:15px;outline:none;margin-bottom:10px}
-textarea.inp{min-height:180px;resize:vertical;line-height:1.8}
-.row{display:flex;gap:10px}
-.btn{flex:1;padding:14px;border-radius:14px;background:var(--sf2);font-weight:700;text-align:center;display:block;text-decoration:none;color:var(--tx)}
-.btn.p{background:var(--ac);color:#06241C}
-.btn.d{background:rgba(255,90,90,.16);color:#FF7B7B}
-.sec{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:14px}
-.sec h4{margin:0 0 10px;color:var(--gd);font-size:15px}
-.sec label{display:block;color:var(--mut);font-size:13px;margin:6px 0 4px}
-.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
-.pv{max-width:100%;max-height:60vh;border-radius:16px;display:block;margin:0 auto 12px}
-.lock{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px}
-.lock .av{width:110px;height:110px}
-.lock .inp{max-width:260px;text-align:center;font-size:22px;letter-spacing:8px}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--sf2);padding:10px 18px;border-radius:14px;z-index:60;font-size:14px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.ib{
+ width:44px;
+ height:44px;
+ border-radius:14px;
+ background:var(--sf);
+ border:1px solid var(--bd);
+ display:grid;
+ place-items:center;
+ flex:none;
+}
+
+.search{
+ width:100%;
+ padding:14px 16px;
+ border-radius:16px;
+ border:1px solid var(--bd);
+ background:var(--sf);
+ color:var(--tx);
+ outline:none;
+ margin-bottom:15px;
+}
+
+.search:focus,
+.inp:focus,
+.select:focus{
+ border-color:var(--ac);
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:11px;
+}
+
+.fc{
+ position:relative;
+ min-height:142px;
+ padding:15px 12px;
+ border-radius:20px;
+ background:var(--sf);
+ border:1px solid var(--bd);
+ overflow:hidden;
+ text-align:right;
+ display:flex;
+ flex-direction:column;
+ justify-content:space-between;
+ box-shadow:0 5px 18px rgba(0,0,0,.05);
+ transition:.15s;
+}
+
+.fc:active{
+ transform:scale(.96);
+}
+
+.fc::after{
+ content:"";
+ position:absolute;
+ width:90px;
+ height:90px;
+ border-radius:50%;
+ background:var(--c);
+ opacity:.11;
+ left:-28px;
+ top:-28px;
+}
+
+.fi{
+ width:46px;
+ height:46px;
+ border-radius:15px;
+ display:grid;
+ place-items:center;
+ background:color-mix(in srgb,var(--c) 17%,transparent);
+ color:var(--c);
+ position:relative;
+ z-index:1;
+}
+
+.fc b{
+ display:block;
+ font-size:14px;
+ margin-top:11px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+.fc small{
+ display:block;
+ color:var(--mut);
+ font-size:11px;
+ margin-top:4px;
+}
+
+.folderMenu{
+ position:absolute;
+ left:8px;
+ top:8px;
+ width:30px;
+ height:30px;
+ display:grid;
+ place-items:center;
+ border-radius:9px;
+ background:rgba(0,0,0,.12);
+ z-index:3;
+}
+
+.folderMenu svg{
+ width:17px;
+ height:17px;
+}
+
+.bar{
+ display:flex;
+ align-items:center;
+ gap:11px;
+ margin:5px 0 18px;
+}
+
+.bar h2{
+ margin:0;
+ flex:1;
+ font-size:21px;
+}
+
+.list{
+ display:flex;
+ flex-direction:column;
+ gap:9px;
+}
+
+.it{
+ width:100%;
+ display:flex;
+ align-items:center;
+ gap:11px;
+ padding:11px;
+ border-radius:18px;
+ background:var(--sf);
+ border:1px solid var(--bd);
+ text-align:right;
+ box-shadow:0 4px 15px rgba(0,0,0,.04);
+}
+
+.th{
+ width:53px;
+ height:53px;
+ border-radius:14px;
+ background:var(--sf2);
+ display:grid;
+ place-items:center;
+ overflow:hidden;
+ flex:none;
+ color:var(--mut);
+}
+
+.th img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.it .t{
+ min-width:0;
+ flex:1;
+}
+
+.it b{
+ display:block;
+ font-size:14px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+.it small{
+ display:block;
+ color:var(--mut);
+ font-size:11px;
+ margin-top:4px;
+}
+
+.badges{
+ display:flex;
+ gap:5px;
+ margin-top:5px;
+}
+
+.badge{
+ padding:2px 7px;
+ border-radius:8px;
+ font-size:10px;
+ background:var(--sf2);
+ color:var(--mut);
+}
+
+.pin{
+ color:var(--gd);
+}
+
+.empty{
+ text-align:center;
+ color:var(--mut);
+ padding:55px 20px;
+ line-height:2;
+}
+
+.fab{
+ position:fixed;
+ bottom:calc(20px + env(safe-area-inset-bottom));
+ left:20px;
+ background:var(--ac);
+ color:#06241C;
+ font-weight:850;
+ padding:14px 20px;
+ border-radius:18px;
+ box-shadow:0 10px 28px rgba(61,219,176,.28);
+ display:flex;
+ align-items:center;
+ gap:7px;
+ z-index:10;
+}
+
+.fab svg{
+ width:21px;
+ height:21px;
+}
+
+.ov{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.58);
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+ z-index:100;
+}
+
+.sh{
+ width:100%;
+ max-width:700px;
+ max-height:92vh;
+ overflow:auto;
+ background:var(--sf);
+ border-radius:27px 27px 0 0;
+ padding:21px 18px calc(22px + env(safe-area-inset-bottom));
+ border:1px solid var(--bd);
+ box-shadow:var(--shadow);
+}
+
+.sh h3{
+ margin:0 0 15px;
+ font-size:19px;
+}
+
+.inp,
+.select{
+ width:100%;
+ padding:13px 14px;
+ border-radius:14px;
+ border:1px solid var(--bd);
+ background:var(--bg);
+ color:var(--tx);
+ outline:none;
+ margin-bottom:10px;
+}
+
+textarea.inp{
+ min-height:190px;
+ resize:vertical;
+ line-height:1.9;
+}
+
+.row{
+ display:flex;
+ gap:9px;
+}
+
+.btn{
+ flex:1;
+ padding:13px 12px;
+ border-radius:14px;
+ background:var(--sf2);
+ color:var(--tx);
+ font-weight:750;
+ text-align:center;
+ text-decoration:none;
+ border:1px solid transparent;
+}
+
+.btn.p{
+ background:var(--ac);
+ color:#06241C;
+}
+
+.btn.d{
+ background:rgba(255,90,90,.14);
+ color:var(--danger);
+}
+
+.btn.g{
+ background:rgba(227,189,98,.13);
+ color:var(--gd);
+}
+
+.sec{
+ background:var(--sf);
+ border:1px solid var(--bd);
+ border-radius:20px;
+ padding:15px;
+ margin-bottom:12px;
+}
+
+.sec h4{
+ margin:0 0 11px;
+ color:var(--gd);
+ font-size:14px;
+}
+
+.sec label{
+ display:block;
+ color:var(--mut);
+ font-size:12px;
+ margin:7px 0 5px;
+}
+
+.sw{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:8px 0;
+}
+
+.switch{
+ position:relative;
+ width:48px;
+ height:28px;
+}
+
+.switch input{
+ display:none;
+}
+
+.slider{
+ position:absolute;
+ inset:0;
+ background:var(--sf2);
+ border-radius:30px;
+}
+
+.slider:before{
+ content:"";
+ position:absolute;
+ width:22px;
+ height:22px;
+ right:3px;
+ top:3px;
+ border-radius:50%;
+ background:var(--mut);
+ transition:.2s;
+}
+
+.switch input:checked+.slider{
+ background:var(--ac);
+}
+
+.switch input:checked+.slider:before{
+ transform:translateX(-20px);
+ background:#06241C;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+ margin-bottom:15px;
+}
+
+.stat{
+ background:var(--sf);
+ border:1px solid var(--bd);
+ border-radius:17px;
+ padding:12px 8px;
+ text-align:center;
+}
+
+.stat b{
+ display:block;
+ font-size:19px;
+}
+
+.stat span{
+ display:block;
+ color:var(--mut);
+ font-size:10px;
+ margin-top:3px;
+}
+
+.tabs{
+ display:flex;
+ gap:7px;
+ overflow:auto;
+ margin-bottom:13px;
+ padding-bottom:2px;
+}
+
+.tab{
+ white-space:nowrap;
+ padding:9px 13px;
+ border-radius:12px;
+ background:var(--sf);
+ border:1px solid var(--bd);
+ color:var(--mut);
+}
+
+.tab.active{
+ color:var(--tx);
+ background:var(--sf2);
+ border-color:var(--ac);
+}
+
+.actions{
+ display:flex;
+ gap:7px;
+}
+
+.action{
+ width:38px;
+ height:38px;
+ border-radius:12px;
+ background:var(--sf2);
+ display:grid;
+ place-items:center;
+ flex:none;
+}
+
+.action svg{
+ width:19px;
+ height:19px;
+}
+
+.pv{
+ max-width:100%;
+ max-height:58vh;
+ display:block;
+ margin:0 auto 12px;
+ border-radius:16px;
+}
+
+.noteView{
+ white-space:pre-wrap;
+ line-height:2;
+ background:var(--bg);
+ border:1px solid var(--bd);
+ padding:15px;
+ border-radius:16px;
+ max-height:60vh;
+ overflow:auto;
+}
+
+.lock{
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ background:var(--bg);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:14px;
+ padding:30px;
+}
+
+.lock .av{
+ width:105px;
+ height:105px;
+}
+
+.lock .inp{
+ max-width:270px;
+ text-align:center;
+ font-size:22px;
+ letter-spacing:7px;
+}
+
+.toast{
+ position:fixed;
+ bottom:90px;
+ left:50%;
+ transform:translateX(-50%);
+ background:var(--sf2);
+ color:var(--tx);
+ padding:10px 17px;
+ border-radius:14px;
+ z-index:2000;
+ box-shadow:var(--shadow);
+ font-size:13px;
+ white-space:nowrap;
+}
+
+.context{
+ position:fixed;
+ inset:0;
+ z-index:500;
+ background:rgba(0,0,0,.4);
+ display:flex;
+ align-items:flex-end;
+}
+
+.contextBox{
+ width:100%;
+ max-width:700px;
+ margin:auto auto 0;
+ background:var(--sf);
+ border-radius:25px 25px 0 0;
+ padding:15px 15px calc(15px + env(safe-area-inset-bottom));
+}
+
+.context button{
+ width:100%;
+ text-align:right;
+ padding:14px;
+ border-radius:13px;
+ margin:3px 0;
+ background:var(--sf2);
+}
+
+.context .danger{
+ color:var(--danger);
+}
+
+.colorRow{
+ display:flex;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-bottom:12px;
+}
+
+.colorChoice{
+ width:38px;
+ height:38px;
+ border-radius:12px;
+ border:3px solid transparent;
+}
+
+.colorChoice.selected{
+ border-color:var(--tx);
+}
+
+.iconRow{
+ display:grid;
+ grid-template-columns:repeat(6,1fr);
+ gap:7px;
+ margin-bottom:12px;
+}
+
+.iconChoice{
+ height:43px;
+ border-radius:12px;
+ background:var(--sf2);
+ display:grid;
+ place-items:center;
+ color:var(--mut);
+}
+
+.iconChoice.selected{
+ color:var(--ac);
+ border:1px solid var(--ac);
+}
+
+.fileDrop{
+ border:1px dashed var(--mut);
+ padding:20px;
+ border-radius:16px;
+ text-align:center;
+ color:var(--mut);
+ margin-bottom:12px;
+}
+
+.progress{
+ height:6px;
+ background:var(--sf2);
+ border-radius:10px;
+ overflow:hidden;
+ margin:8px 0 14px;
+}
+
+.progress div{
+ height:100%;
+ width:0;
+ background:var(--ac);
+}
+
+@media(max-width:430px){
+ #app{
+  padding-left:12px;
+  padding-right:12px;
+ }
+ .grid{
+  gap:8px;
+ }
+ .fc{
+  min-height:132px;
+  padding:13px 9px;
+ }
+ .fc b{
+  font-size:12px;
+ }
+ .fc small{
+  font-size:10px;
+ }
+ .top h1{
+  font-size:24px;
+ }
+}
+
+@media(prefers-reduced-motion:reduce){
+ *{
+  transition:none!important;
+ }
+}
 </style>
 </head>
+
 <body>
+
 <div id="app"></div>
+
 <script>
+/* =========================================================
+   ALMUNTASIR
+   Local personal storage application
+   ========================================================= */
+
 const IC={
+
 code:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+
 heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',
+
 lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+
 brief:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+
 cam:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+
 star:'<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3"/>',
+
 music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+
 grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+
 gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+
 back:'<polyline points="9 18 15 12 9 6"/>',
+
 plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+
 file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+
 note:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
-mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/>'
+
+mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/>',
+
+trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
+
+edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+
+copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+
+share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/>',
+
+pin:'<path d="M12 17v5"/><path d="M5 3h14l-2 6 2 3H5l2-3z"/>',
+
+download:'<path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/>',
+
+upload:'<path d="M12 15V3"/><polyline points="7 8 12 3 17 8"/><path d="M5 21h14"/>',
+
+more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/>',
+
+moon:'<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.5 6.5 0 0 0 21 12.8z"/>',
+
+search:'<circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16" y2="16"/>',
+
+info:'<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7" x2="12.01" y2="7"/>',
+
+stats:'<line x1="4" y1="20" x2="4" y2="10"/><line x1="10" y1="20" x2="10" y2="4"/><line x1="16" y1="20" x2="16" y2="13"/><line x1="22" y1="20" x2="22" y2="7"/>',
+
+folder:'<path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+
+restore:'<polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 1.4-8.5L1 10"/>',
+
+check:'<polyline points="20 6 9 17 4 12"/>',
+
+text:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="12" y1="6" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/>',
+
+x:'<line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>'
 };
-const svg=n=>`<svg viewBox="0 0 24 24">${IC[n]}</svg>`;
-const FOLDERS=[
-{id:'code',n:'الأكواد',i:'code',c:'#5EC8FF'},
-{id:'mem',n:'الذكريات',i:'heart',c:'#FF7A9C'},
-{id:'priv',n:'ملفات خاصة',i:'lock',c:'#B69CFF'},
-{id:'proj',n:'مشاريع',i:'brief',c:'#FFC65C'},
-{id:'mine',n:'ذكرياتي',i:'cam',c:'#5CE0B0'},
-{id:'mnt',n:'منتصر',i:'star',c:'#F2D57E'},
-{id:'tmb',n:'طمبور الشمال',i:'music',c:'#FF9F6B'},
-{id:'oth',n:'أخرى',i:'grid',c:'#9FB0C8'}];
+
+const svg=n=>`<svg viewBox="0 0 24 24">${IC[n]||IC.grid}</svg>`;
+
 const EMAIL='alnourmontasir@gmail.com';
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const DEFAULT_FOLDERS=[
+ {id:'code',n:'الأكواد',i:'code',c:'#5EC8FF',fixed:true},
+ {id:'mem',n:'الذكريات',i:'heart',c:'#FF7A9C',fixed:true},
+ {id:'priv',n:'ملفات خاصة',i:'lock',c:'#B69CFF',fixed:true},
+ {id:'proj',n:'مشاريع',i:'brief',c:'#FFC65C',fixed:true},
+ {id:'mine',n:'ذكرياتي',i:'cam',c:'#5CE0B0',fixed:true},
+ {id:'mnt',n:'منتصر',i:'star',c:'#F2D57E',fixed:true},
+ {id:'tmb',n:'طمبور الشمال',i:'music',c:'#FF9F6B',fixed:true},
+ {id:'oth',n:'أخرى',i:'grid',c:'#9FB0C8',fixed:true}
+];
+
+const COLORS=[
+ '#5EC8FF','#FF7A9C','#B69CFF','#FFC65C',
+ '#5CE0B0','#F2D57E','#FF9F6B','#9FB0C8',
+ '#FF7777','#A77BFF','#49C2A0','#D79A4B'
+];
+
+const ICONS=[
+ 'folder','code','heart','lock','brief','cam',
+ 'star','music','grid','note','file','text'
+];
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({
+ '&':'&amp;',
+ '<':'&lt;',
+ '>':'&gt;',
+ '"':'&quot;',
+ "'":'&#39;'
+}[c]));
+
 const $=s=>document.querySelector(s);
 
-/* التخزين */
-const DB=new Promise((res,rej)=>{const r=indexedDB.open('almuntasir',1);r.onupgradeneeded=()=>r.result.createObjectStore('items',{keyPath:'id'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-async function tx(mode,fn){const db=await DB;return new Promise((res,rej)=>{const t=db.transaction('items',mode);const r=fn(t.objectStore('items'));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error)})}
-const getAll=()=>tx('readonly',s=>s.getAll());
-const putItem=o=>tx('readwrite',s=>s.put(o));
-const delItem=id=>tx('readwrite',s=>s.delete(id));
+/* ================= DATABASE ================= */
 
-let cfg=Object.assign({theme:'dark',pin:'',publisher:'',about:'',version:'1.0.0',note:''},JSON.parse(localStorage.getItem('cfg')||'{}'));
-const saveCfg=()=>localStorage.setItem('cfg',JSON.stringify(cfg));
-const applyTheme=()=>document.documentElement.dataset.theme=cfg.theme;
+const DB=new Promise((resolve,reject)=>{
+ const r=indexedDB.open('almuntasir_v2',2);
+
+ r.onupgradeneeded=e=>{
+   const db=e.target.result;
+
+   if(!db.objectStoreNames.contains('items')){
+     db.createObjectStore('items',{keyPath:'id'});
+   }
+
+   if(!db.objectStoreNames.contains('folders')){
+     db.createObjectStore('folders',{keyPath:'id'});
+   }
+ };
+
+ r.onsuccess=()=>resolve(r.result);
+ r.onerror=()=>reject(r.error);
+});
+
+async function storeTx(store,mode,fn){
+ const db=await DB;
+
+ return new Promise((resolve,reject)=>{
+   const t=db.transaction(store,mode);
+   const s=t.objectStore(store);
+   let result;
+
+   try{
+     result=fn(s);
+   }catch(e){
+     reject(e);
+   }
+
+   t.oncomplete=()=>resolve(result?.result);
+   t.onerror=()=>reject(t.error);
+ });
+}
+
+const getItems=()=>storeTx('items','readonly',s=>s.getAll());
+
+const putItem=o=>storeTx('items','readwrite',s=>s.put(o));
+
+const deleteItem=id=>storeTx('items','readwrite',s=>s.delete(id));
+
+const getFolders=()=>storeTx('folders','readonly',s=>s.getAll());
+
+const putFolder=o=>storeTx('folders','readwrite',s=>s.put(o));
+
+const deleteFolder=id=>storeTx('folders','readwrite',s=>s.delete(id));
+
+/* ================= SETTINGS ================= */
+
+let cfg=Object.assign({
+ theme:'system',
+ pin:'',
+ publisher:'',
+ about:'مساحتك الخاصة لحفظ النصوص والصور والملفات.',
+ version:'2.0.0',
+ note:'',
+ sort:'new',
+ trashDays:30
+},JSON.parse(localStorage.getItem('cfg')||'{}'));
+
+function saveCfg(){
+ localStorage.setItem('cfg',JSON.stringify(cfg));
+}
+
+function systemTheme(){
+ return matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+}
+
+function applyTheme(){
+ const theme=cfg.theme==='system'?systemTheme():cfg.theme;
+
+ document.documentElement.dataset.theme=theme;
+
+ const meta=document.querySelector('meta[name="theme-color"]');
+
+ if(meta){
+   meta.content=theme==='light'?'#F3EEE2':'#0B1220';
+ }
+}
+
 applyTheme();
 
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
-function fmt(t){return new Date(t).toLocaleDateString('ar',{year:'numeric',month:'short',day:'numeric'})}
-function closeOv(){document.querySelectorAll('.ov').forEach(o=>o.remove())}
-function sheet(html){closeOv();const o=document.createElement('div');o.className='ov';o.innerHTML=`<div class="sh">${html}</div>`;o.addEventListener('click',e=>{if(e.target===o)o.remove()});document.body.appendChild(o);return o}
+matchMedia('(prefers-color-scheme: light)')
+.addEventListener('change',()=>{
+ if(cfg.theme==='system')applyTheme();
+});
 
-/* التنقل */
-let S={v:'home',f:null};
-function nav(v,f){history.pushState({v,f},'');S={v,f};closeOv();render()}
-addEventListener('popstate',e=>{S=e.state||{v:'home',f:null};closeOv();render()});
-history.replaceState(S,'');
+/* ================= HELPERS ================= */
 
-async function render(){
-  const app=$('#app');
-  if(S.v==='home')return home(app);
-  if(S.v==='folder')return folder(app);
-  if(S.v==='settings')return settings(app);
+function toast(message){
+ const t=document.createElement('div');
+ t.className='toast';
+ t.textContent=message;
+ document.body.appendChild(t);
+
+ setTimeout(()=>t.remove(),1900);
 }
 
-async function home(app){
-  const items=await getAll();
-  app.innerHTML=`
-  <div class="top"><img class="av" src="icon.png" alt=""><div><h1>المنتصر</h1><p>${esc(cfg.publisher)||'مساحتك الخاصة'}</p></div><span class="sp"></span><button class="ib" id="gs" aria-label="الإعدادات">${svg('gear')}</button></div>
-  <input class="search" id="q" placeholder="ابحث في كل الحافظات…">
-  <div id="res"></div>
-  <div class="grid" id="fg">${FOLDERS.map(f=>{const n=items.filter(i=>i.f===f.id).length;return `<button class="fc" style="--c:${f.c}" data-f="${f.id}"><span class="fi">${svg(f.i)}</span><span><b>${f.n}</b><small>${n?n+' عنصر':'فارغة'}</small></span></button>`}).join('')}</div>`;
-  $('#gs').onclick=()=>nav('settings');
-  app.querySelectorAll('.fc').forEach(b=>b.onclick=()=>nav('folder',b.dataset.f));
-  $('#q').oninput=e=>{
-    const v=e.target.value.trim().toLowerCase();
-    $('#fg').style.display=v?'none':'grid';
-    const r=items.filter(i=>(i.title+' '+(i.text||'')).toLowerCase().includes(v));
-    $('#res').innerHTML=v?(r.length?`<div class="list">${r.map(itemRow).join('')}</div>`:'<div class="empty">لا توجد نتائج</div>'):'';
-    bindItems(items);
-  };
+function fmt(t){
+ return new Date(t).toLocaleDateString('ar',{
+  year:'numeric',
+  month:'short',
+  day:'numeric'
+ });
 }
 
-function itemRow(i){
-  const isImg=i.type==='file'&&(i.mime||'').startsWith('image/');
-  const th=isImg?`<img data-blob="${i.id}">`:svg(i.type==='note'?'note':'file');
-  const fn=FOLDERS.find(f=>f.id===i.f)?.n||'';
-  return `<button class="it" data-id="${i.id}"><span class="th">${th}</span><div class="t"><b>${esc(i.title)}</b><small>${fn} · ${fmt(i.created)}</small></div></button>`;
-}
-function bindItems(items){
-  document.querySelectorAll('.it').forEach(b=>b.onclick=()=>openItem(items.find(i=>i.id===b.dataset.id)));
-  document.querySelectorAll('img[data-blob]').forEach(im=>{const it=items.find(i=>i.id===im.dataset.blob);if(it&&it.blob)im.src=URL.createObjectURL(it.blob)});
-}
-
-async function folder(app){
-  const f=FOLDERS.find(x=>x.id===S.f);
-  const items=(await getAll()).filter(i=>i.f===f.id).sort((a,b)=>b.created-a.created);
-  app.innerHTML=`
-  <div class="bar"><button class="ib" id="bk" aria-label="رجوع">${svg('back').replace('<svg','<svg style="transform:scaleX(-1)"')}</button><h2 style="color:${f.c}">${f.n}</h2><span class="fi" style="--c:${f.c}">${svg(f.i)}</span></div>
-  ${items.length?`<div class="list">${items.map(itemRow).join('')}</div>`:`<div class="empty">هذه الحافظة فارغة.<br>اضغط «إضافة» لحفظ ملاحظة أو ملف.</div>`}
-  <button class="fab" id="add">${svg('plus')}إضافة</button>`;
-  $('#bk').onclick=()=>history.back();
-  $('#add').onclick=()=>addMenu(f);
-  bindItems(items);
+function fmtTime(t){
+ return new Date(t).toLocaleString('ar',{
+  year:'numeric',
+  month:'short',
+  day:'numeric',
+  hour:'2-digit',
+  minute:'2-digit'
+ });
 }
 
-function addMenu(f){
-  const o=sheet(`<h3>إضافة إلى «${f.n}»</h3>
-    <div class="row"><button class="btn p" id="an">ملاحظة</button><button class="btn" id="af">ملف أو صورة</button></div>
-    <input type="file" id="fi" multiple hidden>`);
-  o.querySelector('#an').onclick=()=>editNote(f.id);
-  o.querySelector('#af').onclick=()=>o.querySelector('#fi').click();
-  o.querySelector('#fi').onchange=async e=>{
-    for(const file of e.target.files){await putItem({id:crypto.randomUUID(),f:f.id,type:'file',title:file.name,mime:file.type,blob:file,created:Date.now()})}
-    closeOv();toast('تم الحفظ');render();
-  };
+function closeOv(){
+ document.querySelectorAll('.ov,.context').forEach(e=>e.remove());
 }
 
-function editNote(fid,item){
-  const o=sheet(`<h3>${item?'تعديل الملاحظة':'ملاحظة جديدة'}</h3>
-   <input class="inp" id="nt" placeholder="العنوان" value="${esc(item?.title)}">
-   <textarea class="inp" id="nb" placeholder="اكتب هنا…">${esc(item?.text)}</textarea>
-   <div class="row"><button class="btn p" id="sv">حفظ</button><button class="btn" id="cn">إلغاء</button></div>`);
-  o.querySelector('#cn').onclick=closeOv;
-  o.querySelector('#sv').onclick=async()=>{
-    const title=o.querySelector('#nt').value.trim()||'بدون عنوان';
-    await putItem({id:item?.id||crypto.randomUUID(),f:item?.f||fid,type:'note',title,text:o.querySelector('#nb').value,created:item?.created||Date.now()});
-    closeOv();toast('تم الحفظ');render();
-  };
+function sheet(html){
+ closeOv();
+
+ const o=document.createElement('div');
+ o.className='ov';
+
+ o.innerHTML=`<div class="sh">${html}</div>`;
+
+ o.addEventListener('click',e=>{
+   if(e.target===o)o.remove();
+ });
+
+ document.body.appendChild(o);
+
+ return o;
 }
 
-function openItem(it){
-  if(!it)return;
-  if(it.type==='note')return editNote(it.f,it);
-  const url=URL.createObjectURL(it.blob);
-  const isImg=(it.mime||'').startsWith('image/');
-  const o=sheet(`<h3>${esc(it.title)}</h3>
-    ${isImg?`<img class="pv" src="${url}">`:`<div class="empty">${svg('file')}<br>${esc(it.mime||'ملف')}</div>`}
-    <div class="row"><a class="btn p" href="${url}" download="${esc(it.title)}">حفظ نسخة</a><button class="btn d" id="dl">حذف</button></div>`);
-  o.querySelector('#dl').onclick=async()=>{if(confirm('حذف هذا العنصر نهائياً؟')){await delItem(it.id);closeOv();render()}};
+function contextMenu(html){
+ closeOv();
+
+ const o=document.createElement('div');
+ o.className='context';
+
+ o.innerHTML=`<div class="contextBox">${html}</div>`;
+
+ o.addEventListener('click',e=>{
+   if(e.target===o)o.remove();
+ });
+
+ document.body.appendChild(o);
+
+ return o;
 }
 
-function settings(app){
-  app.innerHTML=`
-  <div class="bar"><button class="ib" id="bk">${svg('back').replace('<svg','<svg style="transform:scaleX(-1)"')}</button><h2>الإعدادات</h2></div>
-  <div class="sec"><h4>حول التطبيق</h4>
-    <label>وصف التطبيق</label><textarea class="inp" id="ab" style="min-height:90px">${esc(cfg.about)}</textarea>
-    <label>الإصدار</label><input class="inp" id="vr" value="${esc(cfg.version)}">
-  </div>
-  <div class="sec"><h4>الناشر</h4>
-    <label>اسم الناشر</label><input class="inp" id="pb" value="${esc(cfg.publisher)}">
-    <label>ملاحظات إضافية</label><input class="inp" id="nt" value="${esc(cfg.note)}">
-  </div>
-  <div class="sec"><h4>البريد الإلكتروني</h4>
-    <div class="sw"><span>${EMAIL}</span></div>
-    <div class="row"><a class="btn p" href="mailto:${EMAIL}">${svg('mail')} راسلني</a></div>
-  </div>
-  <div class="sec"><h4>المظهر والأمان</h4>
-    <div class="sw"><span>الوضع الفاتح</span><input type="checkbox" id="th" ${cfg.theme==='light'?'checked':''}></div>
-    <label>رمز قفل التطبيق (اتركه فارغاً لإلغاء القفل)</label>
-    <input class="inp" id="pn" type="password" inputmode="numeric" maxlength="8" value="${esc(cfg.pin)}">
-  </div>
-  <button class="btn p" id="sv" style="width:100%">حفظ الإعدادات</button>`;
-  $('#bk').onclick=()=>history.back();
-  $('#sv').onclick=()=>{
-    cfg.about=$('#ab').value;cfg.version=$('#vr').value;cfg.publisher=$('#pb').value;cfg.note=$('#nt').value;
-    cfg.theme=$('#th').checked?'light':'dark';cfg.pin=$('#pn').value.trim();
-    saveCfg();applyTheme();toast('تم حفظ الإعدادات');
-  };
+function getFolder(id){
+ return state.folders.find(f=>f.id===id);
 }
 
-function lockScreen(){
-  if(!cfg.pin)return;
-  const d=document.createElement('div');d.className='lock';
-  d.innerHTML=`<img class="av" src="icon.png"><h1 style="margin:0">المنتصر</h1><input class="inp" type="password" inputmode="numeric" placeholder="الرمز" autofocus>`;
-  document.body.appendChild(d);
-  d.querySelector('input').oninput=e=>{if(e.target.value===cfg.pin)d.remove()};
+function itemTypeName(i){
+ if(i.type==='note')return 'نص';
+ if((i.mime||'').startsWith('image/'))return 'صورة';
+ return 'ملف';
 }
-lockScreen();
-render();
-</script>
-</body>
-</html>
+
+function sortItems(items){
+ const arr=[...items];
+
+ if(cfg.sort==='name'){
+   return arr.sort((a,b)=>String(a.title).localeCompare(String(b.title),'ar'));
+ }
+
+ if(cfg.sort==='old'){
+   return arr.sort((a,b)=>a.created-b.created);
+ }
+
+ return arr.sort((a,b)=>{
+   if(!!b.pinned!==!!a.pinned)return b.pinned?1:-1;
+   return b.created-a.created;
+ });
+}
+
+/* ================= STATE ================= */
+
+let state={
+ v:'home',
+ f:null,
+ folders:[],
+ items:[],
+ search:''
+};
+
+/* ================= INITIAL DATA ================= */
+
+async function initData(){
+
+ let folders=await getFolders();
+
+ if(!folders.length){
+   for(const f of DEFAULT_FOLDERS){
+     await putFolder(f);
+   }
+   folders=await getFolders();
+ }
+
+ state.folders=folders;
+
+ state.items=await getItems();
+}
+
+async function refreshData(){
+ state.folders=await getFolders();
+ state.items=await getItems();
+}
+
+/* ================= NAVIGATION ================= */
+
+function nav(v,f=null){
+ history.pushState({v,f},'',location.href);
+ state.v=v;
+ state.f=f;
+ closeOv();
+ render();
+}
+
+addEventListener('popstate',e=>{
+ const s=e.state||{v:'home',f:null};
+ state.v=s.v;
+ state.f=s.f;
+ closeOv();
+ render();
+});
+
+history.replaceState({v:'home',f:null},'',location.href
