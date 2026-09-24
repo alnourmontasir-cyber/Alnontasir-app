@@ -2,5 +2,11 @@
   "appId": "com.almuntasir.app",
   "appName": "تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD",
   "webDir": "www",
-  "android": { "backgroundColor": "#0B1220" }
+  "bundledWebRuntime": false,
+  "android": {
+    "backgroundColor": "#0B1220",
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
 }
