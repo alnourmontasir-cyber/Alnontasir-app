@@ -1,1069 +1,386 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<meta name="theme-color" content="#111111">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<title>المنتصر</title>
-
-<style>
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-    background: #111;
-    color: #fff;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    overflow-x: hidden;
-}
-
-button,
-input,
-textarea,
-select {
-    font-family: Arial, sans-serif;
-}
-
-button {
-    cursor: pointer;
-}
-
-#app {
-    width: 100%;
-    min-height: 100vh;
-}
-
-/* ---------- Header ---------- */
-
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: #171717;
-    border-bottom: 1px solid #333;
-    padding: 14px 12px;
-}
-
-.header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.app-title {
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.header-button {
-    width: 44px;
-    height: 44px;
-    border: 0;
-    border-radius: 12px;
-    background: #292929;
-    color: white;
-    font-size: 22px;
-}
-
-.search {
-    margin-top: 12px;
-    width: 100%;
-    height: 46px;
-    border: 1px solid #3a3a3a;
-    border-radius: 13px;
-    background: #222;
-    color: white;
-    padding: 0 15px;
-    font-size: 16px;
-    outline: none;
-}
-
-.search:focus {
-    border-color: #777;
-}
-
-/* ---------- Main ---------- */
-
-.main {
-    padding: 15px 12px 100px;
-}
-
-.section-title {
-    font-size: 19px;
-    font-weight: bold;
-    margin: 10px 3px 12px;
-}
-
-/* ---------- Folders ---------- */
-
-.folder-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.folder {
-    min-height: 112px;
-    background: #1d1d1d;
-    border: 1px solid #333;
-    border-radius: 17px;
-    padding: 12px 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-.folder:active {
-    transform: scale(.97);
-}
-
-.folder-icon {
-    font-size: 39px;
-    margin-bottom: 7px;
-}
-
-.folder-name {
-    font-size: 14px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.folder-count {
-    font-size: 11px;
-    color: #999;
-    margin-top: 4px;
-}
-
-/* ---------- Recent ---------- */
-
-.items {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-}
-
-.item {
-    background: #1c1c1c;
-    border: 1px solid #333;
-    border-radius: 14px;
-    padding: 12px;
-}
-
-.item-main {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.item-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 11px;
-    background: #292929;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 23px;
-    flex-shrink: 0;
-}
-
-.item-info {
-    min-width: 0;
-    flex: 1;
-}
-
-.item-title {
-    font-size: 15px;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.item-date {
-    color: #888;
-    font-size: 11px;
-    margin-top: 4px;
-}
-
-.item-actions {
-    display: flex;
-    gap: 5px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-
-.small-button {
-    border: 0;
-    border-radius: 9px;
-    background: #303030;
-    color: white;
-    padding: 8px 11px;
-    font-size: 12px;
-}
-
-.small-button:active {
-    transform: scale(.96);
-}
-
-/* ---------- Empty ---------- */
-
-.empty {
-    text-align: center;
-    color: #888;
-    padding: 30px 10px;
-}
-
-/* ---------- Bottom actions ---------- */
-
-.bottom-actions {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 150;
-    background: rgba(20,20,20,.97);
-    border-top: 1px solid #333;
-    padding: 10px;
-    display: flex;
-    gap: 8px;
-}
-
-.bottom-button {
-    flex: 1;
-    min-height: 48px;
-    border: 0;
-    border-radius: 13px;
-    background: #292929;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.bottom-button:active {
-    transform: scale(.97);
-}
-
-/* ---------- Modal ---------- */
-
-.modal {
-    position: fixed;
-    inset: 0;
-    z-index: 300;
-    display: none;
-    background: rgba(0,0,0,.78);
-    padding: 15px;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-box {
-    width: 100%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: #1b1b1b;
-    border: 1px solid #444;
-    border-radius: 20px;
-    padding: 18px;
-}
-
-.modal-title {
-    font-size: 21px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.field {
-    margin-bottom: 13px;
-}
-
-.field label {
-    display: block;
-    margin-bottom: 7px;
-    color: #ccc;
-    font-size: 14px;
-}
-
-.field input,
-.field textarea,
-.field select {
-    width: 100%;
-    border: 1px solid #3b3b3b;
-    border-radius: 12px;
-    background: #252525;
-    color: white;
-    padding: 12px;
-    outline: none;
-    font-size: 15px;
-}
-
-.field textarea {
-    min-height: 150px;
-    resize: vertical;
-}
-
-.modal-buttons {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
-}
-
-.modal-button {
-    flex: 1;
-    min-height: 46px;
-    border: 0;
-    border-radius: 12px;
-    background: #303030;
-    color: white;
-    font-weight: bold;
-}
-
-.modal-button.primary {
-    background: #555;
-}
-
-/* ---------- Lock ---------- */
-
-.lock-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: #111;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-}
-
-.lock-screen.show {
-    display: flex;
-}
-
-.lock-box {
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.lock-icon {
-    font-size: 70px;
-    margin-bottom: 15px;
-}
-
-.lock-box h2 {
-    margin: 5px 0 20px;
-}
-
-.lock-input {
-    width: 100%;
-    height: 52px;
-    border: 1px solid #444;
-    border-radius: 13px;
-    background: #222;
-    color: white;
-    text-align: center;
-    font-size: 20px;
-    outline: none;
-}
-
-.lock-button {
-    width: 100%;
-    height: 50px;
-    margin-top: 10px;
-    border: 0;
-    border-radius: 13px;
-    background: #444;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* ---------- Light mode ---------- */
-
-body.light {
-    background: #f2f2f2;
-    color: #111;
-}
-
-body.light .header,
-body.light .bottom-actions {
-    background: #fff;
-    border-color: #ddd;
-}
-
-body.light .header-button,
-body.light .search,
-body.light .folder,
-body.light .item,
-body.light .modal-box,
-body.light .field input,
-body.light .field textarea,
-body.light .field select,
-body.light .item-icon,
-body.light .small-button,
-body.light .bottom-button {
-    background: #fff;
-    color: #111;
-    border-color: #ddd;
-}
-
-body.light .folder-count,
-body.light .item-date,
-body.light .empty {
-    color: #777;
-}
-
-body.light .modal {
-    background: rgba(0,0,0,.45);
-}
-
-/* ---------- Toast ---------- */
-
-.toast {
-    position: fixed;
-    left: 50%;
-    bottom: 78px;
-    transform: translateX(-50%) translateY(20px);
-    background: #333;
-    color: white;
-    border-radius: 12px;
-    padding: 11px 18px;
-    z-index: 800;
-    opacity: 0;
-    pointer-events: none;
-    transition: .25s;
-    max-width: 90%;
-    text-align: center;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* ---------- Responsive ---------- */
-
-@media (min-width: 700px) {
-    .main {
-        max-width: 800px;
-        margin: auto;
-    }
-
-    .folder-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .bottom-actions {
-        left: 50%;
-        transform: translateX(-50%);
-        max-width: 800px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنتصر - التطبيق الشخصي</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --primary-color: #4361ee;
+            --accent-color: #3a0ca3;
+            --border-color: #dee2e6;
+            --shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-color: #f8f9fa;
+                --primary-color: #4895ef;
+                --accent-color: #560bad;
+                --border-color: #2d2d2d;
+                --shadow: 0 10px 20px rgba(0,0,0,0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .folder-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .folder-card:active {
+            transform: scale(0.95);
+        }
+
+        .folder-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .folder-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Modal / Folder View */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-height: 85vh;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease-out;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .saved-items {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+
+        .saved-item {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        /* Bottom Nav / Footer Settings */
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            background: var(--card-bg);
+        }
+
+        footer span {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="app"></div>
+    <header>
+        <h1>تطبيق المنتصر</h1>
+        <p>المساحة الرقمية الخاصة والموثقة</p>
+    </header>
 
-<div id="modal" class="modal">
-    <div id="modalBox" class="modal-box"></div>
-</div>
-
-<div id="toast" class="toast"></div>
-
-<div id="lockScreen" class="lock-screen">
-    <div class="lock-box">
-        <div class="lock-icon">🔒</div>
-        <h2>المنتصر</h2>
-        <p>Enter your PIN</p>
-        <input
-            id="lockInput"
-            class="lock-input"
-            type="password"
-            inputmode="numeric"
-            maxlength="20"
-            autocomplete="off"
-        >
-        <button id="lockButton" class="lock-button">
-            Unlock
-        </button>
+    <div class="container">
+        <div class="grid" id="foldersGrid">
+            <!-- Folders will be injected by JS -->
+        </div>
     </div>
-</div>
 
-<script>
-"use strict";
+    <footer>
+        <span onclick="openSettings()">إعدادات وحول التطبيق</span>
+        <span>alnourmontasir@gmail.com</span>
+    </footer>
 
-/* ---------- App configuration ---------- */
-
-const APP_NAME = "المنتصر";
-const APP_EMAIL = "alnourmontasir@gmail.com";
-
-const DB_NAME = "almuntasir_storage";
-const DB_VERSION = 1;
-
-let db = null;
-let items = [];
-let folders = [];
-let currentFolder = null;
-let searchText = "";
-
-/* ---------- Default folders ---------- */
-
-const DEFAULT_FOLDERS = [
-    {
-        id: "codes",
-        name: "الأكواد",
-        icon: "💻"
-    },
-    {
-        id: "photos",
-        name: "الصور",
-        icon: "🖼️"
-    },
-    {
-        id: "memos",
-        name: "المذكرات",
-        icon: "📝"
-    },
-    {
-        id: "engineering",
-        name: "هندسيات",
-        icon: "⚙️"
-    },
-    {
-        id: "controls",
-        name: "تحكمات",
-        icon: "🎛️"
-    },
-    {
-        id: "north",
-        name: "طمبور الشمال",
-        icon: "📁"
-    },
-    {
-        id: "other",
-        name: "أخرى",
-        icon: "📦"
-    },
-    {
-        id: "private",
-        name: "خاص",
-        icon: "🔐"
-    },
-    {
-        id: "projects",
-        name: "المشاريع",
-        icon: "🛠️"
-    },
-    {
-        id: "memories",
-        name: "ذكريات",
-        icon: "❤️"
-    },
-    {
-        id: "files",
-        name: "الملفات",
-        icon: "📂"
-    },
-    {
-        id: "important",
-        name: "مهم",
-        icon: "⭐"
-    }
-];
-
-/* ---------- Start ---------- */
-
-document.addEventListener("DOMContentLoaded", function () {
-    startApp();
-});
-
-async function startApp() {
-    try {
-        await openDatabase();
-        await createDefaultFolders();
-        await loadFolders();
-        await loadItems();
-
-        render();
-
-        loadSettings();
-
-    } catch (error) {
-        console.error(error);
-
-        document.getElementById("app").innerHTML = `
-            <div style="
-                min-height:100vh;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                padding:25px;
-                text-align:center;
-            ">
-                <div>
-                    <div style="font-size:55px;">⚠️</div>
-                    <h2>Application Error</h2>
-                    <p>The application could not start.</p>
-                    <button
-                        onclick="location.reload()"
-                        style="
-                            padding:12px 25px;
-                            border:0;
-                            border-radius:12px;
-                        "
-                    >
-                        Reload
-                    </button>
-                </div>
+    <!-- Folder Modal -->
+    <div class="modal" id="folderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">اسم الحافظة</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
-        `;
-    }
-}
+            <input type="text" id="itemTitle" placeholder="عنوان العنصر (اختياري)...">
+            <textarea id="itemContent" placeholder="اكتب الأكواد، الأبيات، المعلومات، أو الملاحظات هنا..."></textarea>
+            <input type="file" id="itemImage" accept="image/*" style="margin-bottom: 15px;">
+            <button class="btn" onclick="saveData()">حفظ في الحافظة</button>
+            
+            <div class="saved-items" id="savedItemsList">
+                <!-- Saved items will appear here -->
+            </div>
+        </div>
+    </div>
 
-/* ---------- IndexedDB ---------- */
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إعدادات وحول التطبيق</h2>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+            <div style="line-height: 1.8;">
+                <p><strong>اسم التطبيق:</strong> المنتصر</p>
+                <p><strong>الناشر والمطور:</strong> منتصر النور (Montasir Alnor)</p>
+                <p><strong>البريد الإلكتروني:</strong> alnourmontasir@gmail.com</p>
+                <p><strong>الإصدار:</strong> 1.0.0 (حديث ومتطور)</p>
+                <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border-color);">
+                <p style="font-size: 0.9rem; opacity: 0.8;">تم تصميم هذا التطبيق خصيصاً ليتناسب مع أنظمة الأندرويد الحديثة، ودعم الوضع الداكن والفاتح تلقائياً، مع حماية وحفظ البيانات محلياً داخل هاتفك.</p>
+            </div>
+        </div>
+    </div>
 
-function openDatabase() {
-    return new Promise(function (resolve, reject) {
+    <script>
+        const folders = [
+            { id: 'codes', name: 'الأكواد', icon: '💻' },
+            { id: 'memories', name: 'الذكريات', icon: '📸' },
+            { id: 'secret', name: 'ملفات خاصة', icon: '🔒' },
+            { id: 'projects', name: 'مشاريع', icon: '🚀' },
+            { id: 'my_memories', name: 'ذكرياتي', icon: '📖' },
+            { id: 'montasir', name: 'منتصر', icon: '👑' },
+            { id: 'tambour', name: 'طمبور الشمال', icon: '🎵' },
+            { id: 'other', name: 'أخرى', icon: '📁' }
+        ];
 
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        let currentFolder = '';
 
-        request.onupgradeneeded = function (event) {
+        const grid = document.getElementById('foldersGrid');
+        folders.forEach(f => {
+            grid.innerHTML += `
+                <div class="folder-card" onclick="openFolder('${f.id}', '${f.name}')">
+                    <div class="folder-icon">${f.icon}</div>
+                    <div class="folder-title">${f.name}</div>
+                </div>
+            `;
+        });
 
-            const database = event.target.result;
+        function openFolder(id, name) {
+            currentFolder = id;
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemContent').value = '';
+            document.getElementById('itemImage').value = '';
+            loadSavedItems();
+            document.getElementById('folderModal').style.display = 'flex';
+        }
 
-            if (!database.objectStoreNames.contains("items")) {
-                const store = database.createObjectStore(
-                    "items",
-                    {
-                        keyPath: "id",
-                        autoIncrement: true
-                    }
-                );
+        function closeModal() {
+            document.getElementById('folderModal').style.display = 'none';
+        }
 
-                store.createIndex(
-                    "folderId",
-                    "folderId",
-                    { unique: false }
-                );
+        function openSettings() {
+            document.getElementById('settingsModal').style.display = 'flex';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        function saveData() {
+            const title = document.getElementById('itemTitle').value;
+            const content = document.getElementById('itemContent').value;
+            const imageInput = document.getElementById('itemImage');
+            
+            if (!content && !imageInput.files[0]) {
+                alert('الرجاء كتابة نص أو إدراج صورة على الأقل للحفظ.');
+                return;
             }
 
-            if (!database.objectStoreNames.contains("folders")) {
-                database.createObjectStore(
-                    "folders",
-                    {
-                        keyPath: "id"
-                    }
-                );
-            }
-        };
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = imageInput.files[0] ? e.target.result : null;
+                
+                const newItem = {
+                    title: title || 'بدون عنوان',
+                    content: content,
+                    image: imageData,
+                    date: new Date().toLocaleDateString('ar-SA')
+                };
 
-        request.onsuccess = function (event) {
-            db = event.target.result;
+                let savedData = JSON.parse(localStorage.getItem(currentFolder)) || [];
+                savedData.unshift(newItem);
+                localStorage.setItem(currentFolder, JSON.stringify(savedData));
 
-            db.onerror = function (event) {
-                console.error("Database error:", event);
+                document.getElementById('itemTitle').value = '';
+                document.getElementById('itemContent').value = '';
+                document.getElementById('itemImage').value = '';
+                loadSavedItems();
             };
 
-            resolve();
-        };
+            if (imageInput.files[0]) {
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                reader.onload({ target: { result: null } });
+            }
+        }
 
-        request.onerror = function () {
-            reject(request.error);
-        };
-    });
-}
-
-function createDefaultFolders() {
-    return new Promise(function (resolve, reject) {
-
-        const transaction = db.transaction(
-            "folders",
-            "readwrite"
-        );
-
-        const store = transaction.objectStore("folders");
-
-        DEFAULT_FOLDERS.forEach(function (folder) {
-            store.put(folder);
-        });
-
-        transaction.oncomplete = function () {
-            resolve();
-        };
-
-        transaction.onerror = function () {
-            reject(transaction.error);
-        };
-    });
-}
-
-function loadFolders() {
-    return new Promise(function (resolve, reject) {
-
-        const transaction = db.transaction(
-            "folders",
-            "readonly"
-        );
-
-        const request =
-            transaction.objectStore("folders").getAll();
-
-        request.onsuccess = function () {
-            folders = request.result || [];
-            resolve();
-        };
-
-        request.onerror = function () {
-            reject(request.error);
-        };
-    });
-}
-
-function loadItems() {
-    return new Promise(function (resolve, reject) {
-
-        const transaction = db.transaction(
-            "items",
-            "readonly"
-        );
-
-        const request =
-            transaction.objectStore("items").getAll();
-
-        request.onsuccess = function () {
-            items = request.result || [];
-
-            items.sort(function (a, b) {
-                return (b.created || 0) - (a.created || 0);
+        function loadSavedItems() {
+            const list = document.getElementById('savedItemsList');
+            let savedData = JSON.parse(localStorage.getItem(currentFolder)) || [];
+            
+            list.innerHTML = savedData.length ? '' : '<p style="text-align:center; opacity:0.6;">لا توجد محتويات محفوظة بعد.</p>';
+            
+            savedData.forEach(item => {
+                let imgHtml = item.image ? `<img src="${item.image}" style="max-width:100%; border-radius:8px; margin-top:8px;">` : '';
+                list.innerHTML += `
+                    <div class="saved-item">
+                        <strong>${item.title}</strong> (${item.date})<br>
+                        <p style="margin-top:5px;">${item.content}</p>
+                        ${imgHtml}
+                    </div>
+                `;
             });
-
-            resolve();
-        };
-
-        request.onerror = function () {
-            reject(request.error);
-        };
-    });
-}
-
-/* ---------- Item database ---------- */
-
-function addItem(item) {
-    return new Promise(function (resolve, reject) {
-
-        const transaction = db.transaction(
-            "items",
-            "readwrite"
-        );
-
-        const request =
-            transaction.objectStore("items").add(item);
-
-        request.onsuccess = function () {
-            resolve(request.result);
-        };
-
-        request.onerror = function () {
-            reject(request.error);
-        };
-    });
-}
-
-function updateItem(item) {
-    return new Promise(function (resolve, reject) {
-
-        const transaction = db.transaction(
-            "items",
-            "readwrite"
-        );
-
-        transaction.objectStore("items").put(item);
-
-        transaction.oncomplete = function () {
-            resolve();
-        };
-
-        transaction.onerror = function () {
-            reject(transaction.error);
-        };
-    });
-}
-
-function deleteItem(id) {
-    return new Promise(function (resolve, reject) {
-
-        const transaction = db.transaction(
-            "items",
-            "readwrite"
-        );
-
-        transaction.objectStore("items").delete(id);
-
-        transaction.oncomplete = function () {
-            resolve();
-        };
-
-        transaction.onerror = function () {
-            reject(transaction.error);
-        };
-    });
-}
-
-/* ---------- Settings ---------- */
-
-function getSettings() {
-    try {
-        return JSON.parse(
-            localStorage.getItem("almuntasir_settings") || "{}"
-        );
-    } catch (error) {
-        return {};
-    }
-}
-
-function saveSettings(settings) {
-    localStorage.setItem(
-        "almuntasir_settings",
-        JSON.stringify(settings)
-    );
-}
-
-function loadSettings() {
-
-    const settings = getSettings();
-
-    if (settings.theme === "light") {
-        document.body.classList.add("light");
-    }
-
-    if (settings.pin) {
-        showLockScreen(settings.pin);
-    }
-}
-
-/* ---------- Main render ---------- */
-
-function render() {
-
-    const app = document.getElementById("app");
-
-    if (currentFolder) {
-        renderFolder(app);
-        return;
-    }
-
-    renderHome(app);
-}
-
-/* ---------- Home ---------- */
-
-function renderHome(app) {
-
-    let folderHTML = "";
-
-    folders.forEach(function (folder) {
-
-        const count = items.filter(function (item) {
-            return item.folderId === folder.id;
-        }).length;
-
-        folderHTML += `
-            <button
-                class="folder"
-                onclick="openFolder('${escapeAttribute(folder.id)}')"
-            >
-                <div class="folder-icon">
-                    ${folder.icon}
-                </div>
-
-                <div class="folder-name">
-                    ${escapeHTML(folder.name)}
-                </div>
-
-                <div class="folder-count">
-                    ${count} items
-                </div>
-            </button>
-        `;
-    });
-
-    const recentItems = getFilteredItems()
-        .slice(0, 8);
-
-    let recentHTML = "";
-
-    if (recentItems.length === 0) {
-
-        recentHTML = `
-            <div class="empty">
-                No files yet
-            </div>
-        `;
-
-    } else {
-
-        recentHTML =
-            recentItems
-            .map(function (item) {
-                return itemHTML(item);
-            })
-            .join("");
-    }
-
-    app.innerHTML = `
-
-        <header class="header">
-
-            <div class="header-row">
-
-                <div class="app-title">
-                    ${APP_NAME}
-                </div>
-
-                <button
-                    class="header-button"
-                    onclick="openSettings()"
-                >
-                    ⚙️
-                </button>
-
-            </div>
-
-            <input
-                id="searchInput"
-                class="search"
-                type="search"
-                placeholder="بحث..."
-                value="${escapeAttribute(searchText)}"
-                oninput="handleSearch(this.value)"
-            >
-
-        </header>
-
-        <main class="main">
-
-            <div class="section-title">
-                المجلدات
-            </div>
-
-            <div class="folder-grid">
-                ${folderHTML}
-            </div>
-
-            <div class="section-title" style="margin-top:25px;">
-                آخر الملفات
-            </div>
-
-            <div class="items">
-                ${recentHTML}
-            </div>
-
-        </main>
-
-        ${bottomActions()}
-    `;
-}
-
-/* ---------- Folder ---------- */
-
-function renderFolder(app) {
-
-    const folder =
-        folders.find(function (f) {
-            return f.id === currentFolder;
-        });
-
-    if (!folder) {
-        currentFolder = null;
-        render();
-        return;
-    }
-
-    let folderItems =
-        getFilteredItems()
-        .filter(function (item) {
-            return item.folderId === currentFolder;
-        });
-
-    let content = "";
-
-    if (folderItems.length === 0) {
-
-        content = `
-            <div class="empty">
-                This folder is empty
-            </div>
-        `;
-
-    } else {
-
-        content =
-            folderItems
-            .map(function (item) {
-                return itemHTML(item);
-            })
-            .join("");
-    }
-
-    app.innerHTML = `
-
-        <header class="header">
-
-            <div class="header-row">
-
-                <button
-                    class="header-button"
-                    onclick="goHome()"
-                >
-                    ←
-                </button>
-
-                <div
-                    class="app-title"
-                    style="font-size:20px;"
-                >
-                    ${folder.icon}
-                    ${escapeHTML(folder.name)}
-                </div>
-
-                <button
-                    class="header-button"
-                    onclick="openSettings()"
-                >
-                    ⚙️
-                </button>
-
-            </div>
-
-            <input
-                class="search"
-                type="search"
-                placeholder="بحث داخل المجلد..."
-                value="${escapeAttribute(searchText)}"
-                oninput="handleSearch(this.value)"
-     
+        }
+    </script>
+</body>
+</html>
