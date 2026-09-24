@@ -1,560 +1,101 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31103f 100%);
-            --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-            --card-border: rgba(255, 255, 255, 0.15);
-            --accent-1: #6366f1;
-            --accent-2: #ec4899;
-            --text-color: #f8fafc;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#070b18">
+<title>المنتصر SD</title>
 
-        [data-theme="sunset"] {
-            --bg-gradient: linear-gradient(135deg, #451a03 0%, #7c2d12 50%, #9a3412 100%);
-            --accent-1: #f97316;
-            --accent-2: #ef4444;
-        }
+<style>
+:root{
+    --bg:#070b18;
+    --bg2:#0e1630;
+    --surface:rgba(255,255,255,.075);
+    --surface2:rgba(255,255,255,.11);
+    --border:rgba(255,255,255,.12);
+    --text:#f8fafc;
+    --muted:#9ca9c2;
+    --primary:#7c5cff;
+    --secondary:#00c6ff;
+    --pink:#ff3d9a;
+    --green:#19d99a;
+    --orange:#ffae45;
+    --red:#ff5272;
+    --radius:24px;
+}
 
-        [data-theme="emerald"] {
-            --bg-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #0f766e 100%);
-            --accent-1: #10b981;
-            --accent-2: #06b6d4;
-        }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
 
-        [data-theme="purple"] {
-            --bg-gradient: linear-gradient(135deg, #2e1065 0%, #581c87 50%, #7e22ce 100%);
-            --accent-1: #a855f7;
-            --accent-2: #ec4899;
-        }
+html,body{
+    min-height:100%;
+    background:var(--bg);
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-            user-select: none;
-        }
+body{
+    color:var(--text);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
 
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-color);
-            min-height: 100vh;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    min-height:100vh;
+    padding:
+        max(14px,env(safe-area-inset-top))
+        14px
+        calc(92px + env(safe-area-inset-bottom));
 
-        .header {
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            padding: 18px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-        }
+    overflow-x:hidden;
 
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 5px;
-        }
+    background:
+        radial-gradient(circle at 5% 5%,rgba(124,92,255,.25),transparent 28%),
+        radial-gradient(circle at 95% 15%,rgba(0,198,255,.18),transparent 27%),
+        radial-gradient(circle at 50% 100%,rgba(255,61,154,.15),transparent 35%),
+        var(--bg);
+}
 
-        .header p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
+button,
+input,
+textarea,
+select{
+    font:inherit;
+}
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+button{
+    border:0;
+}
 
-        /* تصميم الأيقونات البيضاوية الاحترافية عالية الجودة */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(15px);
-            border-radius: 35px; /* شكل بيضاوي احترافي */
-            padding: 22px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-        }
+button:active{
+    transform:scale(.97);
+}
 
-        .card:active {
-            transform: scale(0.94);
-        }
+.hidden{
+    display:none!important;
+}
 
-        .card i {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* =========================
+   APP HEADER
+========================= */
 
-        .card span {
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
+.header{
+    position:relative;
+    overflow:hidden;
 
-        .footer-nav {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid var(--card-border);
-            padding: 12px;
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            backdrop-filter: blur(12px);
-        }
+    border-radius:30px;
+    padding:20px;
 
-        .footer-nav button {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            opacity: 0.8;
-            transition: 0.2s;
-        }
+    margin-bottom:16px;
 
-        .footer-nav button:hover, .footer-nav button.active {
-            opacity: 1;
-            color: #38bdf8;
-        }
-
-        .footer-nav button span {
-            font-size: 0.7rem;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .modal-content {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.15);
-            width: 100%;
-            max-width: 420px;
-            border-radius: 30px;
-            padding: 22px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
-
-        .modal-header h3 {
-            font-size: 1.15rem;
-            color: #38bdf8;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: #f8fafc;
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(15,23,42,0.7);
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        /* زر علامة + البيضاوي للاضافة السريعة */
-        .fab-add {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-            width: 100%;
-        }
-
-        /* تخصيص طرق العرض للملفات المضافة */
-        .view-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 0.8rem;
-            opacity: 0.85;
-        }
-
-        .items-container.grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .items-container.bar {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .item-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 0.85rem;
-            position: relative;
-        }
-
-        .item-card img, .item-card video {
-            width: 100%;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 5px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="header" id="appHeader">
-        <h1 id="displayAppName">تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD</h1>
-        <p id="displayEmail">alnourmontasir@gmail.com</p>
-    </div>
-
-    <!-- شبكة الحافظات بأيقونات بيضاوية احترافية -->
-    <div class="grid-container">
-        <div class="card" onclick="openModal('notesModal')">
-            <i class="fa-solid fa-note-sticky"></i>
-            <span>الذكريات والنصوص</span>
-        </div>
-        <div class="card" onclick="openModal('codesModal')">
-            <i class="fa-solid fa-code"></i>
-            <span>الأكواد البرمجية</span>
-        </div>
-        <div class="card" onclick="openModal('projectsModal')">
-            <i class="fa-solid fa-rocket"></i>
-            <span>مشاريع التطبيق</span>
-        </div>
-        <div class="card" onclick="checkPassword('secureModal')">
-            <i class="fa-solid fa-lock"></i>
-            <span>ملفات خاصة</span>
-        </div>
-        <div class="card" onclick="openModal('profileModal')">
-            <i class="fa-solid fa-crown"></i>
-            <span>الملف الشخصي</span>
-        </div>
-        <div class="card" onclick="openModal('hiddenMediaModal')">
-            <i class="fa-solid fa-video-slash"></i>
-            <span>فيديو وموسيقى مخفية</span>
-        </div>
-        <div class="card" onclick="openModal('audioModal')">
-            <i class="fa-solid fa-music"></i>
-            <span>مشغل الطنبور</span>
-        </div>
-        <div class="card" onclick="openModal('settingsModal')">
-            <i class="fa-solid fa-gear"></i>
-            <span>الضبط والإعدادات</span>
-        </div>
-    </div>
-
-    <div class="footer-nav">
-        <button onclick="location.reload()" class="active">
-            <i class="fa-solid fa-house"></i>
-            <span>الرئيسية</span>
-        </button>
-        <button onclick="openModal('settingsModal')">
-            <i class="fa-solid fa-sliders"></i>
-            <span>التحكمات</span>
-        </button>
-        <button onclick="history.back()">
-            <i class="fa-solid fa-circle-chevron-left"></i>
-            <span>رجوع النظام</span>
-        </button>
-    </div>
-
-    <!-- نافذة الذكريات والنصوص -->
-    <div class="modal" id="notesModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>حفظ النصوص والذكريات</h3>
-                <button class="close-btn" onclick="closeModal('notesModal')">&times;</button>
-            </div>
-            <button class="fab-add" onclick="addNewNotePrompt()"><i class="fa-solid fa-plus"></i> إضافة نص جديد</button>
-            <div class="view-controls">
-                <span>عرض الملفات:</span>
-                <select id="notesViewStyle" onchange="changeViewStyle('notes')" style="width: auto; padding: 4px 8px;">
-                    <option value="grid">شبكة</option>
-                    <option value="bar">شريط</option>
-                </select>
-            </div>
-            <div id="notesContainer" class="items-container grid"></div>
-        </div>
-    </div>
-
-    <!-- نافذة الأكواد البرمجية -->
-    <div class="modal" id="codesModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>الأكواد البرمجية</h3>
-                <button class="close-btn" onclick="closeModal('codesModal')">&times;</button>
-            </div>
-            <button class="fab-add" onclick="addNewCodePrompt()"><i class="fa-solid fa-plus"></i> إضافة كود برمجي</button>
-            <div class="view-controls">
-                <span>عرض الملفات:</span>
-                <select id="codesViewStyle" onchange="changeViewStyle('codes')" style="width: auto; padding: 4px 8px;">
-                    <option value="grid">شبكة</option>
-                    <option value="bar">شريط</option>
-                </select>
-            </div>
-            <div id="codesContainer" class="items-container grid"></div>
-        </div>
-    </div>
-
-    <!-- نافذة المشاريع -->
-    <div class="modal" id="projectsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>مشاريع التطبيق</h3>
-                <button class="close-btn" onclick="closeModal('projectsModal')">&times;</button>
-            </div>
-            <button class="fab-add" onclick="addNewProjectPrompt()"><i class="fa-solid fa-plus"></i> إضافة مشروع جديد</button>
-            <div id="projectsContainer" class="items-container grid"></div>
-        </div>
-    </div>
-
-    <!-- نافذة الملف الشخصي -->
-    <div class="modal" id="profileModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>الملف الشخصي</h3>
-                <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
-            </div>
-            <p style="text-align: center; font-weight: bold; color: #38bdf8; font-size: 1.1rem; margin-bottom: 10px;">المنتصر بالله Alnor</p>
-            <p style="text-align: center; opacity: 0.8; font-size: 0.85rem;">مبرمج ومطور التطبيقات الذكية والأنظمة التقنية.</p>
-        </div>
-    </div>
-
-    <!-- نافذة الوسائط المخفية (فيديو وموسيقى محلية دائمية) -->
-    <div class="modal" id="hiddenMediaModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>حافظة الوسائط المخفية</h3>
-                <button class="close-btn" onclick="closeModal('hiddenMediaModal')">&times;</button>
-            </div>
-            <p style="font-size: 0.78rem; color: #34d399; margin-bottom: 12px; text-align: center;">مخفي بالكامل عن معرض الهاتف ولا يظهر في النظام.</p>
-            
-            <div class="form-group">
-                <label class="fab-add" style="cursor: pointer; text-align: center; display: block;">
-                    <i class="fa-solid fa-plus"></i> اختر ملف فيديو أو موسيقى للحفظ
-                    <input type="file" id="mediaFileInput" accept="video/*,audio/*" style="display: none;" onchange="saveMediaFile(event)">
-                </label>
-            </div>
-
-            <div class="view-controls">
-                <span>نوع العرض:</span>
-                <select id="mediaViewStyle" onchange="changeViewStyle('media')" style="width: auto; padding: 4px 8px;">
-                    <option value="grid">شبكة</option>
-                    <option value="bar">شريط</option>
-                </select>
-            </div>
-
-            <div id="hiddenMediaContainer" class="items-container grid"></div>
-        </div>
-    </div>
-
-    <!-- نافذة الطنبور والموسيقى -->
-    <div class="modal" id="audioModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>مشغل الطنبور والموسيقى</h3>
-                <button class="close-btn" onclick="closeModal('audioModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label class="fab-add" style="cursor: pointer; text-align: center; display: block;">
-                    <i class="fa-solid fa-plus"></i> اختر ملف طنبور
-                    <input type="file" accept="audio/*" style="display: none;" onchange="playDirectAudio(event)">
-                </label>
-            </div>
-            <audio id="audioPlayer" controls style="width:100%; margin-top:15px; display:none;"></audio>
-        </div>
-    </div>
-
-    <!-- نافذة الضبط والإعدادات -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>لوحة الضبط والتحكمات</h3>
-                <button class="close-btn" onclick="closeModal('settingsModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label>اسم التطبيق:</label>
-                <input type="text" id="settingAppName" value="تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD">
-            </div>
-            <div class="form-group">
-                <label>البريد الإلكتروني:</label>
-                <input type="text" id="settingEmail" value="alnourmontasir@gmail.com">
-            </div>
-            <div class="form-group">
-                <label>كلمة المرور للملفات الخاصة:</label>
-                <input type="password" id="settingPass" value="1234">
-            </div>
-            <div class="form-group">
-                <label>ثيم الألوان والواجهة:</label>
-                <select id="themeSelect" onchange="changeTheme()">
-                    <option value="default">ليلي ملكي (افتراضي)</option>
-                    <option value="sunset">غروب دافئ</option>
-                    <option value="emerald">زمردي أخضر</option>
-                    <option value="purple">بنفسجي سحري</option>
-                </select>
-            </div>
-            <button class="btn-primary" onclick="saveSettings()">حفظ التعديلات والتثبيت</button>
-        </div>
-    </div>
-
-    <!-- نافذة الملفات الخاصة -->
-    <div class="modal" id="secureModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>الملفات الخاصة المحمية</h3>
-                <button class="close-btn" onclick="closeModal('secureModal')">&times;</button>
-            </div>
-            <button class="fab-add" onclick="addNewSecurePrompt()"><i class="fa-solid fa-plus"></i> إضافة ملف خاص آمن</button>
-            <div id="secureContainer" class="items-container grid"></div>
-        </div>
-    </div>
-
-    <script>
-        // نظام قواعد البيانات الداخلية IndexedDB لتخزين الملفات الكبيرة (صور وفيديو وصوت) بدون مشاكل الحجم
-        let db;
-        const request = indexedDB.open('TramaSdDatabase', 1);
-
-        request.onerror = function(event) {
-            console.error("خطأ في فتح قاعدة البيانات الداخلية");
-        };
-
-        request.onsuccess = function(event) {
-            db = event.target.result;
-            loadAllData();
-        };
-
-        request.onupgradeneeded = function(event) {
-            let db = event.target.result;
-            if (!db.objectStoreNames.contains('files')) {
-                db.createObjectStore('files', { keyPath: 'id', autoIncrement: true });
-            }
-        };
-
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        function checkPassword(modalId) {
-            let savedPass = localStorage.getItem('appPass') || '1234';
-            let entered = prompt("الرجاء إدخال كلمة المرور:");
-            if (entered === savedPass) {
-                openModal(modalId);
-            } else if (entered !== null) {
-                alert("كلمة المرور غير صحيحة!");
-            }
-        }
-
-        function saveFileToDB(category, title, content, type, fileBlob) {
-            if (!db) return;
-            let transaction = db.transaction(['files'], 'readwrite');
-            let store = transaction.objectStore('files');
-            let record = { category, title, content, type, fileBlob, date: new Date().toLocaleDateString() };
-            let request = store.add(record);
-            request.onsuccess = function() {
-                loadAllData();
-                alert("تم الحفظ بنجاح داخل الحافظة!");
-            };
-        }
-
-        function loadAllData() {
-            if (!db) return;
-            let transaction = db.transaction(['files'], 'readonly');
-            let store = transaction.objectStore('files');
-            let request = store.getAll();
-
-            request.onsuccess = function(event) {
-                let records = event.target.result;
-                renderContainer('notes', records.filter(r => r.category === 'notes'), 'notesContainer');
-                renderContainer('codes', records.filter(r => r.category === 'codes'), 'codesContai
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--
