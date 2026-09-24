@@ -1,219 +1,522 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#080c1c">
-<title>تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-[hidden]{display:none!important}
-:root{--fs:1;--a1:#7c5cff;--a2:#00c2ff;--cols:2}
-[data-theme=dark]{--bg:#080c1c;--panel:#10162f;--card:rgba(255,255,255,.065);--txt:#f3f5ff;--mut:#99a2c9;--line:rgba(255,255,255,.11);--sh:0 14px 34px -14px rgba(0,0,0,.7)}
-[data-theme=light]{--bg:#f2f3fb;--panel:#fbfbff;--card:rgba(255,255,255,.82);--txt:#141a36;--mut:#646b92;--line:rgba(20,26,60,.11);--sh:0 14px 30px -16px rgba(60,70,150,.35)}
-html{font-size:calc(16px*var(--fs));background:var(--bg)}
-body{min-height:100vh;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic","Noto Naskh Arabic",Tahoma,sans-serif;line-height:1.5;overflow-x:hidden;overscroll-behavior:none}
-button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
-a{color:inherit}
-#bg{position:fixed;inset:-20%;z-index:0;pointer-events:none;background:
-radial-gradient(38% 30% at 82% 12%,rgba(124,92,255,.5),transparent 70%),
-radial-gradient(34% 28% at 12% 30%,rgba(0,194,255,.38),transparent 70%),
-radial-gradient(36% 30% at 90% 68%,rgba(255,61,129,.34),transparent 70%),
-radial-gradient(34% 28% at 15% 92%,rgba(34,197,94,.3),transparent 70%),
-radial-gradient(28% 22% at 55% 50%,rgba(251,191,36,.16),transparent 70%);animation:drift 26s ease-in-out infinite alternate}
-[data-theme=light] #bg{opacity:.5}
-@keyframes drift{to{transform:translate3d(-4%,3%,0) rotate(6deg) scale(1.05)}}
-.noanim *,.noanim #bg{animation:none!important;transition:none!important}
-#app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom))}
-.top{padding-top:calc(14px + env(safe-area-inset-top))}
-.brand,.ftop{display:flex;align-items:center;gap:12px}
-.bt{flex:1;min-width:0}
-.bt h1{font-size:1.28rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bt p{font-size:.78rem;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.av{width:54px;height:54px;border-radius:19px;overflow:hidden;background:linear-gradient(135deg,var(--a1),var(--a2));display:grid;place-items:center;font-weight:800;font-size:1.35rem;color:#fff;box-shadow:0 10px 22px -8px var(--a1);flex:none}
-.av img{width:100%;height:100%;object-fit:cover}
-img:not([src]){visibility:hidden}
-.ib{width:44px;height:44px;flex:none;border-radius:15px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;backdrop-filter:blur(14px);transition:transform .15s}
-.ib:active{transform:scale(.92)}
-.hero{margin:18px 0;border-radius:28px;padding:18px;background:linear-gradient(120deg,var(--a1),var(--a2));color:#fff;position:relative;overflow:hidden;box-shadow:var(--sh)}
-.hero:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.17);top:-70px;left:-50px}
-.hero:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.12);bottom:-50px;right:30px}
-.hero p{position:relative;font-weight:700;font-size:1.02rem}
-.stats{position:relative;display:flex;gap:10px;margin-top:12px}
-.stats div{flex:1;background:rgba(255,255,255,.2);border-radius:16px;padding:9px 6px;text-align:center;backdrop-filter:blur(8px);font-size:.75rem}
-.stats b{display:block;font-size:1.35rem;line-height:1.2}
-.grid{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:14px}
-.tile{position:relative;aspect-ratio:1/1.02;border-radius:28px;padding:15px;display:flex;flex-direction:column;justify-content:flex-end;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(16px);box-shadow:var(--sh);overflow:hidden;cursor:pointer;transition:transform .18s;text-align:right}
-.tile:active{transform:scale(.95)}
-.tile:before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,var(--g1),var(--g2));opacity:.17}
-.tile .ico{position:absolute;top:15px;right:15px;width:60px;height:60px;border-radius:21px;background:linear-gradient(135deg,var(--g1),var(--g2));display:grid;place-items:center;color:#fff;box-shadow:0 12px 24px -8px var(--g2)}
-[data-cols="3"] .tile .ico{width:46px;height:46px;border-radius:16px}
-[data-cols="3"] .tile{padding:11px}
-.tile b{position:relative;font-size:1.02rem;font-weight:800;line-height:1.3}
-.tile small{position:relative;color:var(--mut);font-size:.76rem}
-.tile .edit{position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--mut)}
-.tile .lk{position:absolute;bottom:13px;left:13px;color:var(--mut)}
-.tile.add{align-items:center;justify-content:center;gap:6px;border:2px dashed var(--line);background:transparent;box-shadow:none;color:var(--mut)}
-.tile.add:before{display:none}
-.foot{text-align:center;color:var(--mut);font-size:.78rem;margin-top:22px}
-.fh{padding-top:calc(14px + env(safe-area-inset-top));position:sticky;top:0;z-index:3;background:linear-gradient(var(--bg) 78%,transparent);padding-bottom:6px;margin:0 -16px;padding-inline:16px}
-.fic{width:48px;height:48px;border-radius:17px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 10px 22px -8px var(--g2);flex:none}
-.sr{display:flex;align-items:center;gap:8px;margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0 13px;color:var(--mut)}
-.sr input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--txt);font:inherit;padding:12px 0}
-.grow{flex:1;margin:0}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;padding:7px 15px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:.85rem;color:var(--mut)}
-.chip.on{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;border-color:transparent}
-.cards{column-count:2;column-gap:12px;margin-top:10px}
-.card{break-inside:avoid;margin-bottom:12px;border-radius:22px;background:var(--card);border:1px solid var(--line);overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:transform .15s}
-.card:active{transform:scale(.97)}
-.card .th{position:relative;aspect-ratio:1;background:rgba(120,130,180,.18);display:grid;place-items:center;color:#fff}
-.card .th img,.card .th video{width:100%;height:100%;object-fit:cover}
-.card .th.au{background:linear-gradient(135deg,var(--g1),var(--g2))}
-.card .pl{position:absolute;inset:auto auto 8px 8px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.5);display:grid;place-items:center;backdrop-filter:blur(6px)}
-.card h3{font-size:.94rem;padding:10px 12px 0;line-height:1.4;word-break:break-word}
-.card small{display:flex;align-items:center;gap:5px;padding:2px 12px 12px;color:var(--mut);font-size:.74rem}
-.tx{padding:14px 14px 0;color:var(--mut);font-size:.82rem;line-height:1.75;max-height:8.5em;overflow:hidden;white-space:pre-wrap;word-break:break-word}
-.tx.poem{text-align:center}
-.tx.code{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem}
-.empty{text-align:center;color:var(--mut);padding:60px 20px}
-.empty svg{opacity:.5;margin-bottom:10px}
-.empty b{display:block;color:var(--txt);font-size:1.05rem}
-.fab{position:fixed;left:20px;bottom:calc(22px + env(safe-area-inset-bottom));width:62px;height:62px;border-radius:23px;background:linear-gradient(135deg,var(--g1,var(--a1)),var(--g2,var(--a2)));color:#fff;display:grid;place-items:center;box-shadow:0 16px 32px -8px var(--g2,var(--a1));z-index:5;transition:transform .15s}
-.fab:active{transform:scale(.9)}
-.sheet{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-.sheet .dim{position:absolute;inset:0;background:rgba(4,7,18,.6);opacity:0;transition:opacity .25s;backdrop-filter:blur(4px)}
-.sheet .panel{position:relative;width:100%;max-width:720px;max-height:92vh;overflow:auto;background:var(--panel);border-radius:30px 30px 0 0;padding:10px 16px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);border:1px solid var(--line)}
-.sheet.on{pointer-events:auto}
-.sheet.on .dim{opacity:1}
-.sheet.on .panel{transform:none}
-.sheet.full .panel{height:100%;max-height:none;border-radius:0;border:0;padding-top:calc(12px + env(safe-area-inset-top))}
-.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:2px auto 14px}
-.sh{font-size:1.15rem;font-weight:800;margin-bottom:12px}
-.eh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.eh .sh{flex:1;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-h4{font-size:.85rem;color:var(--mut);margin:16px 0 8px;font-weight:600}
-.mut{color:var(--mut);line-height:1.8}
-.inp{width:100%;background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:16px;padding:13px 14px;font:inherit;outline:0;margin-bottom:10px}
-.inp:focus{border-color:var(--a1)}
-.ta{min-height:52vh;resize:none;line-height:1.9}
-.ta.poem{text-align:center;font-size:1.08rem}
-.ta.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:16px;padding:13px 18px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 12px 24px -12px var(--a1)}
-.btn.sec{background:var(--card);color:var(--txt);border:1px solid var(--line);box-shadow:none}
-.btn.red{background:linear-gradient(135deg,#ff4d6d,#c9184a);box-shadow:none}
-.btn.sm{padding:10px 15px;border-radius:14px}
-.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.acts .btn{flex:1;min-width:120px}
-.addg{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.addg button{display:flex;align-items:center;gap:12px;padding:14px;border-radius:20px;background:var(--card);border:1px solid var(--line);text-align:right;font-weight:700}
-.addg span{width:50px;height:50px;border-radius:17px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 10px 20px -8px var(--g2)}
-.ipk{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.ipk button{aspect-ratio:1;border-radius:15px;border:2px solid transparent;background:var(--card);display:grid;place-items:center}
-.ipk .sel{border-color:var(--txt)}
-.cpk button{border-radius:50%}
-.prev{display:grid;place-items:center;margin:4px 0 14px}
-.pv{width:78px;height:78px;border-radius:27px;display:grid;place-items:center;color:#fff;box-shadow:0 16px 30px -10px rgba(0,0,0,.5)}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
-.row:last-child{border:0}
-.row span{display:flex;align-items:center;gap:8px}
-.set{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:8px 15px 12px;margin-top:14px;backdrop-filter:blur(14px)}
-.set h2{display:flex;align-items:center;gap:10px;font-size:1.02rem;padding:10px 0}
-.sic{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;color:#fff}
-.sw{width:52px;height:30px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .2s}
-.sw:after{content:"";position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:right .2s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
-.sw.on{background:linear-gradient(135deg,var(--a1),var(--a2))}
-.sw.on:after{right:25px}
-.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:3px}
-.seg button{padding:7px 13px;border-radius:11px;color:var(--mut);font-size:.88rem}
-.seg .on{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff}
-.sws{display:flex;gap:10px;flex-wrap:wrap;padding:6px 0 10px}
-.swc{width:40px;height:40px;border-radius:14px;border:3px solid transparent}
-.swc.on{border-color:var(--txt)}
-.prof{display:flex;align-items:center;gap:14px;padding:6px 0 14px}
-.avb{position:relative;width:78px;height:78px;border-radius:26px;flex:none}
-.avb .av{width:78px;height:78px;border-radius:26px;font-size:1.9rem}
-.avb i{position:absolute;bottom:-4px;left:-4px;width:30px;height:30px;border-radius:50%;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center}
-.prof small{color:var(--mut)}
-.fld{display:block;font-size:.83rem;color:var(--mut);margin-bottom:4px}
-.fld .inp{margin:5px 0 10px;color:var(--txt)}
-.rng{width:150px;accent-color:var(--a1)}
-.big{width:100%;max-height:62vh;object-fit:contain;border-radius:22px;background:rgba(0,0,0,.35)}
-.disc{width:150px;height:150px;border-radius:50%;margin:20px auto;display:grid;place-items:center;color:#fff;background:conic-gradient(from 0deg,#ff3d81,#ffb02e,#22c55e,#00c2ff,#7c5cff,#ff3d81);box-shadow:0 20px 40px -14px var(--a1);animation:spin 9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-audio{width:100%;margin-top:8px}
-.cap{margin-top:14px;color:var(--mut);line-height:1.9;white-space:pre-wrap}
-.body{white-space:pre-wrap;line-height:2;font-size:1.06rem;word-break:break-word}
-.body.poem{text-align:center;font-size:1.18rem}
-.code{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.84rem;line-height:1.7;background:#0a0f22;color:#e6eaff;padding:14px;border-radius:18px;overflow:auto;white-space:pre}
-.res{display:flex;align-items:center;gap:12px;padding:11px;border-radius:18px;background:var(--card);border:1px solid var(--line);margin-bottom:9px}
-.res .sic{width:42px;height:42px;border-radius:15px}
-.res b{display:block;font-size:.95rem}
-.res small{color:var(--mut)}
-#lock{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;overflow:auto}
-#lock:before{content:"";position:fixed;inset:0;background:radial-gradient(40% 30% at 80% 15%,rgba(124,92,255,.5),transparent 70%),radial-gradient(40% 30% at 15% 85%,rgba(0,194,255,.4),transparent 70%),radial-gradient(35% 28% at 85% 80%,rgba(255,61,129,.3),transparent 70%)}
-.pin .panel{display:grid;place-items:center;background:var(--bg)}
-.padbox{position:relative;text-align:center;padding:24px}
-.padbox h2{font-size:1.3rem;margin-top:12px}
-.padbox p{color:var(--mut);margin:4px 0 18px;min-height:1.5em}
-.lockic{width:66px;height:66px;border-radius:24px;margin:0 auto;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 14px 28px -10px var(--a1)}
-.dots{display:flex;justify-content:center;gap:12px;margin-bottom:22px;min-height:16px}
-.dots i{width:15px;height:15px;border-radius:50%;border:2px solid var(--mut);transition:transform .15s}
-.dots i.f{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:transparent;transform:scale(1.1)}
-.keys{display:grid;grid-template-columns:repeat(3,72px);gap:14px;justify-content:center;direction:ltr}
-.keys button{height:72px;border-radius:50%;background:var(--card);border:1px solid var(--line);font-size:1.5rem;font-weight:600;display:grid;place-items:center;backdrop-filter:blur(10px)}
-.keys button:active{background:var(--a1);color:#fff}
-.lnk{display:block;margin:16px auto 0;color:var(--mut);padding:8px 14px}
-.shake{animation:shake .4s}
-@keyframes shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
-#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:rgba(17,24,39,.94);color:#fff;padding:10px 18px;border-radius:15px;opacity:0;transition:.25s;z-index:70;pointer-events:none;font-size:.9rem;max-width:88vw;text-align:center}
-#toast.show{opacity:1;transform:translate(-50%,0)}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31103f 100%);
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --accent-1: #6366f1;
+            --accent-2: #ec4899;
+            --text-color: #f8fafc;
+        }
+
+        [data-theme="sunset"] {
+            --bg-gradient: linear-gradient(135deg, #451a03 0%, #7c2d12 50%, #9a3412 100%);
+        }
+
+        [data-theme="emerald"] {
+            --bg-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #0f766e 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            padding: 18px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .card:active {
+            transform: scale(0.95);
+        }
+
+        .card i {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card span {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .footer-nav {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--card-border);
+            padding: 12px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-nav button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            opacity: 0.8;
+            transition: 0.2s;
+        }
+
+        .footer-nav button:hover, .footer-nav button.active {
+            opacity: 1;
+            color: #38bdf8;
+        }
+
+        .footer-nav button span {
+            font-size: 0.7rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.15);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            color: #38bdf8;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #f8fafc;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(15,23,42,0.6);
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .media-box {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        .media-box video, .media-box audio {
+            width: 100%;
+            margin-top: 8px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-<div id="bg"></div>
-<div id="app"></div>
-<div id="sheets"></div>
-<div id="lock" hidden></div>
-<div id="toast"></div>
-<input type="file" id="fi" hidden>
-<script>
-"use strict";
-const $=(s,r=document)=>r.querySelector(s);
-const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
-/* ---------- الأيقونات (SVG) ---------- */
-const P={
-folder:'<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
-code:'<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
-image:'<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/>',
-camera:'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/>',
-lock:'<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
-rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
-crown:'<path d="m2 4 3 12h14l3-12-6 7-4-7-4 7z"/><path d="M5 20h14"/>',
-book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
-music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
-video:'<path d="m16 13 5.22 3.48a.5.5 0 0 0 .78-.42V7.87a.5.5 0 0 0-.75-.43L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/>',
-heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
-star:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>',
-laptop:'<path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/>',
-zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
-feather:'<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8 2 22"/><path d="M17.5 15H9"/>',
-note:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8M16 13H8M16 17H8"/>',
-globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
-flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
-sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
-shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
-search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
-plus:'<path d="M12 5v14M5 12h14"/>',
-back:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
-more:'<circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/>',
-edit:'<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
-x:'<path d="M18 6 6 18M6 6l12 12"/>',
-check:'<path d="M20 6 9 17l-5-5"/>',
-play:'<path d="M6 3l14 9-14 9z" fill="currentColor"/>',
-trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
-share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy
+    <div class="header" id="appHeader">
+        <h1 id="displayAppName">تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD</h1>
+        <p id="displayEmail">alnourmontasir@gmail.com</p>
+    </div>
+
+    <div class="grid-container">
+        <div class="card" onclick="openModal('notesModal')">
+            <i class="fa-solid fa-note-sticky"></i>
+            <span>الذكريات والنصوص</span>
+        </div>
+        <div class="card" onclick="openModal('codesModal')">
+            <i class="fa-solid fa-code"></i>
+            <span>الأكواد البرمجية</span>
+        </div>
+        <div class="card" onclick="openModal('projectsModal')">
+            <i class="fa-solid fa-rocket"></i>
+            <span>مشاريع التطبيق</span>
+        </div>
+        <div class="card" onclick="checkPassword('secureModal')">
+            <i class="fa-solid fa-lock"></i>
+            <span>ملفات خاصة</span>
+        </div>
+        <div class="card" onclick="openModal('profileModal')">
+            <i class="fa-solid fa-crown"></i>
+            <span>الملف الشخصي</span>
+        </div>
+        <div class="card" onclick="openModal('hiddenMediaModal')">
+            <i class="fa-solid fa-video-slash"></i>
+            <span>حفظ فيديو وموسيقى مخفي</span>
+        </div>
+        <div class="card" onclick="openModal('audioModal')">
+            <i class="fa-solid fa-music"></i>
+            <span>مشغل الطنبور</span>
+        </div>
+        <div class="card" onclick="openModal('settingsModal')">
+            <i class="fa-solid fa-gear"></i>
+            <span>الضبط والإعدادات</span>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <button onclick="location.reload()" class="active">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </button>
+        <button onclick="openModal('settingsModal')">
+            <i class="fa-solid fa-sliders"></i>
+            <span>التحكمات</span>
+        </button>
+        <button onclick="history.back()">
+            <i class="fa-solid fa-circle-chevron-left"></i>
+            <span>رجوع النظام</span>
+        </button>
+    </div>
+
+    <!-- نافذة النصوص -->
+    <div class="modal" id="notesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>الحافظة والنصوص</h3>
+                <button class="close-btn" onclick="closeModal('notesModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>اكتب ذكرياتك أو ملاحظاتك هنا:</label>
+                <textarea id="noteInput" rows="5" placeholder="اكتب نصاً جديداً..."></textarea>
+            </div>
+            <button class="btn-primary" onclick="saveNote()">حفظ النص في الحافظة</button>
+            <p id="saveStatus" style="font-size:0.8rem; color:#34d399; margin-top:8px; text-align:center;"></p>
+        </div>
+    </div>
+
+    <!-- نافذة الأكواد -->
+    <div class="modal" id="codesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>الأكواد البرمجية</h3>
+                <button class="close-btn" onclick="closeModal('codesModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <textarea rows="6" placeholder="احفظ أكوادك هنا..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المشاريع -->
+    <div class="modal" id="projectsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>مشاريع التطبيق</h3>
+                <button class="close-btn" onclick="closeModal('projectsModal')">&times;</button>
+            </div>
+            <p style="text-align: center; opacity: 0.8; font-size: 0.9rem;">إدارة مشاريعك الهندسية والبرمجية هنا.</p>
+        </div>
+    </div>
+
+    <!-- نافذة الملف الشخصي -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>الملف الشخصي</h3>
+                <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            <p style="text-align: center; font-weight: bold; color: #38bdf8;">المنتصر بالله Alnor</p>
+        </div>
+    </div>
+
+    <!-- نافذة حفظ الفيديوهات والموسيقى المخفية داخل التطبيق حصرياً -->
+    <div class="modal" id="hiddenMediaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>حافظة الوسائط المخفية</h3>
+                <button class="close-btn" onclick="closeModal('hiddenMediaModal')">&times;</button>
+            </div>
+            <p style="font-size: 0.8rem; color: #34d399; margin-bottom: 12px; text-align: center;">المجلد مخفي تماماً عن النظام ولا يظهر في المعرض أو مشغلات الهاتف.</p>
+            <div class="form-group">
+                <label>اختر فيديو أو موسيقى للتخزين الداخلي السري:</label>
+                <input type="file" id="hiddenMediaInput" accept="video/*,audio/*" onchange="storeHiddenMedia(event)">
+            </div>
+            <div class="media-box" id="hiddenMediaContainer">
+                <span style="font-size:0.85rem; opacity:0.7;">لا توجد ملفات مخفية مشغلة حالياً</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة مشغل الطنبور -->
+    <div class="modal" id="audioModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>مشغل الموسيقى والطنبور</h3>
+                <button class="close-btn" onclick="closeModal('audioModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>اختر ملف طنبور للاستماع الفوري:</label>
+                <input type="file" id="audioInput" accept="audio/*" onchange="playAudio(event)">
+            </div>
+            <audio id="audioPlayer" controls style="width:100%; margin-top:15px; display:none;"></audio>
+        </div>
+    </div>
+
+    <!-- نافذة الإعدادات -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>لوحة الضبط والإعدادات</h3>
+                <button class="close-btn" onclick="closeModal('settingsModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>اسم التطبيق:</label>
+                <input type="text" id="settingAppName" value="تـ𝓣𝓻𝓪𝓶𝓪ـرامـا SD">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني:</label>
+                <input type="text" id="settingEmail" value="alnourmontasir@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور الخاصة بالملفات:</label>
+                <input type="password" id="settingPass" value="1234">
+            </div>
+            <div class="form-group">
+                <label>ثيم الألوان:</label>
+                <select id="themeSelect" onchange="changeTheme()">
+                    <option value="default">ليلي ملكي (افتراضي)</option>
+                    <option value="sunset">غروب دافئ</option>
+                    <option value="emerald">زمردي أخضر</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="saveSettings()">حفظ التعديلات وتطبيقها</button>
+        </div>
+    </div>
+
+    <!-- نافذة الملفات الخاصة -->
+    <div class="modal" id="secureModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>الملفات الخاصة المحمية</h3>
+                <button class="close-btn" onclick="closeModal('secureModal')">&times;</button>
+            </div>
+            <p style="text-align:center; margin-bottom:15px; color:#34d399;">تم فتح الملفات الخاصة بنجاح عبر كلمة المرور!</p>
+            <div class="form-group">
+                <textarea rows="4" placeholder="محتوى سري خاص بك..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        function checkPassword(modalId) {
+            let savedPass = localStorage.getItem('appPass') || '1234';
+            let entered = prompt("الرجاء إدخال كلمة المرور:");
+            if (entered === savedPass) {
+                openModal(modalId);
+            } else if (entered !== null) {
+                alert("كلمة المرور غير صحيحة!");
+            }
+        }
+        function saveNote() {
+            let text = document.getElementById('noteInput').value;
+            localStorage.setItem('savedNote', text);
+            document.getElementById('saveStatus').innerText = "تم حفظ النص بنجاح في الحافظة!";
+            setTimeout(() => { document.getElementById('saveStatus').innerText = ""; }, 3000);
+        }
+        function storeHiddenMedia(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Data = e.target.result;
+                localStorage.setItem('hiddenMedia', base64Data);
+                localStorage.setItem('hiddenMediaType', file.type);
+                renderHiddenMedia();
+                alert("تم إدخال وحفظ الفيديو/الموسيقى داخل التطبيق بسريّة تامة ولن يظهر في أستوديو الجهاز!");
+            };
+            reader.readAsDataURL(file);
+        }
+        function renderHiddenMedia() {
+            let data = localStorage.getItem('hiddenMedia');
+            let type = localStorage.getItem('hiddenMediaType');
+            let container = document.getElementById('hiddenMediaContainer');
+            if (data) {
+                if (type.includes('video')) {
+                    container.innerHTML = `<video controls src="${data}"></video>`;
+                } else {
+                    container.innerHTML = `<audio controls src="${data}"></audio>`;
+                }
+            }
+        }
+        function playAudio(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            let audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = URL.createObjectURL(file);
+            audioPlayer.style.display = 'block';
+            audioPlayer.play();
+        }
+        function changeTheme() {
+            let theme = document.getElementById('themeSelect').value;
+            if(theme === 'sunset') document.body.setAttribute('data-theme', 'sunset');
+            else if(theme === 'emerald') document.body.setAttribute('data-theme', 'emerald');
+            else document.body.removeAttribute('data-theme');
+            localStorage.setItem('appTheme', theme);
+        }
+        function saveSettings() {
+            let name = document.getElementById('settingAppName').value;
+            let email = document.getElementById('settingEmail').value;
+            let pass = document.getElementById('settingPass').value;
+            
+            localStorage.setItem('appName', name);
+            localStorage.setItem('appEmail', email);
+            localStorage.setItem('appPass', pass);
+
+            document.getElementById('displayAppName').innerText = name;
+            document.getElementById('displayEmail').innerText = email;
+            
+            alert("تم حفظ التعديلات بنجاح!");
+            closeModal('settingsModal');
+        }
+
+        window.onload = function() {
+            if(localStorage.getItem('appName')) {
+                document.getElementById('displayAppName').innerText = localStorage.getItem('appName');
+                document.getElementById('settingAppName').value = localStorage.getItem('appName');
+            }
+            if(localStorage.getItem('appEmail')) {
+                document.getElementById('displayEmail').innerText = localStorage.getItem('appEmail');
+                document.getElementById('settingEmail').value = localStorage.getItem('appEmail');
+            }
+            let savedTheme = localStorage.getItem('appTheme');
+            if(savedTheme) {
+                document.getElementById('themeSelect').value = savedTheme;
+                changeTheme();
+            }
+            if(localStorage.getItem('savedNote')) {
+                document.getElementById('noteInput').value = localStorage.getItem('savedNote');
+            }
+            renderHiddenMedia();
+        }
+    </script>
+</body>
+</html>
