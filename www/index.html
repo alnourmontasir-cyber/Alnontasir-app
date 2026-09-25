@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
-<title>منتصر النور حسين</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>المنتصر</title>
 <style>
 :root{
   --bg:#12151b;
@@ -43,7 +41,7 @@
 html,body{height:100%;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:'Tajawal',system-ui,sans-serif;
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
   overscroll-behavior:none;
   padding-top:env(safe-area-inset-top);
   padding-bottom:env(safe-area-inset-bottom);
@@ -106,7 +104,9 @@ input:focus,textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
 .empty-state svg{width:46px;height:46px; margin-bottom:12px; opacity:.5;}
 .empty-state p{margin:0; font-size:13.5px;}
 
-.fab{position:fixed; bottom:28px; inset-inline-end:22px; width:58px;height:58px;border-radius:50%; background:linear-gradient(155deg,var(--gold),var(--gold-dim)); box-shadow:var(--shadow); display:flex;align-items:center;justify-content:center; z-index:50;}
+.fab{display:none; position:fixed; bottom:28px; inset-inline-end:22px; width:58px;height:58px;border-radius:50%; background:linear-gradient(155deg,var(--gold),var(--gold-dim)); box-shadow:var(--shadow); align-items:center;justify-content:center; z-index:50;}
+.fab.show{display:flex;}
+#diagBox{display:none; margin:16px 2px; padding:14px; border-radius:14px; background:#3a1f1f; border:1px solid #a44; color:#ffd9d3; font-size:12px; white-space:pre-wrap; direction:ltr; text-align:left;}
 .fab svg{width:24px;height:24px; color:#12151b;}
 
 /* ---------- Modal ---------- */
@@ -172,6 +172,7 @@ input:focus,textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     </button>
   </div>
+  <div id="diagBox"></div>
   <div class="grid" id="foldersGrid"></div>
 </div>
 
@@ -372,5 +373,4 @@ function handlePinSetupComplete(){
     pinSetupFirst = pendingPinEntry;
     pendingPinEntry=''; renderPinDots(0);
     pinSetupStage='confirm';
-    document.querySelector('#lockScreen p').textContent='أعد إدخال الرمز للتأكيد';
-  } else if(pinSet
+    document.querySelecto
