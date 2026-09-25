@@ -173,8 +173,46 @@ input:focus,textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
     </button>
   </div>
   <div id="diagBox"></div>
-  <div class="grid" id="foldersGrid"></div>
+  <div class="grid" id="foldersGrid">
+    <button class="folder-card" style="--fc:#3f9d8f" onclick="openFolder('code')">
+      <div class="folder-icon" style="background:#3f9d8f"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 4 4 4M16 9l4 4-4 4M13 5l-2 16"/></svg></div>
+      <div><h3>الأكواد</h3><span class="count-label" data-folder="code">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#c9a24b" onclick="openFolder('memories')">
+      <div class="folder-icon" style="background:#c9a24b"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21c0-4-3.6-6-8-6s-8 2-8 6M12 12a4 4 0 100-8 4 4 0 000 8z"/></svg></div>
+      <div><h3>الذكريات</h3><span class="count-label" data-folder="memories">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#b5504a" onclick="openFolder('private')">
+      <div class="folder-icon" style="background:#b5504a"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V5l7-3z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg></div>
+      <div><h3>ملفات خاصة</h3><span class="count-label" data-folder="private">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#3f6fb0" onclick="openFolder('projects')">
+      <div class="folder-icon" style="background:#3f6fb0"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg></div>
+      <div><h3>مشاريع</h3><span class="count-label" data-folder="projects">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#b0567f" onclick="openFolder('mymemory')">
+      <div class="folder-icon" style="background:#b0567f"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-9.5-9C.5 8 2.5 4 6.5 4c2 0 3.5 1.5 5.5 4 2-2.5 3.5-4 5.5-4 4 0 6 4 4 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
+      <div><h3>ذكرياتي</h3><span class="count-label" data-folder="mymemory">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#8a5fbf" onclick="openFolder('media')">
+      <div class="folder-icon" style="background:#8a5fbf"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="15" height="14" rx="2"/><path d="M21 8l-3 3 3 3V8z"/></svg></div>
+      <div><h3>الفيديوهات والصور</h3><span class="count-label" data-folder="media">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#c07a30" onclick="openFolder('tambour')">
+      <div class="folder-icon" style="background:#c07a30"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><circle cx="9" cy="18" r="3"/><circle cx="15" cy="16" r="3"/></svg></div>
+      <div><h3>طمبور الشمال</h3><span class="count-label" data-folder="tambour">0 عنصر</span></div>
+    </button>
+    <button class="folder-card" style="--fc:#6b7385" onclick="openFolder('other')">
+      <div class="folder-icon" style="background:#6b7385"><svg viewBox="0 0 24 24" fill="none" stroke="#12151b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></div>
+      <div><h3>أخرى</h3><span class="count-label" data-folder="other">0 عنصر</span></div>
+    </button>
+  </div>
 </div>
+<noscript>
+  <div style="position:fixed;bottom:0;inset-inline:0;background:#3a1f1f;color:#ffd9d3;padding:14px 18px;font-size:12.5px;text-align:center;z-index:600;">
+    تنبيه: الجافاسكربت لا يعمل داخل هذا التطبيق، لذلك لا يمكن فتح الحافظات أو حفظ أي محتوى. هذه مشكلة في إعدادات تطبيق الأندرويد (WebView) وليست في هذا الملف.
+  </div>
+</noscript>
 
 <!-- ============== FOLDER DETAIL ============== -->
 <div class="screen" id="screen-folder">
@@ -275,102 +313,4 @@ const FOLDERS = [
     icon:'<path d="M20 21c0-4-3.6-6-8-6s-8 2-8 6M12 12a4 4 0 100-8 4 4 0 000 8z"/>' },
   { id:'private',  name:'ملفات خاصة',        color:'#b5504a', type:'file',
     icon:'<path d="M12 2l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V5l7-3z"/><path d="M9.5 12l1.8 1.8L15 10"/>' },
-  { id:'projects', name:'مشاريع',            color:'#3f6fb0', type:'note',
-    icon:'<path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>' },
-  { id:'mymemory', name:'ذكرياتي',           color:'#b0567f', type:'note',
-    icon:'<path d="M12 21s-7-4.5-9.5-9C.5 8 2.5 4 6.5 4c2 0 3.5 1.5 5.5 4 2-2.5 3.5-4 5.5-4 4 0 6 4 4 8-2.5 4.5-9.5 9-9.5 9z"/>' },
-  { id:'media',    name:'الفيديوهات والصور', color:'#8a5fbf', type:'media',
-    icon:'<rect x="3" y="5" width="15" height="14" rx="2"/><path d="M21 8l-3 3 3 3V8z"/>' },
-  { id:'tambour',  name:'طمبور الشمال',      color:'#c07a30', type:'note',
-    icon:'<path d="M12 3v13"/><circle cx="9" cy="18" r="3"/><circle cx="15" cy="16" r="3"/>' },
-  { id:'other',    name:'أخرى',              color:'#6b7385', type:'file',
-    icon:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>' },
-];
-const DEFAULT_SETTINGS = { appName:'المنتصر', tagline:'خزانتك الخاصة', about:'', publisher:'', version:'1.0.0', avatar:'', pinEnabled:false, pin:'' };
-
-/* ========================= STATE / STORAGE ========================= */
-let settings = loadSettings();
-let data = loadData();
-let currentFolder = null;
-let pendingAvatar = null;
-let pendingPinEntry = '';
-let pinSetupStage = null; // 'new' | 'confirm'
-let pinSetupFirst = '';
-let mediaFilesBuffer = []; // {dataUrl, mime, name}
-
-function loadSettings(){
-  try{ return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem('almuntasir_settings')||'{}')); }
-  catch(e){ return {...DEFAULT_SETTINGS}; }
-}
-function saveSettingsToStorage(){ localStorage.setItem('almuntasir_settings', JSON.stringify(settings)); }
-function loadData(){
-  try{ return Object.assign({}, Object.fromEntries(FOLDERS.map(f=>[f.id,[]])), JSON.parse(localStorage.getItem('almuntasir_data')||'{}')); }
-  catch(e){ let o={}; FOLDERS.forEach(f=>o[f.id]=[]); return o; }
-}
-function saveDataToStorage(){ localStorage.setItem('almuntasir_data', JSON.stringify(data)); }
-
-/* ========================= LOCK SCREEN ========================= */
-function buildPinPad(){
-  const pad = document.getElementById('pinPad');
-  pad.innerHTML='';
-  const keys=['1','2','3','4','5','6','7','8','9','','0','⌫'];
-  keys.forEach(k=>{
-    const b=document.createElement('button');
-    b.className='pin-key';
-    if(k===''){ b.style.visibility='hidden'; }
-    else{
-      b.textContent = k==='⌫' ? '⌫' : k;
-      b.onclick = ()=> handlePinKey(k);
-    }
-    pad.appendChild(b);
-  });
-}
-function renderPinDots(len){
-  const wrap = document.getElementById('pinDots');
-  wrap.innerHTML='';
-  for(let i=0;i<4;i++){
-    const d=document.createElement('div');
-    d.className='pin-dot'+(i<len?' filled':'');
-    wrap.appendChild(d);
-  }
-}
-function handlePinKey(k){
-  if(k==='⌫'){ pendingPinEntry = pendingPinEntry.slice(0,-1); renderPinDots(pendingPinEntry.length); return; }
-  if(pendingPinEntry.length>=4) return;
-  pendingPinEntry += k;
-  renderPinDots(pendingPinEntry.length);
-  if(pendingPinEntry.length===4){
-    setTimeout(()=>{
-      if(pinSetupStage){ handlePinSetupComplete(); }
-      else{ handleUnlockAttempt(); }
-    }, 120);
-  }
-}
-function handleUnlockAttempt(){
-  if(pendingPinEntry === settings.pin){
-    document.getElementById('lockScreen').classList.remove('active');
-    pendingPinEntry=''; renderPinDots(0);
-    document.getElementById('lockError').textContent='';
-  } else {
-    document.getElementById('lockError').textContent='رمز غير صحيح، حاول مجدداً';
-    pendingPinEntry=''; renderPinDots(0);
-  }
-}
-function showLockScreen(){
-  buildPinPad(); renderPinDots(0); pendingPinEntry='';
-  document.getElementById('lockError').textContent='';
-  document.getElementById('lockScreen').classList.add('active');
-}
-
-/* PIN setup flow (from settings) */
-function startSetPin(){
-  pinSetupStage='new'; pinSetupFirst=''; pendingPinEntry='';
-  showLockScreen();
-  document.querySelector('#lockScreen p').textContent='أدخل رمزاً جديداً مكوناً من 4 أرقام';
-}
-function handlePinSetupComplete(){
-  if(pinSetupStage==='new'){
-    pinSetupFirst = pendingPinEntry;
-    pendingPinEntry=''; renderPinDots(0);
-    pinSetupStage='confirm';
-    document.querySelecto
+  { id:'projects', name:'مشاريع',            color:'#3f6fb0', ty
