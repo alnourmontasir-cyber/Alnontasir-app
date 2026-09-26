@@ -329,6 +329,7 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 
 <!-- hidden fallback pickers -->
 <input type="file" id="photoFallbackInput" accept="image/*" capture="environment" class="hidden">
+<input type="file" id="photoUploadInput" accept="image/*" class="hidden">
 <input type="file" id="videoFallbackInput" accept="video/*" class="hidden">
 <input type="file" id="musicFallbackInput" accept="audio/*" class="hidden">
 <input type="file" id="fileGenericInput" class="hidden">
@@ -614,12 +615,14 @@ async function saveToGallery(){
 
   try{
     if(isNative && Media && item.kind==='photo'){
-      await Media.savePhoto({ path: item.nativeUri || item.src });
+      const uri = item.storedPath ? await getShareableUri(item) : (item.nativeUri || item.src);
+      await Media.savePhoto({ path: uri });
       toast('تم الحفظ في المعرض');
       return;
     }
     if(isNative && Media && item.kind==='video'){
-      await Media.saveVideo({ path: item.nativeUri || item.src });
+      const uri = item.storedPath ? await getShareableUri(item) : (item.nativeUri || item.src);
+      await Media.saveVideo({ path: uri });
       toast('تم الحفظ في المعرض');
       return;
     }
@@ -632,7 +635,8 @@ async function saveToGallery(){
     a.remove();
     toast(isNative ? 'لحفظ الصور والفيديوهات في المعرض مباشرة، ثبّت إضافة Media في المشروع' : 'تم بدء التنزيل');
   }catch(e){
-    toast('تعذّر الحفظ في المعرض');
+    // Show the real reason so it can be reported/debugged instead of a silent generic message
+    toast('تعذّر الحفظ: ' + (e && (e.message || e.errorMessage || e.code) || 'خطأ غير معروف'));
   }
 }
 
@@ -641,23 +645,33 @@ async function shareItem(){
   const item = currentViewItem;
   if(!item) return;
   const Share = window.Capacitor?.Plugins?.Share;
+  const hasFile = !!item.nativeUri; // a real file:// / content:// path
   try{
     if(Share){
-      await Share.share({
-        title: item.title || 'مشاركة',
-        text: item.title || '',
-        url: item.nativeUri || item.src,
-        dialogTitle: 'مشاركة عبر'
-      });
+      const payload = { title: item.title || 'مشاركة', dialogTitle: 'مشاركة عبر' };
+      if(hasFile){
+        // Capacitor's FileProvider only exposes the app's Cache folder to other apps
+        // by default — a file saved in Data (our persistent storage) can't be handed
+        // straight to the share sheet. Stage a temp copy in Cache first, then share that.
+        toast('جاري التحضير...');
+        payload.url = await getShareableUri(item);
+      } else if(item.kind==='note' || item.kind==='code' || !item.src){
+        payload.text = item.content || item.title || '';
+      } else {
+        toast('هذا العنصر أُضيف قبل تحديث المشاركة — احذفه وأضفه من جديد ليصبح قابلاً للمشاركة كملف');
+        return;
+      }
+      await Share.share(payload);
       return;
     }
     if(navigator.share){
-      await navigator.share({ title: item.title || '', text: item.title || '', url: item.src });
+      if(hasFile) await navigator.share({ title: item.title || '', url: item.nativeUri });
+      else await navigator.share({ title: item.title || '', text: item.content || item.title || '' });
       return;
     }
     toast('المشاركة غير مدعومة في هذه البيئة — ثبّت إضافة Share في المشروع');
   }catch(e){
-    /* the user likely cancelled the native share sheet — no need to show an error */
+    toast('تعذّرت المشاركة: ' + (e && (e.message || e.errorMessage || e.code) || 'خطأ غير معروف'));
   }
 }
 
@@ -675,6 +689,7 @@ function openAddModal(){
       <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="مثال: رحلة الصيف"></div>
       <div class="capture-row">
         <button type="button" class="capture-btn" onclick="capturePhoto()">${svg('camera')}<span>التقاط صورة</span></button>
+        <button type="button" class="capture-btn" onclick="document.getElementById('photoUploadInput').click()">${svg('upload')}<span>رفع صورة</span></button>
         <button type="button" class="capture-btn" onclick="document.getElementById('videoFallbackInput').click()">${svg('upload')}<span>رفع فيديو</span></button>
         <button type="button" class="capture-btn" onclick="document.getElementById('musicFallbackInput').click()">${svg('music')}<span>رفع موسيقى</span></button>
         <button type="button" class="capture-btn" id="recordBtn" onclick="toggleRecordAudio()">${svg('mic')}<span id="recordBtnLabel">تسجيل صوت</span></button>
@@ -717,6 +732,7 @@ function submitAddItem(){
     item.src = pendingMedia.src;
     item.name = pendingMedia.name;
     item.nativeUri = pendingMedia.nativeUri || null;
+    item.storedPath = pendingMedia.storedPath || null;
     item.title = title || pendingMedia.name;
   } else if(folder.kind === 'code'){
     const content = document.getElementById('addContent').value;
@@ -780,7 +796,10 @@ async function persistFile(file, name){
       });
       const uriRes = await Filesystem.getUri({ directory: 'DATA', path: safeName });
       const src = window.Capacitor.convertFileSrc(uriRes.uri);
-      return { src, name, nativeUri: uriRes.uri };
+      // storedPath is the relative filename inside Directory.Data — kept so we can
+      // later copy the file into the Cache directory just before sharing (Capacitor's
+      // FileProvider only exposes the caches folder to other apps by default).
+      return { src, name, nativeUri: uriRes.uri, storedPath: safeName };
     }catch(e){
       console.warn('Filesystem save failed, falling back to inline storage', e);
       toast('تعذّر الحفظ في تخزين الجهاز، سيتم استخدام تخزين مؤقت');
@@ -790,18 +809,40 @@ async function persistFile(file, name){
   if(file.size > 3*1024*1024){
     toast('تنبيه: الملف كبير وقد لا يُحفظ داخل معاينة المتصفح — سيعمل بشكل صحيح داخل التطبيق المثبّت');
   }
-  return { src: dataUrl, name, nativeUri: null };
+  return { src: dataUrl, name, nativeUri: null, storedPath: null };
 }
 
-/* PHOTO */
+/* Copy the item's persisted file into the Cache directory (shareable by default
+   under Capacitor's built-in FileProvider config) right before sharing it. */
+async function getShareableUri(item){
+  const Filesystem = window.Capacitor?.Plugins?.Filesystem;
+  if(!Filesystem || !item.storedPath) return item.nativeUri || null;
+  try{
+    const cacheName = 'share_' + item.storedPath;
+    await Filesystem.copy({ from: item.storedPath, directory: 'DATA', to: cacheName, toDirectory: 'CACHE' });
+    const uriRes = await Filesystem.getUri({ directory: 'CACHE', path: cacheName });
+    return uriRes.uri;
+  }catch(e){
+    console.warn('Could not stage a shareable cache copy', e);
+    return item.nativeUri || null;
+  }
+}
+
+/* PHOTO — capture with camera */
 async function capturePhoto(){
   const Camera = window.Capacitor?.Plugins?.Camera;
   if(Camera){
     try{
-      const photo = await Camera.getPhoto({ quality: 80, resultType: 'dataUrl', source: 'CAMERA', saveToGallery: true });
-      pendingMedia = { kind:'photo', src: photo.dataUrl, name:'صورة', nativeUri: null };
+      // resultType 'dataUrl' so the photo always displays fine inside the webview;
+      // we then persist it through the same Filesystem pipeline as uploads so it
+      // gets a real native path (nativeUri) — required for Save-to-gallery and Share.
+      const photo = await Camera.getPhoto({ quality: 80, resultType: 'dataUrl', source: 'CAMERA' });
+      const blob = await (await fetch(photo.dataUrl)).blob();
+      const file = new File([blob], 'photo_'+Date.now()+'.jpeg', { type: blob.type || 'image/jpeg' });
+      const saved = await persistFile(file, 'صورة');
+      pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
       showMediaPreview();
-    }catch(e){ /* user cancelled */ }
+    }catch(e){ toast('تعذّر التقاط الصورة: ' + (e && e.message || 'خطأ غير معروف')); }
   } else {
     document.getElementById('photoFallbackInput').click();
   }
@@ -809,7 +850,16 @@ async function capturePhoto(){
 document.getElementById('photoFallbackInput').addEventListener('change', async e=>{
   const file = e.target.files[0]; if(!file) return;
   const saved = await persistFile(file, file.name || 'صورة');
-  pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri };
+  pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+  showMediaPreview();
+  e.target.value = '';
+});
+/* PHOTO — upload an existing photo from the gallery/files (no camera) */
+document.getElementById('photoUploadInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  toast('جاري الحفظ...');
+  const saved = await persistFile(file, file.name || 'صورة');
+  pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
   showMediaPreview();
   e.target.value = '';
 });
@@ -819,7 +869,7 @@ document.getElementById('videoFallbackInput').addEventListener('change', async e
   const file = e.target.files[0]; if(!file) return;
   toast('جاري الحفظ...');
   const saved = await persistFile(file, file.name || 'فيديو');
-  pendingMedia = { kind:'video', src: saved.src, name: saved.name, nativeUri: saved.nativeUri };
+  pendingMedia = { kind:'video', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
   showMediaPreview();
   e.target.value = '';
 });
@@ -829,7 +879,7 @@ document.getElementById('musicFallbackInput').addEventListener('change', async e
   const file = e.target.files[0]; if(!file) return;
   toast('جاري الحفظ...');
   const saved = await persistFile(file, file.name || 'مقطع صوتي');
-  pendingMedia = { kind:'music', src: saved.src, name: saved.name, nativeUri: saved.nativeUri };
+  pendingMedia = { kind:'music', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
   showMediaPreview();
   e.target.value = '';
 });
@@ -839,7 +889,7 @@ document.getElementById('fileGenericInput').addEventListener('change', async e=>
   const file = e.target.files[0]; if(!file) return;
   toast('جاري الحفظ...');
   const saved = await persistFile(file, file.name || 'ملف');
-  pendingMedia = { kind:'file', src: saved.src, name: saved.name, nativeUri: saved.nativeUri };
+  pendingMedia = { kind:'file', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
   showMediaPreview();
   e.target.value = '';
 });
@@ -859,7 +909,7 @@ async function toggleRecordAudio(){
         const blob = new Blob(audioChunks, { type: 'audio/webm' });
         const file = new File([blob], 'تسجيل_'+Date.now()+'.webm', { type:'audio/webm' });
         const saved = await persistFile(file, 'تسجيل صوتي');
-        pendingMedia = { kind:'audio', src: saved.src, name: saved.name, nativeUri: saved.nativeUri };
+        pendingMedia = { kind:'audio', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
         showMediaPreview();
       };
       mediaRecorder.start();
