@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#12151b">
-<title>منتصر النور</title>
+<title>المنتصر</title>
+
 <style>
 :root{
   --bg:#12151b;
@@ -21,8 +22,6 @@
   --radius-md:16px;
   --radius-sm:10px;
   --shadow:0 10px 30px rgba(0,0,0,.35);
-  --icon-size:47px;
-  --font-scale:1;
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -30,7 +29,6 @@ html,body{margin:0;min-height:100%;}
 body{
   background:var(--bg);color:var(--text);
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
-  font-size:calc(15px * var(--font-scale));
   padding-top:env(safe-area-inset-top);
   padding-bottom:env(safe-area-inset-bottom);
 }
@@ -41,7 +39,6 @@ input,textarea,select{
   border:1px solid var(--border);border-radius:var(--radius-sm);
   padding:12px 14px;font-size:15px;
 }
-select{-webkit-appearance:none;appearance:none;}
 input[type="color"]{padding:4px;height:44px;cursor:pointer;}
 input[type="range"]{padding:0;background:transparent;}
 textarea{min-height:110px;resize:vertical;}
@@ -50,48 +47,40 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .hidden{display:none!important;}
 .screen{display:none;min-height:100vh;padding:18px 16px 100px;}
 .screen.active{display:block;}
-.top-header{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 16px;gap:10px;}
+.top-header{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 20px;gap:10px;}
 .brand{display:flex;align-items:center;gap:12px;min-width:0;}
 .avatar,.avatar-fallback{width:52px;height:52px;border-radius:16px;flex-shrink:0;}
 .avatar{object-fit:cover;border:1px solid var(--border);}
 .avatar-fallback{background:linear-gradient(155deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900;color:#12151b;}
-.brand h1{margin:0;font-size:calc(20px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.brand p{margin:3px 0 0;color:var(--text-dim);font-size:calc(12px * var(--font-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand h1{margin:0;font-size:20px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand p{margin:3px 0 0;color:var(--text-dim);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .header-actions{display:flex;gap:8px;flex-shrink:0;}
 .icon-btn{width:43px;height:43px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .icon-btn:active{transform:scale(.94);}
 .icon-btn svg{width:20px;height:20px;}
-.home-search{margin-bottom:18px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .folder-card{position:relative;overflow:hidden;min-height:135px;padding:16px;text-align:right;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(160deg,var(--surface),var(--surface-2));display:flex;flex-direction:column;justify-content:space-between;transition:.12s;}
 .folder-card:active{transform:scale(.96);}
 .folder-card::after{content:"";position:absolute;width:100px;height:100px;top:-35px;inset-inline-end:-35px;border-radius:50%;background:var(--fc);opacity:.13;}
-.folder-icon{width:var(--icon-size);height:var(--icon-size);border-radius:14px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.folder-icon svg{width:48%;height:48%;color:#fff;}
-.folder-icon img{width:100%;height:100%;object-fit:cover;}
-.folder-card h3{margin:0 0 4px;font-size:calc(14px * var(--font-scale));}
-.folder-card span{font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);}
-.detail-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.detail-header h2{margin:0;flex:1;font-size:calc(19px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.folder-icon{width:47px;height:47px;border-radius:14px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;}
+.folder-icon svg{width:23px;height:23px;color:#fff;}
+.folder-card h3{margin:0 0 4px;font-size:14px;}
+.folder-card span{font-size:11.5px;color:var(--text-dim);}
+.detail-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.detail-header h2{margin:0;flex:1;font-size:19px;font-weight:900;}
 .search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 12px;}
 .search-box svg{width:18px;height:18px;color:var(--text-dim);flex-shrink:0;}
 .search-box input{border:0;background:transparent;padding:11px 0;}
 .search-box input:focus{outline:0;}
 .item-list{display:flex;flex-direction:column;gap:10px;}
-.item-list.grid-view{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.item-list.grid-view .item-card{flex-direction:column;align-items:stretch;text-align:center;padding:10px;}
-.item-list.grid-view .item-thumb{width:100%;height:84px;border-radius:12px;}
-.item-list.grid-view .item-thumb svg{width:26px;height:26px;}
-.item-list.grid-view .item-body p{display:none;}
-.item-list.grid-view .item-actions{flex-direction:row;justify-content:center;margin-top:8px;}
 .item-card{display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);}
-.item-thumb{width:calc(var(--icon-size) * 1.02);height:calc(var(--icon-size) * 1.02);flex-shrink:0;border-radius:11px;background:var(--surface-2);object-fit:cover;display:flex;align-items:center;justify-content:center;color:var(--gold);}
-.item-thumb svg{width:46%;height:46%;}
+.item-thumb{width:48px;height:48px;flex-shrink:0;border-radius:11px;background:var(--surface-2);object-fit:cover;display:flex;align-items:center;justify-content:center;color:var(--gold);}
+.item-thumb svg{width:22px;height:22px;}
 .item-thumb img{width:100%;height:100%;object-fit:cover;border-radius:11px;}
 .item-body{flex:1;min-width:0;cursor:pointer;}
-.item-body h4{margin:0 0 4px;font-size:calc(14.5px * var(--font-scale));}
-.item-body p{margin:0;color:var(--text-dim);font-size:calc(12.5px * var(--font-scale));white-space:pre-wrap;word-break:break-word;max-height:48px;overflow:hidden;}
-.item-meta{margin-top:5px;font-size:calc(10.5px * var(--font-scale));color:var(--text-dim);}
+.item-body h4{margin:0 0 4px;font-size:14.5px;}
+.item-body p{margin:0;color:var(--text-dim);font-size:12.5px;white-space:pre-wrap;word-break:break-word;max-height:48px;overflow:hidden;}
+.item-meta{margin-top:5px;font-size:10.5px;color:var(--text-dim);}
 .item-actions{display:flex;flex-direction:column;gap:6px;}
 .item-actions button{width:31px;height:31px;border-radius:9px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;}
 .item-actions svg{width:15px;height:15px;}
@@ -105,15 +94,12 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .modal-backdrop.active{display:flex;}
 .modal{width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:var(--bg-elev);border-top:1px solid var(--border);}
 .modal-handle{width:40px;height:4px;margin:0 auto 15px;border-radius:3px;background:var(--border);}
-.modal-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;}
-.modal-head-row h3{margin:0;font-size:17px;}
 .modal h3{margin:0 0 16px;font-size:17px;}
 .field{margin-bottom:13px;}
 .field label{display:block;margin-bottom:6px;color:var(--text-dim);font-size:12.5px;}
 .field .hint{display:block;margin-top:5px;color:var(--text-dim);font-size:11px;}
 .modal-actions{display:flex;gap:10px;margin-top:8px;}
-.btn{flex:1;padding:13px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn svg{width:17px;height:17px;flex-shrink:0;}
+.btn{flex:1;padding:13px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;text-align:center;}
 .btn-primary{background:var(--gold);color:#12151b;}
 .btn-ghost{background:var(--surface-2);color:var(--text);}
 .btn-danger{background:var(--danger);color:#fff;}
@@ -127,16 +113,6 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .switch.on{background:var(--gold);}
 .switch.on::after{inset-inline-start:23px;background:#12151b;}
 .color-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.icon-pick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:6px;}
-.icon-pick{aspect-ratio:1;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
-.icon-pick svg{width:18px;height:18px;}
-.icon-pick.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;}
-.mode-row{display:flex;gap:10px;}
-.mode-btn{flex:1;padding:14px 10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;}
-.mode-btn svg{width:20px;height:20px;}
-.mode-btn.active{border-color:var(--gold);background:var(--gold-dim);color:#fff;}
-.range-row{display:flex;align-items:center;gap:10px;}
-.range-row span{font-size:12px;color:var(--text-dim);min-width:38px;text-align:center;}
 .toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);z-index:600;padding:11px 20px;border-radius:30px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);font-size:13px;opacity:0;pointer-events:none;transition:.2s;max-width:88vw;text-align:center;}
 .toast.show{opacity:1;}
 #lockScreen{display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:17px;padding:25px;}
@@ -158,53 +134,11 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .capture-btn.recording svg{color:#fff;}
 .media-preview-box{margin-top:6px;padding:10px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);display:none;}
 .media-preview-box.show{display:block;}
-.contact-link{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);text-decoration:none;color:var(--text);font-size:13.5px;margin-bottom:8px;}
-.contact-link:last-child{margin-bottom:0;}
-.contact-link svg{width:19px;height:19px;color:var(--gold);flex-shrink:0;}
-
-/* ===== Full-screen viewer ===== */
-#screen-view{padding-bottom:110px;}
-.view-media-full{width:100%;max-height:62vh;border-radius:16px;background:#000;object-fit:contain;display:block;}
-.view-audio-box{width:100%;padding:40px 20px;border-radius:16px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
-.view-audio-box svg{width:46px;height:46px;color:var(--gold);}
-.view-content-inner{display:flex;flex-direction:column;gap:14px;width:100%;}
-.view-actionbar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:var(--bg-elev);border-top:1px solid var(--border);z-index:150;}
-
-/* ===== Folder options menu ===== */
-.folder-menu-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.folder-menu-head .folder-icon{width:44px;height:44px;flex-shrink:0;}
-.folder-menu-head h4{margin:0;font-size:15.5px;}
-.menu-section-label{padding:6px 10px 6px;color:var(--text-dim);font-size:11.5px;}
-.menu-list{display:flex;flex-direction:column;gap:4px;margin-bottom:6px;}
-.menu-item{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:var(--radius-sm);text-align:right;width:100%;font-size:14px;}
-.menu-item:active{background:var(--surface-2);}
-.menu-item svg{width:19px;height:19px;color:var(--gold);flex-shrink:0;}
-.menu-item.active{background:var(--surface-2);color:var(--gold);font-weight:700;}
-.menu-item.danger{color:var(--danger);}
-.menu-item.danger svg{color:var(--danger);}
-.menu-divider{height:1px;background:var(--border);margin:8px 2px;}
-
-/* ===== Multi-select ===== */
-.select-bar{display:none;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);}
-.select-bar.show{display:flex;}
-.select-bar .sb-count{flex:1;font-size:12.5px;color:var(--text-dim);white-space:nowrap;}
-.select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
-.select-bar button.danger{background:var(--danger);color:#fff;}
-.selectable .item-card{position:relative;}
-.select-check{position:absolute;top:8px;inset-inline-start:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.5);border:2px solid #fff;display:flex;align-items:center;justify-content:center;z-index:3;flex-shrink:0;}
-.select-check svg{width:13px;height:13px;color:#fff;opacity:0;}
-.select-check.checked{background:var(--gold);border-color:var(--gold);}
-.select-check.checked svg{opacity:1;}
-.item-list.selectable .item-card{padding-inline-start:38px;}
-.item-list.selectable.grid-view .item-card{padding-inline-start:10px;}
-
-/* RTL caret / backspace fix for Arabic text inputs inside WebViews */
-input[type="text"], input:not([type]), textarea{
-  unicode-bidi: plaintext;
-}
+.view-media{width:100%;max-height:60vh;border-radius:14px;background:#000;}
 </style>
 </head>
 <body>
+
 <!-- ================= LOCK ================= -->
 <div id="lockScreen">
   <div class="lock-emblem">
@@ -233,9 +167,7 @@ input[type="text"], input:not([type]), textarea{
       </div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="editFoldersBtn" onclick="toggleFolderSelectMode()" title="تحديد الحافظات">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
-      </button>
+      <button class="icon-btn" id="searchOpenBtn" onclick="openSearch()"></button>
       <button class="icon-btn" onclick="openSettings()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <circle cx="12" cy="12" r="3"/>
@@ -244,19 +176,6 @@ input[type="text"], input:not([type]), textarea{
       </button>
     </div>
   </div>
-
-  <div class="search-box home-search" onclick="openSearch()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input placeholder="ابحث في كل محتوياتك..." readonly style="pointer-events:none">
-  </div>
-
-  <div class="select-bar" id="folderSelectBar">
-    <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
-    <span class="sb-count" id="folderSelCount">0 محدد</span>
-    <button class="danger" onclick="deleteSelectedFolders()">حذف المحدد</button>
-    <button onclick="exitFolderSelectMode()">إلغاء</button>
-  </div>
-
   <div class="grid" id="foldersGrid"></div>
 </div>
 
@@ -282,15 +201,6 @@ input[type="text"], input:not([type]), textarea{
     </button>
     <h2 id="folderTitle"></h2>
     <span id="folderCountBadge" style="font-size:12px;color:var(--text-dim)"></span>
-    <button class="icon-btn" id="folderMenuBtn" onclick="openFolderMenu()" title="خيارات الحافظة">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-  </div>
-  <div class="select-bar" id="itemSelectBar">
-    <button onclick="toggleSelectAllItems()"><span id="selAllItemsLabel">تحديد الكل</span></button>
-    <span class="sb-count" id="itemSelCount">0 محدد</span>
-    <button class="danger" onclick="deleteSelectedItems()">حذف المحدد</button>
-    <button onclick="exitItemSelectMode()">إلغاء</button>
   </div>
   <div class="item-list" id="itemList"></div>
 </div>
@@ -298,28 +208,6 @@ input[type="text"], input:not([type]), textarea{
 <button class="fab" id="fabBtn" onclick="openAddModal()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
 </button>
-
-<!-- ================= FULL-SCREEN VIEWER ================= -->
-<div class="screen" id="screen-view">
-  <div class="detail-header">
-    <button class="icon-btn" onclick="closeFullView()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <h2 id="viewTitle" style="font-size:16px"></h2>
-  </div>
-  <div class="view-content-inner" id="viewContent"></div>
-
-  <div class="view-actionbar">
-    <button class="btn btn-ghost" id="viewSaveBtn" onclick="saveToGallery()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      حفظ في المعرض
-    </button>
-    <button class="btn btn-primary" onclick="shareItem()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
-      مشاركة
-    </button>
-  </div>
-</div>
 
 <!-- ================= SETTINGS ================= -->
 <div class="screen" id="screen-settings">
@@ -341,22 +229,8 @@ input[type="text"], input:not([type]), textarea{
       </label>
     </div>
     <span class="hint">هذا الشعار يظهر داخل التطبيق فقط. لتغيير أيقونة التطبيق على شاشة جهازك يلزم تحديث ملف الأيقونة وإعادة بناء التطبيق من GitHub.</span>
-    <div class="field" style="margin-top:12px"><label>اسم التطبيق</label><input id="setAppName" dir="rtl" placeholder="المنتصر"></div>
-    <div class="field"><label>الشعار الفرعي</label><input id="setTagline" dir="rtl" placeholder="خزانتك الخاصة"></div>
-  </div>
-
-  <div class="settings-group">
-    <h4>وضع المظهر</h4>
-    <div class="mode-row">
-      <button type="button" class="mode-btn" id="modeBtn-dark" onclick="setThemeMode('dark')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        داكن
-      </button>
-      <button type="button" class="mode-btn" id="modeBtn-light" onclick="setThemeMode('light')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        فاتح
-      </button>
-    </div>
+    <div class="field" style="margin-top:12px"><label>اسم التطبيق</label><input id="setAppName" placeholder="المنتصر"></div>
+    <div class="field"><label>الشعار الفرعي</label><input id="setTagline" placeholder="خزانتك الخاصة"></div>
   </div>
 
   <div class="settings-group">
@@ -371,40 +245,14 @@ input[type="text"], input:not([type]), textarea{
       <label>استدارة الأشكال (حاد ← دائري)</label>
       <input type="range" id="themeRadius" min="0" max="30" step="1">
     </div>
-    <div class="field">
-      <label>حجم أيقونات الحافظات والعناصر</label>
-      <div class="range-row">
-        <input type="range" id="themeIconSize" min="32" max="80" step="1" style="flex:1">
-        <span id="themeIconSizeVal">47</span>
-      </div>
-    </div>
-    <div class="field">
-      <label>حجم الخط العام</label>
-      <div class="range-row">
-        <input type="range" id="themeFontScale" min="80" max="140" step="5" style="flex:1">
-        <span id="themeFontScaleVal">100%</span>
-      </div>
-    </div>
     <button class="btn btn-ghost" style="width:100%" onclick="resetTheme()">استعادة المظهر الافتراضي</button>
   </div>
 
   <div class="settings-group">
     <h4>حول التطبيق</h4>
     <div class="field"><label>نبذة عن التطبيق</label><textarea id="setAbout" placeholder="اكتب نبذة عن التطبيق"></textarea></div>
-    <div class="field"><label>الناشر</label><input id="setPublisher" dir="rtl" placeholder="اسم الناشر"></div>
+    <div class="field"><label>الناشر</label><input id="setPublisher" placeholder="اسم الناشر"></div>
     <div class="field"><label>الإصدار</label><input id="setVersion" placeholder="1.0.0"></div>
-  </div>
-
-  <div class="settings-group">
-    <h4>تواصل معنا</h4>
-    <a class="contact-link" href="mailto:alnourmontasir@gmail.com">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/><polyline points="22 6 12 13 2 6"/></svg>
-      <span style="direction:ltr;unicode-bidi:embed">alnourmontasir@gmail.com</span>
-    </a>
-    <a class="contact-link" href="https://www.facebook.com/montasiralnuor" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-      <span>صفحتنا على فيسبوك</span>
-    </a>
   </div>
 
   <div class="settings-group">
@@ -427,16 +275,11 @@ input[type="text"], input:not([type]), textarea{
   <button class="btn btn-primary" style="width:100%" onclick="saveSettings()">حفظ الإعدادات</button>
 </div>
 
-<!-- ================= ADD ITEM MODAL ================= -->
+<!-- ================= ADD MODAL ================= -->
 <div class="modal-backdrop" id="addModalBackdrop">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-head-row">
-      <h3 id="addModalTitle" style="margin:0">إضافة</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddModal()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
+    <h3 id="addModalTitle">إضافة</h3>
     <div id="addModalBody"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeAddModal()">إلغاء</button>
@@ -445,117 +288,13 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<!-- ================= ADD/EDIT FOLDER MODAL ================= -->
-<div class="modal-backdrop" id="folderModalBackdrop">
+<!-- ================= VIEW MODAL ================= -->
+<div class="modal-backdrop" id="viewModalBackdrop">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-head-row">
-      <h3 id="folderModalTitle" style="margin:0">إضافة حافظة جديدة</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderModal()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="field"><label>اسم الحافظة</label><input id="newFolderName" dir="rtl" placeholder="مثال: دراسة"></div>
-    <div class="field"><label>نوع المحتوى</label>
-      <select id="newFolderKind">
-        <option value="note">ملاحظات نصية</option>
-        <option value="text">نصوص</option>
-        <option value="article">مقالات</option>
-        <option value="poem">أشعار</option>
-        <option value="code">أكواد</option>
-        <option value="media">صور وفيديو وصوت</option>
-        <option value="file">ملفات عامة</option>
-      </select>
-    </div>
-    <div class="color-grid">
-      <div class="field"><label>اللون الأساسي</label><input type="color" id="newFolderColor" value="#5eb1a1"></div>
-      <div class="field"><label>اللون الثانوي</label><input type="color" id="newFolderColor2" value="#2f7d6c"></div>
-    </div>
-    <div class="field">
-      <label>الأيقونة</label>
-      <div class="icon-pick-grid" id="folderIconPicker"></div>
-    </div>
-    <div class="field">
-      <label>أو استخدم صورة من المعرض كأيقونة</label>
-      <div style="display:flex;gap:10px;align-items:center">
-        <button type="button" class="btn btn-ghost" style="flex:1" onclick="document.getElementById('folderIconImageInput').click()">اختيار صورة</button>
-        <img id="folderIconImagePreview" class="hidden" style="width:44px;height:44px;border-radius:12px;object-fit:cover;flex-shrink:0">
-        <button type="button" class="icon-btn hidden" id="removeFolderIconImageBtn" style="width:38px;height:38px;flex-shrink:0" onclick="removeFolderIconImage()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
-      </div>
-      <input type="file" id="folderIconImageInput" accept="image/*" class="hidden">
-    </div>
+    <div id="viewModalBody"></div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeFolderModal()">إلغاء</button>
-      <button class="btn btn-primary" id="folderSubmitBtn" onclick="submitFolderForm()">إنشاء</button>
-    </div>
-  </div>
-</div>
-
-<!-- ================= FOLDER OPTIONS MENU ================= -->
-<div class="modal-backdrop" id="folderMenuBackdrop">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-head-row" style="margin-bottom:4px">
-      <span></span>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderMenu()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="folder-menu-head">
-      <div class="folder-icon" id="menuFolderIcon"></div>
-      <h4 id="menuFolderName"></h4>
-    </div>
-
-    <div class="menu-section-label">الفرز والترتيب</div>
-    <div class="menu-list">
-      <button type="button" class="menu-item" id="sortBtn-newest" onclick="setMenuSort('newest')">الأحدث أولًا</button>
-      <button type="button" class="menu-item" id="sortBtn-oldest" onclick="setMenuSort('oldest')">الأقدم أولًا</button>
-      <button type="button" class="menu-item" id="sortBtn-alpha" onclick="setMenuSort('alpha')">أبجديًا (أ-ي)</button>
-    </div>
-
-    <div class="menu-divider"></div>
-    <div class="menu-section-label">طريقة عرض المحتويات</div>
-    <div class="menu-list">
-      <button type="button" class="menu-item" id="viewBtn-list" onclick="setMenuView('list')">عرض كقائمة</button>
-      <button type="button" class="menu-item" id="viewBtn-grid" onclick="setMenuView('grid')">عرض كشبكة</button>
-    </div>
-
-    <div class="menu-divider"></div>
-    <div class="menu-list">
-      <button type="button" class="menu-item" onclick="enterItemSelectMode()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
-        تحديد العناصر
-      </button>
-      <button type="button" class="menu-item" onclick="editCurrentFolder()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        تعديل الاسم واللون والأيقونة
-      </button>
-      <button type="button" class="menu-item danger" onclick="requestDeleteCurrentFolder()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        حذف الحافظة
-      </button>
-    </div>
-
-    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeFolderMenu()">إغلاق</button>
-  </div>
-</div>
-
-<!-- ================= CONFIRM DELETE MODAL (used everywhere) ================= -->
-<div class="modal-backdrop" id="confirmModalBackdrop">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-head-row">
-      <h3 id="confirmModalTitle" style="margin:0">تأكيد الحذف</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeConfirmModal()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <p id="confirmModalMsg" style="color:var(--text-dim);font-size:13.5px;margin:0 0 18px;line-height:1.6"></p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeConfirmModal()">إلغاء</button>
-      <button class="btn btn-danger" onclick="runConfirmAction()">تأكيد الحذف</button>
+      <button class="btn btn-ghost" onclick="closeViewModal()">إغلاق</button>
     </div>
   </div>
 </div>
@@ -564,8 +303,7 @@ input[type="text"], input:not([type]), textarea{
 
 <!-- hidden fallback pickers -->
 <input type="file" id="photoFallbackInput" accept="image/*" capture="environment" class="hidden">
-<input type="file" id="photoUploadInput" accept="image/*" class="hidden">
-<input type="file" id="videoFallbackInput" accept="video/*" class="hidden">
+<input type="file" id="videoFallbackInput" accept="video/*" capture="environment" class="hidden">
 <input type="file" id="musicFallbackInput" accept="audio/*" class="hidden">
 <input type="file" id="fileGenericInput" class="hidden">
 
@@ -591,70 +329,16 @@ const ICONS = {
   eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
   file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
   inbox:'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
-  search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
-  briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
-  gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
-  plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-1 .1-1.3.5l-.5.6c-.4.5-.2 1.2.3 1.5L9 12l-2 3H3l-1 1 3 2 2 3 1-1v-4l3-2 3.5 5.3c.3.5 1 .7 1.5.3l.6-.5c.4-.3.6-.8.5-1.3z"/>',
-  target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
-  plus:'<path d="M12 5v14M5 12h14"/>',
-  check:'<polyline points="20 6 9 17 4 12"/>',
-  text:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/>',
-  article:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/>',
-  poem:'<path d="M6 17h3l2-4V7H5v6h3l-2 4z"/><path d="M15 17h3l2-4V7h-6v6h3l-2 4z"/>',
-  edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
-  mail:'<path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/><polyline points="22 6 12 13 2 6"/>',
-  phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
-  globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
-  lock:'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
-  key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5 19 11l3-3-3.5-3.5"/>',
-  calendar:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
-  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-  bookmark:'<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
-  folder2:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
-  archive:'<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>',
-  cloud:'<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
-  coffee:'<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
-  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-  car:'<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
-  chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
-  mappin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
-  flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
-  sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
-  moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
-  umbrella:'<path d="M23 12a11.05 11.05 0 0 0-22 0z"/><path d="M12 12v8a2 2 0 0 1-4 0"/>',
-  compass:'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
-  anchor:'<circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/>',
-  award:'<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
-  box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
-  rocket:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
-  smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
-  paperclip:'<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>',
-  link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
-  tag:'<path d="M20.59 13.41 13.41 20.59a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
-  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
-  droplet:'<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"/>',
-  headphones:'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
-  monitor:'<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
-  smartphone:'<rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
-  creditcard:'<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
-  shoppingbag:'<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
-  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-  activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
-  feather:'<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>'
+  search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'
 };
-const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem','mail','phone','globe','lock','key','calendar','clock','bookmark','folder2','archive','cloud','coffee','home','car','chat','mappin','flag','sun','moon','umbrella','compass','anchor','award','box','rocket','smile','paperclip','link','tag','zap','droplet','headphones','monitor','smartphone','creditcard','shoppingbag','users','activity','feather'];
-const ICON_PALETTE = ['#f59e0b','#ec4899','#a855f7','#3b82f6','#22c55e','#ef4444','#06b6d4','#eab308','#f97316','#8b5cf6','#10b981','#e11d48','#14b8a6','#6366f1','#d946ef'];
 function svg(name,extra){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
-function folderIconInner(folder){
-  if(folder.customIcon) return `<img src="${folder.customIcon}">`;
-  return svg(folder.icon);
-}
+
+document.getElementById('searchOpenBtn').innerHTML = svg('search');
 
 /* =========================================================
-   DEFAULT FOLDERS
+   FOLDERS
 ========================================================= */
-const DEFAULT_FOLDERS = [
+const FOLDERS = [
   {id:"code", name:"الأكواد", color:"#eab308", color2:"#b45309", kind:"code", icon:"code"},
   {id:"memories", name:"الذكريات", color:"#f59e0b", color2:"#b45309", kind:"note", icon:"heart"},
   {id:"private", name:"ملفات خاصة", color:"#f43f5e", color2:"#9f1239", kind:"file", icon:"shield"},
@@ -670,45 +354,14 @@ const DEFAULT_FOLDERS = [
 ========================================================= */
 let data = JSON.parse(localStorage.getItem("montasir_data") || "{}");
 let settings = JSON.parse(localStorage.getItem("montasir_settings") || "{}");
-if(!Array.isArray(settings.customFolders)) settings.customFolders = [];
-if(!settings.folderViews) settings.folderViews = {};
-if(!settings.folderOverrides) settings.folderOverrides = {};
 let currentFolder = null;
 let pendingMedia = null;
 let mediaRecorder = null, audioChunks = [], isRecording = false;
 let pinMode = "unlock";
 let pinBuffer = "";
 let firstNewPin = "";
-let currentViewItem = null;
-let viewOrigin = "folder"; // "folder" | "search"
-let pickedFolderIcon = "heart";
-let pendingFolderCustomIcon = null;
-let editingFolderId = null;
 
-/* selection state */
-let folderSelectMode = false;
-let selectedFolderIds = new Set();
-let itemSelectMode = false;
-let selectedItemIds = new Set();
-
-/* generic confirm modal */
-let _confirmCallback = null;
-
-function getFolders(){
-  return DEFAULT_FOLDERS.map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{})).concat(settings.customFolders);
-}
-function getFolder(id){ return getFolders().find(f=>f.id===id); }
-function updateFolderMeta(id, patch){
-  const idx = settings.customFolders.findIndex(f=>f.id===id);
-  if(idx !== -1){
-    settings.customFolders[idx] = Object.assign({}, settings.customFolders[idx], patch);
-  } else {
-    settings.folderOverrides[id] = Object.assign({}, settings.folderOverrides[id]||{}, patch);
-  }
-  saveSettingsData();
-}
-
-getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
+FOLDERS.forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
 saveData();
 
 function saveData(){
@@ -730,10 +383,7 @@ function iconForKind(kind){
   if(kind==='code') return 'code';
   if(kind==='file') return 'file';
   if(kind==='photo') return 'camera';
-  if(kind==='text') return 'text';
-  if(kind==='article') return 'article';
-  if(kind==='poem') return 'poem';
-  return 'heart'; // note
+  return 'heart';
 }
 
 function toast(msg){
@@ -745,47 +395,15 @@ function toast(msg){
 }
 
 /* =========================================================
-   GENERIC CONFIRM MODAL — nothing deletes without this
-========================================================= */
-function showConfirm(title, msg, onConfirm){
-  document.getElementById('confirmModalTitle').textContent = title;
-  document.getElementById('confirmModalMsg').textContent = msg;
-  _confirmCallback = onConfirm;
-  document.getElementById('confirmModalBackdrop').classList.add('active');
-}
-function closeConfirmModal(){
-  document.getElementById('confirmModalBackdrop').classList.remove('active');
-  _confirmCallback = null;
-}
-function runConfirmAction(){
-  const cb = _confirmCallback;
-  document.getElementById('confirmModalBackdrop').classList.remove('active');
-  _confirmCallback = null;
-  if(cb) cb();
-}
-
-/* =========================================================
    NAVIGATION
 ========================================================= */
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function goHome(){
-  currentFolder=null;
-  if(folderSelectMode) exitFolderSelectMode();
-  if(itemSelectMode) exitItemSelectMode();
-  document.getElementById('fabBtn').classList.remove('show');
-  renderHome(); showScreen('screen-home');
-}
-function openSettings(){
-  if(folderSelectMode) exitFolderSelectMode();
-  loadSettingsForm();
-  document.getElementById('fabBtn').classList.remove('show');
-  showScreen('screen-settings');
-}
+function goHome(){ currentFolder=null; document.getElementById('fabBtn').classList.remove('show'); renderHome(); showScreen('screen-home'); }
+function openSettings(){ loadSettingsForm(); document.getElementById('fabBtn').classList.remove('show'); showScreen('screen-settings'); }
 function openSearch(){
-  if(folderSelectMode) exitFolderSelectMode();
   document.getElementById('searchInput').value = '';
   renderSearchResults('');
   document.getElementById('fabBtn').classList.remove('show');
@@ -804,7 +422,7 @@ function renderSearchResults(q){
     return;
   }
   let results = [];
-  getFolders().forEach(f=>{
+  FOLDERS.forEach(f=>{
     (data[f.id]||[]).forEach(item=>{
       const hay = ((item.title||'')+' '+(item.content||'')+' '+(item.name||'')+' '+f.name).toLowerCase();
       if(hay.includes(q)) results.push(Object.assign({}, item, {folderId:f.id, folderName:f.name}));
@@ -829,97 +447,31 @@ function renderSearchResults(q){
 }
 function openSearchResult(folderId, itemId){
   currentFolder = folderId;
-  viewItem(itemId, 'search');
+  viewItem(itemId);
 }
 
 /* =========================================================
-   HOME / FOLDER SELECTION MODE (multi-select + bulk delete)
+   HOME
 ========================================================= */
-function toggleFolderSelectMode(){
-  if(folderSelectMode){ exitFolderSelectMode(); return; }
-  folderSelectMode = true;
-  selectedFolderIds.clear();
-  document.getElementById('folderSelectBar').classList.add('show');
-  updateFolderSelCount();
-  renderHome();
-}
-function exitFolderSelectMode(){
-  folderSelectMode = false;
-  selectedFolderIds.clear();
-  document.getElementById('folderSelectBar').classList.remove('show');
-  renderHome();
-}
-function toggleFolderChecked(id){
-  if(selectedFolderIds.has(id)) selectedFolderIds.delete(id); else selectedFolderIds.add(id);
-  updateFolderSelCount();
-  renderHome();
-}
-function toggleSelectAllFolders(){
-  const all = getFolders().map(f=>f.id);
-  const allSelected = all.length>0 && all.every(id=>selectedFolderIds.has(id));
-  if(allSelected) selectedFolderIds.clear();
-  else all.forEach(id=>selectedFolderIds.add(id));
-  updateFolderSelCount();
-  renderHome();
-}
-function updateFolderSelCount(){
-  document.getElementById('folderSelCount').textContent = selectedFolderIds.size + ' محدد';
-  const all = getFolders().map(f=>f.id);
-  document.getElementById('selAllFoldersLabel').textContent = (all.length>0 && all.every(id=>selectedFolderIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
-}
-function deleteSelectedFolders(){
-  if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
-  const n = selectedFolderIds.size;
-  showConfirm('حذف الحافظات المحددة', `سيتم حذف ${n} ${n===1?'حافظة':'حافظات'} وكل محتوياتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
-    selectedFolderIds.forEach(id=>deleteFolderNow(id));
-    exitFolderSelectMode();
-    toast('تم الحذف');
-  });
-}
-function deleteFolderNow(id){
-  settings.customFolders = settings.customFolders.filter(f=>f.id!==id);
-  delete data[id];
-  delete settings.folderViews[id];
-  delete settings.folderOverrides[id];
-  saveSettingsData();
-  saveData();
-}
-
 function renderHome(){
   applyIdentity();
   const grid = document.getElementById("foldersGrid");
-  grid.classList.toggle('selectable', folderSelectMode);
   grid.innerHTML = "";
-  getFolders().forEach(folder=>{
+  FOLDERS.forEach(folder=>{
     const count = data[folder.id]?.length || 0;
-    const checked = selectedFolderIds.has(folder.id);
     const card = document.createElement("button");
-    card.type = "button";
     card.className = "folder-card";
     card.style.setProperty("--fc", folder.color);
     card.style.setProperty("--fc2", folder.color2);
     card.innerHTML = `
-      ${folderSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : ''}
-      <div class="folder-icon">${folderIconInner(folder)}</div>
+      <div class="folder-icon">${svg(folder.icon)}</div>
       <div>
         <h3>${escapeHTML(folder.name)}</h3>
         <span>${count} ${count===1?"عنصر":"عناصر"}</span>
       </div>`;
-    card.onclick = () => { folderSelectMode ? toggleFolderChecked(folder.id) : openFolder(folder.id); };
+    card.onclick = () => openFolder(folder.id);
     grid.appendChild(card);
   });
-  if(!folderSelectMode){
-    const addCard = document.createElement("button");
-    addCard.type = "button";
-    addCard.className = "folder-card";
-    addCard.style.setProperty("--fc", "#c9a24b");
-    addCard.style.setProperty("--fc2", "#8a733a");
-    addCard.innerHTML = `
-      <div class="folder-icon">${svg('plus')}</div>
-      <div><h3>حافظة جديدة</h3><span>إضافة</span></div>`;
-    addCard.onclick = () => openFolderModal();
-    grid.appendChild(addCard);
-  }
 }
 
 function applyIdentity(){
@@ -933,165 +485,13 @@ function applyIdentity(){
   else { img.classList.add('hidden'); fb.classList.remove('hidden'); fb.textContent = name.charAt(0); }
 }
 
-/* ---- Add / Edit folder modal ---- */
-function renderFolderIconPicker(selected){
-  const pick = document.getElementById('folderIconPicker');
-  pick.innerHTML = FOLDER_ICON_CHOICES.map((ic,i)=>{
-    const col = ICON_PALETTE[i % ICON_PALETTE.length];
-    const sel = (!pendingFolderCustomIcon && ic===selected) ? 'selected' : '';
-    return `<button type="button" class="icon-pick ${sel}" data-icon="${ic}" style="color:${col};background:${col}26" onclick="selectFolderIcon('${ic}')">${svg(ic)}</button>`;
-  }).join('');
-}
-function updateFolderImagePreview(){
-  const img = document.getElementById('folderIconImagePreview');
-  const rmBtn = document.getElementById('removeFolderIconImageBtn');
-  if(pendingFolderCustomIcon){
-    img.src = pendingFolderCustomIcon;
-    img.classList.remove('hidden');
-    rmBtn.classList.remove('hidden');
-  } else {
-    img.classList.add('hidden');
-    rmBtn.classList.add('hidden');
-  }
-}
-function removeFolderIconImage(){
-  pendingFolderCustomIcon = null;
-  updateFolderImagePreview();
-  renderFolderIconPicker(pickedFolderIcon);
-}
-document.getElementById('folderIconImageInput').addEventListener('change', async e=>{
-  const file = e.target.files[0]; if(!file) return;
-  const dataUrl = await readFileAsDataURL(file);
-  pendingFolderCustomIcon = dataUrl;
-  updateFolderImagePreview();
-  renderFolderIconPicker(pickedFolderIcon);
-  e.target.value = '';
-});
-
-function openFolderModal(editId){
-  editingFolderId = editId || null;
-  const folder = editId ? getFolder(editId) : null;
-  document.getElementById('folderModalTitle').textContent = editId ? 'تعديل الحافظة' : 'إضافة حافظة جديدة';
-  document.getElementById('folderSubmitBtn').textContent = editId ? 'حفظ' : 'إنشاء';
-  document.getElementById('newFolderName').value = folder ? folder.name : '';
-  document.getElementById('newFolderKind').value = folder ? folder.kind : 'note';
-  document.getElementById('newFolderColor').value = folder ? folder.color : '#5eb1a1';
-  document.getElementById('newFolderColor2').value = folder ? folder.color2 : '#2f7d6c';
-  pickedFolderIcon = folder ? folder.icon : 'heart';
-  pendingFolderCustomIcon = folder && folder.customIcon ? folder.customIcon : null;
-  renderFolderIconPicker(pickedFolderIcon);
-  updateFolderImagePreview();
-  document.getElementById('folderModalBackdrop').classList.add('active');
-}
-function selectFolderIcon(ic){
-  pickedFolderIcon = ic;
-  pendingFolderCustomIcon = null;
-  updateFolderImagePreview();
-  renderFolderIconPicker(ic);
-}
-function closeFolderModal(){
-  document.getElementById('folderModalBackdrop').classList.remove('active');
-  editingFolderId = null;
-}
-function submitFolderForm(){
-  const name = document.getElementById('newFolderName').value.trim();
-  if(!name){ toast('أدخل اسم الحافظة'); return; }
-  const kind = document.getElementById('newFolderKind').value;
-  const color = document.getElementById('newFolderColor').value;
-  const color2 = document.getElementById('newFolderColor2').value;
-  const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null};
-
-  if(editingFolderId){
-    updateFolderMeta(editingFolderId, patch);
-    if(currentFolder === editingFolderId){
-      document.getElementById('folderTitle').textContent = name;
-    }
-    toast('تم تحديث الحافظة');
-  } else {
-    const id = 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-    settings.customFolders.push(Object.assign({id}, patch));
-    data[id] = [];
-    saveSettingsData();
-    saveData();
-    toast('تم إنشاء الحافظة');
-  }
-  editingFolderId = null;
-  closeFolderModal();
-  renderHome();
-}
-function editCurrentFolder(){
-  closeFolderMenu();
-  openFolderModal(currentFolder);
-}
-
 /* =========================================================
-   FOLDER OPTIONS MENU (sort, view, select, edit, delete)
+   FOLDER / ITEMS
 ========================================================= */
-function openFolderMenu(){
-  const folder = getFolder(currentFolder);
-  if(!folder) return;
-  const iconEl = document.getElementById('menuFolderIcon');
-  iconEl.style.setProperty('--fc', folder.color);
-  iconEl.style.setProperty('--fc2', folder.color2);
-  iconEl.innerHTML = folderIconInner(folder);
-  document.getElementById('menuFolderName').textContent = folder.name;
-  const v = getFolderView(currentFolder);
-  updateMenuSortActive(v.sort);
-  updateMenuViewActive(v.view);
-  document.getElementById('folderMenuBackdrop').classList.add('active');
-}
-function closeFolderMenu(){
-  document.getElementById('folderMenuBackdrop').classList.remove('active');
-}
-function updateMenuSortActive(s){
-  ['newest','oldest','alpha'].forEach(k=>{
-    document.getElementById('sortBtn-'+k).classList.toggle('active', k===s);
-  });
-}
-function updateMenuViewActive(v){
-  ['list','grid'].forEach(k=>{
-    document.getElementById('viewBtn-'+k).classList.toggle('active', k===v);
-  });
-}
-function setMenuSort(s){
-  setFolderView(currentFolder, {sort:s});
-  updateMenuSortActive(s);
-  renderItems();
-}
-function setMenuView(v){
-  setFolderView(currentFolder, {view:v});
-  updateMenuViewActive(v);
-  renderItems();
-}
-function requestDeleteCurrentFolder(){
-  closeFolderMenu();
-  const folder = getFolder(currentFolder);
-  if(!folder) return;
-  showConfirm('حذف الحافظة', `سيتم حذف حافظة "${folder.name}" وكل محتوياتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
-    const id = currentFolder;
-    goHome();
-    deleteFolderNow(id);
-    renderHome();
-    toast('تم حذف الحافظة');
-  });
-}
-
-/* =========================================================
-   FOLDER / ITEMS  (sort + grid/list view)
-========================================================= */
-function getFolderView(id){
-  return Object.assign({sort:'newest', view:'list'}, settings.folderViews[id]||{});
-}
-function setFolderView(id, patch){
-  settings.folderViews[id] = Object.assign(getFolderView(id), patch);
-  saveSettingsData();
-}
-
 function openFolder(id){
-  const folder = getFolder(id);
+  const folder = FOLDERS.find(f=>f.id===id);
   if(!folder) return;
   currentFolder = id;
-  if(itemSelectMode) exitItemSelectMode();
   document.getElementById('folderTitle').textContent = folder.name;
   const c = data[id]?.length || 0;
   document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
@@ -1100,252 +500,96 @@ function openFolder(id){
   showScreen('screen-folder');
 }
 
-function sortItems(items, sort){
-  const arr = items.slice();
-  if(sort==='oldest') arr.sort((a,b)=>a.createdAt-b.createdAt);
-  else if(sort==='alpha') arr.sort((a,b)=>(a.title||'').localeCompare((b.title||''),'ar'));
-  else arr.sort((a,b)=>b.createdAt-a.createdAt); // newest
-  return arr;
-}
-
 function renderItems(){
   const list = document.getElementById('itemList');
-  const v = getFolderView(currentFolder);
-  list.classList.toggle('grid-view', v.view==='grid');
-  list.classList.toggle('selectable', itemSelectMode);
-  const items = sortItems(data[currentFolder] || [], v.sort);
+  const items = data[currentFolder] || [];
   if(items.length === 0){
-    list.classList.remove('grid-view');
     list.innerHTML = `<div class="empty-state">${svg('inbox')}<p>لا توجد عناصر بعد — اضغط + للإضافة</p></div>`;
     return;
   }
-  list.innerHTML = items.map(item=>{
+  list.innerHTML = items.slice().reverse().map(item=>{
     let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
-    const checked = selectedItemIds.has(item.id);
     return `
       <div class="item-card">
-        ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" onclick="event.stopPropagation();toggleItemChecked('${item.id}')">${svg('check')}</span>` : ''}
         <div class="item-thumb">${thumb}</div>
-        <div class="item-body" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
+        <div class="item-body" onclick="viewItem('${item.id}')">
           <h4>${escapeHTML(item.title||"بدون عنوان")}</h4>
           <p>${escapeHTML((item.content||item.name||"").slice(0,90))}</p>
           <div class="item-meta">${fmtDate(item.createdAt)}</div>
         </div>
-        ${itemSelectMode ? '' : `
         <div class="item-actions">
-          <button onclick="viewItem('${item.id}','folder')">${svg('eye')}</button>
-          <button onclick="requestDeleteItem('${item.id}')">${svg('trash')}</button>
-        </div>`}
+          <button onclick="viewItem('${item.id}')">${svg('eye')}</button>
+          <button onclick="deleteItem('${item.id}')">${svg('trash')}</button>
+        </div>
       </div>`;
   }).join('');
 }
 
-function requestDeleteItem(id){
-  const item = (data[currentFolder]||[]).find(i=>i.id===id);
-  showConfirm('حذف العنصر', `سيتم حذف "${escapeHTML(item&&item.title || 'هذا العنصر')}" نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
-    data[currentFolder] = (data[currentFolder]||[]).filter(i=>i.id!==id);
-    saveData();
-    renderItems();
-    const c = data[currentFolder]?.length || 0;
-    document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
-    toast('تم الحذف');
-  });
-}
-
-/* ---- item multi-select ---- */
-function enterItemSelectMode(){
-  closeFolderMenu();
-  itemSelectMode = true;
-  selectedItemIds.clear();
-  document.getElementById('itemSelectBar').classList.add('show');
-  document.getElementById('fabBtn').classList.remove('show');
-  updateItemSelCount();
+function deleteItem(id){
+  data[currentFolder] = (data[currentFolder]||[]).filter(i=>i.id!==id);
+  saveData();
   renderItems();
-}
-function exitItemSelectMode(){
-  itemSelectMode = false;
-  selectedItemIds.clear();
-  document.getElementById('itemSelectBar').classList.remove('show');
-  if(currentFolder) document.getElementById('fabBtn').classList.add('show');
-  renderItems();
-}
-function toggleItemChecked(id){
-  if(selectedItemIds.has(id)) selectedItemIds.delete(id); else selectedItemIds.add(id);
-  updateItemSelCount();
-  renderItems();
-}
-function toggleSelectAllItems(){
-  const all = (data[currentFolder]||[]).map(i=>i.id);
-  const allSelected = all.length>0 && all.every(id=>selectedItemIds.has(id));
-  if(allSelected) selectedItemIds.clear();
-  else all.forEach(id=>selectedItemIds.add(id));
-  updateItemSelCount();
-  renderItems();
-}
-function updateItemSelCount(){
-  document.getElementById('itemSelCount').textContent = selectedItemIds.size + ' محدد';
-  const all = (data[currentFolder]||[]).map(i=>i.id);
-  document.getElementById('selAllItemsLabel').textContent = (all.length>0 && all.every(id=>selectedItemIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
-}
-function deleteSelectedItems(){
-  if(selectedItemIds.size===0){ toast('لم تختر أي عنصر'); return; }
-  const n = selectedItemIds.size;
-  showConfirm('حذف العناصر المحددة', `سيتم حذف ${n} ${n===1?'عنصر':'عناصر'} نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
-    data[currentFolder] = (data[currentFolder]||[]).filter(i=>!selectedItemIds.has(i.id));
-    saveData();
-    const c = data[currentFolder]?.length || 0;
-    document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
-    exitItemSelectMode();
-    toast('تم الحذف');
-  });
+  const c = data[currentFolder]?.length || 0;
+  document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
+  toast('تم الحذف');
 }
 
 /* =========================================================
-   FULL-SCREEN VIEWER
+   VIEW MODAL
 ========================================================= */
-function viewItem(id, origin){
+function viewItem(id){
   const item = (data[currentFolder]||[]).find(i=>i.id===id);
   if(!item) return;
-  currentViewItem = item;
-  viewOrigin = origin || 'folder';
-
-  document.getElementById('viewTitle').textContent = item.title || 'بدون عنوان';
-  const content = document.getElementById('viewContent');
-  let inner = '';
-  if(item.kind==='photo'){
-    inner = `<img class="view-media-full" src="${item.src}">`;
-  } else if(item.kind==='video'){
-    inner = `<video class="view-media-full" src="${item.src}" controls playsinline></video>`;
-  } else if(item.kind==='music' || item.kind==='audio'){
-    inner = `<div class="view-audio-box">${svg('mic')}</div><audio style="width:100%" src="${item.src}" controls></audio>`;
-  } else if(item.kind==='code'){
-    inner = `<textarea class="mono" readonly style="min-height:55vh;width:100%">${escapeHTML(item.content||"")}</textarea>`;
-  } else if(item.kind==='file'){
-    inner = `<div class="view-audio-box">${svg('file')}</div><p style="color:var(--text-dim);text-align:center">${escapeHTML(item.name||'')}</p>`;
-  } else {
-    inner = `<p style="white-space:pre-wrap;color:var(--text);width:100%">${escapeHTML(item.content||"")}</p>`;
-  }
-  inner += `<div class="item-meta">${fmtDate(item.createdAt)}</div>`;
-  content.innerHTML = inner;
-
-  const canSave = ['photo','video','music','audio','file'].includes(item.kind);
-  document.getElementById('viewSaveBtn').style.display = canSave ? 'flex' : 'none';
-
-  document.getElementById('fabBtn').classList.remove('show');
-  showScreen('screen-view');
+  const body = document.getElementById('viewModalBody');
+  let inner = `<h3>${escapeHTML(item.title||"بدون عنوان")}</h3>`;
+  if(item.kind==='photo') inner += `<img class="view-media" src="${item.src}">`;
+  else if(item.kind==='video') inner += `<video class="view-media" src="${item.src}" controls playsinline></video>`;
+  else if(item.kind==='music' || item.kind==='audio') inner += `<audio class="view-media" src="${item.src}" controls style="width:100%"></audio>`;
+  else if(item.kind==='code') inner += `<textarea class="mono" readonly style="min-height:220px">${escapeHTML(item.content||"")}</textarea>`;
+  else if(item.kind==='file') inner += `<p style="color:var(--text-dim)">${escapeHTML(item.name||'')}</p><a class="btn btn-ghost" style="display:block" href="${item.src}" download="${escapeHTML(item.name||'file')}">${svg('upload')} تنزيل الملف</a>`;
+  else inner += `<p style="white-space:pre-wrap;color:var(--text)">${escapeHTML(item.content||"")}</p>`;
+  inner += `<div class="item-meta" style="margin-top:10px">${fmtDate(item.createdAt)}</div>`;
+  body.innerHTML = inner;
+  document.getElementById('viewModalBackdrop').classList.add('active');
 }
-
-function closeFullView(){
-  currentViewItem = null;
-  if(viewOrigin === 'search'){
-    showScreen('screen-search');
-  } else {
-    showScreen('screen-folder');
-    if(currentFolder && !itemSelectMode){
-      document.getElementById('fabBtn').classList.add('show');
-    }
-  }
-}
-
-/* Save currently viewed item to the device gallery / downloads */
-async function saveToGallery(){
-  const item = currentViewItem;
-  if(!item) return;
-  const Media = window.Capacitor?.Plugins?.Media;
-  const isNative = window.Capacitor?.isNativePlatform ? window.Capacitor.isNativePlatform() : false;
-
-  try{
-    if(isNative && Media && item.kind==='photo'){
-      const uri = item.storedPath ? await getShareableUri(item) : (item.nativeUri || item.src);
-      await Media.savePhoto({ path: uri });
-      toast('تم الحفظ في المعرض');
-      return;
-    }
-    if(isNative && Media && item.kind==='video'){
-      const uri = item.storedPath ? await getShareableUri(item) : (item.nativeUri || item.src);
-      await Media.saveVideo({ path: uri });
-      toast('تم الحفظ في المعرض');
-      return;
-    }
-    const a = document.createElement('a');
-    a.href = item.src;
-    a.download = item.name || item.title || 'ملف';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    toast(isNative ? 'لحفظ الصور والفيديوهات في المعرض مباشرة، ثبّت إضافة Media في المشروع' : 'تم بدء التنزيل');
-  }catch(e){
-    toast('تعذّر الحفظ: ' + (e && (e.message || e.errorMessage || e.code) || 'خطأ غير معروف'));
-  }
-}
-
-/* Share currently viewed item */
-async function shareItem(){
-  const item = currentViewItem;
-  if(!item) return;
-  const Share = window.Capacitor?.Plugins?.Share;
-  const hasFile = !!item.nativeUri;
-  try{
-    if(Share){
-      const payload = { title: item.title || 'مشاركة', dialogTitle: 'مشاركة عبر' };
-      if(hasFile){
-        toast('جاري التحضير...');
-        payload.url = await getShareableUri(item);
-      } else if(!item.src){
-        payload.text = item.content || item.title || '';
-      } else {
-        toast('هذا العنصر أُضيف قبل تحديث المشاركة — احذفه وأضفه من جديد ليصبح قابلاً للمشاركة كملف');
-        return;
-      }
-      await Share.share(payload);
-      return;
-    }
-    if(navigator.share){
-      if(hasFile) await navigator.share({ title: item.title || '', url: item.nativeUri });
-      else await navigator.share({ title: item.title || '', text: item.content || item.title || '' });
-      return;
-    }
-    toast('المشاركة غير مدعومة في هذه البيئة — ثبّت إضافة Share في المشروع');
-  }catch(e){
-    toast('تعذّرت المشاركة: ' + (e && (e.message || e.errorMessage || e.code) || 'خطأ غير معروف'));
-  }
-}
+function closeViewModal(){ document.getElementById('viewModalBackdrop').classList.remove('active'); }
 
 /* =========================================================
-   ADD ITEM MODAL
+   ADD MODAL
 ========================================================= */
 function openAddModal(){
-  const folder = getFolder(currentFolder);
+  const folder = FOLDERS.find(f=>f.id===currentFolder);
   pendingMedia = null;
   document.getElementById('addModalTitle').textContent = 'إضافة إلى ' + folder.name;
   const body = document.getElementById('addModalBody');
 
   if(folder.kind === 'media'){
     body.innerHTML = `
-      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" dir="rtl" placeholder="مثال: رحلة الصيف"></div>
+      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="مثال: رحلة الصيف"></div>
       <div class="capture-row">
         <button type="button" class="capture-btn" onclick="capturePhoto()">${svg('camera')}<span>التقاط صورة</span></button>
-        <button type="button" class="capture-btn" onclick="document.getElementById('photoUploadInput').click()">${svg('upload')}<span>رفع صورة</span></button>
-        <button type="button" class="capture-btn" onclick="document.getElementById('videoFallbackInput').click()">${svg('upload')}<span>رفع فيديو</span></button>
+        <button type="button" class="capture-btn" onclick="document.getElementById('videoFallbackInput').click()">${svg('video')}<span>تصوير / رفع فيديو</span></button>
         <button type="button" class="capture-btn" onclick="document.getElementById('musicFallbackInput').click()">${svg('music')}<span>رفع موسيقى</span></button>
         <button type="button" class="capture-btn" id="recordBtn" onclick="toggleRecordAudio()">${svg('mic')}<span id="recordBtnLabel">تسجيل صوت</span></button>
       </div>
-      <div class="media-preview-box" id="mediaPreviewBox"></div>`;
+      <div class="media-preview-box" id="mediaPreviewBox"></div>
+    `;
   } else if(folder.kind === 'code'){
     body.innerHTML = `
-      <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="اسم الكود"></div>
-      <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>`;
+      <div class="field"><label>العنوان</label><input id="addTitle" placeholder="اسم الكود"></div>
+      <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>
+    `;
   } else if(folder.kind === 'file'){
     body.innerHTML = `
-      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" dir="rtl" placeholder="اسم الملف"></div>
+      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="اسم الملف"></div>
       <button type="button" class="capture-btn" style="width:100%" onclick="document.getElementById('fileGenericInput').click()">${svg('upload')}<span>اختيار ملف من الجهاز</span></button>
-      <div class="media-preview-box" id="mediaPreviewBox"></div>`;
+      <div class="media-preview-box" id="mediaPreviewBox"></div>
+    `;
   } else {
-    const labelMap = {text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري'};
-    const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
-      <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="عنوان"></div>
-      <div class="field"><label>${label}</label><textarea id="addContent" dir="rtl" placeholder="اكتب هنا..." style="min-height:${folder.kind==='poem'?'170px':'110px'}"></textarea></div>`;
+      <div class="field"><label>العنوان</label><input id="addTitle" placeholder="عنوان"></div>
+      <div class="field"><label>المحتوى</label><textarea id="addContent" placeholder="اكتب هنا..."></textarea></div>
+    `;
   }
   document.getElementById('addModalBackdrop').classList.add('active');
 }
@@ -1355,7 +599,7 @@ function closeAddModal(){
 }
 
 function submitAddItem(){
-  const folder = getFolder(currentFolder);
+  const folder = FOLDERS.find(f=>f.id===currentFolder);
   const titleEl = document.getElementById('addTitle');
   const title = titleEl ? titleEl.value.trim() : "";
   let item = { id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now() };
@@ -1365,8 +609,6 @@ function submitAddItem(){
     item.kind = pendingMedia.kind;
     item.src = pendingMedia.src;
     item.name = pendingMedia.name;
-    item.nativeUri = pendingMedia.nativeUri || null;
-    item.storedPath = pendingMedia.storedPath || null;
     item.title = title || pendingMedia.name;
   } else if(folder.kind === 'code'){
     const content = document.getElementById('addContent').value;
@@ -1375,7 +617,7 @@ function submitAddItem(){
   } else {
     const content = document.getElementById('addContent').value;
     if(!title && !content){ toast('أضف عنوانًا أو محتوى'); return; }
-    item.kind = folder.kind; item.title = title || 'بدون عنوان'; item.content = content;
+    item.kind = 'note'; item.title = title || 'بدون عنوان'; item.content = content;
   }
 
   data[currentFolder].push(item);
@@ -1401,6 +643,8 @@ function showMediaPreview(){
 
 /* =========================================================
    FILE -> DEVICE STORAGE
+   Uses Capacitor Filesystem's internal app storage (Directory.DATA)
+   so large photos/videos/music/recordings never bloat localStorage.
 ========================================================= */
 function readFileAsDataURL(file){
   return new Promise((resolve,reject)=>{
@@ -1419,7 +663,7 @@ async function persistFile(file, name){
   if(Filesystem && isNative){
     try{
       const base64 = dataUrl.split(',')[1];
-      const safeName = Date.now()+'_'+name.replace(/[^a-zA-Z0-9.-]/g,'_');
+      const safeName = Date.now()+'_'+name.replace(/[^a-zA-Z0-9._-]/g,'_');
       await Filesystem.writeFile({
         path: safeName,
         data: base64,
@@ -1428,45 +672,28 @@ async function persistFile(file, name){
       });
       const uriRes = await Filesystem.getUri({ directory: 'DATA', path: safeName });
       const src = window.Capacitor.convertFileSrc(uriRes.uri);
-      return { src, name, nativeUri: uriRes.uri, storedPath: safeName };
+      return { src, name };
     }catch(e){
       console.warn('Filesystem save failed, falling back to inline storage', e);
       toast('تعذّر الحفظ في تخزين الجهاز، سيتم استخدام تخزين مؤقت');
     }
   }
 
-  if(file.size > 31 * 1024 * 1024){
+  if(file.size > 3*1024*1024){
     toast('تنبيه: الملف كبير وقد لا يُحفظ داخل معاينة المتصفح — سيعمل بشكل صحيح داخل التطبيق المثبّت');
   }
-  return { src: dataUrl, name, nativeUri: null, storedPath: null };
+  return { src: dataUrl, name };
 }
 
-async function getShareableUri(item){
-  const Filesystem = window.Capacitor?.Plugins?.Filesystem;
-  if(!Filesystem || !item.storedPath) return item.nativeUri || null;
-  try{
-    const cacheName = 'share_' + item.storedPath;
-    await Filesystem.copy({ from: item.storedPath, directory: 'DATA', to: cacheName, toDirectory: 'CACHE' });
-    const uriRes = await Filesystem.getUri({ directory: 'CACHE', path: cacheName });
-    return uriRes.uri;
-  }catch(e){
-    console.warn('Could not stage a shareable cache copy', e);
-    return item.nativeUri || null;
-  }
-}
-
-/* PHOTO — capture with camera */
+/* PHOTO */
 async function capturePhoto(){
   const Camera = window.Capacitor?.Plugins?.Camera;
   if(Camera){
     try{
-      const photo = await Camera.getPhoto({ quality: 80, resultType: 'dataUrl', source: 'CAMERA' });
-      const blob = await (await fetch(photo.dataUrl)).blob();
-      const file = new File([blob], 'photo_'+Date.now()+'.jpeg', { type: blob.type || 'image/jpeg' });
-      const saved = await persistFile(file, 'صورة');
-      pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+      const photo = await Camera.getPhoto({ quality: 80, resultType: 'dataUrl', source: 'CAMERA', saveToGallery: true });
+      pendingMedia = { kind:'photo', src: photo.dataUrl, name:'صورة' };
       showMediaPreview();
-    }catch(e){ toast('تعذّر التقاط الصورة: ' + (e && e.message || 'خطأ غير معروف')); }
+    }catch(e){ /* user cancelled */ }
   } else {
     document.getElementById('photoFallbackInput').click();
   }
@@ -1474,39 +701,37 @@ async function capturePhoto(){
 document.getElementById('photoFallbackInput').addEventListener('change', async e=>{
   const file = e.target.files[0]; if(!file) return;
   const saved = await persistFile(file, file.name || 'صورة');
-  pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+  pendingMedia = { kind:'photo', src: saved.src, name: saved.name };
   showMediaPreview();
   e.target.value = '';
 });
-document.getElementById('photoUploadInput').addEventListener('change', async e=>{
-  const file = e.target.files[0]; if(!file) return;
-  toast('جاري الحفظ...');
-  const saved = await persistFile(file, file.name || 'صورة');
-  pendingMedia = { kind:'photo', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
-  showMediaPreview();
-  e.target.value = '';
-});
+
+/* VIDEO */
 document.getElementById('videoFallbackInput').addEventListener('change', async e=>{
   const file = e.target.files[0]; if(!file) return;
   toast('جاري الحفظ...');
   const saved = await persistFile(file, file.name || 'فيديو');
-  pendingMedia = { kind:'video', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+  pendingMedia = { kind:'video', src: saved.src, name: saved.name };
   showMediaPreview();
   e.target.value = '';
 });
+
+/* MUSIC */
 document.getElementById('musicFallbackInput').addEventListener('change', async e=>{
   const file = e.target.files[0]; if(!file) return;
   toast('جاري الحفظ...');
   const saved = await persistFile(file, file.name || 'مقطع صوتي');
-  pendingMedia = { kind:'music', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+  pendingMedia = { kind:'music', src: saved.src, name: saved.name };
   showMediaPreview();
   e.target.value = '';
 });
+
+/* GENERIC FILE */
 document.getElementById('fileGenericInput').addEventListener('change', async e=>{
   const file = e.target.files[0]; if(!file) return;
   toast('جاري الحفظ...');
   const saved = await persistFile(file, file.name || 'ملف');
-  pendingMedia = { kind:'file', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+  pendingMedia = { kind:'file', src: saved.src, name: saved.name };
   showMediaPreview();
   e.target.value = '';
 });
@@ -1526,7 +751,7 @@ async function toggleRecordAudio(){
         const blob = new Blob(audioChunks, { type: 'audio/webm' });
         const file = new File([blob], 'تسجيل_'+Date.now()+'.webm', { type:'audio/webm' });
         const saved = await persistFile(file, 'تسجيل صوتي');
-        pendingMedia = { kind:'audio', src: saved.src, name: saved.name, nativeUri: saved.nativeUri, storedPath: saved.storedPath };
+        pendingMedia = { kind:'audio', src: saved.src, name: saved.name };
         showMediaPreview();
       };
       mediaRecorder.start();
@@ -1546,43 +771,22 @@ async function toggleRecordAudio(){
 }
 
 /* =========================================================
-   THEME / APPEARANCE  (mode presets, colors, radius, icon size, font scale)
+   THEME / APPEARANCE
 ========================================================= */
-const THEME_PRESETS = {
-  dark:  { bg:'#12151b', surface:'#1f2430', surface2:'#262c3a', border:'#31394a', text:'#edeee8', textDim:'#9aa2b5' },
-  light: { bg:'#f4f2ee', surface:'#ffffff', surface2:'#eef0f4', border:'#dfe2e8', text:'#20242e', textDim:'#6b7280' }
-};
-const DEFAULT_THEME = Object.assign({ accent:'#c9a24b', accentDim:'#8a733a', radius:22, iconSize:47, fontScale:100, mode:'dark' }, THEME_PRESETS.dark);
+const DEFAULT_THEME = { bg:'#12151b', surface:'#1f2430', accent:'#c9a24b', accentDim:'#8a733a', text:'#edeee8', radius:22 };
 
 function applyTheme(){
   const th = Object.assign({}, DEFAULT_THEME, settings.theme||{});
   const r = document.documentElement.style;
   r.setProperty('--bg', th.bg);
   r.setProperty('--surface', th.surface);
-  r.setProperty('--surface-2', th.surface2);
-  r.setProperty('--border', th.border);
   r.setProperty('--gold', th.accent);
   r.setProperty('--gold-dim', th.accentDim);
   r.setProperty('--text', th.text);
-  r.setProperty('--text-dim', th.textDim);
   const rad = Number(th.radius);
   r.setProperty('--radius-lg', rad+'px');
   r.setProperty('--radius-md', Math.round(rad*0.72)+'px');
   r.setProperty('--radius-sm', Math.round(rad*0.45)+'px');
-  r.setProperty('--icon-size', Number(th.iconSize)+'px');
-  r.setProperty('--font-scale', (Number(th.fontScale)/100));
-}
-function setThemeMode(mode){
-  const preset = THEME_PRESETS[mode] || THEME_PRESETS.dark;
-  settings.theme = Object.assign({}, DEFAULT_THEME, settings.theme||{}, preset, {mode});
-  saveSettingsData();
-  applyTheme();
-  loadThemeForm();
-}
-function updateModeButtons(){
-  const mode = (settings.theme && settings.theme.mode) || 'dark';
-  document.getElementById('modeBtn-dark').classList.toggle('active', mode==='dark');
-  document.getElementById('modeBtn-light').classList.toggle('active', mode==='light');
 }
 function loadThemeForm(){
   const th = Object.assign({}, DEFAULT_THEME, settings.theme||{});
@@ -1591,29 +795,20 @@ function loadThemeForm(){
   document.getElementById('themeAccent').value = th.accent;
   document.getElementById('themeText').value = th.text;
   document.getElementById('themeRadius').value = th.radius;
-  document.getElementById('themeIconSize').value = th.iconSize;
-  document.getElementById('themeIconSizeVal').textContent = th.iconSize;
-  document.getElementById('themeFontScale').value = th.fontScale;
-  document.getElementById('themeFontScaleVal').textContent = th.fontScale + '%';
-  updateModeButtons();
 }
 function updateThemeFromForm(){
-  settings.theme = Object.assign({}, DEFAULT_THEME, settings.theme||{}, {
+  settings.theme = {
     bg: document.getElementById('themeBg').value,
     surface: document.getElementById('themeSurface').value,
     accent: document.getElementById('themeAccent').value,
     accentDim: document.getElementById('themeAccent').value,
     text: document.getElementById('themeText').value,
-    radius: document.getElementById('themeRadius').value,
-    iconSize: document.getElementById('themeIconSize').value,
-    fontScale: document.getElementById('themeFontScale').value
-  });
-  document.getElementById('themeIconSizeVal').textContent = settings.theme.iconSize;
-  document.getElementById('themeFontScaleVal').textContent = settings.theme.fontScale + '%';
+    radius: document.getElementById('themeRadius').value
+  };
   applyTheme();
   saveSettingsData();
 }
-['themeBg','themeSurface','themeAccent','themeText','themeRadius','themeIconSize','themeFontScale'].forEach(id=>{
+['themeBg','themeSurface','themeAccent','themeText','themeRadius'].forEach(id=>{
   document.getElementById(id).addEventListener('input', updateThemeFromForm);
 });
 function resetTheme(){
