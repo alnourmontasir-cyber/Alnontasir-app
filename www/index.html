@@ -70,21 +70,12 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .folder-icon svg{width:48%;height:48%;color:#fff;}
 .folder-card h3{margin:0 0 4px;font-size:calc(14px * var(--font-scale));}
 .folder-card span{font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);}
-.folder-del-btn{position:absolute;top:8px;inset-inline-start:8px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:2;}
-.folder-del-btn svg{width:13px;height:13px;color:#fff;}
-.edit-mode .folder-del-btn{display:flex;}
-.edit-mode .folder-card{animation:wiggle .25s infinite alternate;}
-@keyframes wiggle{from{transform:rotate(-0.6deg)}to{transform:rotate(0.6deg)}}
-.detail-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.detail-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .detail-header h2{margin:0;flex:1;font-size:calc(19px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 12px;}
 .search-box svg{width:18px;height:18px;color:var(--text-dim);flex-shrink:0;}
 .search-box input{border:0;background:transparent;padding:11px 0;}
 .search-box input:focus{outline:0;}
-.toolbar-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.toolbar-row select{flex:1;padding:9px 10px;font-size:calc(12.5px * var(--font-scale));}
-.view-toggle-btn{width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.view-toggle-btn svg{width:18px;height:18px;}
 .item-list{display:flex;flex-direction:column;gap:10px;}
 .item-list.grid-view{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .item-list.grid-view .item-card{flex-direction:column;align-items:stretch;text-align:center;padding:10px;}
@@ -109,8 +100,6 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .fab{display:none;position:fixed;bottom:25px;inset-inline-end:22px;width:59px;height:59px;border-radius:50%;background:linear-gradient(155deg,var(--gold),var(--gold-dim));box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:100;}
 .fab.show{display:flex;}
 .fab svg{width:25px;height:25px;color:#12151b;}
-.fab-secondary{bottom:96px;background:linear-gradient(155deg,var(--surface-2),var(--surface));border:1px solid var(--border);}
-.fab-secondary svg{color:var(--gold);}
 .modal-backdrop{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);}
 .modal-backdrop.active{display:flex;}
 .modal{width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:var(--bg-elev);border-top:1px solid var(--border);}
@@ -170,6 +159,34 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .view-audio-box svg{width:46px;height:46px;color:var(--gold);}
 .view-content-inner{display:flex;flex-direction:column;gap:14px;width:100%;}
 .view-actionbar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:var(--bg-elev);border-top:1px solid var(--border);z-index:150;}
+
+/* ===== Folder options menu ===== */
+.folder-menu-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.folder-menu-head .folder-icon{width:44px;height:44px;flex-shrink:0;}
+.folder-menu-head h4{margin:0;font-size:15.5px;}
+.menu-section-label{padding:6px 10px 6px;color:var(--text-dim);font-size:11.5px;}
+.menu-list{display:flex;flex-direction:column;gap:4px;margin-bottom:6px;}
+.menu-item{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:var(--radius-sm);text-align:right;width:100%;font-size:14px;}
+.menu-item:active{background:var(--surface-2);}
+.menu-item svg{width:19px;height:19px;color:var(--gold);flex-shrink:0;}
+.menu-item.active{background:var(--surface-2);color:var(--gold);font-weight:700;}
+.menu-item.danger{color:var(--danger);}
+.menu-item.danger svg{color:var(--danger);}
+.menu-divider{height:1px;background:var(--border);margin:8px 2px;}
+
+/* ===== Multi-select ===== */
+.select-bar{display:none;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);}
+.select-bar.show{display:flex;}
+.select-bar .sb-count{flex:1;font-size:12.5px;color:var(--text-dim);white-space:nowrap;}
+.select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
+.select-bar button.danger{background:var(--danger);color:#fff;}
+.selectable .item-card{position:relative;}
+.select-check{position:absolute;top:8px;inset-inline-start:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.5);border:2px solid #fff;display:flex;align-items:center;justify-content:center;z-index:3;flex-shrink:0;}
+.select-check svg{width:13px;height:13px;color:#fff;opacity:0;}
+.select-check.checked{background:var(--gold);border-color:var(--gold);}
+.select-check.checked svg{opacity:1;}
+.item-list.selectable .item-card{padding-inline-start:38px;}
+.item-list.selectable.grid-view .item-card{padding-inline-start:10px;}
 </style>
 </head>
 <body>
@@ -201,8 +218,8 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
       </div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="editFoldersBtn" onclick="toggleEditMode()" title="تعديل الحافظات">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <button class="icon-btn" id="editFoldersBtn" onclick="toggleFolderSelectMode()" title="تحديد الحافظات">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
       </button>
       <button class="icon-btn" onclick="openSettings()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -216,6 +233,13 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
   <div class="search-box home-search" onclick="openSearch()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input placeholder="ابحث في كل محتوياتك..." readonly style="pointer-events:none">
+  </div>
+
+  <div class="select-bar" id="folderSelectBar">
+    <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
+    <span class="sb-count" id="folderSelCount">0 محدد</span>
+    <button class="danger" onclick="deleteSelectedFolders()">حذف المحدد</button>
+    <button onclick="exitFolderSelectMode()">إلغاء</button>
   </div>
 
   <div class="grid" id="foldersGrid"></div>
@@ -243,21 +267,19 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
     </button>
     <h2 id="folderTitle"></h2>
     <span id="folderCountBadge" style="font-size:12px;color:var(--text-dim)"></span>
+    <button class="icon-btn" id="folderMenuBtn" onclick="openFolderMenu()" title="خيارات الحافظة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
-  <div class="toolbar-row">
-    <select id="sortSelect" onchange="onSortChange()">
-      <option value="newest">الأحدث أولًا</option>
-      <option value="oldest">الأقدم أولًا</option>
-      <option value="alpha">أبجديًا (أ-ي)</option>
-    </select>
-    <button class="view-toggle-btn" id="viewToggleBtn" onclick="toggleViewMode()" title="تغيير طريقة العرض"></button>
+  <div class="select-bar" id="itemSelectBar">
+    <button onclick="toggleSelectAllItems()"><span id="selAllItemsLabel">تحديد الكل</span></button>
+    <span class="sb-count" id="itemSelCount">0 محدد</span>
+    <button class="danger" onclick="deleteSelectedItems()">حذف المحدد</button>
+    <button onclick="exitItemSelectMode()">إلغاء</button>
   </div>
   <div class="item-list" id="itemList"></div>
 </div>
 
-<button class="fab fab-secondary" id="fabDeleteFolderBtn" onclick="confirmDeleteCurrentFolder()" title="حذف الحافظة">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-</button>
 <button class="fab" id="fabBtn" onclick="openAddModal()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
 </button>
@@ -386,6 +408,9 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
     <div class="field"><label>نوع المحتوى</label>
       <select id="newFolderKind">
         <option value="note">ملاحظات نصية</option>
+        <option value="text">نصوص</option>
+        <option value="article">مقالات</option>
+        <option value="poem">أشعار</option>
         <option value="code">أكواد</option>
         <option value="media">صور وفيديو وصوت</option>
         <option value="file">ملفات عامة</option>
@@ -402,6 +427,58 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeFolderModal()">إلغاء</button>
       <button class="btn btn-primary" onclick="submitNewFolder()">إنشاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FOLDER OPTIONS MENU ================= -->
+<div class="modal-backdrop" id="folderMenuBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="folder-menu-head">
+      <div class="folder-icon" id="menuFolderIcon"></div>
+      <h4 id="menuFolderName"></h4>
+    </div>
+
+    <div class="menu-section-label">الفرز والترتيب</div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" id="sortBtn-newest" onclick="setMenuSort('newest')">الأحدث أولًا</button>
+      <button type="button" class="menu-item" id="sortBtn-oldest" onclick="setMenuSort('oldest')">الأقدم أولًا</button>
+      <button type="button" class="menu-item" id="sortBtn-alpha" onclick="setMenuSort('alpha')">أبجديًا (أ-ي)</button>
+    </div>
+
+    <div class="menu-divider"></div>
+    <div class="menu-section-label">طريقة عرض المحتويات</div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" id="viewBtn-list" onclick="setMenuView('list')">عرض كقائمة</button>
+      <button type="button" class="menu-item" id="viewBtn-grid" onclick="setMenuView('grid')">عرض كشبكة</button>
+    </div>
+
+    <div class="menu-divider"></div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" onclick="enterItemSelectMode()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
+        تحديد العناصر
+      </button>
+      <button type="button" class="menu-item danger" onclick="requestDeleteCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        حذف الحافظة
+      </button>
+    </div>
+
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeFolderMenu()">إغلاق</button>
+  </div>
+</div>
+
+<!-- ================= CONFIRM DELETE MODAL (used everywhere) ================= -->
+<div class="modal-backdrop" id="confirmModalBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="confirmModalTitle">تأكيد الحذف</h3>
+    <p id="confirmModalMsg" style="color:var(--text-dim);font-size:13.5px;margin:0 0 18px;line-height:1.6"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeConfirmModal()">إلغاء</button>
+      <button class="btn btn-danger" onclick="runConfirmAction()">تأكيد الحذف</button>
     </div>
   </div>
 </div>
@@ -443,9 +520,13 @@ const ICONS = {
   gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
   plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-1 .1-1.3.5l-.5.6c-.4.5-.2 1.2.3 1.5L9 12l-2 3H3l-1 1 3 2 2 3 1-1v-4l3-2 3.5 5.3c.3.5 1 .7 1.5.3l.6-.5c.4-.3.6-.8.5-1.3z"/>',
   target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
-  plus:'<path d="M12 5v14M5 12h14"/>'
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  text:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/>',
+  article:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/>',
+  poem:'<path d="M6 17h3l2-4V7H5v6h3l-2 4z"/><path d="M15 17h3l2-4V7h-6v6h3l-2 4z"/>'
 };
-const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file'];
+const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem'];
 function svg(name,extra){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
 
 /* =========================================================
@@ -477,8 +558,16 @@ let pinBuffer = "";
 let firstNewPin = "";
 let currentViewItem = null;
 let viewOrigin = "folder"; // "folder" | "search"
-let editMode = false;
 let pickedFolderIcon = "heart";
+
+/* selection state */
+let folderSelectMode = false;
+let selectedFolderIds = new Set();
+let itemSelectMode = false;
+let selectedItemIds = new Set();
+
+/* generic confirm modal */
+let _confirmCallback = null;
 
 function getFolders(){ return DEFAULT_FOLDERS.concat(settings.customFolders); }
 function getFolder(id){ return getFolders().find(f=>f.id===id); }
@@ -505,7 +594,10 @@ function iconForKind(kind){
   if(kind==='code') return 'code';
   if(kind==='file') return 'file';
   if(kind==='photo') return 'camera';
-  return 'heart';
+  if(kind==='text') return 'text';
+  if(kind==='article') return 'article';
+  if(kind==='poem') return 'poem';
+  return 'heart'; // note
 }
 
 function toast(msg){
@@ -517,6 +609,26 @@ function toast(msg){
 }
 
 /* =========================================================
+   GENERIC CONFIRM MODAL — nothing deletes without this
+========================================================= */
+function showConfirm(title, msg, onConfirm){
+  document.getElementById('confirmModalTitle').textContent = title;
+  document.getElementById('confirmModalMsg').textContent = msg;
+  _confirmCallback = onConfirm;
+  document.getElementById('confirmModalBackdrop').classList.add('active');
+}
+function closeConfirmModal(){
+  document.getElementById('confirmModalBackdrop').classList.remove('active');
+  _confirmCallback = null;
+}
+function runConfirmAction(){
+  const cb = _confirmCallback;
+  document.getElementById('confirmModalBackdrop').classList.remove('active');
+  _confirmCallback = null;
+  if(cb) cb();
+}
+
+/* =========================================================
    NAVIGATION
 ========================================================= */
 function showScreen(id){
@@ -524,14 +636,20 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 function goHome(){
-  currentFolder=null; editMode=false;
-  document.getElementById('foldersGrid').classList.remove('edit-mode');
+  currentFolder=null;
+  if(folderSelectMode) exitFolderSelectMode();
+  if(itemSelectMode) exitItemSelectMode();
   document.getElementById('fabBtn').classList.remove('show');
-  document.getElementById('fabDeleteFolderBtn').classList.remove('show');
   renderHome(); showScreen('screen-home');
 }
-function openSettings(){ loadSettingsForm(); document.getElementById('fabBtn').classList.remove('show'); document.getElementById('fabDeleteFolderBtn').classList.remove('show'); showScreen('screen-settings'); }
+function openSettings(){
+  if(folderSelectMode) exitFolderSelectMode();
+  loadSettingsForm();
+  document.getElementById('fabBtn').classList.remove('show');
+  showScreen('screen-settings');
+}
 function openSearch(){
+  if(folderSelectMode) exitFolderSelectMode();
   document.getElementById('searchInput').value = '';
   renderSearchResults('');
   document.getElementById('fabBtn').classList.remove('show');
@@ -579,44 +697,92 @@ function openSearchResult(folderId, itemId){
 }
 
 /* =========================================================
-   HOME / EDIT MODE (add & delete folders)
+   HOME / FOLDER SELECTION MODE (multi-select + bulk delete)
 ========================================================= */
-function toggleEditMode(){
-  editMode = !editMode;
-  document.getElementById('foldersGrid').classList.toggle('edit-mode', editMode);
-  toast(editMode ? 'اضغط على أيقونة الحذف لإزالة حافظة، أو + لإضافة واحدة' : 'تم الخروج من وضع التعديل');
+function toggleFolderSelectMode(){
+  if(folderSelectMode){ exitFolderSelectMode(); return; }
+  folderSelectMode = true;
+  selectedFolderIds.clear();
+  document.getElementById('folderSelectBar').classList.add('show');
+  updateFolderSelCount();
+  renderHome();
+}
+function exitFolderSelectMode(){
+  folderSelectMode = false;
+  selectedFolderIds.clear();
+  document.getElementById('folderSelectBar').classList.remove('show');
+  renderHome();
+}
+function toggleFolderChecked(id){
+  if(selectedFolderIds.has(id)) selectedFolderIds.delete(id); else selectedFolderIds.add(id);
+  updateFolderSelCount();
+  renderHome();
+}
+function toggleSelectAllFolders(){
+  const all = getFolders().map(f=>f.id);
+  const allSelected = all.length>0 && all.every(id=>selectedFolderIds.has(id));
+  if(allSelected) selectedFolderIds.clear();
+  else all.forEach(id=>selectedFolderIds.add(id));
+  updateFolderSelCount();
+  renderHome();
+}
+function updateFolderSelCount(){
+  document.getElementById('folderSelCount').textContent = selectedFolderIds.size + ' محدد';
+  const all = getFolders().map(f=>f.id);
+  document.getElementById('selAllFoldersLabel').textContent = (all.length>0 && all.every(id=>selectedFolderIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
+}
+function deleteSelectedFolders(){
+  if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
+  const n = selectedFolderIds.size;
+  showConfirm('حذف الحافظات المحددة', `سيتم حذف ${n} ${n===1?'حافظة':'حافظات'} وكل محتوياتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+    selectedFolderIds.forEach(id=>deleteFolderNow(id));
+    exitFolderSelectMode();
+    toast('تم الحذف');
+  });
+}
+function deleteFolderNow(id){
+  settings.customFolders = settings.customFolders.filter(f=>f.id!==id);
+  delete data[id];
+  delete settings.folderViews[id];
+  saveSettingsData();
+  saveData();
 }
 
 function renderHome(){
   applyIdentity();
   const grid = document.getElementById("foldersGrid");
+  grid.classList.toggle('selectable', folderSelectMode);
   grid.innerHTML = "";
   getFolders().forEach(folder=>{
     const count = data[folder.id]?.length || 0;
+    const checked = selectedFolderIds.has(folder.id);
     const card = document.createElement("button");
+    card.type = "button";
     card.className = "folder-card";
     card.style.setProperty("--fc", folder.color);
     card.style.setProperty("--fc2", folder.color2);
     card.innerHTML = `
-      <button type="button" class="folder-del-btn" onclick="event.stopPropagation();deleteFolder('${folder.id}')">${svg('trash')}</button>
+      ${folderSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : ''}
       <div class="folder-icon">${svg(folder.icon)}</div>
       <div>
         <h3>${escapeHTML(folder.name)}</h3>
         <span>${count} ${count===1?"عنصر":"عناصر"}</span>
       </div>`;
-    card.onclick = () => { if(editMode) return; openFolder(folder.id); };
+    card.onclick = () => { folderSelectMode ? toggleFolderChecked(folder.id) : openFolder(folder.id); };
     grid.appendChild(card);
   });
-  // "add folder" card, always last
-  const addCard = document.createElement("button");
-  addCard.className = "folder-card";
-  addCard.style.setProperty("--fc", "#c9a24b");
-  addCard.style.setProperty("--fc2", "#8a733a");
-  addCard.innerHTML = `
-    <div class="folder-icon">${svg('plus')}</div>
-    <div><h3>حافظة جديدة</h3><span>إضافة</span></div>`;
-  addCard.onclick = openFolderModal;
-  grid.appendChild(addCard);
+  if(!folderSelectMode){
+    const addCard = document.createElement("button");
+    addCard.type = "button";
+    addCard.className = "folder-card";
+    addCard.style.setProperty("--fc", "#c9a24b");
+    addCard.style.setProperty("--fc2", "#8a733a");
+    addCard.innerHTML = `
+      <div class="folder-icon">${svg('plus')}</div>
+      <div><h3>حافظة جديدة</h3><span>إضافة</span></div>`;
+    addCard.onclick = openFolderModal;
+    grid.appendChild(addCard);
+  }
 }
 
 function applyIdentity(){
@@ -664,22 +830,57 @@ function submitNewFolder(){
   renderHome();
   toast('تم إنشاء الحافظة');
 }
-function deleteFolder(id){
-  const folder = getFolder(id);
+
+/* =========================================================
+   FOLDER OPTIONS MENU (sort, view, select, delete)
+========================================================= */
+function openFolderMenu(){
+  const folder = getFolder(currentFolder);
   if(!folder) return;
-  if(!confirm(`حذف حافظة "${folder.name}" وكل محتوياتها؟`)) return;
-  settings.customFolders = settings.customFolders.filter(f=>f.id!==id);
-  delete data[id];
-  delete settings.folderViews[id];
-  saveSettingsData();
-  saveData();
-  renderHome();
-  toast('تم حذف الحافظة');
+  const iconEl = document.getElementById('menuFolderIcon');
+  iconEl.style.setProperty('--fc', folder.color);
+  iconEl.style.setProperty('--fc2', folder.color2);
+  iconEl.innerHTML = svg(folder.icon);
+  document.getElementById('menuFolderName').textContent = folder.name;
+  const v = getFolderView(currentFolder);
+  updateMenuSortActive(v.sort);
+  updateMenuViewActive(v.view);
+  document.getElementById('folderMenuBackdrop').classList.add('active');
 }
-function confirmDeleteCurrentFolder(){
-  if(!currentFolder) return;
-  deleteFolder(currentFolder);
-  if(!getFolder(currentFolder)) goHome();
+function closeFolderMenu(){
+  document.getElementById('folderMenuBackdrop').classList.remove('active');
+}
+function updateMenuSortActive(s){
+  ['newest','oldest','alpha'].forEach(k=>{
+    document.getElementById('sortBtn-'+k).classList.toggle('active', k===s);
+  });
+}
+function updateMenuViewActive(v){
+  ['list','grid'].forEach(k=>{
+    document.getElementById('viewBtn-'+k).classList.toggle('active', k===v);
+  });
+}
+function setMenuSort(s){
+  setFolderView(currentFolder, {sort:s});
+  updateMenuSortActive(s);
+  renderItems();
+}
+function setMenuView(v){
+  setFolderView(currentFolder, {view:v});
+  updateMenuViewActive(v);
+  renderItems();
+}
+function requestDeleteCurrentFolder(){
+  closeFolderMenu();
+  const folder = getFolder(currentFolder);
+  if(!folder) return;
+  showConfirm('حذف الحافظة', `سيتم حذف حافظة "${folder.name}" وكل محتوياتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+    const id = currentFolder;
+    goHome();
+    deleteFolderNow(id);
+    renderHome();
+    toast('تم حذف الحافظة');
+  });
 }
 
 /* =========================================================
@@ -697,32 +898,13 @@ function openFolder(id){
   const folder = getFolder(id);
   if(!folder) return;
   currentFolder = id;
+  if(itemSelectMode) exitItemSelectMode();
   document.getElementById('folderTitle').textContent = folder.name;
   const c = data[id]?.length || 0;
   document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
   document.getElementById('fabBtn').classList.add('show');
-  document.getElementById('fabDeleteFolderBtn').classList.add('show');
-  const v = getFolderView(id);
-  document.getElementById('sortSelect').value = v.sort;
-  updateViewToggleIcon(v.view);
   renderItems();
   showScreen('screen-folder');
-}
-
-function onSortChange(){
-  setFolderView(currentFolder, {sort: document.getElementById('sortSelect').value});
-  renderItems();
-}
-function toggleViewMode(){
-  const v = getFolderView(currentFolder);
-  const next = v.view === 'grid' ? 'list' : 'grid';
-  setFolderView(currentFolder, {view: next});
-  updateViewToggleIcon(next);
-  renderItems();
-}
-function updateViewToggleIcon(view){
-  document.getElementById('viewToggleBtn').innerHTML = view==='grid' ? svg('inbox') : svg('grid');
-  document.getElementById('viewToggleBtn').title = view==='grid' ? 'التبديل إلى عرض القائمة' : 'التبديل إلى عرض الشبكة';
 }
 
 function sortItems(items, sort){
@@ -737,6 +919,7 @@ function renderItems(){
   const list = document.getElementById('itemList');
   const v = getFolderView(currentFolder);
   list.classList.toggle('grid-view', v.view==='grid');
+  list.classList.toggle('selectable', itemSelectMode);
   const items = sortItems(data[currentFolder] || [], v.sort);
   if(items.length === 0){
     list.classList.remove('grid-view');
@@ -745,29 +928,83 @@ function renderItems(){
   }
   list.innerHTML = items.map(item=>{
     let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
+    const checked = selectedItemIds.has(item.id);
     return `
       <div class="item-card">
+        ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" onclick="event.stopPropagation();toggleItemChecked('${item.id}')">${svg('check')}</span>` : ''}
         <div class="item-thumb">${thumb}</div>
-        <div class="item-body" onclick="viewItem('${item.id}','folder')">
+        <div class="item-body" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
           <h4>${escapeHTML(item.title||"بدون عنوان")}</h4>
           <p>${escapeHTML((item.content||item.name||"").slice(0,90))}</p>
           <div class="item-meta">${fmtDate(item.createdAt)}</div>
         </div>
+        ${itemSelectMode ? '' : `
         <div class="item-actions">
           <button onclick="viewItem('${item.id}','folder')">${svg('eye')}</button>
-          <button onclick="deleteItem('${item.id}')">${svg('trash')}</button>
-        </div>
+          <button onclick="requestDeleteItem('${item.id}')">${svg('trash')}</button>
+        </div>`}
       </div>`;
   }).join('');
 }
 
-function deleteItem(id){
-  data[currentFolder] = (data[currentFolder]||[]).filter(i=>i.id!==id);
-  saveData();
+function requestDeleteItem(id){
+  const item = (data[currentFolder]||[]).find(i=>i.id===id);
+  showConfirm('حذف العنصر', `سيتم حذف "${escapeHTML(item&&item.title || 'هذا العنصر')}" نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+    data[currentFolder] = (data[currentFolder]||[]).filter(i=>i.id!==id);
+    saveData();
+    renderItems();
+    const c = data[currentFolder]?.length || 0;
+    document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
+    toast('تم الحذف');
+  });
+}
+
+/* ---- item multi-select ---- */
+function enterItemSelectMode(){
+  closeFolderMenu();
+  itemSelectMode = true;
+  selectedItemIds.clear();
+  document.getElementById('itemSelectBar').classList.add('show');
+  document.getElementById('fabBtn').classList.remove('show');
+  updateItemSelCount();
   renderItems();
-  const c = data[currentFolder]?.length || 0;
-  document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
-  toast('تم الحذف');
+}
+function exitItemSelectMode(){
+  itemSelectMode = false;
+  selectedItemIds.clear();
+  document.getElementById('itemSelectBar').classList.remove('show');
+  if(currentFolder) document.getElementById('fabBtn').classList.add('show');
+  renderItems();
+}
+function toggleItemChecked(id){
+  if(selectedItemIds.has(id)) selectedItemIds.delete(id); else selectedItemIds.add(id);
+  updateItemSelCount();
+  renderItems();
+}
+function toggleSelectAllItems(){
+  const all = (data[currentFolder]||[]).map(i=>i.id);
+  const allSelected = all.length>0 && all.every(id=>selectedItemIds.has(id));
+  if(allSelected) selectedItemIds.clear();
+  else all.forEach(id=>selectedItemIds.add(id));
+  updateItemSelCount();
+  renderItems();
+}
+function updateItemSelCount(){
+  document.getElementById('itemSelCount').textContent = selectedItemIds.size + ' محدد';
+  const all = (data[currentFolder]||[]).map(i=>i.id);
+  document.getElementById('selAllItemsLabel').textContent = (all.length>0 && all.every(id=>selectedItemIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
+}
+function deleteSelectedItems(){
+  if(selectedItemIds.size===0){ toast('لم تختر أي عنصر'); return; }
+  const n = selectedItemIds.size;
+  showConfirm('حذف العناصر المحددة', `سيتم حذف ${n} ${n===1?'عنصر':'عناصر'} نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+    data[currentFolder] = (data[currentFolder]||[]).filter(i=>!selectedItemIds.has(i.id));
+    saveData();
+    const c = data[currentFolder]?.length || 0;
+    document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
+    exitItemSelectMode();
+    toast('تم الحذف');
+  });
 }
 
 /* =========================================================
@@ -802,7 +1039,6 @@ function viewItem(id, origin){
   document.getElementById('viewSaveBtn').style.display = canSave ? 'flex' : 'none';
 
   document.getElementById('fabBtn').classList.remove('show');
-  document.getElementById('fabDeleteFolderBtn').classList.remove('show');
   showScreen('screen-view');
 }
 
@@ -812,9 +1048,8 @@ function closeFullView(){
     showScreen('screen-search');
   } else {
     showScreen('screen-folder');
-    if(currentFolder){
+    if(currentFolder && !itemSelectMode){
       document.getElementById('fabBtn').classList.add('show');
-      document.getElementById('fabDeleteFolderBtn').classList.add('show');
     }
   }
 }
@@ -863,7 +1098,7 @@ async function shareItem(){
       if(hasFile){
         toast('جاري التحضير...');
         payload.url = await getShareableUri(item);
-      } else if(item.kind==='note' || item.kind==='code' || !item.src){
+      } else if(!item.src){
         payload.text = item.content || item.title || '';
       } else {
         toast('هذا العنصر أُضيف قبل تحديث المشاركة — احذفه وأضفه من جديد ليصبح قابلاً للمشاركة كملف');
@@ -913,9 +1148,11 @@ function openAddModal(){
       <button type="button" class="capture-btn" style="width:100%" onclick="document.getElementById('fileGenericInput').click()">${svg('upload')}<span>اختيار ملف من الجهاز</span></button>
       <div class="media-preview-box" id="mediaPreviewBox"></div>`;
   } else {
+    const labelMap = {text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري'};
+    const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" placeholder="عنوان"></div>
-      <div class="field"><label>المحتوى</label><textarea id="addContent" placeholder="اكتب هنا..."></textarea></div>`;
+      <div class="field"><label>${label}</label><textarea id="addContent" placeholder="اكتب هنا..." style="min-height:${folder.kind==='poem'?'170px':'110px'}"></textarea></div>`;
   }
   document.getElementById('addModalBackdrop').classList.add('active');
 }
@@ -945,7 +1182,7 @@ function submitAddItem(){
   } else {
     const content = document.getElementById('addContent').value;
     if(!title && !content){ toast('أضف عنوانًا أو محتوى'); return; }
-    item.kind = 'note'; item.title = title || 'بدون عنوان'; item.content = content;
+    item.kind = folder.kind; item.title = title || 'بدون عنوان'; item.content = content;
   }
 
   data[currentFolder].push(item);
@@ -1320,4 +1557,4 @@ function init(){
 init();
 </script>
 </body>
-</html>
+                                                                                                </html>
