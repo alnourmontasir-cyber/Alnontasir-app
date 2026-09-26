@@ -66,8 +66,9 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .folder-card{position:relative;overflow:hidden;min-height:135px;padding:16px;text-align:right;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(160deg,var(--surface),var(--surface-2));display:flex;flex-direction:column;justify-content:space-between;transition:.12s;}
 .folder-card:active{transform:scale(.96);}
 .folder-card::after{content:"";position:absolute;width:100px;height:100px;top:-35px;inset-inline-end:-35px;border-radius:50%;background:var(--fc);opacity:.13;}
-.folder-icon{width:var(--icon-size);height:var(--icon-size);border-radius:14px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;}
+.folder-icon{width:var(--icon-size);height:var(--icon-size);border-radius:14px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .folder-icon svg{width:48%;height:48%;color:#fff;}
+.folder-icon img{width:100%;height:100%;object-fit:cover;}
 .folder-card h3{margin:0 0 4px;font-size:calc(14px * var(--font-scale));}
 .folder-card span{font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);}
 .detail-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -104,6 +105,8 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .modal-backdrop.active{display:flex;}
 .modal{width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:var(--bg-elev);border-top:1px solid var(--border);}
 .modal-handle{width:40px;height:4px;margin:0 auto 15px;border-radius:3px;background:var(--border);}
+.modal-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;}
+.modal-head-row h3{margin:0;font-size:17px;}
 .modal h3{margin:0 0 16px;font-size:17px;}
 .field{margin-bottom:13px;}
 .field label{display:block;margin-bottom:6px;color:var(--text-dim);font-size:12.5px;}
@@ -127,7 +130,11 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .icon-pick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:6px;}
 .icon-pick{aspect-ratio:1;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
 .icon-pick svg{width:18px;height:18px;}
-.icon-pick.selected{border-color:var(--gold);background:var(--gold-dim);}
+.icon-pick.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;}
+.mode-row{display:flex;gap:10px;}
+.mode-btn{flex:1;padding:14px 10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;}
+.mode-btn svg{width:20px;height:20px;}
+.mode-btn.active{border-color:var(--gold);background:var(--gold-dim);color:#fff;}
 .range-row{display:flex;align-items:center;gap:10px;}
 .range-row span{font-size:12px;color:var(--text-dim);min-width:38px;text-align:center;}
 .toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);z-index:600;padding:11px 20px;border-radius:30px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);font-size:13px;opacity:0;pointer-events:none;transition:.2s;max-width:88vw;text-align:center;}
@@ -151,6 +158,9 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .capture-btn.recording svg{color:#fff;}
 .media-preview-box{margin-top:6px;padding:10px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);display:none;}
 .media-preview-box.show{display:block;}
+.contact-link{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);text-decoration:none;color:var(--text);font-size:13.5px;margin-bottom:8px;}
+.contact-link:last-child{margin-bottom:0;}
+.contact-link svg{width:19px;height:19px;color:var(--gold);flex-shrink:0;}
 
 /* ===== Full-screen viewer ===== */
 #screen-view{padding-bottom:110px;}
@@ -187,6 +197,11 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 .select-check.checked svg{opacity:1;}
 .item-list.selectable .item-card{padding-inline-start:38px;}
 .item-list.selectable.grid-view .item-card{padding-inline-start:10px;}
+
+/* RTL caret / backspace fix for Arabic text inputs inside WebViews */
+input[type="text"], input:not([type]), textarea{
+  unicode-bidi: plaintext;
+}
 </style>
 </head>
 <body>
@@ -326,8 +341,22 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
       </label>
     </div>
     <span class="hint">هذا الشعار يظهر داخل التطبيق فقط. لتغيير أيقونة التطبيق على شاشة جهازك يلزم تحديث ملف الأيقونة وإعادة بناء التطبيق من GitHub.</span>
-    <div class="field" style="margin-top:12px"><label>اسم التطبيق</label><input id="setAppName" placeholder="المنتصر"></div>
-    <div class="field"><label>الشعار الفرعي</label><input id="setTagline" placeholder="خزانتك الخاصة"></div>
+    <div class="field" style="margin-top:12px"><label>اسم التطبيق</label><input id="setAppName" dir="rtl" placeholder="المنتصر"></div>
+    <div class="field"><label>الشعار الفرعي</label><input id="setTagline" dir="rtl" placeholder="خزانتك الخاصة"></div>
+  </div>
+
+  <div class="settings-group">
+    <h4>وضع المظهر</h4>
+    <div class="mode-row">
+      <button type="button" class="mode-btn" id="modeBtn-dark" onclick="setThemeMode('dark')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        داكن
+      </button>
+      <button type="button" class="mode-btn" id="modeBtn-light" onclick="setThemeMode('light')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        فاتح
+      </button>
+    </div>
   </div>
 
   <div class="settings-group">
@@ -362,8 +391,20 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
   <div class="settings-group">
     <h4>حول التطبيق</h4>
     <div class="field"><label>نبذة عن التطبيق</label><textarea id="setAbout" placeholder="اكتب نبذة عن التطبيق"></textarea></div>
-    <div class="field"><label>الناشر</label><input id="setPublisher" placeholder="اسم الناشر"></div>
+    <div class="field"><label>الناشر</label><input id="setPublisher" dir="rtl" placeholder="اسم الناشر"></div>
     <div class="field"><label>الإصدار</label><input id="setVersion" placeholder="1.0.0"></div>
+  </div>
+
+  <div class="settings-group">
+    <h4>تواصل معنا</h4>
+    <a class="contact-link" href="mailto:alnourmontasir@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/><polyline points="22 6 12 13 2 6"/></svg>
+      <span style="direction:ltr;unicode-bidi:embed">alnourmontasir@gmail.com</span>
+    </a>
+    <a class="contact-link" href="https://www.facebook.com/montasiralnuor" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      <span>صفحتنا على فيسبوك</span>
+    </a>
   </div>
 
   <div class="settings-group">
@@ -390,7 +431,12 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 <div class="modal-backdrop" id="addModalBackdrop">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3 id="addModalTitle">إضافة</h3>
+    <div class="modal-head-row">
+      <h3 id="addModalTitle" style="margin:0">إضافة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <div id="addModalBody"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeAddModal()">إلغاء</button>
@@ -399,12 +445,17 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
   </div>
 </div>
 
-<!-- ================= ADD FOLDER MODAL ================= -->
+<!-- ================= ADD/EDIT FOLDER MODAL ================= -->
 <div class="modal-backdrop" id="folderModalBackdrop">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>إضافة حافظة جديدة</h3>
-    <div class="field"><label>اسم الحافظة</label><input id="newFolderName" placeholder="مثال: دراسة"></div>
+    <div class="modal-head-row">
+      <h3 id="folderModalTitle" style="margin:0">إضافة حافظة جديدة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><label>اسم الحافظة</label><input id="newFolderName" dir="rtl" placeholder="مثال: دراسة"></div>
     <div class="field"><label>نوع المحتوى</label>
       <select id="newFolderKind">
         <option value="note">ملاحظات نصية</option>
@@ -424,9 +475,20 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
       <label>الأيقونة</label>
       <div class="icon-pick-grid" id="folderIconPicker"></div>
     </div>
+    <div class="field">
+      <label>أو استخدم صورة من المعرض كأيقونة</label>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button type="button" class="btn btn-ghost" style="flex:1" onclick="document.getElementById('folderIconImageInput').click()">اختيار صورة</button>
+        <img id="folderIconImagePreview" class="hidden" style="width:44px;height:44px;border-radius:12px;object-fit:cover;flex-shrink:0">
+        <button type="button" class="icon-btn hidden" id="removeFolderIconImageBtn" style="width:38px;height:38px;flex-shrink:0" onclick="removeFolderIconImage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+      <input type="file" id="folderIconImageInput" accept="image/*" class="hidden">
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeFolderModal()">إلغاء</button>
-      <button class="btn btn-primary" onclick="submitNewFolder()">إنشاء</button>
+      <button class="btn btn-primary" id="folderSubmitBtn" onclick="submitFolderForm()">إنشاء</button>
     </div>
   </div>
 </div>
@@ -435,6 +497,12 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 <div class="modal-backdrop" id="folderMenuBackdrop">
   <div class="modal">
     <div class="modal-handle"></div>
+    <div class="modal-head-row" style="margin-bottom:4px">
+      <span></span>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <div class="folder-menu-head">
       <div class="folder-icon" id="menuFolderIcon"></div>
       <h4 id="menuFolderName"></h4>
@@ -460,6 +528,10 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
         تحديد العناصر
       </button>
+      <button type="button" class="menu-item" onclick="editCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        تعديل الاسم واللون والأيقونة
+      </button>
       <button type="button" class="menu-item danger" onclick="requestDeleteCurrentFolder()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         حذف الحافظة
@@ -474,7 +546,12 @@ input:focus,textarea:focus{outline:2px solid var(--gold);}
 <div class="modal-backdrop" id="confirmModalBackdrop">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3 id="confirmModalTitle">تأكيد الحذف</h3>
+    <div class="modal-head-row">
+      <h3 id="confirmModalTitle" style="margin:0">تأكيد الحذف</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeConfirmModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <p id="confirmModalMsg" style="color:var(--text-dim);font-size:13.5px;margin:0 0 18px;line-height:1.6"></p>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeConfirmModal()">إلغاء</button>
@@ -524,10 +601,55 @@ const ICONS = {
   check:'<polyline points="20 6 9 17 4 12"/>',
   text:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/>',
   article:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/>',
-  poem:'<path d="M6 17h3l2-4V7H5v6h3l-2 4z"/><path d="M15 17h3l2-4V7h-6v6h3l-2 4z"/>'
+  poem:'<path d="M6 17h3l2-4V7H5v6h3l-2 4z"/><path d="M15 17h3l2-4V7h-6v6h3l-2 4z"/>',
+  edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+  mail:'<path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/><polyline points="22 6 12 13 2 6"/>',
+  phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5 19 11l3-3-3.5-3.5"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  bookmark:'<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+  folder2:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+  archive:'<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>',
+  cloud:'<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+  coffee:'<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  car:'<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+  chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  mappin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+  sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+  moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+  umbrella:'<path d="M23 12a11.05 11.05 0 0 0-22 0z"/><path d="M12 12v8a2 2 0 0 1-4 0"/>',
+  compass:'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  anchor:'<circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/>',
+  award:'<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+  box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+  rocket:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+  smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
+  paperclip:'<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>',
+  link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  tag:'<path d="M20.59 13.41 13.41 20.59a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  droplet:'<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"/>',
+  headphones:'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+  monitor:'<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  smartphone:'<rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+  creditcard:'<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  shoppingbag:'<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+  feather:'<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>'
 };
-const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem'];
+const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem','mail','phone','globe','lock','key','calendar','clock','bookmark','folder2','archive','cloud','coffee','home','car','chat','mappin','flag','sun','moon','umbrella','compass','anchor','award','box','rocket','smile','paperclip','link','tag','zap','droplet','headphones','monitor','smartphone','creditcard','shoppingbag','users','activity','feather'];
+const ICON_PALETTE = ['#f59e0b','#ec4899','#a855f7','#3b82f6','#22c55e','#ef4444','#06b6d4','#eab308','#f97316','#8b5cf6','#10b981','#e11d48','#14b8a6','#6366f1','#d946ef'];
 function svg(name,extra){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
+function folderIconInner(folder){
+  if(folder.customIcon) return `<img src="${folder.customIcon}">`;
+  return svg(folder.icon);
+}
 
 /* =========================================================
    DEFAULT FOLDERS
@@ -550,6 +672,7 @@ let data = JSON.parse(localStorage.getItem("montasir_data") || "{}");
 let settings = JSON.parse(localStorage.getItem("montasir_settings") || "{}");
 if(!Array.isArray(settings.customFolders)) settings.customFolders = [];
 if(!settings.folderViews) settings.folderViews = {};
+if(!settings.folderOverrides) settings.folderOverrides = {};
 let currentFolder = null;
 let pendingMedia = null;
 let mediaRecorder = null, audioChunks = [], isRecording = false;
@@ -559,6 +682,8 @@ let firstNewPin = "";
 let currentViewItem = null;
 let viewOrigin = "folder"; // "folder" | "search"
 let pickedFolderIcon = "heart";
+let pendingFolderCustomIcon = null;
+let editingFolderId = null;
 
 /* selection state */
 let folderSelectMode = false;
@@ -569,8 +694,19 @@ let selectedItemIds = new Set();
 /* generic confirm modal */
 let _confirmCallback = null;
 
-function getFolders(){ return DEFAULT_FOLDERS.concat(settings.customFolders); }
+function getFolders(){
+  return DEFAULT_FOLDERS.map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{})).concat(settings.customFolders);
+}
 function getFolder(id){ return getFolders().find(f=>f.id===id); }
+function updateFolderMeta(id, patch){
+  const idx = settings.customFolders.findIndex(f=>f.id===id);
+  if(idx !== -1){
+    settings.customFolders[idx] = Object.assign({}, settings.customFolders[idx], patch);
+  } else {
+    settings.folderOverrides[id] = Object.assign({}, settings.folderOverrides[id]||{}, patch);
+  }
+  saveSettingsData();
+}
 
 getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
 saveData();
@@ -744,6 +880,7 @@ function deleteFolderNow(id){
   settings.customFolders = settings.customFolders.filter(f=>f.id!==id);
   delete data[id];
   delete settings.folderViews[id];
+  delete settings.folderOverrides[id];
   saveSettingsData();
   saveData();
 }
@@ -763,7 +900,7 @@ function renderHome(){
     card.style.setProperty("--fc2", folder.color2);
     card.innerHTML = `
       ${folderSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : ''}
-      <div class="folder-icon">${svg(folder.icon)}</div>
+      <div class="folder-icon">${folderIconInner(folder)}</div>
       <div>
         <h3>${escapeHTML(folder.name)}</h3>
         <span>${count} ${count===1?"عنصر":"عناصر"}</span>
@@ -780,7 +917,7 @@ function renderHome(){
     addCard.innerHTML = `
       <div class="folder-icon">${svg('plus')}</div>
       <div><h3>حافظة جديدة</h3><span>إضافة</span></div>`;
-    addCard.onclick = openFolderModal;
+    addCard.onclick = () => openFolderModal();
     grid.appendChild(addCard);
   }
 }
@@ -796,43 +933,99 @@ function applyIdentity(){
   else { img.classList.add('hidden'); fb.classList.remove('hidden'); fb.textContent = name.charAt(0); }
 }
 
-/* ---- Add folder modal ---- */
-function openFolderModal(){
-  document.getElementById('newFolderName').value = '';
-  document.getElementById('newFolderKind').value = 'note';
-  document.getElementById('newFolderColor').value = '#5eb1a1';
-  document.getElementById('newFolderColor2').value = '#2f7d6c';
-  pickedFolderIcon = 'heart';
+/* ---- Add / Edit folder modal ---- */
+function renderFolderIconPicker(selected){
   const pick = document.getElementById('folderIconPicker');
-  pick.innerHTML = FOLDER_ICON_CHOICES.map(ic=>`<button type="button" class="icon-pick ${ic==='heart'?'selected':''}" data-icon="${ic}" onclick="selectFolderIcon('${ic}')">${svg(ic)}</button>`).join('');
+  pick.innerHTML = FOLDER_ICON_CHOICES.map((ic,i)=>{
+    const col = ICON_PALETTE[i % ICON_PALETTE.length];
+    const sel = (!pendingFolderCustomIcon && ic===selected) ? 'selected' : '';
+    return `<button type="button" class="icon-pick ${sel}" data-icon="${ic}" style="color:${col};background:${col}26" onclick="selectFolderIcon('${ic}')">${svg(ic)}</button>`;
+  }).join('');
+}
+function updateFolderImagePreview(){
+  const img = document.getElementById('folderIconImagePreview');
+  const rmBtn = document.getElementById('removeFolderIconImageBtn');
+  if(pendingFolderCustomIcon){
+    img.src = pendingFolderCustomIcon;
+    img.classList.remove('hidden');
+    rmBtn.classList.remove('hidden');
+  } else {
+    img.classList.add('hidden');
+    rmBtn.classList.add('hidden');
+  }
+}
+function removeFolderIconImage(){
+  pendingFolderCustomIcon = null;
+  updateFolderImagePreview();
+  renderFolderIconPicker(pickedFolderIcon);
+}
+document.getElementById('folderIconImageInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const dataUrl = await readFileAsDataURL(file);
+  pendingFolderCustomIcon = dataUrl;
+  updateFolderImagePreview();
+  renderFolderIconPicker(pickedFolderIcon);
+  e.target.value = '';
+});
+
+function openFolderModal(editId){
+  editingFolderId = editId || null;
+  const folder = editId ? getFolder(editId) : null;
+  document.getElementById('folderModalTitle').textContent = editId ? 'تعديل الحافظة' : 'إضافة حافظة جديدة';
+  document.getElementById('folderSubmitBtn').textContent = editId ? 'حفظ' : 'إنشاء';
+  document.getElementById('newFolderName').value = folder ? folder.name : '';
+  document.getElementById('newFolderKind').value = folder ? folder.kind : 'note';
+  document.getElementById('newFolderColor').value = folder ? folder.color : '#5eb1a1';
+  document.getElementById('newFolderColor2').value = folder ? folder.color2 : '#2f7d6c';
+  pickedFolderIcon = folder ? folder.icon : 'heart';
+  pendingFolderCustomIcon = folder && folder.customIcon ? folder.customIcon : null;
+  renderFolderIconPicker(pickedFolderIcon);
+  updateFolderImagePreview();
   document.getElementById('folderModalBackdrop').classList.add('active');
 }
 function selectFolderIcon(ic){
   pickedFolderIcon = ic;
-  document.querySelectorAll('#folderIconPicker .icon-pick').forEach(el=>{
-    el.classList.toggle('selected', el.dataset.icon===ic);
-  });
+  pendingFolderCustomIcon = null;
+  updateFolderImagePreview();
+  renderFolderIconPicker(ic);
 }
-function closeFolderModal(){ document.getElementById('folderModalBackdrop').classList.remove('active'); }
-function submitNewFolder(){
+function closeFolderModal(){
+  document.getElementById('folderModalBackdrop').classList.remove('active');
+  editingFolderId = null;
+}
+function submitFolderForm(){
   const name = document.getElementById('newFolderName').value.trim();
   if(!name){ toast('أدخل اسم الحافظة'); return; }
   const kind = document.getElementById('newFolderKind').value;
   const color = document.getElementById('newFolderColor').value;
   const color2 = document.getElementById('newFolderColor2').value;
-  const id = 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-  const folder = {id, name, color, color2, kind, icon: pickedFolderIcon};
-  settings.customFolders.push(folder);
-  data[id] = [];
-  saveSettingsData();
-  saveData();
+  const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null};
+
+  if(editingFolderId){
+    updateFolderMeta(editingFolderId, patch);
+    if(currentFolder === editingFolderId){
+      document.getElementById('folderTitle').textContent = name;
+    }
+    toast('تم تحديث الحافظة');
+  } else {
+    const id = 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    settings.customFolders.push(Object.assign({id}, patch));
+    data[id] = [];
+    saveSettingsData();
+    saveData();
+    toast('تم إنشاء الحافظة');
+  }
+  editingFolderId = null;
   closeFolderModal();
   renderHome();
-  toast('تم إنشاء الحافظة');
+}
+function editCurrentFolder(){
+  closeFolderMenu();
+  openFolderModal(currentFolder);
 }
 
 /* =========================================================
-   FOLDER OPTIONS MENU (sort, view, select, delete)
+   FOLDER OPTIONS MENU (sort, view, select, edit, delete)
 ========================================================= */
 function openFolderMenu(){
   const folder = getFolder(currentFolder);
@@ -840,7 +1033,7 @@ function openFolderMenu(){
   const iconEl = document.getElementById('menuFolderIcon');
   iconEl.style.setProperty('--fc', folder.color);
   iconEl.style.setProperty('--fc2', folder.color2);
-  iconEl.innerHTML = svg(folder.icon);
+  iconEl.innerHTML = folderIconInner(folder);
   document.getElementById('menuFolderName').textContent = folder.name;
   const v = getFolderView(currentFolder);
   updateMenuSortActive(v.sort);
@@ -1129,7 +1322,7 @@ function openAddModal(){
 
   if(folder.kind === 'media'){
     body.innerHTML = `
-      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="مثال: رحلة الصيف"></div>
+      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" dir="rtl" placeholder="مثال: رحلة الصيف"></div>
       <div class="capture-row">
         <button type="button" class="capture-btn" onclick="capturePhoto()">${svg('camera')}<span>التقاط صورة</span></button>
         <button type="button" class="capture-btn" onclick="document.getElementById('photoUploadInput').click()">${svg('upload')}<span>رفع صورة</span></button>
@@ -1140,19 +1333,19 @@ function openAddModal(){
       <div class="media-preview-box" id="mediaPreviewBox"></div>`;
   } else if(folder.kind === 'code'){
     body.innerHTML = `
-      <div class="field"><label>العنوان</label><input id="addTitle" placeholder="اسم الكود"></div>
+      <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="اسم الكود"></div>
       <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>`;
   } else if(folder.kind === 'file'){
     body.innerHTML = `
-      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="اسم الملف"></div>
+      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" dir="rtl" placeholder="اسم الملف"></div>
       <button type="button" class="capture-btn" style="width:100%" onclick="document.getElementById('fileGenericInput').click()">${svg('upload')}<span>اختيار ملف من الجهاز</span></button>
       <div class="media-preview-box" id="mediaPreviewBox"></div>`;
   } else {
     const labelMap = {text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري'};
     const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
-      <div class="field"><label>العنوان</label><input id="addTitle" placeholder="عنوان"></div>
-      <div class="field"><label>${label}</label><textarea id="addContent" placeholder="اكتب هنا..." style="min-height:${folder.kind==='poem'?'170px':'110px'}"></textarea></div>`;
+      <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="عنوان"></div>
+      <div class="field"><label>${label}</label><textarea id="addContent" dir="rtl" placeholder="اكتب هنا..." style="min-height:${folder.kind==='poem'?'170px':'110px'}"></textarea></div>`;
   }
   document.getElementById('addModalBackdrop').classList.add('active');
 }
@@ -1353,24 +1546,43 @@ async function toggleRecordAudio(){
 }
 
 /* =========================================================
-   THEME / APPEARANCE  (colors, radius, icon size, font scale)
+   THEME / APPEARANCE  (mode presets, colors, radius, icon size, font scale)
 ========================================================= */
-const DEFAULT_THEME = { bg:'#12151b', surface:'#1f2430', accent:'#c9a24b', accentDim:'#8a733a', text:'#edeee8', radius:22, iconSize:47, fontScale:100 };
+const THEME_PRESETS = {
+  dark:  { bg:'#12151b', surface:'#1f2430', surface2:'#262c3a', border:'#31394a', text:'#edeee8', textDim:'#9aa2b5' },
+  light: { bg:'#f4f2ee', surface:'#ffffff', surface2:'#eef0f4', border:'#dfe2e8', text:'#20242e', textDim:'#6b7280' }
+};
+const DEFAULT_THEME = Object.assign({ accent:'#c9a24b', accentDim:'#8a733a', radius:22, iconSize:47, fontScale:100, mode:'dark' }, THEME_PRESETS.dark);
 
 function applyTheme(){
   const th = Object.assign({}, DEFAULT_THEME, settings.theme||{});
   const r = document.documentElement.style;
   r.setProperty('--bg', th.bg);
   r.setProperty('--surface', th.surface);
+  r.setProperty('--surface-2', th.surface2);
+  r.setProperty('--border', th.border);
   r.setProperty('--gold', th.accent);
   r.setProperty('--gold-dim', th.accentDim);
   r.setProperty('--text', th.text);
+  r.setProperty('--text-dim', th.textDim);
   const rad = Number(th.radius);
   r.setProperty('--radius-lg', rad+'px');
   r.setProperty('--radius-md', Math.round(rad*0.72)+'px');
   r.setProperty('--radius-sm', Math.round(rad*0.45)+'px');
   r.setProperty('--icon-size', Number(th.iconSize)+'px');
   r.setProperty('--font-scale', (Number(th.fontScale)/100));
+}
+function setThemeMode(mode){
+  const preset = THEME_PRESETS[mode] || THEME_PRESETS.dark;
+  settings.theme = Object.assign({}, DEFAULT_THEME, settings.theme||{}, preset, {mode});
+  saveSettingsData();
+  applyTheme();
+  loadThemeForm();
+}
+function updateModeButtons(){
+  const mode = (settings.theme && settings.theme.mode) || 'dark';
+  document.getElementById('modeBtn-dark').classList.toggle('active', mode==='dark');
+  document.getElementById('modeBtn-light').classList.toggle('active', mode==='light');
 }
 function loadThemeForm(){
   const th = Object.assign({}, DEFAULT_THEME, settings.theme||{});
@@ -1383,9 +1595,10 @@ function loadThemeForm(){
   document.getElementById('themeIconSizeVal').textContent = th.iconSize;
   document.getElementById('themeFontScale').value = th.fontScale;
   document.getElementById('themeFontScaleVal').textContent = th.fontScale + '%';
+  updateModeButtons();
 }
 function updateThemeFromForm(){
-  settings.theme = {
+  settings.theme = Object.assign({}, DEFAULT_THEME, settings.theme||{}, {
     bg: document.getElementById('themeBg').value,
     surface: document.getElementById('themeSurface').value,
     accent: document.getElementById('themeAccent').value,
@@ -1394,7 +1607,7 @@ function updateThemeFromForm(){
     radius: document.getElementById('themeRadius').value,
     iconSize: document.getElementById('themeIconSize').value,
     fontScale: document.getElementById('themeFontScale').value
-  };
+  });
   document.getElementById('themeIconSizeVal').textContent = settings.theme.iconSize;
   document.getElementById('themeFontScaleVal').textContent = settings.theme.fontScale + '%';
   applyTheme();
@@ -1557,4 +1770,4 @@ function init(){
 init();
 </script>
 </body>
-                                                                                                </html>
+</html>
