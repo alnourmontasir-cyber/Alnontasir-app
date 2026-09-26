@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#12151b">
-<title>تـ𝓣𝓻𝓪𝓶𝓪ـرامـا</title>
+<title>المنتصر</title>
 
 <style>
 :root{
@@ -339,4 +339,474 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function goHome(){ currentFolder=null; document.getElem
+function goHome(){ currentFolder=null; document.getElementById('fabBtn').classList.remove('show'); renderHome(); showScreen('screen-home'); }
+function openSettings(){ loadSettingsForm(); document.getElementById('fabBtn').classList.remove('show'); showScreen('screen-settings'); }
+
+/* =========================================================
+   HOME
+========================================================= */
+function renderHome(){
+  applyIdentity();
+  const grid = document.getElementById("foldersGrid");
+  grid.innerHTML = "";
+  FOLDERS.forEach(folder=>{
+    const count = data[folder.id]?.length || 0;
+    const card = document.createElement("button");
+    card.className = "folder-card";
+    card.style.setProperty("--fc", folder.color);
+    card.style.setProperty("--fc2", folder.color2);
+    card.innerHTML = `
+      <div class="folder-icon">${svg(folder.icon)}</div>
+      <div>
+        <h3>${escapeHTML(folder.name)}</h3>
+        <span>${count} ${count===1?"عنصر":"عناصر"}</span>
+      </div>`;
+    card.onclick = () => openFolder(folder.id);
+    grid.appendChild(card);
+  });
+}
+
+function applyIdentity(){
+  const name = settings.appName || "المنتصر";
+  const tag = settings.tagline || "خزانتك الخاصة";
+  document.getElementById('homeAppName').textContent = name;
+  document.getElementById('homeTagline').textContent = tag;
+  document.getElementById('lockAppName') && (document.getElementById('lockAppName').textContent = name);
+  const img = document.getElementById('homeAvatarImg');
+  const fb = document.getElementById('homeAvatarFallback');
+  if(settings.avatar){ img.src = settings.avatar; img.classList.remove('hidden'); fb.classList.add('hidden'); }
+  else { img.classList.add('hidden'); fb.classList.remove('hidden'); fb.textContent = name.charAt(0); }
+}
+
+/* =========================================================
+   FOLDER / ITEMS
+========================================================= */
+function openFolder(id){
+  const folder = FOLDERS.find(f=>f.id===id);
+  if(!folder) return;
+  currentFolder = id;
+  document.getElementById('folderTitle').textContent = folder.name;
+  const c = data[id]?.length || 0;
+  document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
+  document.getElementById('fabBtn').classList.add('show');
+  renderItems();
+  showScreen('screen-folder');
+}
+
+function renderItems(){
+  const list = document.getElementById('itemList');
+  const items = data[currentFolder] || [];
+  if(items.length === 0){
+    list.innerHTML = `
+      <div class="empty-state">
+        ${svg('inbox')}
+        <p>لا توجد عناصر بعد — اضغط + للإضافة</p>
+      </div>`;
+    return;
+  }
+  list.innerHTML = items.slice().reverse().map(item=>{
+    let thumb;
+    if(item.kind==='photo' && item.src) thumb = `<img src="${item.src}">`;
+    else if(item.kind==='video') thumb = svg('video');
+    else if(item.kind==='music') thumb = svg('music');
+    else if(item.kind==='audio') thumb = svg('mic');
+    else if(item.kind==='code') thumb = svg('code');
+    else if(item.kind==='file') thumb = svg('file');
+    else thumb = svg('heart');
+    return `
+      <div class="item-card">
+        <div class="item-thumb">${thumb}</div>
+        <div class="item-body" onclick="viewItem('${item.id}')">
+          <h4>${escapeHTML(item.title||"بدون عنوان")}</h4>
+          <p>${escapeHTML((item.content||item.name||"").slice(0,90))}</p>
+          <div class="item-meta">${fmtDate(item.createdAt)}</div>
+        </div>
+        <div class="item-actions">
+          <button onclick="viewItem('${item.id}')">${svg('eye')}</button>
+          <button onclick="deleteItem('${item.id}')">${svg('trash')}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function deleteItem(id){
+  data[currentFolder] = (data[currentFolder]||[]).filter(i=>i.id!==id);
+  saveData();
+  renderItems();
+  const c = data[currentFolder]?.length || 0;
+  document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
+  toast('تم الحذف');
+}
+
+/* =========================================================
+   VIEW MODAL
+========================================================= */
+function viewItem(id){
+  const item = (data[currentFolder]||[]).find(i=>i.id===id);
+  if(!item) return;
+  const body = document.getElementById('viewModalBody');
+  let inner = `<h3>${escapeHTML(item.title||"بدون عنوان")}</h3>`;
+  if(item.kind==='photo') inner += `<img class="view-media" src="${item.src}">`;
+  else if(item.kind==='video') inner += `<video class="view-media" src="${item.src}" controls playsinline></video>`;
+  else if(item.kind==='music' || item.kind==='audio') inner += `<audio class="view-media" src="${item.src}" controls style="width:100%"></audio>`;
+  else if(item.kind==='code') inner += `<textarea class="mono" readonly style="min-height:220px">${escapeHTML(item.content||"")}</textarea>`;
+  else if(item.kind==='file') inner += `<p style="color:var(--text-dim)">${escapeHTML(item.name||'')}</p><a class="btn btn-ghost" style="display:block" href="${item.src}" download="${escapeHTML(item.name||'file')}">${svg('upload')} تنزيل الملف</a>`;
+  else inner += `<p style="white-space:pre-wrap;color:var(--text)">${escapeHTML(item.content||"")}</p>`;
+  inner += `<div class="item-meta" style="margin-top:10px">${fmtDate(item.createdAt)}</div>`;
+  body.innerHTML = inner;
+  document.getElementById('viewModalBackdrop').classList.add('active');
+}
+function closeViewModal(){ document.getElementById('viewModalBackdrop').classList.remove('active'); }
+
+/* =========================================================
+   ADD MODAL
+========================================================= */
+function openAddModal(){
+  const folder = FOLDERS.find(f=>f.id===currentFolder);
+  pendingMedia = null;
+  document.getElementById('addModalTitle').textContent = 'إضافة إلى ' + folder.name;
+  const body = document.getElementById('addModalBody');
+
+  if(folder.kind === 'media'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="مثال: رحلة الصيف"></div>
+      <div class="capture-row">
+        <button type="button" class="capture-btn" onclick="capturePhoto()">${svg('camera')}<span>التقاط صورة</span></button>
+        <button type="button" class="capture-btn" onclick="document.getElementById('videoFallbackInput').click()">${svg('video')}<span>تصوير / رفع فيديو</span></button>
+        <button type="button" class="capture-btn" onclick="document.getElementById('musicFallbackInput').click()">${svg('music')}<span>رفع موسيقى</span></button>
+        <button type="button" class="capture-btn" id="recordBtn" onclick="toggleRecordAudio()">${svg('mic')}<span id="recordBtnLabel">تسجيل صوت</span></button>
+      </div>
+      <div class="media-preview-box" id="mediaPreviewBox"></div>
+    `;
+  } else if(folder.kind === 'code'){
+    body.innerHTML = `
+      <div class="field"><label>العنوان</label><input id="addTitle" placeholder="اسم الكود"></div>
+      <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>
+    `;
+  } else if(folder.kind === 'file'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" placeholder="اسم الملف"></div>
+      <button type="button" class="capture-btn" style="width:100%" onclick="document.getElementById('fileGenericInput').click()">${svg('upload')}<span>اختيار ملف من الجهاز</span></button>
+      <div class="media-preview-box" id="mediaPreviewBox"></div>
+    `;
+  } else {
+    body.innerHTML = `
+      <div class="field"><label>العنوان</label><input id="addTitle" placeholder="عنوان"></div>
+      <div class="field"><label>المحتوى</label><textarea id="addContent" placeholder="اكتب هنا..."></textarea></div>
+    `;
+  }
+  document.getElementById('addModalBackdrop').classList.add('active');
+}
+function closeAddModal(){
+  document.getElementById('addModalBackdrop').classList.remove('active');
+  if(isRecording && mediaRecorder) mediaRecorder.stop();
+}
+
+function submitAddItem(){
+  const folder = FOLDERS.find(f=>f.id===currentFolder);
+  const titleEl = document.getElementById('addTitle');
+  const title = titleEl ? titleEl.value.trim() : "";
+  let item = { id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now() };
+
+  if(folder.kind === 'media' || folder.kind === 'file'){
+    if(!pendingMedia){ toast('اختر ملفًا أولًا'); return; }
+    item.kind = pendingMedia.kind;
+    item.src = pendingMedia.src;
+    item.name = pendingMedia.name;
+    item.title = title || pendingMedia.name;
+  } else if(folder.kind === 'code'){
+    const content = document.getElementById('addContent').value;
+    if(!title && !content){ toast('أضف عنوانًا أو كودًا'); return; }
+    item.kind = 'code'; item.title = title || 'بدون عنوان'; item.content = content;
+  } else {
+    const content = document.getElementById('addContent').value;
+    if(!title && !content){ toast('أضف عنوانًا أو محتوى'); return; }
+    item.kind = 'note'; item.title = title || 'بدون عنوان'; item.content = content;
+  }
+
+  data[currentFolder].push(item);
+  saveData();
+  renderItems();
+  const c = data[currentFolder].length;
+  document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
+  closeAddModal();
+  toast('تم الحفظ');
+}
+
+function showMediaPreview(){
+  const box = document.getElementById('mediaPreviewBox');
+  if(!box || !pendingMedia) return;
+  let html = `<div style="font-size:12.5px;color:var(--text-dim);margin-bottom:8px">${escapeHTML(pendingMedia.name||'')}</div>`;
+  if(pendingMedia.kind==='photo') html += `<img class="preview" src="${pendingMedia.src}">`;
+  else if(pendingMedia.kind==='video') html += `<video class="preview" src="${pendingMedia.src}" controls playsinline></video>`;
+  else if(pendingMedia.kind==='music' || pendingMedia.kind==='audio') html += `<audio src="${pendingMedia.src}" controls style="width:100%"></audio>`;
+  else html += `<div style="color:var(--text-dim);font-size:13px">تم اختيار الملف ✓</div>`;
+  box.innerHTML = html;
+  box.classList.add('show');
+}
+
+/* =========================================================
+   FILE -> DEVICE STORAGE (uses Capacitor Filesystem when available,
+   falls back to plain dataURL in a normal browser)
+========================================================= */
+function readFileAsDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = ()=>resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+async function persistFile(file, name){
+  const dataUrl = await readFileAsDataURL(file);
+  const Filesystem = window.Capacitor?.Plugins?.Filesystem;
+  const isNative = window.Capacitor?.isNativePlatform?.();
+  if(Filesystem && isNative){
+    try{
+      const base64 = dataUrl.split(',')[1];
+      const safeName = Date.now()+'_'+name.replace(/[^a-zA-Z0-9._-]/g,'_');
+      await Filesystem.writeFile({ path: safeName, data: base64, directory: 'DOCUMENTS', recursive: true });
+      const uriRes = await Filesystem.getUri({ directory: 'DOCUMENTS', path: safeName });
+      const src = window.Capacitor.convertFileSrc(uriRes.uri);
+      return { src, name };
+    }catch(e){
+      console.warn('Filesystem save failed, falling back to inline storage', e);
+      return { src: dataUrl, name };
+    }
+  }
+  // browser preview fallback
+  if(file.size > 4*1024*1024){ toast('تنبيه: الملف كبير، قد لا يُحفظ في المعاينة داخل المتصفح'); }
+  return { src: dataUrl, name };
+}
+
+/* PHOTO (Capacitor Camera plugin, with gallery fallback) */
+async function capturePhoto(){
+  const Camera = window.Capacitor?.Plugins?.Camera;
+  if(Camera){
+    try{
+      const photo = await Camera.getPhoto({ quality: 80, resultType: 'dataUrl', source: 'CAMERA', saveToGallery: true });
+      pendingMedia = { kind:'photo', src: photo.dataUrl, name:'صورة' };
+      showMediaPreview();
+    }catch(e){ /* user cancelled */ }
+  } else {
+    document.getElementById('photoFallbackInput').click();
+  }
+}
+document.getElementById('photoFallbackInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const saved = await persistFile(file, file.name || 'صورة');
+  pendingMedia = { kind:'photo', src: saved.src, name: saved.name };
+  showMediaPreview();
+  e.target.value = '';
+});
+
+/* VIDEO */
+document.getElementById('videoFallbackInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  toast('جاري الحفظ...');
+  const saved = await persistFile(file, file.name || 'فيديو');
+  pendingMedia = { kind:'video', src: saved.src, name: saved.name };
+  showMediaPreview();
+  e.target.value = '';
+});
+
+/* MUSIC */
+document.getElementById('musicFallbackInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  toast('جاري الحفظ...');
+  const saved = await persistFile(file, file.name || 'مقطع صوتي');
+  pendingMedia = { kind:'music', src: saved.src, name: saved.name };
+  showMediaPreview();
+  e.target.value = '';
+});
+
+/* GENERIC FILE (private / other folders) */
+document.getElementById('fileGenericInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  toast('جاري الحفظ...');
+  const saved = await persistFile(file, file.name || 'ملف');
+  pendingMedia = { kind:'file', src: saved.src, name: saved.name };
+  showMediaPreview();
+  e.target.value = '';
+});
+
+/* VOICE RECORDER (native MediaRecorder API — no extra plugin needed) */
+async function toggleRecordAudio(){
+  const btn = document.getElementById('recordBtn');
+  const label = document.getElementById('recordBtnLabel');
+  if(!isRecording){
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = async ()=>{
+        stream.getTracks().forEach(t=>t.stop());
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const file = new File([blob], 'تسجيل_'+Date.now()+'.webm', { type:'audio/webm' });
+        const saved = await persistFile(file, 'تسجيل صوتي');
+        pendingMedia = { kind:'audio', src: saved.src, name: saved.name };
+        showMediaPreview();
+      };
+      mediaRecorder.start();
+      isRecording = true;
+      btn.classList.add('recording');
+      label.textContent = 'إيقاف التسجيل';
+      toast('جاري التسجيل...');
+    }catch(e){
+      toast('تعذّر الوصول إلى الميكروفون');
+    }
+  } else {
+    mediaRecorder.stop();
+    isRecording = false;
+    btn.classList.remove('recording');
+    label.textContent = 'تسجيل صوت';
+  }
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+function loadSettingsForm(){
+  document.getElementById('setAppName').value = settings.appName || '';
+  document.getElementById('setTagline').value = settings.tagline || '';
+  document.getElementById('setAbout').value = settings.about || '';
+  document.getElementById('setPublisher').value = settings.publisher || '';
+  document.getElementById('setVersion').value = settings.version || '';
+  document.getElementById('pinToggle').classList.toggle('on', !!settings.pinEnabled);
+  document.getElementById('notifToggle').classList.toggle('on', !!settings.dailyReminder);
+  const img = document.getElementById('settingsAvatarImg');
+  const fb = document.getElementById('settingsAvatarFallback');
+  if(settings.avatar){ img.src = settings.avatar; img.classList.remove('hidden'); fb.classList.add('hidden'); }
+  else { img.classList.add('hidden'); fb.classList.remove('hidden'); }
+}
+function saveSettings(){
+  settings.appName = document.getElementById('setAppName').value.trim();
+  settings.tagline = document.getElementById('setTagline').value.trim();
+  settings.about = document.getElementById('setAbout').value.trim();
+  settings.publisher = document.getElementById('setPublisher').value.trim();
+  settings.version = document.getElementById('setVersion').value.trim();
+  saveSettingsData();
+  applyIdentity();
+  toast('تم حفظ الإعدادات');
+}
+document.getElementById('avatarInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const dataUrl = await readFileAsDataURL(file);
+  settings.avatar = dataUrl;
+  saveSettingsData();
+  loadSettingsForm();
+  applyIdentity();
+});
+
+/* PIN lock */
+function togglePin(){
+  if(!settings.pinEnabled && !settings.pin){ toast('عيّن رمزًا أولًا'); return; }
+  settings.pinEnabled = !settings.pinEnabled;
+  saveSettingsData();
+  document.getElementById('pinToggle').classList.toggle('on', settings.pinEnabled);
+}
+function startSetPin(){
+  pinMode = 'set-new'; pinBuffer=''; firstNewPin='';
+  document.getElementById('lockTitle').textContent = 'أدخل رمزًا جديدًا';
+  document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
+  document.getElementById('lockError').textContent = '';
+  renderPinPad(); renderPinDots();
+  document.getElementById('lockScreen').classList.add('active');
+}
+function renderPinPad(){
+  const pad = document.getElementById('pinPad');
+  const keys = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
+  pad.innerHTML = keys.map(k=>{
+    if(k==='') return `<div></div>`;
+    return `<button class="pin-key" onclick="pressPinKey('${k}')">${k}</button>`;
+  }).join('');
+}
+function renderPinDots(){
+  const dots = document.getElementById('pinDots');
+  dots.innerHTML = Array.from({length:4}).map((_,i)=>`<div class="pin-dot ${i<pinBuffer.length?'filled':''}"></div>`).join('');
+}
+function pressPinKey(k){
+  if(k==='⌫'){ pinBuffer = pinBuffer.slice(0,-1); renderPinDots(); return; }
+  if(pinBuffer.length>=4) return;
+  pinBuffer += k;
+  renderPinDots();
+  if(pinBuffer.length===4) setTimeout(handlePinComplete, 150);
+}
+function handlePinComplete(){
+  if(pinMode==='unlock'){
+    if(pinBuffer === settings.pin){
+      document.getElementById('lockScreen').classList.remove('active');
+    } else {
+      document.getElementById('lockError').textContent = 'رمز غير صحيح';
+      pinBuffer=''; renderPinDots();
+    }
+  } else if(pinMode==='set-new'){
+    firstNewPin = pinBuffer;
+    pinMode = 'set-confirm';
+    pinBuffer='';
+    document.getElementById('lockTitle').textContent = 'أعد إدخال الرمز';
+    document.getElementById('lockError').textContent='';
+    renderPinDots();
+  } else if(pinMode==='set-confirm'){
+    if(pinBuffer === firstNewPin){
+      settings.pin = pinBuffer;
+      settings.pinEnabled = true;
+      saveSettingsData();
+      document.getElementById('pinToggle').classList.add('on');
+      document.getElementById('lockScreen').classList.remove('active');
+      toast('تم تعيين رمز القفل');
+    } else {
+      document.getElementById('lockError').textContent = 'الرمزان غير متطابقين، حاول مجددًا';
+      pinMode='set-new'; pinBuffer=''; firstNewPin='';
+      document.getElementById('lockTitle').textContent = 'أدخل رمزًا جديدًا';
+      renderPinDots();
+    }
+  }
+}
+
+/* Daily reminder via Capacitor Local Notifications (falls back gracefully) */
+async function toggleDailyReminder(){
+  const LN = window.Capacitor?.Plugins?.LocalNotifications;
+  const willEnable = !settings.dailyReminder;
+  if(willEnable){
+    if(LN){
+      try{
+        const perm = await LN.requestPermissions();
+        if(perm.display !== 'granted'){ toast('لم يتم منح إذن الإشعارات'); return; }
+        await LN.schedule({ notifications:[{
+          id: 1,
+          title: settings.appName || 'المنتصر',
+          body: 'تذكير يومي بفتح التطبيق',
+          schedule: { on: { hour: 20, minute: 0 }, repeats: true }
+        }]});
+      }catch(e){ toast('تعذّر جدولة الإشعار'); return; }
+    } else {
+      toast('الإشعارات تعمل داخل التطبيق المثبت فقط');
+    }
+  } else {
+    if(LN){ try{ await LN.cancel({ notifications:[{id:1}] }); }catch(e){} }
+  }
+  settings.dailyReminder = willEnable;
+  saveSettingsData();
+  document.getElementById('notifToggle').classList.toggle('on', willEnable);
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+function init(){
+  if(settings.pinEnabled && settings.pin){
+    pinMode='unlock'; pinBuffer='';
+    document.getElementById('lockTitle').textContent = 'أدخل رمز الدخول';
+    document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
+    renderPinPad(); renderPinDots();
+    document.getElementById('lockScreen').classList.add('active');
+  }
+  renderHome();
+}
+init();
+</script>
+</body>
+</html>
