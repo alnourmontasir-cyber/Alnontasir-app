@@ -135,7 +135,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold)}
     <div class="brand">
       <img id="homeAvatarImg" class="avatar hidden">
       <div id="homeAvatarFallback" class="avatar-fallback">م</div>
-      <div style="min-width:0"><h1 id="homeAppName">منتصر النور</h1><p id="homeTagline">خزانتك الخاصة</p></div>
+      <div style="min-width:0"><h1 id="homeAppName">المنتصر</h1><p id="homeTagline">خزانتك الخاصة</p></div>
     </div>
     <div class="header-actions"><button class="icon-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div>
   </div>
@@ -217,6 +217,17 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold)}
     <h4>حول التطبيق</h4>
     <div class="field"><label>نبذة</label><textarea id="setAbout"></textarea></div><div class="field"><label>الناشر</label><input id="setPublisher"></div><div class="field"><label>الإصدار</label><input id="setVersion" placeholder="1.0.0"></div>
   </div>
+  <div class="settings-group">
+    <h4>إدارة بيانات التطبيق</h4>
+    <div class="option-grid" style="grid-template-columns:1fr 1fr">
+      <button class="option" onclick="showAppStats()">الإحصائيات</button>
+      <button class="option" onclick="showFavorites()">المفضلة</button>
+      <button class="option" onclick="backupAppData()">نسخة احتياطية</button>
+      <button class="option" onclick="document.getElementById('restoreInput').click()">استعادة نسخة</button>
+    </div>
+    <input id="restoreInput" type="file" accept="application/json,.json" style="display:none" onchange="restoreAppData(this.files[0])">
+    <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="showAllItems()">عرض كل العناصر</button>
+  </div>
   <button class="btn btn-primary" style="width:100%" onclick="saveSettings()">حفظ الإعدادات</button>
 </div>
 
@@ -232,19 +243,11 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold)}
 
 <div class="modal-backdrop" id="confirmBackdrop"><div class="modal"><div class="modal-handle"></div><h3 id="confirmTitle">تأكيد</h3><p id="confirmText" style="color:var(--text-dim);line-height:1.7"></p><div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal('confirmBackdrop')">إلغاء</button><button class="btn btn-danger" id="confirmBtn">حذف</button></div></div></div>
 
+<div class="modal-backdrop" id="statsBackdrop"><div class="modal"><div class="modal-handle"></div><h3>إحصائيات التطبيق</h3><div id="statsBody"></div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal('statsBackdrop')">إغلاق</button></div></div></div>
+<div class="modal-backdrop" id="favoritesBackdrop"><div class="modal"><div class="modal-handle"></div><h3>المفضلة</h3><div class="item-list" id="favoritesList"></div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal('favoritesBackdrop')">إغلاق</button></div></div></div>
+<div class="modal-backdrop" id="allItemsBackdrop"><div class="modal"><div class="modal-handle"></div><h3>كل العناصر</h3><div class="item-list" id="allItemsList"></div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal('allItemsBackdrop')">إغلاق</button></div></div></div>
 <div class="toast" id="toast"></div>
 
 <input type="file" id="photoFallbackInput" accept="image/*" capture="environment" class="hidden">
 <input type="file" id="photoUploadInput" accept="image/*" class="hidden">
-<input type="file" id="videoFallbackInput" accept="video/*" class="hidden">
-<input type="file" id="musicFallbackInput" accept="audio/*" class="hidden">
-<input type="file" id="fileGenericInput" class="hidden">
-
-<script>
-const ICONS={
-code:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
-heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>',
-shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
-layers:'<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
-star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-film:'<rect x="2" y="3" width="20" height="18" rx="2"/><line x1="7" y1="3" x2="7" y2="21"/><line x1="17
+<input type="file" id="videoFallbackInput" accept="video/*"
