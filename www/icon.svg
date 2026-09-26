@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Montasir logo">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#171717"/>
+      <stop offset="100%" stop-color="#070707"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f9efbf"/>
+      <stop offset="12%" stop-color="#e7c870"/>
+      <stop offset="36%" stop-color="#f0d58a"/>
+      <stop offset="52%" stop-color="#bc8d35"/>
+      <stop offset="74%" stop-color="#f6e8b2"/>
+      <stop offset="100%" stop-color="#7d5c2a"/>
+    </linearGradient>
+    <linearGradient id="goldEdge" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#f5df9a"/>
+      <stop offset="100%" stop-color="#7a5628"/>
+    </linearGradient>
+    <filter id="leather" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.1"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000" flood-opacity="0.62"/>
+    </filter>
+  </defs>
+
+  <rect x="18" y="18" width="476" height="476" rx="92" fill="url(#bg)" stroke="#6d5322" stroke-width="9"/>
+  <rect x="28" y="28" width="456" height="456" rx="82" fill="#0a0b0d" opacity="0.94"/>
+  <rect x="28" y="28" width="456" height="456" rx="82" fill="#0a0b0d" filter="url(#leather)" opacity="0.55"/>
+
+  <g filter="url(#shadow)">
+    <path d="M127 154 L182 216 L196 210 L272 104 L329 145 L253 250 L203 224 L164 258 Z" fill="url(#gold)" stroke="url(#goldEdge)" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M210 141 L323 256 L266 215 L257 146 L210 141 Z" fill="#f4d07f" opacity="0.35"/>
+
+    <g transform="translate(132 86)">
+      <path d="M117 11 L146 79 L216 88 L163 132 L183 201 L117 162 L51 201 L71 132 L18 88 L88 79 Z" fill="url(#gold)" stroke="url(#goldEdge)" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M117 45 L137 92 L188 97 L150 131 L162 178 L117 152 L72 178 L84 131 L46 97 L97 92 Z" fill="#f8eebd" opacity="0.3"/>
+    </g>
+
+    <g transform="translate(174 118)">
+      <path d="M14 248 L175 117 L248 187 L314 80 L372 98 L266 273 L209 211 L146 295 Z" fill="url(#gold)" stroke="url(#goldEdge)" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M136 318 L310 151 L281 200 L345 196 L260 312 Z" fill="#f5d47d" opacity="0.34"/>
+    </g>
+
+    <text x="256" y="420" text-anchor="middle" font-size="92" font-weight="700" letter-spacing="-6" fill="url(#gold)" stroke="#694f1f" stroke-width="2" paint-order="stroke fill" font-family="Georgia, 'Times New Roman', serif">Montasir</text>
+  </g>
+</svg>
