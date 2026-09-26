@@ -1,11 +1,15 @@
 {
-  "name": "almuntasir",
+  "name": "تـ𝓣𝓻𝓪𝓶𝓪ـرامـا",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^7.0.0",
     "@capacitor/cli": "^7.0.0",
-    "@capacitor/core": "^7.0.0"
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/camera": "^7.0.0",
+    "@capacitor/filesystem": "^7.0.0",
+    "@capacitor/local-notifications": "^7.0.0",
+    "@capacitor/push-notifications": "^7.0.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5"
