@@ -245,6 +245,78 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .analytics-bar-fill{height:100%;background:var(--gold);border-radius:4px;}
 .mini-hint{font-size:11px;color:var(--text-dim);margin-top:4px;display:block;}
 
+/* ---- compact & timeline views ---- */
+.item-list.compact-view{gap:2px;}
+.item-list.compact-view .item-card{padding:8px 10px;gap:9px;border-radius:12px;}
+.item-list.compact-view .item-thumb{width:32px;height:32px;border-radius:8px;}
+.item-list.compact-view .item-thumb svg{width:44%;height:44%;}
+.item-list.compact-view .item-body p{display:none;}
+.item-list.compact-view .item-body h4{margin:0;font-size:13px;font-weight:600;}
+.item-list.compact-view .item-meta{display:none;}
+.item-list.compact-view .item-actions{flex-direction:row;gap:4px;}
+.item-list.compact-view .item-actions button{width:25px;height:25px;}
+.timeline-date-label{margin:16px 2px 8px;color:var(--gold);font-size:12px;font-weight:800;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.timeline-date-label:first-child{margin-top:0;}
+
+/* ---- checklist items (task folders) ---- */
+.checklist-box{display:flex;flex-direction:column;gap:2px;width:100%;}
+.checklist-row{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--border);cursor:pointer;}
+.checklist-row:last-child{border-bottom:0;}
+.checklist-check{width:24px;height:24px;border-radius:8px;border:2px solid var(--gold-dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#12151b;}
+.checklist-check.checked{background:var(--gold);border-color:var(--gold);}
+.checklist-check svg{width:14px;height:14px;}
+.checklist-done{text-decoration:line-through;color:var(--text-dim);}
+.quote-block{position:relative;padding:20px 22px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);font-size:16px;line-height:1.7;font-weight:600;}
+.quote-block::before{content:"\201D";position:absolute;top:-6px;inset-inline-start:14px;font-size:46px;color:var(--gold-dim);font-weight:900;}
+
+/* ---- home grid density ---- */
+.grid.compact-grid{grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.grid.compact-grid .folder-card{min-height:100px;padding:10px;}
+.grid.compact-grid .folder-card h3{font-size:12px;}
+.grid.compact-grid .folder-card span{font-size:10px;}
+.grid.compact-grid .folder-icon{width:32px;height:32px;}
+
+/* ---- pure-image / video tiles: no text, details only on tap ---- */
+.item-list.photo-wall{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.item-list.photo-wall .item-card{grid-column:1/-1;}
+.visual-card{position:relative;padding:0;border:1px solid var(--border);background:var(--surface-2);border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:1;display:block;width:100%;}
+.visual-card:active{transform:scale(.97);}
+.visual-card img,.visual-card video{width:100%;height:100%;object-fit:cover;display:block;}
+.visual-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;color:#fff;pointer-events:none;}
+.visual-play svg{width:16px;height:16px;}
+
+/* ---- home screen widgets ---- */
+.widgets-section{display:flex;flex-direction:column;gap:14px;margin-bottom:18px;}
+.widget-clock{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--border);}
+.widget-clock .wc-time{font-size:26px;font-weight:900;letter-spacing:.5px;}
+.widget-clock .wc-date{font-size:11.5px;color:var(--text-dim);margin-top:2px;}
+.widget-clock .wc-greet{font-size:12.5px;color:var(--gold);font-weight:800;}
+.widget-block{padding:14px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);}
+.widget-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.widget-add-btn{width:30px;height:30px;border-radius:9px;background:var(--surface-2);color:var(--gold);font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1;}
+.notes-scroller{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;}
+.notes-empty{color:var(--text-dim);font-size:12px;padding:6px 2px;}
+.note-card{flex-shrink:0;width:150px;min-height:86px;padding:11px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);text-align:right;}
+.note-card p{margin:0;white-space:pre-wrap;word-break:break-word;font-size:12.5px;color:var(--text);max-height:60px;overflow:hidden;}
+.note-card .nc-row{display:flex;justify-content:flex-end;margin-top:6px;}
+.note-card .nc-del{width:22px;height:22px;border-radius:7px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--danger);}
+.note-card .nc-del svg{width:12px;height:12px;}
+.todo-input-row{display:flex;gap:8px;margin-bottom:10px;}
+.todo-list{display:flex;flex-direction:column;gap:7px;}
+.todo-empty{color:var(--text-dim);font-size:12px;padding:2px;}
+.todo-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.todo-row.done{opacity:.55;}
+.todo-row.done span{text-decoration:line-through;}
+.todo-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--gold-dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:transparent;}
+.todo-row.done .todo-check{background:var(--gold);border-color:var(--gold);}
+.todo-check svg{width:12px;height:12px;color:#12151b;opacity:0;}
+.todo-row.done .todo-check svg{opacity:1;}
+.todo-row span{flex:1;font-size:13px;text-align:right;}
+.todo-del{width:26px;height:26px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--text-dim);flex-shrink:0;}
+.todo-del svg{width:13px;height:13px;}
+.quick-capture-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#12151b;font-weight:800;font-size:13.5px;}
+.quick-capture-btn svg{width:19px;height:19px;}
+
 input[type="text"], input:not([type]), textarea{
   unicode-bidi: plaintext;
 }
@@ -308,6 +380,40 @@ input[type="text"], input:not([type]), textarea{
   <div id="recentSection">
     <p class="section-label">أحدث الإضافات</p>
     <div class="recent-scroller" id="recentScroller"></div>
+  </div>
+
+  <div class="widgets-section" id="widgetsSection">
+    <div class="widget-clock hidden" id="widgetClockBlock">
+      <div>
+        <div class="wc-time" id="wcTime"></div>
+        <div class="wc-date" id="wcDate"></div>
+      </div>
+      <div class="wc-greet" id="wcGreet"></div>
+    </div>
+
+    <div class="widget-block hidden" id="widgetNotesBlock">
+      <div class="widget-head">
+        <p class="section-label" style="margin:0">ملاحظات سريعة</p>
+        <button type="button" class="widget-add-btn" onclick="openQuickNoteModal()">+</button>
+      </div>
+      <div class="notes-scroller" id="notesScroller"></div>
+    </div>
+
+    <div class="widget-block hidden" id="widgetTodoBlock">
+      <div class="widget-head">
+        <p class="section-label" style="margin:0">مهامي</p>
+      </div>
+      <div class="todo-input-row">
+        <input id="todoInput" dir="rtl" placeholder="أضف مهمة جديدة..." onkeydown="if(event.key==='Enter')addTodo()">
+        <button type="button" class="btn btn-primary" style="flex:0 0 auto;padding:0 18px" onclick="addTodo()">إضافة</button>
+      </div>
+      <div class="todo-list" id="todoList"></div>
+    </div>
+
+    <button type="button" class="quick-capture-btn hidden" id="quickCaptureBtn" onclick="quickCapturePhoto()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span>التقاط سريع وحفظ في الصور</span>
+    </button>
   </div>
 
   <div class="home-tools">
@@ -521,6 +627,8 @@ input[type="text"], input:not([type]), textarea{
         <option value="newest">الأحدث أولًا</option>
         <option value="oldest">الأقدم أولًا</option>
         <option value="alpha">أبجديًا (أ-ي)</option>
+        <option value="favorite">المفضّلة أولًا</option>
+        <option value="random">ترتيب عشوائي</option>
       </select>
     </div>
     <div class="field">
@@ -528,7 +636,46 @@ input[type="text"], input:not([type]), textarea{
       <select id="setDefaultView" onchange="saveMiscSetting('defaultView', this.value)">
         <option value="list">قائمة</option>
         <option value="grid">شبكة</option>
+        <option value="compact">مضغوط (كثيف)</option>
+        <option value="timeline">زمني (حسب التاريخ)</option>
       </select>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>تحكمات إضافية</h4>
+    <div class="switch-row">
+      <span class="sr-label">اهتزاز خفيف عند الإجراءات<small>عند الحفظ، الحذف، والتحديد</small></span>
+      <button class="switch" id="hapticToggle" onclick="toggleHaptic()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">شبكة حافظات مضغوطة في الرئيسية<small>3 أعمدة بدل عمودين لعرض أكبر عدد ممكن</small></span>
+      <button class="switch" id="compactGridToggle" onclick="toggleCompactGrid()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">إخفاء عدد العناصر على بطاقات الحافظات</span>
+      <button class="switch" id="hideCountsToggle" onclick="toggleHideCounts()"></button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>أدوات الشاشة الرئيسية</h4>
+    <span class="hint" style="display:block;margin-bottom:8px">فعّل ما يفيدك واترك الباقي — الشاشة الرئيسية ليست مقصورة على الحافظات فقط.</span>
+    <div class="switch-row">
+      <span class="sr-label">الساعة والتاريخ والتحية</span>
+      <button class="switch" id="widgetToggle-clock" onclick="toggleWidget('clock')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">الملاحظات السريعة<small>ملاحظات فورية غير مرتبطة بأي حافظة</small></span>
+      <button class="switch" id="widgetToggle-notes" onclick="toggleWidget('notes')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">قائمة المهام</span>
+      <button class="switch" id="widgetToggle-todo" onclick="toggleWidget('todo')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">زر التقاط سريع<small>يلتقط صورة ويحفظها مباشرة في حافظة الصور</small></span>
+      <button class="switch" id="widgetToggle-capture" onclick="toggleWidget('capture')"></button>
     </div>
   </div>
 
@@ -673,9 +820,21 @@ input[type="text"], input:not([type]), textarea{
         <option value="text">نصوص</option>
         <option value="article">مقالات</option>
         <option value="poem">أشعار</option>
+        <option value="quote">اقتباسات وأقوال</option>
         <option value="code">أكواد</option>
         <option value="media">صور وفيديو وصوت</option>
         <option value="file">ملفات عامة</option>
+        <option value="document">مستندات</option>
+        <option value="task">قوائم مهام</option>
+        <option value="link">روابط ومواقع</option>
+        <option value="contact">جهات اتصال</option>
+        <option value="event">مواعيد وتذكيرات</option>
+        <option value="recipe">وصفات طبخ</option>
+        <option value="password">حسابات وكلمات مرور</option>
+        <option value="diary">يوميات ومذكرات</option>
+        <option value="idea">أفكار وخواطر</option>
+        <option value="goal">أهداف وعادات</option>
+        <option value="expense">مصروفات ونفقات</option>
       </select>
     </div>
     <div class="color-grid">
@@ -727,6 +886,8 @@ input[type="text"], input:not([type]), textarea{
       <button type="button" class="menu-item" id="sortBtn-newest" onclick="setMenuSort('newest')">الأحدث أولًا</button>
       <button type="button" class="menu-item" id="sortBtn-oldest" onclick="setMenuSort('oldest')">الأقدم أولًا</button>
       <button type="button" class="menu-item" id="sortBtn-alpha" onclick="setMenuSort('alpha')">أبجديًا (أ-ي)</button>
+      <button type="button" class="menu-item" id="sortBtn-favorite" onclick="setMenuSort('favorite')">المفضّلة أولًا</button>
+      <button type="button" class="menu-item" id="sortBtn-random" onclick="setMenuSort('random')">ترتيب عشوائي</button>
     </div>
 
     <div class="menu-divider"></div>
@@ -734,6 +895,8 @@ input[type="text"], input:not([type]), textarea{
     <div class="menu-list">
       <button type="button" class="menu-item" id="viewBtn-list" onclick="setMenuView('list')">عرض كقائمة</button>
       <button type="button" class="menu-item" id="viewBtn-grid" onclick="setMenuView('grid')">عرض كشبكة</button>
+      <button type="button" class="menu-item" id="viewBtn-compact" onclick="setMenuView('compact')">عرض مضغوط (كثيف)</button>
+      <button type="button" class="menu-item" id="viewBtn-timeline" onclick="setMenuView('timeline')">عرض زمني (حسب التاريخ)</button>
     </div>
 
     <div class="menu-divider"></div>
@@ -794,6 +957,23 @@ input[type="text"], input:not([type]), textarea{
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeConfirmModal()">إلغاء</button>
       <button class="btn btn-danger" onclick="runConfirmAction()">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="quickNoteModalBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">ملاحظة سريعة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeQuickNoteModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><textarea id="quickNoteInput" dir="rtl" placeholder="اكتب ملاحظة سريعة هنا... (غير مرتبطة بأي حافظة)" style="min-height:120px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeQuickNoteModal()">إلغاء</button>
+      <button class="btn btn-primary" onclick="submitQuickNote()">حفظ</button>
     </div>
   </div>
 </div>
@@ -879,9 +1059,11 @@ const ICONS = {
   fingerprint:'<path d="M12 11c0 4-1 7-3 9"/><path d="M8 15a10 10 0 0 1 0-9"/><path d="M12 3a9 9 0 0 1 9 9c0 1 0 2-.3 3"/><path d="M16 8a4 4 0 0 1 1 3c0 1 0 2-.3 3"/><path d="M4 12a8 8 0 0 1 8-8"/><path d="M2 12a10 10 0 0 1 1-4.3"/>',
   copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
   pin:'<line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79L16 12V6h1a1 1 0 0 0 0-2H7a1 1 0 0 0 0 2h1v6l-1.89 1.45A2 2 0 0 0 5 15.24z"/>',
-  move:'<polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>'
+  move:'<polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>',
+  quote:'<path d="M3 21c3-2 4-4.5 4-7.5V6h-6v7h4c0 2-1 4-4 5.5z"/><path d="M14 21c3-2 4-4.5 4-7.5V6h-6v7h4c0 2-1 4-4 5.5z"/>',
+  checklist:'<path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><path d="M4 6l1 1 2-2"/><path d="M4 12l1 1 2-2"/><path d="M4 18l1 1 2-2"/>'
 };
-const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem','mail','phone','globe','lock','key','calendar','clock','bookmark','folder2','archive','cloud','coffee','home','car','chat','mappin','flag','sun','moon','umbrella','compass','anchor','award','box','rocket','smile','paperclip','link','tag','zap','droplet','headphones','monitor','smartphone','creditcard','shoppingbag','users','activity','feather'];
+const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem','mail','phone','globe','lock','key','calendar','clock','bookmark','folder2','archive','cloud','coffee','home','car','chat','mappin','flag','sun','moon','umbrella','compass','anchor','award','box','rocket','smile','paperclip','link','tag','zap','droplet','headphones','monitor','smartphone','creditcard','shoppingbag','users','activity','feather','quote','checklist'];
 const ICON_PALETTE = ['#f59e0b','#ec4899','#a855f7','#3b82f6','#22c55e','#ef4444','#06b6d4','#eab308','#f97316','#8b5cf6','#10b981','#e11d48','#14b8a6','#6366f1','#d946ef'];
 function svg(name,extra){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
 function svgFilled(name,extra){return `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
@@ -898,6 +1080,8 @@ const DEFAULT_FOLDERS = [
   {id:"mymemory", name:"ذكرياتي", color:"#ec4899", color2:"#a21caf", kind:"note", icon:"star"},
   {id:"media", name:"الفيديوهات والصور", color:"#a855f7", color2:"#6d28d9", kind:"media", icon:"film"},
   {id:"tambour", name:"طمبور الشمال", color:"#f2994a", color2:"#c2570c", kind:"note", icon:"music"},
+  {id:"tasks", name:"مهام ومشاريع", color:"#22c55e", color2:"#15803d", kind:"task", icon:"checklist"},
+  {id:"links", name:"روابط مهمة", color:"#0ea5e9", color2:"#0369a1", kind:"link", icon:"link"},
   {id:"other", name:"أخرى", color:"#64748b", color2:"#334155", kind:"file", icon:"grid"}
 ];
 
@@ -909,6 +1093,17 @@ if(!settings.folderOverrides) settings.folderOverrides = {};
 if(!settings.defaultSort) settings.defaultSort = 'newest';
 if(!settings.defaultView) settings.defaultView = 'list';
 if(typeof settings.autoLockMinutes !== 'number') settings.autoLockMinutes = 0;
+if(!settings.widgets) settings.widgets = { clock:true, notes:true, todo:true, capture:true };
+if(typeof settings.hapticEnabled !== 'boolean') settings.hapticEnabled = false;
+if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = false;
+if(typeof settings.hideFolderCounts !== 'boolean') settings.hideFolderCounts = false;
+let widgetsData = JSON.parse(localStorage.getItem("montasir_widgets") || '{}');
+if(!Array.isArray(widgetsData.notes)) widgetsData.notes = [];
+if(!Array.isArray(widgetsData.todos)) widgetsData.todos = [];
+function saveWidgetsData(){
+  try{ localStorage.setItem("montasir_widgets", JSON.stringify(widgetsData)); }
+  catch(e){ toast('تعذّر حفظ الأداة — المساحة ممتلئة'); }
+}
 let currentFolder = null;
 let pendingMedia = [];
 let mediaRecorder = null, audioChunks = [], isRecording = false;
@@ -976,14 +1171,54 @@ function iconForKind(kind){
   if(kind==='video') return 'video';
   if(kind==='music' || kind==='audio') return 'mic';
   if(kind==='code') return 'code';
-  if(kind==='file') return 'file';
+  if(kind==='file' || kind==='document') return 'file';
   if(kind==='photo') return 'camera';
   if(kind==='text') return 'text';
   if(kind==='article') return 'article';
   if(kind==='poem') return 'poem';
+  if(kind==='quote') return 'quote';
+  if(kind==='task') return 'checklist';
+  if(kind==='link') return 'link';
+  if(kind==='contact') return 'phone';
+  if(kind==='event') return 'calendar';
+  if(kind==='recipe') return 'coffee';
+  if(kind==='password') return 'key';
+  if(kind==='diary') return 'book';
+  if(kind==='idea') return 'zap';
+  if(kind==='goal') return 'target';
+  if(kind==='expense') return 'creditcard';
   return 'heart';
 }
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function itemPreviewText(item){
+  if(item.kind==='task') return (item.checklist||[]).map(t=>t.text).join(' • ');
+  if(item.kind==='link') return item.url || '';
+  if(item.kind==='contact') return item.phone || item.email || '';
+  if(item.kind==='event') return [item.eventDate,item.eventTime].filter(Boolean).join(' — ');
+  return item.content || item.name || '';
+}
 
+function haptic(){
+  if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} }
+}
+function toggleHaptic(){
+  settings.hapticEnabled = !settings.hapticEnabled;
+  saveSettingsData();
+  document.getElementById('hapticToggle').classList.toggle('on', settings.hapticEnabled);
+  haptic();
+}
+function toggleCompactGrid(){
+  settings.compactHomeGrid = !settings.compactHomeGrid;
+  saveSettingsData();
+  document.getElementById('compactGridToggle').classList.toggle('on', settings.compactHomeGrid);
+  renderHome();
+}
+function toggleHideCounts(){
+  settings.hideFolderCounts = !settings.hideFolderCounts;
+  saveSettingsData();
+  document.getElementById('hideCountsToggle').classList.toggle('on', settings.hideFolderCounts);
+  renderHome();
+}
 function toast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1208,15 +1443,165 @@ function openHomeRecentItem(folderId,itemId){
   currentFolder = folderId;
   viewItem(itemId,'home');
 }
+
+/* ---------- Home screen widgets: clock, quick notes, checklist, quick capture ---------- */
+function toggleWidget(key){
+  settings.widgets[key] = !settings.widgets[key];
+  saveSettingsData();
+  document.getElementById('widgetToggle-'+key).classList.toggle('on', settings.widgets[key]);
+  renderWidgets();
+}
+let _clockTimer = null;
+function renderWidgets(){
+  const w = settings.widgets || {};
+  document.getElementById('widgetClockBlock').classList.toggle('hidden', !w.clock);
+  document.getElementById('widgetNotesBlock').classList.toggle('hidden', !w.notes);
+  document.getElementById('widgetTodoBlock').classList.toggle('hidden', !w.todo);
+  document.getElementById('quickCaptureBtn').classList.toggle('hidden', !w.capture);
+  if(w.clock){ tickClock(); if(!_clockTimer) _clockTimer = setInterval(tickClock, 30000); }
+  if(w.notes) renderQuickNotes();
+  if(w.todo) renderTodos();
+}
+function tickClock(){
+  const now = new Date();
+  document.getElementById('wcTime').textContent = now.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
+  document.getElementById('wcDate').textContent = now.toLocaleDateString('ar', {weekday:'long', day:'numeric', month:'long'});
+  const h = now.getHours();
+  const greet = h<5 ? 'سهرة هنيّة' : h<12 ? 'صباح الخير' : h<17 ? 'نهارك سعيد' : h<21 ? 'مساء الخير' : 'ليلة سعيدة';
+  document.getElementById('wcGreet').textContent = greet;
+}
+
+let editingNoteId = null;
+function openQuickNoteModal(id){
+  editingNoteId = id || null;
+  const note = id ? widgetsData.notes.find(n=>n.id===id) : null;
+  document.getElementById('quickNoteInput').value = note ? note.text : '';
+  document.getElementById('quickNoteModalBackdrop').classList.add('active');
+  setTimeout(()=>document.getElementById('quickNoteInput').focus(), 150);
+}
+function closeQuickNoteModal(){
+  document.getElementById('quickNoteModalBackdrop').classList.remove('active');
+  editingNoteId = null;
+}
+function submitQuickNote(){
+  const text = document.getElementById('quickNoteInput').value.trim();
+  if(!text){ toast('اكتب شيئًا أولًا'); return; }
+  if(editingNoteId){
+    const note = widgetsData.notes.find(n=>n.id===editingNoteId);
+    if(note) note.text = text;
+  } else {
+    widgetsData.notes.unshift({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), text, createdAt: Date.now() });
+  }
+  saveWidgetsData();
+  closeQuickNoteModal();
+  renderQuickNotes();
+  toast('تم الحفظ');
+}
+function deleteQuickNote(id){
+  widgetsData.notes = widgetsData.notes.filter(n=>n.id!==id);
+  saveWidgetsData();
+  renderQuickNotes();
+}
+function renderQuickNotes(){
+  const box = document.getElementById('notesScroller');
+  if(!widgetsData.notes.length){
+    box.innerHTML = `<div class="notes-empty">لا ملاحظات بعد — اضغط + لإضافة ملاحظة سريعة لا ترتبط بأي حافظة</div>`;
+    return;
+  }
+  box.innerHTML = widgetsData.notes.map(n=>`
+    <div class="note-card" onclick="openQuickNoteModal('${n.id}')">
+      <p>${escapeHTML(n.text)}</p>
+      <div class="nc-row"><button type="button" class="nc-del" onclick="event.stopPropagation();deleteQuickNote('${n.id}')">${svg('trash')}</button></div>
+    </div>`).join('');
+}
+
+function addTodo(){
+  const input = document.getElementById('todoInput');
+  const text = input.value.trim();
+  if(!text) return;
+  widgetsData.todos.unshift({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), text, done:false, createdAt: Date.now() });
+  input.value = '';
+  saveWidgetsData();
+  renderTodos();
+}
+function toggleTodo(id){
+  const t = widgetsData.todos.find(t=>t.id===id);
+  if(t) t.done = !t.done;
+  saveWidgetsData();
+  renderTodos();
+}
+function deleteTodo(id){
+  widgetsData.todos = widgetsData.todos.filter(t=>t.id!==id);
+  saveWidgetsData();
+  renderTodos();
+}
+function renderTodos(){
+  const box = document.getElementById('todoList');
+  if(!widgetsData.todos.length){
+    box.innerHTML = `<div class="todo-empty">لا توجد مهام بعد — أضف مهمتك الأولى أعلاه</div>`;
+    return;
+  }
+  const sorted = widgetsData.todos.slice().sort((a,b)=> (a.done===b.done) ? b.createdAt-a.createdAt : (a.done?1:-1));
+  box.innerHTML = sorted.map(t=>`
+    <div class="todo-row ${t.done?'done':''}">
+      <button type="button" class="todo-check" onclick="toggleTodo('${t.id}')">${svg('check')}</button>
+      <span onclick="toggleTodo('${t.id}')">${escapeHTML(t.text)}</span>
+      <button type="button" class="todo-del" onclick="deleteTodo('${t.id}')">${svg('trash')}</button>
+    </div>`).join('');
+}
+
+async function quickCapturePhoto(){
+  const targetId = getFolder('media') ? 'media' : (getFolders()[0] && getFolders()[0].id);
+  if(!targetId){ toast('أنشئ حافظة أولًا'); return; }
+  const Camera = window.Capacitor?.Plugins?.Camera;
+  try{
+    let saved;
+    if(Camera){
+      const photo = await Camera.getPhoto({ quality: 80, resultType: 'dataUrl', source: 'CAMERA' });
+      const blob = await (await fetch(photo.dataUrl)).blob();
+      const file = new File([blob], 'photo_'+Date.now()+'.jpeg', { type: blob.type || 'image/jpeg' });
+      saved = await persistFile(file, 'صورة');
+    } else {
+      toast('اختر صورة من جهازك...');
+      saved = await new Promise((resolve,reject)=>{
+        const inp = document.getElementById('photoFallbackInput');
+        const handler = async e=>{
+          inp.removeEventListener('change', handler);
+          const file = e.target.files[0];
+          if(!file){ reject('cancel'); return; }
+          resolve(await persistFile(file, file.name || 'صورة'));
+          e.target.value = '';
+        };
+        inp.addEventListener('change', handler);
+        inp.click();
+      });
+    }
+    data[targetId] = data[targetId] || [];
+    data[targetId].push({
+      id: Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+      createdAt: Date.now(), kind:'photo', src: saved.src, name: saved.name,
+      nativeUri: saved.nativeUri, storedPath: saved.storedPath,
+      title: 'التقاط سريع', favorite:false, deleted:false, tags:[]
+    });
+    saveData();
+    renderHome();
+    toast('تم الحفظ في حافظة الصور');
+  }catch(e){
+    if(e !== 'cancel') toast('تعذّر الالتقاط: ' + (e && e.message || 'خطأ غير معروف'));
+  }
+}
+
 function renderHome(){
   applyIdentity();
   updateTrashBadge();
   renderHomeStats();
   renderRecentItems();
+  renderWidgets();
   const sortSel = document.getElementById('homeSortSelect');
   if(sortSel) sortSel.value = settings.homeSort || 'custom';
   const grid = document.getElementById("foldersGrid");
   grid.classList.toggle('selectable', folderSelectMode);
+  grid.classList.toggle('compact-grid', !!settings.compactHomeGrid);
   grid.innerHTML = "";
   const folders = sortedVisibleFolders();
   if(folders.length===0 && homeFilterText){
@@ -1237,7 +1622,7 @@ function renderHome(){
       <div class="folder-icon">${folderIconInner(folder)}</div>
       <div>
         <h3>${escapeHTML(folder.name)}</h3>
-        <span>${count} ${count===1?"عنصر":"عناصر"}</span>
+        ${settings.hideFolderCounts ? '' : `<span>${count} ${count===1?"عنصر":"عناصر"}</span>`}
       </div>`;
     card.onclick = () => { folderSelectMode ? toggleFolderChecked(folder.id) : openFolder(folder.id); };
     grid.appendChild(card);
@@ -1407,12 +1792,12 @@ function togglePinCurrentFolder(){
   toast(folder.pinned ? 'تم إلغاء التثبيت' : 'تم التثبيت في الأعلى');
 }
 function updateMenuSortActive(s){
-  ['newest','oldest','alpha'].forEach(k=>{
+  ['newest','oldest','alpha','favorite','random'].forEach(k=>{
     document.getElementById('sortBtn-'+k).classList.toggle('active', k===s);
   });
 }
 function updateMenuViewActive(v){
-  ['list','grid'].forEach(k=>{
+  ['list','grid','compact','timeline'].forEach(k=>{
     document.getElementById('viewBtn-'+k).classList.toggle('active', k===v);
   });
 }
@@ -1517,6 +1902,8 @@ function sortItems(items, sort){
   const arr = items.slice();
   if(sort==='oldest') arr.sort((a,b)=>a.createdAt-b.createdAt);
   else if(sort==='alpha') arr.sort((a,b)=>(a.title||'').localeCompare((b.title||''),'ar'));
+  else if(sort==='favorite') arr.sort((a,b)=> (b.favorite?1:0)-(a.favorite?1:0) || b.createdAt-a.createdAt);
+  else if(sort==='random') { for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } }
   else arr.sort((a,b)=>b.createdAt-a.createdAt);
   return arr;
 }
@@ -1526,16 +1913,50 @@ function toggleFolderFavFilter(){
   setFolderView(currentFolder, {favOnly: !v.favOnly});
   renderItems();
 }
+function itemCardHTML(item){
+  const isPureVisual = (item.kind==='photo' || item.kind==='video') && item.src;
+  if(isPureVisual){
+    const checked = selectedItemIds.has(item.id);
+    const thumb = item.kind==='photo' ? `<img src="${item.src}">` : `<video src="${item.src}" muted></video>`;
+    return `
+      <button type="button" class="visual-card" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
+        ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" style="top:8px;inset-inline-start:8px">${svg('check')}</span>` : ''}
+        ${item.kind==='video' ? `<span class="visual-play">${svg('video')}</span>` : ''}
+        ${item.favorite?`<span class="fav-star" style="top:6px;inset-inline-end:6px;inset-inline-start:auto">${svgFilled('star')}</span>`:''}
+        ${thumb}
+      </button>`;
+  }
+  let thumb = svg(iconForKind(item.kind));
+  const checked = selectedItemIds.has(item.id);
+  return `
+    <div class="item-card">
+      ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" onclick="event.stopPropagation();toggleItemChecked('${item.id}')">${svg('check')}</span>` : ''}
+      <div class="item-thumb">${thumb}${item.favorite?`<span class="fav-star">${svgFilled('star')}</span>`:''}</div>
+      <div class="item-body" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
+        <h4>${escapeHTML(item.title||"بدون عنوان")}</h4>
+        <p>${escapeHTML(itemPreviewText(item).slice(0,90))}</p>
+        <div class="item-meta">${fmtDate(item.createdAt)}</div>
+      </div>
+      ${itemSelectMode ? '' : `
+      <div class="item-actions">
+        <button onclick="viewItem('${item.id}','folder')">${svg('eye')}</button>
+        <button class="${item.favorite?'starred':''}" onclick="toggleFavorite('${currentFolder}','${item.id}')">${svg('star')}</button>
+        <button onclick="requestDeleteItem('${item.id}')">${svg('trash')}</button>
+      </div>`}
+    </div>`;
+}
 function renderItems(){
   const list = document.getElementById('itemList');
   const v = getFolderView(currentFolder);
   list.classList.toggle('grid-view', v.view==='grid');
+  list.classList.toggle('compact-view', v.view==='compact');
   list.classList.toggle('selectable', itemSelectMode);
   const chip = document.getElementById('folderFavFilterChip');
   if(chip) chip.classList.toggle('active', !!v.favOnly);
   let items = (data[currentFolder] || []).filter(i=>!i.deleted);
   if(v.favOnly) items = items.filter(i=>i.favorite);
   items = sortItems(items, v.sort);
+  list.classList.toggle('photo-wall', v.view!=='timeline' && items.length>0 && items.every(i=>(i.kind==='photo'||i.kind==='video') && i.src));
   const c = items.length;
   document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
   if(items.length === 0){
@@ -1545,26 +1966,17 @@ function renderItems(){
       : `<div class="empty-state">${svg('inbox')}<p>لا توجد عناصر بعد — اضغط + للإضافة</p></div>`;
     return;
   }
-  list.innerHTML = items.map(item=>{
-    let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
-    const checked = selectedItemIds.has(item.id);
-    return `
-      <div class="item-card">
-        ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" onclick="event.stopPropagation();toggleItemChecked('${item.id}')">${svg('check')}</span>` : ''}
-        <div class="item-thumb">${thumb}${item.favorite?`<span class="fav-star">${svgFilled('star')}</span>`:''}</div>
-        <div class="item-body" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
-          <h4>${escapeHTML(item.title||"بدون عنوان")}</h4>
-          <p>${escapeHTML((item.content||item.name||"").slice(0,90))}</p>
-          <div class="item-meta">${fmtDate(item.createdAt)}</div>
-        </div>
-        ${itemSelectMode ? '' : `
-        <div class="item-actions">
-          <button onclick="viewItem('${item.id}','folder')">${svg('eye')}</button>
-          <button class="${item.favorite?'starred':''}" onclick="toggleFavorite('${currentFolder}','${item.id}')">${svg('star')}</button>
-          <button onclick="requestDeleteItem('${item.id}')">${svg('trash')}</button>
-        </div>`}
-      </div>`;
-  }).join('');
+  if(v.view === 'timeline'){
+    let lastDate = null, html = '';
+    items.forEach(item=>{
+      const label = fmtDate(item.createdAt);
+      if(label !== lastDate){ html += `<div class="timeline-date-label">${label}</div>`; lastDate = label; }
+      html += itemCardHTML(item);
+    });
+    list.innerHTML = html;
+  } else {
+    list.innerHTML = items.map(itemCardHTML).join('');
+  }
 }
 
 function toggleFavorite(folderId, itemId){
@@ -1572,6 +1984,7 @@ function toggleFavorite(folderId, itemId){
   if(!item) return;
   item.favorite = !item.favorite;
   saveData();
+  haptic();
   if(currentFolder===folderId) renderItems();
   if(currentViewItem && currentViewItem.id===itemId) currentViewItem.favorite = item.favorite;
   toast(item.favorite ? 'أُضيف إلى المفضلة' : 'أُزيل من المفضلة');
@@ -1662,8 +2075,32 @@ function viewItem(id, origin){
     inner = `<div class="view-audio-box">${svg('mic')}</div><audio style="width:100%" src="${item.src}" controls></audio>`;
   } else if(item.kind==='code'){
     inner = `<div class="view-copy-row"><button onclick="copyItemContent()">${svg('copy')}نسخ الكود</button></div><textarea class="mono" readonly style="min-height:50vh;width:100%">${escapeHTML(item.content||"")}</textarea>`;
-  } else if(item.kind==='file'){
+  } else if(item.kind==='file' || item.kind==='document'){
     inner = `<div class="view-audio-box">${svg('file')}</div><p style="color:var(--text-dim);text-align:center">${escapeHTML(item.name||'')}</p>`;
+  } else if(item.kind==='task'){
+    const list = item.checklist || [];
+    const doneCount = list.filter(t=>t.done).length;
+    inner = `<div class="checklist-box">${list.map((t,i)=>`
+        <div class="checklist-row" onclick="toggleChecklistItem(${i})">
+          <span class="checklist-check ${t.done?'checked':''}">${t.done?svg('check'):''}</span>
+          <span class="${t.done?'checklist-done':''}">${escapeHTML(t.text)}</span>
+        </div>`).join('') || `<p style="color:var(--text-dim);text-align:center">لا توجد مهام</p>`}</div>
+      <div class="item-meta">${doneCount} من ${list.length} مكتملة</div>`;
+  } else if(item.kind==='link'){
+    inner = `<div class="view-audio-box">${svg('link')}</div>
+      <a href="${escapeHTML(item.url||'#')}" target="_blank" rel="noopener" style="display:block;text-align:center;color:var(--gold);word-break:break-all;margin-bottom:6px">${escapeHTML(item.url||'')}</a>
+      ${item.content ? `<p style="white-space:pre-wrap;color:var(--text);width:100%">${escapeHTML(item.content)}</p>` : ''}`;
+  } else if(item.kind==='contact'){
+    inner = `<div class="view-audio-box">${svg('phone')}</div>`;
+    if(item.phone) inner += `<a class="contact-link" href="tel:${escapeHTML(item.phone)}">${svg('phone')}<span dir="ltr" style="unicode-bidi:embed">${escapeHTML(item.phone)}</span></a>`;
+    if(item.email) inner += `<a class="contact-link" href="mailto:${escapeHTML(item.email)}">${svg('mail')}<span dir="ltr" style="unicode-bidi:embed">${escapeHTML(item.email)}</span></a>`;
+    if(item.content) inner += `<p style="white-space:pre-wrap;color:var(--text);width:100%">${escapeHTML(item.content)}</p>`;
+  } else if(item.kind==='event'){
+    inner = `<div class="view-audio-box">${svg('calendar')}</div>
+      <p style="text-align:center;font-weight:800;font-size:16px">${escapeHTML(item.eventDate||'')}${item.eventTime?(' — '+escapeHTML(item.eventTime)):''}</p>
+      ${item.content ? `<p style="white-space:pre-wrap;color:var(--text);width:100%">${escapeHTML(item.content)}</p>` : ''}`;
+  } else if(item.kind==='quote'){
+    inner = `<div class="quote-block">${escapeHTML(item.content||"")}</div>`;
   } else {
     inner = `<div class="view-copy-row"><button onclick="copyItemContent()">${svg('copy')}نسخ النص</button></div><p style="white-space:pre-wrap;color:var(--text);width:100%">${escapeHTML(item.content||"")}</p>`;
   }
@@ -1673,13 +2110,19 @@ function viewItem(id, origin){
   inner += `<div class="item-meta">${fmtDate(item.createdAt)}</div>`;
   content.innerHTML = inner;
 
-  const canSave = ['photo','video','music','audio','file'].includes(item.kind);
+  const canSave = ['photo','video','music','audio','file','document'].includes(item.kind);
   document.getElementById('viewSaveBtn').style.display = canSave ? 'flex' : 'none';
 
   document.getElementById('fabBtn').classList.remove('show');
   showScreen('screen-view');
 }
 
+function toggleChecklistItem(i){
+  if(!currentViewItem || !currentViewItem.checklist || !currentViewItem.checklist[i]) return;
+  currentViewItem.checklist[i].done = !currentViewItem.checklist[i].done;
+  saveData();
+  viewItem(currentViewItem.id, viewOrigin);
+}
 async function copyItemContent(){
   if(!currentViewItem) return;
   try{
@@ -1855,8 +2298,37 @@ function openEditItemModal(){
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
       <div class="field"><label>الكود</label><textarea id="addContent" class="mono">${escapeHTML(item.content||'')}</textarea></div>
       <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" value="${escapeHTML((item.tags||[]).join(', '))}"></div>`;
+  } else if(item.kind==='task'){
+    const linesText = (item.checklist||[]).map(t=>t.text).join('\n');
+    body.innerHTML = `
+      <div class="field"><label>عنوان القائمة</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
+      <div class="field"><label>المهام (كل مهمة في سطر مستقل)</label><textarea id="addContent" dir="rtl">${escapeHTML(linesText)}</textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" value="${escapeHTML((item.tags||[]).join(', '))}"></div>`;
+  } else if(item.kind==='link'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان الرابط</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
+      <div class="field"><label>الرابط (URL)</label><input id="addUrl" dir="ltr" value="${escapeHTML(item.url||'')}"></div>
+      <div class="field"><label>ملاحظة (اختياري)</label><textarea id="addContent" dir="rtl">${escapeHTML(item.content||'')}</textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" value="${escapeHTML((item.tags||[]).join(', '))}"></div>`;
+  } else if(item.kind==='contact'){
+    body.innerHTML = `
+      <div class="field"><label>الاسم</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
+      <div class="field"><label>رقم الهاتف (اختياري)</label><input id="addPhone" dir="ltr" value="${escapeHTML(item.phone||'')}"></div>
+      <div class="field"><label>البريد الإلكتروني (اختياري)</label><input id="addEmail" dir="ltr" value="${escapeHTML(item.email||'')}"></div>
+      <div class="field"><label>ملاحظة (اختياري)</label><textarea id="addContent" dir="rtl">${escapeHTML(item.content||'')}</textarea></div>`;
+  } else if(item.kind==='event'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان الموعد</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
+      <div class="field"><label>التاريخ</label><input id="addDate" type="date" value="${escapeHTML(item.eventDate||'')}"></div>
+      <div class="field"><label>الوقت (اختياري)</label><input id="addTime" type="time" value="${escapeHTML(item.eventTime||'')}"></div>
+      <div class="field"><label>ملاحظة (اختياري)</label><textarea id="addContent" dir="rtl">${escapeHTML(item.content||'')}</textarea></div>`;
   } else {
-    const labelMap = {text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري', note:'المحتوى'};
+    const labelMap = {
+      text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري', note:'المحتوى',
+      quote:'نص الاقتباس', recipe:'المكوّنات وطريقة التحضير', password:'اسم المستخدم / كلمة المرور والتفاصيل',
+      diary:'ماذا حدث اليوم؟', idea:'اكتب فكرتك أو خاطرتك', goal:'تفاصيل الهدف وخطوات تحقيقه',
+      expense:'التفاصيل والمبلغ'
+    };
     const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
@@ -1900,13 +2372,43 @@ function openAddModal(){
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="اسم الكود"></div>
       <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>
       <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" placeholder="مثال: جافاسكربت, مهم"></div>`;
-  } else if(folder.kind === 'file'){
+  } else if(folder.kind === 'file' || folder.kind === 'document'){
     body.innerHTML = `
       <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" dir="rtl" placeholder="اسم الملف"></div>
       <button type="button" class="capture-btn" style="width:100%" onclick="document.getElementById('fileGenericInput').click()">${svg('upload')}<span>اختيار ملف أو أكثر من الجهاز</span></button>
       <div class="media-preview-box" id="mediaPreviewBox"></div>`;
+  } else if(folder.kind === 'task'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان القائمة</label><input id="addTitle" dir="rtl" placeholder="مثال: مهام اليوم"></div>
+      <div class="field"><label>المهام (كل مهمة في سطر مستقل)</label><textarea id="addContent" dir="rtl" placeholder="مهمة أولى
+مهمة ثانية
+مهمة ثالثة"></textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" placeholder="مثال: عمل, شخصي"></div>`;
+  } else if(folder.kind === 'link'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان الرابط</label><input id="addTitle" dir="rtl" placeholder="اسم الموقع أو الصفحة"></div>
+      <div class="field"><label>الرابط (URL)</label><input id="addUrl" dir="ltr" placeholder="https://example.com"></div>
+      <div class="field"><label>ملاحظة (اختياري)</label><textarea id="addContent" dir="rtl" placeholder="وصف مختصر..."></textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" placeholder="مثال: مرجع, قراءة لاحقًا"></div>`;
+  } else if(folder.kind === 'contact'){
+    body.innerHTML = `
+      <div class="field"><label>الاسم</label><input id="addTitle" dir="rtl" placeholder="اسم الشخص أو الجهة"></div>
+      <div class="field"><label>رقم الهاتف (اختياري)</label><input id="addPhone" dir="ltr" placeholder="+9665xxxxxxxx"></div>
+      <div class="field"><label>البريد الإلكتروني (اختياري)</label><input id="addEmail" dir="ltr" placeholder="name@email.com"></div>
+      <div class="field"><label>ملاحظة (اختياري)</label><textarea id="addContent" dir="rtl" placeholder="ملاحظات إضافية..."></textarea></div>`;
+  } else if(folder.kind === 'event'){
+    body.innerHTML = `
+      <div class="field"><label>عنوان الموعد</label><input id="addTitle" dir="rtl" placeholder="مثال: موعد طبيب"></div>
+      <div class="field"><label>التاريخ</label><input id="addDate" type="date"></div>
+      <div class="field"><label>الوقت (اختياري)</label><input id="addTime" type="time"></div>
+      <div class="field"><label>ملاحظة (اختياري)</label><textarea id="addContent" dir="rtl" placeholder="تفاصيل إضافية..."></textarea></div>`;
   } else {
-    const labelMap = {text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري'};
+    const labelMap = {
+      text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري',
+      quote:'نص الاقتباس', recipe:'المكوّنات وطريقة التحضير', password:'اسم المستخدم / كلمة المرور والتفاصيل',
+      diary:'ماذا حدث اليوم؟', idea:'اكتب فكرتك أو خاطرتك', goal:'تفاصيل الهدف وخطوات تحقيقه',
+      expense:'التفاصيل والمبلغ'
+    };
     const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="عنوان"></div>
@@ -1934,7 +2436,18 @@ function submitAddItem(){
     const item = currentViewItem;
     item.title = title || item.title;
     const contentEl = document.getElementById('addContent');
-    if(contentEl) item.content = contentEl.value;
+    if(item.kind==='task'){
+      const lines = (contentEl?contentEl.value:'').split('\n').map(s=>s.trim()).filter(Boolean);
+      const oldDone = {}; (item.checklist||[]).forEach(t=>{ oldDone[t.text]=t.done; });
+      item.checklist = lines.map(t=>({text:t, done: !!oldDone[t]}));
+    } else if(contentEl){
+      item.content = contentEl.value;
+    }
+    const urlEl = document.getElementById('addUrl'); if(urlEl) item.url = urlEl.value.trim();
+    const phoneEl = document.getElementById('addPhone'); if(phoneEl) item.phone = phoneEl.value.trim();
+    const emailEl = document.getElementById('addEmail'); if(emailEl) item.email = emailEl.value.trim();
+    const dateEl = document.getElementById('addDate'); if(dateEl) item.eventDate = dateEl.value;
+    const timeEl = document.getElementById('addTime'); if(timeEl) item.eventTime = timeEl.value;
     if(document.getElementById('addTags')) item.tags = parseTagsInput();
     saveData();
     document.getElementById('viewTitle').textContent = item.title || 'بدون عنوان';
@@ -1946,11 +2459,11 @@ function submitAddItem(){
 
   const folder = getFolder(currentFolder);
 
-  if(folder.kind === 'media' || folder.kind === 'file'){
+  if(folder.kind === 'media' || folder.kind === 'file' || folder.kind === 'document'){
     if(!pendingMedia.length){ toast('اختر ملفًا واحدًا على الأقل'); return; }
     pendingMedia.forEach(m=>{
       const item = {
-        id: Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+        id: genId(),
         createdAt: Date.now(),
         kind: m.kind, src: m.src, name: m.name,
         nativeUri: m.nativeUri || null, storedPath: m.storedPath || null,
@@ -1961,14 +2474,37 @@ function submitAddItem(){
   } else if(folder.kind === 'code'){
     const content = document.getElementById('addContent').value;
     if(!title && !content){ toast('أضف عنوانًا أو كودًا'); return; }
-    data[currentFolder].push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now(), kind:'code', title: title || 'بدون عنوان', content, favorite:false, deleted:false, tags: parseTagsInput() });
+    data[currentFolder].push({ id: genId(), createdAt: Date.now(), kind:'code', title: title || 'بدون عنوان', content, favorite:false, deleted:false, tags: parseTagsInput() });
+  } else if(folder.kind === 'task'){
+    const raw = document.getElementById('addContent').value;
+    const lines = raw.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!title && !lines.length){ toast('أضف عنوانًا أو مهمة واحدة على الأقل'); return; }
+    data[currentFolder].push({ id: genId(), createdAt: Date.now(), kind:'task', title: title || 'قائمة مهام', checklist: lines.map(t=>({text:t, done:false})), favorite:false, deleted:false, tags: parseTagsInput() });
+  } else if(folder.kind === 'link'){
+    const url = document.getElementById('addUrl').value.trim();
+    const content = document.getElementById('addContent').value;
+    if(!title && !url){ toast('أضف عنوانًا أو رابطًا'); return; }
+    data[currentFolder].push({ id: genId(), createdAt: Date.now(), kind:'link', title: title || url, url, content, favorite:false, deleted:false, tags: parseTagsInput() });
+  } else if(folder.kind === 'contact'){
+    const phone = document.getElementById('addPhone').value.trim();
+    const email = document.getElementById('addEmail').value.trim();
+    const content = document.getElementById('addContent').value;
+    if(!title && !phone && !email){ toast('أضف اسمًا أو رقمًا أو بريدًا'); return; }
+    data[currentFolder].push({ id: genId(), createdAt: Date.now(), kind:'contact', title: title || 'بدون اسم', phone, email, content, favorite:false, deleted:false, tags:[] });
+  } else if(folder.kind === 'event'){
+    const eDate = document.getElementById('addDate').value;
+    const eTime = document.getElementById('addTime').value;
+    const content = document.getElementById('addContent').value;
+    if(!title && !eDate){ toast('أضف عنوانًا أو تاريخًا'); return; }
+    data[currentFolder].push({ id: genId(), createdAt: Date.now(), kind:'event', title: title || 'بدون عنوان', eventDate: eDate, eventTime: eTime, content, favorite:false, deleted:false, tags:[] });
   } else {
     const content = document.getElementById('addContent').value;
     if(!title && !content){ toast('أضف عنوانًا أو محتوى'); return; }
-    data[currentFolder].push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now(), kind: folder.kind, title: title || 'بدون عنوان', content, favorite:false, deleted:false, tags: parseTagsInput() });
+    data[currentFolder].push({ id: genId(), createdAt: Date.now(), kind: folder.kind, title: title || 'بدون عنوان', content, favorite:false, deleted:false, tags: parseTagsInput() });
   }
 
   saveData();
+  haptic();
   renderItems();
   closeAddModal();
   toast('تم الحفظ');
@@ -2238,7 +2774,7 @@ function requestEmptyTrash(){
 
 /* ---------- Backup export / import ---------- */
 function exportBackup(){
-  const backup = { app:'montasir', version:1, exportedAt: Date.now(), data, settings };
+  const backup = { app:'montasir', version:1, exportedAt: Date.now(), data, settings, widgetsData };
   const blob = new Blob([JSON.stringify(backup)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2267,9 +2803,15 @@ document.getElementById('backupImportInput').addEventListener('change', e=>{
           if(!settings.defaultSort) settings.defaultSort = 'newest';
           if(!settings.defaultView) settings.defaultView = 'list';
           if(typeof settings.autoLockMinutes !== 'number') settings.autoLockMinutes = 0;
+          if(!settings.widgets) settings.widgets = { clock:true, notes:true, todo:true, capture:true };
+        }
+        if(parsed.widgetsData){
+          widgetsData = parsed.widgetsData;
+          if(!Array.isArray(widgetsData.notes)) widgetsData.notes = [];
+          if(!Array.isArray(widgetsData.todos)) widgetsData.todos = [];
         }
         getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
-        saveData(); saveSettingsData();
+        saveData(); saveSettingsData(); saveWidgetsData();
         applyTheme(); applyIdentity(); renderHome();
         toast('تم استيراد النسخة الاحتياطية بنجاح');
       });
@@ -2360,9 +2902,10 @@ document.getElementById('folderImportInput').addEventListener('change', e=>{
 function requestDeleteAllData(){
   showConfirm('حذف كل البيانات', 'سيتم حذف جميع الحافظات والعناصر والإعدادات المخصّصة نهائيًا من هذا الجهاز. لا يمكن التراجع عن هذا الإجراء.', ()=>{
     data = {};
-    settings = { customFolders:[], folderViews:{}, folderOverrides:{}, defaultSort:'newest', defaultView:'list', autoLockMinutes:0 };
+    settings = { customFolders:[], folderViews:{}, folderOverrides:{}, defaultSort:'newest', defaultView:'list', autoLockMinutes:0, widgets:{clock:true,notes:true,todo:true,capture:true} };
+    widgetsData = { notes:[], todos:[] };
     DEFAULT_FOLDERS.forEach(f=>{ data[f.id] = []; });
-    saveData(); saveSettingsData();
+    saveData(); saveSettingsData(); saveWidgetsData();
     applyTheme();
     goHome();
     toast('تم حذف كل البيانات');
@@ -2457,6 +3000,12 @@ function loadSettingsForm(){
   document.getElementById('setDefaultSort').value = settings.defaultSort || 'newest';
   document.getElementById('setDefaultView').value = settings.defaultView || 'list';
   document.getElementById('setAutoLock').value = String(settings.autoLockMinutes || 0);
+  ['clock','notes','todo','capture'].forEach(k=>{
+    document.getElementById('widgetToggle-'+k).classList.toggle('on', !!(settings.widgets && settings.widgets[k]));
+  });
+  document.getElementById('hapticToggle').classList.toggle('on', !!settings.hapticEnabled);
+  document.getElementById('compactGridToggle').classList.toggle('on', !!settings.compactHomeGrid);
+  document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
   loadThemeForm();
   refreshStorageInfo();
   renderAnalytics();
@@ -2666,4 +3215,4 @@ function init(){
 init();
 </script>
 </body>
-  </html>
+        </html>
