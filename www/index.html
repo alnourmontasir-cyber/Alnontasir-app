@@ -411,9 +411,6 @@ input[type="text"], input:not([type]), textarea{
       <button class="icon-btn" onclick="openExtraMenu()" title="المزيد">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
       </button>
-      <button class="icon-btn" onclick="openCalculator()" title="الحاسبة">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="16" y1="11" x2="16" y2="11.01"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="15.01"/><line x1="8" y1="19" x2="8" y2="19.01"/><line x1="12" y1="19" x2="12" y2="19.01"/><line x1="16" y1="19" x2="16" y2="19.01"/></svg>
-      </button>
       <button class="icon-btn" id="editFoldersBtn" onclick="toggleFolderSelectMode()" title="تحديد الحافظات">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
       </button>
@@ -4873,13 +4870,25 @@ function normalizeUrl(input){
   const looksLikeUrl = /^https?:\/\//i.test(v) || (/^[\w-]+(\.[\w-]+)+/.test(v) && !v.includes(' '));
   if(/^https?:\/\//i.test(v)) return v;
   if(looksLikeUrl) return 'https://' + v;
-  return 'https://www.google.com/search?q=' + encodeURIComponent(v);
+  return 'https://duckduckgo.com/html/?q=' + encodeURIComponent(v);
+}
+const BROWSER_IFRAME_BLOCKED_HOSTS = ['youtube.com','google.com','facebook.com','instagram.com','twitter.com','x.com','tiktok.com','whatsapp.com','linkedin.com','amazon.com','netflix.com'];
+function hostBlocksIframe(url){
+  try{
+    const host = new URL(url).hostname.replace(/^www\./,'');
+    return BROWSER_IFRAME_BLOCKED_HOSTS.some(h=> host===h || host.endsWith('.'+h));
+  }catch(e){ return false; }
 }
 function navigateBrowser(){
   const input = document.getElementById('browserUrlInput');
   const url = normalizeUrl(input.value);
   if(!url) return;
   input.value = url;
+  if(hostBlocksIframe(url)){
+    toast('هذا الموقع لا يسمح بالفتح داخل التطبيق — سيُفتح في المتصفح الخارجي');
+    window.open(url, '_blank');
+    return;
+  }
   document.getElementById('browserHomeView').classList.add('hidden');
   const frame = document.getElementById('browserIframe');
   frame.classList.remove('hidden');
@@ -4927,4 +4936,4 @@ function maybeShowBackupReminder(){
 init();
 </script>
 </body>
-  </html>
+                                                                                                               </html>
