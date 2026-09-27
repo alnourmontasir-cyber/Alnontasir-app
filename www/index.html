@@ -79,7 +79,8 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .folder-card h3{margin:0 0 4px;font-size:calc(14px * var(--font-scale));}
 .folder-card span{font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);}
 .detail-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.detail-header h2{margin:0;flex:1;font-size:calc(19px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.detail-header h2{margin:0;flex:1;min-width:0;font-size:calc(19px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.detail-header .icon-btn,.detail-header #folderCountBadge{flex-shrink:0;}
 .search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 12px;}
 .search-box svg{width:18px;height:18px;color:var(--text-dim);flex-shrink:0;}
 .search-box input{border:0;background:transparent;padding:11px 0;}
@@ -148,6 +149,23 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .btn-primary{background:var(--gold);color:#12151b;}
 .btn-ghost{background:var(--surface-2);color:var(--text);}
 .btn-danger{background:var(--danger);color:#fff;}
+/* ---- زر حفظ مدمج وصغير لعمليات الإضافة/التعديل ---- */
+.btn-compact{flex:0 0 auto!important;padding:11px 26px;border-radius:30px;min-width:108px;box-shadow:0 4px 14px rgba(201,162,75,.25);}
+.modal-actions.actions-compact{justify-content:center;gap:12px;}
+.modal-actions.actions-compact .btn-ghost{flex:0 0 auto;padding:11px 22px;border-radius:30px;}
+.mini-save-row{display:flex;justify-content:flex-end;margin-top:8px;}
+.mini-save-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:30px;background:var(--gold);color:#12151b;font-size:12.5px;font-weight:800;box-shadow:0 3px 10px rgba(201,162,75,.3);}
+.mini-save-btn svg{width:13px;height:13px;}
+.mini-save-btn:active{transform:scale(.95);}
+/* ---- صندوق تأكيد يظهر في منتصف الشاشة بشكل بيضاوي احترافي ---- */
+.modal-backdrop.center-modal{align-items:center;padding:24px;}
+.confirm-box{width:100%;max-width:360px;padding:28px 24px 22px;border-radius:32px;background:linear-gradient(165deg,var(--bg-elev),var(--surface));border:1px solid var(--border);box-shadow:0 25px 60px rgba(0,0,0,.55);text-align:center;max-height:none;}
+.confirm-icon{width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(155deg,var(--danger),#8a3226);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(198,90,77,.35);}
+.confirm-icon svg{width:26px;height:26px;color:#fff;}
+.confirm-box h3{margin:0 0 10px;font-size:17px;text-align:center;}
+.confirm-box p{color:var(--text-dim);font-size:13.5px;margin:0 0 20px;line-height:1.7;text-align:center;}
+.confirm-box .modal-actions{gap:10px;}
+.confirm-box .btn{border-radius:30px;padding:13px 10px;}
 .settings-group{margin-bottom:14px;padding:15px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--surface);}
 .settings-group h4{margin:0 0 12px;color:var(--text-dim);font-size:12.5px;display:flex;align-items:center;gap:7px;}
 .settings-group h4 svg{width:14px;height:14px;}
@@ -245,9 +263,10 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .folder-pick-item .folder-icon{width:36px;height:36px;flex-shrink:0;}
 .folder-pick-item span{font-size:13.5px;}
 
-.select-bar{display:none;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);}
+.select-bar{display:none;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.select-bar::-webkit-scrollbar{display:none;}
 .select-bar.show{display:flex;}
-.select-bar .sb-count{flex:1;font-size:12.5px;color:var(--text-dim);white-space:nowrap;}
+.select-bar .sb-count{flex-shrink:0;font-size:12.5px;color:var(--text-dim);white-space:nowrap;padding-inline-end:2px;}
 .select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
 .select-bar button.danger{background:var(--danger);color:#fff;}
 .selectable .item-card{position:relative;}
@@ -373,9 +392,63 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 input[type="text"], input:not([type]), textarea{
   unicode-bidi: plaintext;
 }
+
+/* ================= إمكانية الوصول وسهولة الاستخدام ================= */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.skip-link{position:fixed;top:-60px;inset-inline-start:10px;z-index:2000;background:var(--gold);color:#12151b;padding:10px 18px;border-radius:10px;font-weight:800;font-size:13px;transition:top .15s ease;}
+.skip-link:focus{top:10px;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+button:focus-visible,.icon-btn:focus-visible,.folder-card:focus-visible,.item-card:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+/* تقليل الحركة */
+body.a11y-reduce-motion *{
+  transition-duration:.001ms!important;
+  animation-duration:.001ms!important;
+  animation-iteration-count:1!important;
+  scroll-behavior:auto!important;
+}
+@media (prefers-reduced-motion: reduce){
+  *{ transition-duration:.001ms!important; animation-duration:.001ms!important; }
+}
+
+/* تباين عالٍ */
+body.a11y-high-contrast{
+  --bg:#000000;--bg-elev:#000000;--surface:#0d0d0d;--surface-2:#1a1a1a;
+  --border:#ffffff;--text:#ffffff;--text-dim:#e8e8e8;--gold:#ffd23f;--gold-dim:#ffb800;--danger:#ff6b5c;
+}
+body.a11y-high-contrast .item-card,body.a11y-high-contrast .folder-card,body.a11y-high-contrast .settings-group,body.a11y-high-contrast .widget-block{border-width:2px;}
+body.a11y-high-contrast .icon-btn,body.a11y-high-contrast .btn{border-width:2px;}
+
+/* أهداف لمس أكبر */
+body.a11y-large-targets .icon-btn{width:52px;height:52px;}
+body.a11y-large-targets .icon-btn svg{width:23px;height:23px;}
+body.a11y-large-targets .browser-quick-btn{height:50px;}
+body.a11y-large-targets .item-actions button{width:38px;height:38px;}
+body.a11y-large-targets .item-actions svg{width:18px;height:18px;}
+body.a11y-large-targets .switch{width:56px;height:33px;}
+body.a11y-large-targets .switch::after{width:24px;height:24px;}
+body.a11y-large-targets .switch.on::after{inset-inline-start:26px;}
+body.a11y-large-targets .btn{padding:16px;}
+body.a11y-large-targets .checklist-check,body.a11y-large-targets .todo-check{width:30px;height:30px;}
+body.a11y-large-targets input,body.a11y-large-targets textarea,body.a11y-large-targets select{padding:15px 14px;}
+
+/* نص عريض */
+body.a11y-bold-text{font-weight:600;}
+body.a11y-bold-text h1,body.a11y-bold-text h2,body.a11y-bold-text h3,body.a11y-bold-text h4{font-weight:900;}
+body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y-bold-text .text-dim,body.a11y-bold-text .hint{font-weight:500;}
+
+/* دليل الاستخدام */
+.help-list{display:flex;flex-direction:column;gap:12px;}
+.help-row{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);}
+.help-row .help-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#12151b;}
+.help-row .help-icon svg{width:18px;height:18px;}
+.help-row h5{margin:0 0 3px;font-size:13.5px;}
+.help-row p{margin:0;font-size:12px;color:var(--text-dim);line-height:1.6;}
 </style>
 </head>
 <body>
+<a href="#" class="skip-link" onclick="event.preventDefault();skipToMainContent();">تخطَّ إلى المحتوى الرئيسي</a>
+<div id="a11yAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="lockScreen">
   <div class="lock-emblem">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -399,7 +472,7 @@ input[type="text"], input:not([type]), textarea{
   <button class="lock-bio-btn hidden" id="lockCancelBtn" onclick="cancelFolderUnlock()">إلغاء والعودة</button>
 </div>
 
-<div class="screen active" id="screen-home">
+<div class="screen active" id="screen-home" tabindex="-1">
   <div class="top-header">
     <div class="brand">
       <img id="homeAvatarImg" class="avatar hidden">
@@ -511,9 +584,9 @@ input[type="text"], input:not([type]), textarea{
   <div class="grid" id="foldersGrid"></div>
 </div>
 
-<div class="screen" id="screen-search">
+<div class="screen" id="screen-search" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="search-box">
@@ -533,13 +606,16 @@ input[type="text"], input:not([type]), textarea{
   <div class="item-list" id="searchResults"></div>
 </div>
 
-<div class="screen" id="screen-folder">
+<div class="screen" id="screen-folder" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2 id="folderTitle"></h2>
     <span id="folderCountBadge" style="font-size:12px;color:var(--text-dim)"></span>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="enterItemSelectMode()" title="تحديد العناصر">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
+    </button>
     <button class="icon-btn" id="folderMenuBtn" onclick="openFolderMenu()" title="خيارات الحافظة">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
@@ -558,12 +634,13 @@ input[type="text"], input:not([type]), textarea{
     <button class="danger" onclick="deleteSelectedItems()">نقل للمحذوفات</button>
     <button onclick="exitItemSelectMode()">إلغاء</button>
   </div>
+  <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي عنصر لتحديده مباشرة</span>
   <div class="item-list" id="itemList"></div>
 </div>
 
-<div class="screen" id="screen-favorites">
+<div class="screen" id="screen-favorites" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>المفضلة</h2>
@@ -572,9 +649,9 @@ input[type="text"], input:not([type]), textarea{
   <div class="item-list" id="favList"></div>
 </div>
 
-<div class="screen" id="screen-trash">
+<div class="screen" id="screen-trash" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>سلة المحذوفات</h2>
@@ -586,9 +663,9 @@ input[type="text"], input:not([type]), textarea{
   <div class="item-list" id="trashList"></div>
 </div>
 
-<div class="screen" id="screen-calculator">
+<div class="screen" id="screen-calculator" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>الحاسبة</h2>
@@ -605,9 +682,9 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="screen" id="screen-projects">
+<div class="screen" id="screen-projects" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>مشاريعي</h2>
@@ -618,9 +695,9 @@ input[type="text"], input:not([type]), textarea{
   <div class="grid" id="projectsGrid"></div>
 </div>
 
-<div class="screen" id="screen-tools">
+<div class="screen" id="screen-tools" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>مركز الأدوات</h2>
@@ -628,9 +705,9 @@ input[type="text"], input:not([type]), textarea{
   <div class="grid" id="toolsGrid"></div>
 </div>
 
-<div class="screen" id="screen-browser">
+<div class="screen" id="screen-browser" tabindex="-1">
   <div class="detail-header" style="margin-bottom:0">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>المتصفح</h2>
@@ -668,9 +745,9 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="screen" id="screen-project-view">
+<div class="screen" id="screen-project-view" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="closeProjectView()">
+    <button class="icon-btn" onclick="closeProjectView()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2 id="projectViewTitle" style="font-size:16px"></h2>
@@ -684,12 +761,12 @@ input[type="text"], input:not([type]), textarea{
   <div id="projectViewContent"></div>
 </div>
 
-<div class="modal-backdrop" id="projectModalBackdrop">
+<div class="modal-backdrop" id="projectModalBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 id="projectModalTitle" style="margin:0">مشروع جديد</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeProjectModal()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeProjectModal()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -709,14 +786,17 @@ input[type="text"], input:not([type]), textarea{
       <input type="file" id="projFilesInput" accept="image/*,.pdf,.doc,.docx" multiple class="hidden">
       <div id="projFilesPreview" style="margin-top:8px"></div>
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeProjectModal()">إلغاء</button>
-      <button class="btn btn-primary" onclick="submitProjectForm()">حفظ</button>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeProjectModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" onclick="submitProjectForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
     </div>
   </div>
 </div>
 
-<button class="fab" id="fabBtn" onclick="openAddModal()">
+<button class="fab" id="fabBtn" onclick="openAddModal()" title="إضافة جديد" aria-label="إضافة عنصر جديد">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
 </button>
 
@@ -724,9 +804,9 @@ input[type="text"], input:not([type]), textarea{
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
 </button>
 
-<div class="screen" id="screen-view">
+<div class="screen" id="screen-view" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="closeFullView()">
+    <button class="icon-btn" onclick="closeFullView()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2 id="viewTitle" style="font-size:16px"></h2>
@@ -759,9 +839,9 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="screen" id="screen-settings">
+<div class="screen" id="screen-settings" tabindex="-1">
   <div class="detail-header">
-    <button class="icon-btn" onclick="goHome()">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>الإعدادات</h2>
@@ -780,6 +860,12 @@ input[type="text"], input:not([type]), textarea{
     <span class="hint">هذا الشعار يظهر داخل التطبيق فقط. لتغيير أيقونة التطبيق على شاشة جهازك يلزم تحديث ملف الأيقونة وإعادة بناء التطبيق من GitHub.</span>
     <div class="field" style="margin-top:12px"><label>اسم التطبيق</label><input id="setAppName" dir="rtl" placeholder="المنتصر"></div>
     <div class="field"><label>الشعار الفرعي</label><input id="setTagline" dir="rtl" placeholder="خزانتك الخاصة"></div>
+    <div class="mini-save-row">
+      <button type="button" class="mini-save-btn" onclick="saveSettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
   </div>
 
   <div class="settings-group">
@@ -869,6 +955,39 @@ input[type="text"], input:not([type]), textarea{
       <span class="sr-label">إخفاء الحافظات المقفلة من الرئيسية<small>تبقى محفوظة، ويمكن الوصول إليها من "المزيد ← الحافظات المقفلة"</small></span>
       <button class="switch" id="hideLockedToggle" onclick="toggleHideLockedFromHome()"></button>
     </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      إمكانية الوصول وسهولة الاستخدام
+    </h4>
+    <span class="hint" style="display:block;margin-bottom:8px">خيارات تساعد ذوي الاحتياجات الخاصة ومستخدمي قارئ الشاشة، وتسهّل الاستخدام للجميع.</span>
+    <div class="switch-row">
+      <span class="sr-label">تباين عالٍ<small>ألوان أوضح وأكثر تباينًا لسهولة القراءة</small></span>
+      <button class="switch" id="a11yContrastToggle" onclick="toggleHighContrast()" aria-label="تفعيل أو إيقاف التباين العالي"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تقليل الحركة والانتقالات<small>يوقف الحركات والانتقالات المتحركة قدر الإمكان</small></span>
+      <button class="switch" id="a11yMotionToggle" onclick="toggleReduceMotion()" aria-label="تفعيل أو إيقاف تقليل الحركة"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تكبير أزرار اللمس<small>يكبّر الأزرار والمفاتيح لتسهيل الضغط عليها</small></span>
+      <button class="switch" id="a11yTargetsToggle" onclick="toggleLargeTargets()" aria-label="تفعيل أو إيقاف تكبير أزرار اللمس"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">نص عريض<small>يجعل النصوص أكثر سماكة ووضوحًا</small></span>
+      <button class="switch" id="a11yBoldToggle" onclick="toggleBoldText()" aria-label="تفعيل أو إيقاف النص العريض"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">إعلانات صوتية لقارئ الشاشة<small>يُعلن قارئ الشاشة عن رسائل التنبيه تلقائيًا</small></span>
+      <button class="switch" id="a11yAnnounceToggle" onclick="toggleAnnounce()" aria-label="تفعيل أو إيقاف إعلانات قارئ الشاشة"></button>
+    </div>
+    <span class="mini-hint">لتغيير حجم الخط، استخدم "حجم الخط العام" في قسم المظهر أعلاه.</span>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="openHelpGuide()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      دليل الاستخدام السريع
+    </button>
   </div>
 
   <div class="settings-group">
@@ -983,6 +1102,12 @@ input[type="text"], input:not([type]), textarea{
     <div class="field"><label>نبذة عن التطبيق</label><textarea id="setAbout" placeholder="اكتب نبذة عن التطبيق"></textarea></div>
     <div class="field"><label>الناشر</label><input id="setPublisher" dir="rtl" placeholder="اسم الناشر"></div>
     <div class="field"><label>الإصدار</label><input id="setVersion" placeholder="1.0.0"></div>
+    <div class="mini-save-row">
+      <button type="button" class="mini-save-btn" onclick="saveSettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
   </div>
 
   <div class="settings-group">
@@ -1048,32 +1173,40 @@ input[type="text"], input:not([type]), textarea{
     <button type="button" class="btn btn-danger" style="width:100%" onclick="requestDeleteAllData()">حذف كل البيانات نهائيًا</button>
   </div>
 
-  <button class="btn btn-primary" style="width:100%" onclick="saveSettings()">حفظ الإعدادات</button>
+  <div style="display:flex;justify-content:center">
+    <button class="btn btn-primary btn-compact" onclick="saveSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+      حفظ الإعدادات
+    </button>
+  </div>
 </div>
 
-<div class="modal-backdrop" id="addModalBackdrop">
+<div class="modal-backdrop" id="addModalBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 id="addModalTitle" style="margin:0">إضافة</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddModal()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddModal()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div id="addModalBody"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeAddModal()">إلغاء</button>
-      <button class="btn btn-primary" onclick="submitAddItem()">حفظ</button>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeAddModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" onclick="submitAddItem()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="folderModalBackdrop">
+<div class="modal-backdrop" id="folderModalBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 id="folderModalTitle" style="margin:0">إضافة حافظة جديدة</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderModal()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderModal()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1118,25 +1251,25 @@ input[type="text"], input:not([type]), textarea{
       <div style="display:flex;gap:10px;align-items:center">
         <button type="button" class="btn btn-ghost" style="flex:1" onclick="document.getElementById('folderIconImageInput').click()">اختيار صورة</button>
         <img id="folderIconImagePreview" class="hidden" style="width:44px;height:44px;border-radius:12px;object-fit:cover;flex-shrink:0">
-        <button type="button" class="icon-btn hidden" id="removeFolderIconImageBtn" style="width:38px;height:38px;flex-shrink:0" onclick="removeFolderIconImage()">
+        <button type="button" class="icon-btn hidden" id="removeFolderIconImageBtn" style="width:38px;height:38px;flex-shrink:0" onclick="removeFolderIconImage()" title="إزالة الصورة">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         </button>
       </div>
       <input type="file" id="folderIconImageInput" accept="image/*" class="hidden">
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeFolderModal()">إلغاء</button>
-      <button class="btn btn-primary" id="folderSubmitBtn" onclick="submitFolderForm()">إنشاء</button>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeFolderModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" id="folderSubmitBtn" onclick="submitFolderForm()">إنشاء</button>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="folderMenuBackdrop">
+<div class="modal-backdrop" id="folderMenuBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row" style="margin-bottom:4px">
       <span></span>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderMenu()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderMenu()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1191,16 +1324,16 @@ input[type="text"], input:not([type]), textarea{
       </button>
     </div>
 
-    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeFolderMenu()">إغلاق</button>
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeFolderMenu()" title="إغلاق">إغلاق</button>
   </div>
 </div>
 
-<div class="modal-backdrop" id="moveModalBackdrop">
+<div class="modal-backdrop" id="moveModalBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">نقل إلى حافظة أخرى</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeMoveModal()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeMoveModal()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1208,16 +1341,13 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="modal-backdrop" id="confirmModalBackdrop">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-head-row">
-      <h3 id="confirmModalTitle" style="margin:0">تأكيد الحذف</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeConfirmModal()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+<div class="modal-backdrop center-modal" id="confirmModalBackdrop" role="dialog" aria-modal="true">
+  <div class="confirm-box">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
     </div>
-    <p id="confirmModalMsg" style="color:var(--text-dim);font-size:13.5px;margin:0 0 18px;line-height:1.6"></p>
+    <h3 id="confirmModalTitle">تأكيد الحذف</h3>
+    <p id="confirmModalMsg"></p>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeConfirmModal()">إلغاء</button>
       <button class="btn btn-danger" onclick="runConfirmAction()">تأكيد</button>
@@ -1225,29 +1355,29 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="modal-backdrop" id="quickNoteModalBackdrop">
+<div class="modal-backdrop" id="quickNoteModalBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">ملاحظة سريعة</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeQuickNoteModal()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeQuickNoteModal()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="field"><textarea id="quickNoteInput" dir="rtl" placeholder="اكتب ملاحظة سريعة هنا... (غير مرتبطة بأي حافظة)" style="min-height:120px"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeQuickNoteModal()">إلغاء</button>
-      <button class="btn btn-primary" onclick="submitQuickNote()">حفظ</button>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeQuickNoteModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" onclick="submitQuickNote()">حفظ</button>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="extraMenuBackdrop">
+<div class="modal-backdrop" id="extraMenuBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">المزيد</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeExtraMenu()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeExtraMenu()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1260,17 +1390,60 @@ input[type="text"], input:not([type]), textarea{
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         مركز الأدوات
       </button>
+      <button type="button" class="menu-item" onclick="closeExtraMenu();openHelpGuide()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        دليل الاستخدام السريع
+      </button>
     </div>
     <div id="extraMenuLockedSection"></div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolPdfBackdrop">
+<div class="modal-backdrop" id="helpGuideBackdrop" role="dialog" aria-modal="true" aria-label="دليل الاستخدام السريع">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">مرحبًا بك 👋 دليل سريع للاستخدام</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeHelpGuide()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="help-list">
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <div><h5>الحافظات</h5><p>كل مربع في الرئيسية "حافظة" تجمع نوعًا من العناصر (صور، ملاحظات، روابط...). اضغط عليها لفتحها، واضغط مطوّلًا لسحبها وإعادة ترتيبها.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div><h5>البحث</h5><p>استخدم مربع البحث أعلى الرئيسية للعثور على أي عنصر أو حافظة بسرعة.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l3 6 6 .9-4.5 4.4 1 6.2L12 16.8 6.5 19.5l1-6.2L3 8.9 9 8z"/></svg></div>
+        <div><h5>المفضلة والسلة</h5><p>زر النجمة في أعلى الرئيسية يعرض عناصرك المفضّلة، وزر سلة المهملات يحفظ ما حذفته مؤقتًا قبل حذفه نهائيًا.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82"/></svg></div>
+        <div><h5>الإعدادات وإمكانية الوصول</h5><p>من زر الإعدادات يمكنك تغيير المظهر، حجم الخط، وتفعيل خيارات إمكانية الوصول مثل التباين العالي وتكبير الأزرار وتقليل الحركة.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div><h5>النسخ الاحتياطي</h5><p>من الإعدادات ← النسخ الاحتياطي، يمكنك تصدير كل بياناتك كملف والاحتفاظ به، أو استيراده لاحقًا.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div><h5>مساعدة إضافية</h5><p>يمكنك فتح هذا الدليل في أي وقت من قائمة "المزيد" أو من الإعدادات ← إمكانية الوصول.</p></div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:16px" onclick="closeHelpGuide()">فهمت، ابدأ الاستخدام</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolPdfBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">مولّد PDF من الصور</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closePdfTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closePdfTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1280,18 +1453,18 @@ input[type="text"], input:not([type]), textarea{
     <input type="file" id="pdfImagesInput" accept="image/*" multiple class="hidden">
     <div id="pdfImagesPreview" style="margin-bottom:10px"></div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closePdfTool()">إلغاء</button>
+      <button class="btn btn-ghost" onclick="closePdfTool()" title="إغلاق">إلغاء</button>
       <button class="btn btn-primary" id="pdfGenerateBtn" disabled onclick="generatePdfFromImages()">إنشاء PDF</button>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolCompressBackdrop">
+<div class="modal-backdrop" id="toolCompressBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">ضاغط الصور</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompressTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompressTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1306,18 +1479,18 @@ input[type="text"], input:not([type]), textarea{
       <p class="hint" id="compressResult" style="text-align:center"></p>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeCompressTool()">إغلاق</button>
+      <button class="btn btn-ghost" onclick="closeCompressTool()" title="إغلاق">إغلاق</button>
       <button class="btn btn-primary" onclick="downloadCompressedImage()">تنزيل الصورة المضغوطة</button>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolElectricBackdrop">
+<div class="modal-backdrop" id="toolElectricBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">حاسبة الكهرباء</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeElectricTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeElectricTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1348,12 +1521,12 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolCurrencyBackdrop">
+<div class="modal-backdrop" id="toolCurrencyBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">محول العملات</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCurrencyTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCurrencyTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1367,17 +1540,17 @@ input[type="text"], input:not([type]), textarea{
     <div class="field"><label>أو أدخل سعر الصرف يدويًا</label><input type="number" inputmode="decimal" id="curManualRate" dir="ltr" placeholder="مثال: 3.75" oninput="computeCurrencyConversion()"></div>
     <p style="text-align:center;font-weight:800;font-size:15px" id="curResult"></p>
     <div class="modal-actions">
-      <button class="btn btn-primary" style="flex:1" onclick="closeCurrencyTool()">تم</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeCurrencyTool()" title="إغلاق">تم</button>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolCountdownBackdrop">
+<div class="modal-backdrop" id="toolCountdownBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">العد التنازلي</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCountdownTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCountdownTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1395,12 +1568,12 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolStopwatchBackdrop">
+<div class="modal-backdrop" id="toolStopwatchBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">ساعة التوقيت</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeStopwatchTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeStopwatchTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1415,12 +1588,12 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="modal-backdrop" id="toolCompassBackdrop">
+<div class="modal-backdrop" id="toolCompassBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head-row">
       <h3 style="margin:0">البوصلة</h3>
-      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompassTool()">
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompassTool()" title="إغلاق">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1446,7 +1619,7 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <input type="file" id="photoFallbackInput" accept="image/*" capture="environment" class="hidden">
 <input type="file" id="photoUploadInput" accept="image/*" multiple class="hidden">
@@ -1630,6 +1803,12 @@ if(typeof settings.fabBackOpacity !== 'number') settings.fabBackOpacity = 90;
 if(!settings.fabBackPos) settings.fabBackPos = null;
 if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
 if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
+if(!settings.a11y) settings.a11y = {};
+if(typeof settings.a11y.highContrast !== 'boolean') settings.a11y.highContrast = false;
+if(typeof settings.a11y.reduceMotion !== 'boolean') settings.a11y.reduceMotion = false;
+if(typeof settings.a11y.largeTargets !== 'boolean') settings.a11y.largeTargets = false;
+if(typeof settings.a11y.boldText !== 'boolean') settings.a11y.boldText = false;
+if(typeof settings.a11y.announce !== 'boolean') settings.a11y.announce = true;
 let projects = JSON.parse(localStorage.getItem("montasir_projects") || "[]");
 function saveProjects(){
   try{ localStorage.setItem("montasir_projects", JSON.stringify(projects)); }
@@ -1923,6 +2102,21 @@ function toast(msg){
   t.classList.add('show');
   clearTimeout(t._timer);
   t._timer = setTimeout(()=>t.classList.remove('show'), 2400);
+  announce(msg);
+}
+function announce(msg){
+  if(settings && settings.a11y && settings.a11y.announce===false) return;
+  const a = document.getElementById('a11yAnnouncer');
+  if(!a) return;
+  a.textContent = '';
+  setTimeout(()=>{ a.textContent = msg; }, 30);
+}
+function skipToMainContent(){
+  const active = document.querySelector('.screen.active');
+  if(!active) return;
+  const heading = active.querySelector('h1,h2,h3');
+  (heading || active).setAttribute('tabindex','-1');
+  (heading || active).focus();
 }
 
 function showConfirm(title, msg, onConfirm){
@@ -1944,8 +2138,11 @@ function runConfirmAction(){
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  el.classList.add('active');
   updateFabBackVisibility();
+  const heading = el.querySelector('h1,h2,h3');
+  if(heading){ heading.setAttribute('tabindex','-1'); heading.focus({preventScroll:true}); }
 }
 function goHome(){
   currentFolder=null;
@@ -2768,7 +2965,7 @@ function itemCardHTML(item){
     const checked = selectedItemIds.has(item.id);
     const thumb = item.kind==='photo' ? `<img src="${item.src}">` : `<video src="${item.src}" muted></video>`;
     return `
-      <button type="button" class="visual-card" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
+      <button type="button" class="visual-card" data-item-id="${item.id}" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
         ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" style="top:8px;inset-inline-start:8px">${svg('check')}</span>` : ''}
         ${item.kind==='video' ? `<span class="visual-play">${svg('video')}</span>` : ''}
         ${item.favorite?`<span class="fav-star" style="top:6px;inset-inline-end:6px;inset-inline-start:auto">${svgFilled('star')}</span>`:''}
@@ -2778,7 +2975,7 @@ function itemCardHTML(item){
   let thumb = svg(iconForKind(item.kind));
   const checked = selectedItemIds.has(item.id);
   return `
-    <div class="item-card">
+    <div class="item-card" data-item-id="${item.id}">
       ${itemSelectMode ? `<span class="select-check ${checked?'checked':''}" onclick="event.stopPropagation();toggleItemChecked('${item.id}')">${svg('check')}</span>` : ''}
       <div class="item-thumb">${thumb}${item.favorite?`<span class="fav-star">${svgFilled('star')}</span>`:''}</div>
       <div class="item-body" onclick="${itemSelectMode?`toggleItemChecked('${item.id}')`:`viewItem('${item.id}','folder')`}">
@@ -2788,9 +2985,9 @@ function itemCardHTML(item){
       </div>
       ${itemSelectMode ? '' : `
       <div class="item-actions">
-        <button onclick="viewItem('${item.id}','folder')">${svg('eye')}</button>
-        <button class="${item.favorite?'starred':''}" onclick="toggleFavorite('${currentFolder}','${item.id}')">${svg('star')}</button>
-        <button onclick="requestDeleteItem('${item.id}')">${svg('trash')}</button>
+        <button onclick="viewItem('${item.id}','folder')" title="عرض" aria-label="عرض العنصر">${svg('eye')}</button>
+        <button class="${item.favorite?'starred':''}" onclick="toggleFavorite('${currentFolder}','${item.id}')" title="${item.favorite?'إزالة من المفضلة':'إضافة للمفضلة'}" aria-label="${item.favorite?'إزالة من المفضلة':'إضافة للمفضلة'}">${svg('star')}</button>
+        <button onclick="requestDeleteItem('${item.id}')" title="نقل للمحذوفات" aria-label="حذف العنصر ونقله للمحذوفات">${svg('trash')}</button>
       </div>`}
     </div>`;
 }
@@ -2826,6 +3023,49 @@ function renderItems(){
   } else {
     list.innerHTML = items.map(itemCardHTML).join('');
   }
+  bindItemLongPress();
+}
+
+/* ---------- تحديد العناصر بالضغط المطوّل في أي حافظة، دون الحاجة لفتح القائمة أولًا ---------- */
+const ITEM_LONG_PRESS_MS = 420;
+const ITEM_LONG_PRESS_CANCEL_DIST = 10;
+let _ilpTimer = null, _ilpFired = false, _ilpStartX = 0, _ilpStartY = 0;
+function bindItemLongPress(){
+  const list = document.getElementById('itemList');
+  if(!list || list._longPressBound) return;
+  list._longPressBound = true;
+  const clearPress = ()=>{ clearTimeout(_ilpTimer); _ilpTimer = null; };
+  list.addEventListener('pointerdown', e=>{
+    const card = e.target.closest('[data-item-id]');
+    if(!card) return;
+    const id = card.dataset.itemId;
+    if(!id) return;
+    _ilpFired = false;
+    _ilpStartX = e.clientX; _ilpStartY = e.clientY;
+    clearPress();
+    _ilpTimer = setTimeout(()=>{
+      _ilpFired = true;
+      if(!itemSelectMode){
+        itemSelectMode = true;
+        selectedItemIds.clear();
+        document.getElementById('itemSelectBar').classList.add('show');
+        document.getElementById('fabBtn').classList.remove('show');
+      }
+      if(selectedItemIds.has(id)) selectedItemIds.delete(id); else selectedItemIds.add(id);
+      updateItemSelCount();
+      renderItems();
+      haptic();
+    }, ITEM_LONG_PRESS_MS);
+  }, {passive:true});
+  list.addEventListener('pointermove', e=>{
+    if(!_ilpTimer) return;
+    if(Math.hypot(e.clientX-_ilpStartX, e.clientY-_ilpStartY) > ITEM_LONG_PRESS_CANCEL_DIST) clearPress();
+  }, {passive:true});
+  list.addEventListener('pointerup', clearPress);
+  list.addEventListener('pointercancel', clearPress);
+  list.addEventListener('click', e=>{
+    if(_ilpFired){ e.stopPropagation(); e.preventDefault(); _ilpFired = false; }
+  }, true);
 }
 
 function toggleFavorite(folderId, itemId){
@@ -4328,6 +4568,7 @@ function loadSettingsForm(){
   document.getElementById('fabBackOpacityVal').textContent = settings.fabBackOpacity+'%';
   renderFabBackColorPicker();
   loadThemeForm();
+  loadA11yForm();
   refreshStorageInfo();
   renderAnalytics();
   populateImportTargetFolder();
@@ -5290,8 +5531,99 @@ function openBrowserExternal(){
   window.open(url, '_blank');
 }
 
+/* ================= إمكانية الوصول وسهولة الاستخدام ================= */
+function applyA11ySettings(){
+  const a = settings.a11y || {};
+  document.body.classList.toggle('a11y-high-contrast', !!a.highContrast);
+  document.body.classList.toggle('a11y-reduce-motion', !!a.reduceMotion);
+  document.body.classList.toggle('a11y-large-targets', !!a.largeTargets);
+  document.body.classList.toggle('a11y-bold-text', !!a.boldText);
+}
+function toggleHighContrast(){
+  settings.a11y.highContrast = !settings.a11y.highContrast;
+  saveSettingsData();
+  document.getElementById('a11yContrastToggle').classList.toggle('on', settings.a11y.highContrast);
+  applyA11ySettings();
+  toast(settings.a11y.highContrast ? 'تم تفعيل التباين العالي' : 'تم إيقاف التباين العالي');
+}
+function toggleReduceMotion(){
+  settings.a11y.reduceMotion = !settings.a11y.reduceMotion;
+  saveSettingsData();
+  document.getElementById('a11yMotionToggle').classList.toggle('on', settings.a11y.reduceMotion);
+  applyA11ySettings();
+  toast(settings.a11y.reduceMotion ? 'تم تقليل الحركة والانتقالات' : 'تم تفعيل الحركة الطبيعية');
+}
+function toggleLargeTargets(){
+  settings.a11y.largeTargets = !settings.a11y.largeTargets;
+  saveSettingsData();
+  document.getElementById('a11yTargetsToggle').classList.toggle('on', settings.a11y.largeTargets);
+  applyA11ySettings();
+  toast(settings.a11y.largeTargets ? 'تم تكبير أزرار اللمس' : 'تم إرجاع حجم الأزرار الطبيعي');
+}
+function toggleBoldText(){
+  settings.a11y.boldText = !settings.a11y.boldText;
+  saveSettingsData();
+  document.getElementById('a11yBoldToggle').classList.toggle('on', settings.a11y.boldText);
+  applyA11ySettings();
+  toast(settings.a11y.boldText ? 'تم تفعيل النص العريض' : 'تم إيقاف النص العريض');
+}
+function toggleAnnounce(){
+  settings.a11y.announce = !settings.a11y.announce;
+  saveSettingsData();
+  document.getElementById('a11yAnnounceToggle').classList.toggle('on', settings.a11y.announce);
+  toast(settings.a11y.announce ? 'تم تفعيل الإعلانات الصوتية لقارئ الشاشة' : 'تم إيقاف الإعلانات الصوتية');
+}
+function loadA11yForm(){
+  const a = settings.a11y || {};
+  const map = {a11yContrastToggle:a.highContrast, a11yMotionToggle:a.reduceMotion, a11yTargetsToggle:a.largeTargets, a11yBoldToggle:a.boldText, a11yAnnounceToggle:a.announce};
+  Object.keys(map).forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.toggle('on', !!map[id]); });
+}
+function openHelpGuide(){
+  document.getElementById('helpGuideBackdrop').classList.add('active');
+}
+function closeHelpGuide(){
+  document.getElementById('helpGuideBackdrop').classList.remove('active');
+  try{ localStorage.setItem('montasir_onboarded','1'); }catch(e){}
+}
+/* مزامنة سمة (title) مع aria-label تلقائيًا لأي عنصر جديد يُضاف للصفحة، ليستفيد مستخدمو قارئ الشاشة */
+function mirrorTitlesToAria(root){
+  (root||document).querySelectorAll('[title]:not([aria-label])').forEach(el=>{
+    el.setAttribute('aria-label', el.getAttribute('title'));
+  });
+}
+function setupA11yObserver(){
+  mirrorTitlesToAria(document);
+  const obs = new MutationObserver(muts=>{
+    muts.forEach(m=>{
+      m.addedNodes && m.addedNodes.forEach(n=>{
+        if(n.nodeType===1) mirrorTitlesToAria(n.matches && n.matches('[title]') ? n.parentNode : n);
+      });
+    });
+  });
+  obs.observe(document.body, {childList:true, subtree:true});
+}
+/* إغلاق أي نافذة منبثقة مفتوحة بمفتاح Esc، تسهيلًا على من يستخدم لوحة المفاتيح */
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  const openModal = document.querySelector('.modal-backdrop.active');
+  if(openModal){
+    if(openModal.id === 'confirmModalBackdrop') closeConfirmModal();
+    else openModal.classList.remove('active');
+    return;
+  }
+  if(document.getElementById('screen-settings') && document.getElementById('screen-settings').classList.contains('active')){
+    goHome();
+  }
+});
+function maybeShowOnboarding(){
+  let seen = false;
+  try{ seen = !!localStorage.getItem('montasir_onboarded'); }catch(e){}
+  if(!seen) setTimeout(openHelpGuide, 700);
+}
+
 function init(){
   applyTheme();
+  applyA11ySettings();
   if(settings.pinEnabled && hasLockCredential()){
     showLockScreen();
   }
@@ -5299,6 +5631,8 @@ function init(){
   applyFabBackStyle();
   updateFabBackVisibility();
   maybeShowBackupReminder();
+  setupA11yObserver();
+  maybeShowOnboarding();
 }
 function maybeShowBackupReminder(){
   const LN = window.Capacitor?.Plugins?.LocalNotifications;
@@ -5317,4 +5651,4 @@ async function boot(){
 boot();
 </script>
 </body>
-  </html>
+        </html>
