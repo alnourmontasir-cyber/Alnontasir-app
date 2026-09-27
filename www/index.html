@@ -221,6 +221,30 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .item-list.selectable .item-card{padding-inline-start:38px;}
 .item-list.selectable.grid-view .item-card{padding-inline-start:10px;}
 
+.home-tools{display:flex;gap:8px;margin-bottom:12px;}
+.home-tools .search-box{margin-bottom:0;}
+.sort-select{width:auto;flex-shrink:0;padding:0 10px;font-size:12.5px;background:var(--surface);border-radius:var(--radius-sm);}
+.chip-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+.filter-chip{flex-shrink:0;padding:8px 14px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:12px;color:var(--text-dim);white-space:nowrap;display:flex;align-items:center;gap:6px;}
+.filter-chip svg{width:13px;height:13px;}
+.filter-chip.active{background:var(--gold-dim);border-color:var(--gold);color:#fff;}
+.recent-scroller{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;}
+.recent-card{flex-shrink:0;width:104px;padding:9px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);text-align:right;}
+.recent-card .item-thumb{width:100%;height:60px;border-radius:9px;margin-bottom:6px;}
+.recent-card h5{margin:0;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.recent-card small{color:var(--text-dim);font-size:9.5px;}
+.section-label{margin:0 2px 8px;color:var(--text-dim);font-size:12px;font-weight:700;}
+.folder-card .lock-flag{position:absolute;top:10px;inset-inline-end:10px;width:18px;height:18px;color:var(--text-dim);opacity:.9;}
+.folder-card .lock-flag svg{width:100%;height:100%;}
+.tag-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.tag-chip{padding:3px 10px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);font-size:10.5px;color:var(--gold);}
+.analytics-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.analytics-row:last-child{border-bottom:0;}
+.analytics-row b{color:var(--text);}
+.analytics-bar-track{flex:1;height:6px;border-radius:4px;background:var(--surface-2);margin:0 10px;overflow:hidden;}
+.analytics-bar-fill{height:100%;background:var(--gold);border-radius:4px;}
+.mini-hint{font-size:11px;color:var(--text-dim);margin-top:4px;display:block;}
+
 input[type="text"], input:not([type]), textarea{
   unicode-bidi: plaintext;
 }
@@ -241,6 +265,7 @@ input[type="text"], input:not([type]), textarea{
   <div id="lockError"></div>
   <div class="pin-pad" id="pinPad"></div>
   <button class="lock-bio-btn hidden" id="lockBioBtn" onclick="manualBiometricUnlock()"></button>
+  <button class="lock-bio-btn hidden" id="lockCancelBtn" onclick="cancelFolderUnlock()">إلغاء والعودة</button>
 </div>
 
 <div class="screen active" id="screen-home">
@@ -278,6 +303,26 @@ input[type="text"], input:not([type]), textarea{
     <input placeholder="ابحث في كل محتوياتك..." readonly style="pointer-events:none">
   </div>
 
+  <div class="stats-bar" id="homeStatsBar"></div>
+
+  <div id="recentSection">
+    <p class="section-label">أحدث الإضافات</p>
+    <div class="recent-scroller" id="recentScroller"></div>
+  </div>
+
+  <div class="home-tools">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="folderFilterInput" placeholder="تصفية الحافظات بالاسم..." oninput="filterHomeFolders(this.value)">
+    </div>
+    <select class="sort-select" id="homeSortSelect" onchange="setHomeSort(this.value)">
+      <option value="custom">الترتيب الافتراضي</option>
+      <option value="name">بالاسم (أ-ي)</option>
+      <option value="count">الأكثر عناصر</option>
+      <option value="newest">الأحدث إنشاءً</option>
+    </select>
+  </div>
+
   <div class="select-bar" id="folderSelectBar">
     <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
     <span class="sb-count" id="folderSelCount">0 محدد</span>
@@ -298,6 +343,15 @@ input[type="text"], input:not([type]), textarea{
       <input id="searchInput" placeholder="ابحث في كل محتوياتك..." oninput="renderSearchResults(this.value)">
     </div>
   </div>
+  <div class="home-tools">
+    <select class="sort-select" style="flex:1" id="searchFolderFilter" onchange="renderSearchResults(document.getElementById('searchInput').value)">
+      <option value="">كل الحافظات</option>
+    </select>
+    <button type="button" class="filter-chip" id="searchFavChip" onclick="toggleSearchFavOnly()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>المفضلة فقط</span>
+    </button>
+  </div>
   <div class="item-list" id="searchResults"></div>
 </div>
 
@@ -312,9 +366,17 @@ input[type="text"], input:not([type]), textarea{
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
+  <div class="chip-row" id="folderFilterChips">
+    <button type="button" class="filter-chip" id="folderFavFilterChip" onclick="toggleFolderFavFilter()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>المفضلة فقط</span>
+    </button>
+  </div>
   <div class="select-bar" id="itemSelectBar">
     <button onclick="toggleSelectAllItems()"><span id="selAllItemsLabel">تحديد الكل</span></button>
     <span class="sb-count" id="itemSelCount">0 محدد</span>
+    <button onclick="openMoveModalForSelected()">نقل المحدد</button>
+    <button onclick="favoriteSelectedItems()">تمييز المحدد</button>
     <button class="danger" onclick="deleteSelectedItems()">نقل للمحذوفات</button>
     <button onclick="exitItemSelectMode()">إلغاء</button>
   </div>
@@ -484,6 +546,13 @@ input[type="text"], input:not([type]), textarea{
       </button>
     </div>
     <input type="file" id="backupImportInput" accept="application/json" class="hidden">
+    <span class="mini-hint">لتصدير حافظة واحدة فقط، افتح الحافظة ثم اختر "تصدير هذه الحافظة" من قائمة خياراتها.</span>
+    <div class="field" style="margin-top:12px">
+      <label>استيراد عناصر (ملف حافظة مُصدّر) إلى حافظة موجودة</label>
+      <select id="importTargetFolder"></select>
+      <button type="button" class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="document.getElementById('folderImportInput').click()">اختيار ملف واستيراد العناصر</button>
+    </div>
+    <input type="file" id="folderImportInput" accept="application/json" class="hidden">
   </div>
 
   <div class="settings-group">
@@ -495,6 +564,14 @@ input[type="text"], input:not([type]), textarea{
       <span class="sr-label">المساحة المستخدمة تقريبًا<small id="storageInfoLine">جارٍ الحساب...</small></span>
       <button class="btn btn-ghost" style="flex:none;padding:9px 14px" onclick="refreshStorageInfo()">تحديث</button>
     </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      تحليلات الاستخدام
+    </h4>
+    <div id="analyticsBody"></div>
   </div>
 
   <div class="settings-group">
@@ -605,6 +682,10 @@ input[type="text"], input:not([type]), textarea{
       <div class="field"><label>اللون الأساسي</label><input type="color" id="newFolderColor" value="#5eb1a1"></div>
       <div class="field"><label>اللون الثانوي</label><input type="color" id="newFolderColor2" value="#2f7d6c"></div>
     </div>
+    <div class="switch-row" style="padding:4px 0 10px">
+      <span class="sr-label">قفل هذه الحافظة برمز PIN التطبيق<small>يجب تعيين رمز PIN من الإعدادات أولًا</small></span>
+      <button type="button" class="switch" id="folderLockToggle" onclick="toggleFolderLockInModal()"></button>
+    </div>
     <div class="field">
       <label>الأيقونة</label>
       <div class="icon-pick-grid" id="folderIconPicker"></div>
@@ -668,6 +749,14 @@ input[type="text"], input:not([type]), textarea{
       <button type="button" class="menu-item" onclick="editCurrentFolder()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         تعديل الاسم واللون والأيقونة
+      </button>
+      <button type="button" class="menu-item" onclick="duplicateCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        تكرار الحافظة
+      </button>
+      <button type="button" class="menu-item" onclick="exportCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تصدير هذه الحافظة
       </button>
       <button type="button" class="menu-item danger" onclick="requestDeleteCurrentFolder()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
@@ -842,6 +931,12 @@ let selectedItemIds = new Set();
 
 let _confirmCallback = null;
 
+let homeFilterText = "";
+if(!settings.homeSort) settings.homeSort = 'custom';
+let pendingLockedFolderId = null;
+let pendingFolderLocked = false;
+let searchFavOnly = false;
+
 function getFolders(){
   const list = DEFAULT_FOLDERS.map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{})).concat(settings.customFolders);
   return list.slice().sort((a,b)=> (b.pinned?1:0)-(a.pinned?1:0));
@@ -934,10 +1029,22 @@ function openSettings(){
 function openSearch(){
   if(folderSelectMode) exitFolderSelectMode();
   document.getElementById('searchInput').value = '';
+  populateSearchFolderFilter();
   renderSearchResults('');
   document.getElementById('fabBtn').classList.remove('show');
   showScreen('screen-search');
   setTimeout(()=>document.getElementById('searchInput').focus(), 200);
+}
+function populateSearchFolderFilter(){
+  const sel = document.getElementById('searchFolderFilter');
+  const current = sel.value;
+  sel.innerHTML = `<option value="">كل الحافظات</option>` + getFolders().map(f=>`<option value="${f.id}">${escapeHTML(f.name)}</option>`).join('');
+  sel.value = current || '';
+}
+function toggleSearchFavOnly(){
+  searchFavOnly = !searchFavOnly;
+  document.getElementById('searchFavChip').classList.toggle('active', searchFavOnly);
+  renderSearchResults(document.getElementById('searchInput').value);
 }
 
 function allItemsFlat(includeDeleted){
@@ -953,17 +1060,22 @@ function allItemsFlat(includeDeleted){
 function renderSearchResults(q){
   q = (q||'').trim().toLowerCase();
   const list = document.getElementById('searchResults');
-  if(!q){
+  const folderFilterEl = document.getElementById('searchFolderFilter');
+  const folderFilter = folderFilterEl ? folderFilterEl.value : '';
+  if(!q && !folderFilter && !searchFavOnly){
     list.innerHTML = `<div class="empty-state">${svg('search')}<p>اكتب للبحث في كل عناصرك عبر جميع المجلدات</p></div>`;
     return;
   }
   let results = allItemsFlat(false).filter(item=>{
-    const hay = ((item.title||'')+' '+(item.content||'')+' '+(item.name||'')+' '+item.folderName).toLowerCase();
+    if(folderFilter && item.folderId !== folderFilter) return false;
+    if(searchFavOnly && !item.favorite) return false;
+    if(!q) return true;
+    const hay = ((item.title||'')+' '+(item.content||'')+' '+(item.name||'')+' '+item.folderName+' '+((item.tags||[]).join(' '))).toLowerCase();
     return hay.includes(q);
   });
   results.sort((a,b)=>b.createdAt-a.createdAt);
   if(results.length===0){
-    list.innerHTML = `<div class="empty-state">${svg('search')}<p>لا نتائج لـ "${escapeHTML(q)}"</p></div>`;
+    list.innerHTML = `<div class="empty-state">${svg('search')}<p>لا نتائج مطابقة${q?` لـ "${escapeHTML(q)}"`:''}</p></div>`;
     return;
   }
   list.innerHTML = results.map(item=>{
@@ -1033,13 +1145,85 @@ function deleteFolderNow(id){
   saveData();
 }
 
+function filterHomeFolders(val){
+  homeFilterText = (val||'').trim().toLowerCase();
+  renderHome();
+}
+function setHomeSort(val){
+  settings.homeSort = val;
+  saveSettingsData();
+  renderHome();
+}
+function sortedVisibleFolders(){
+  let list = getFolders();
+  if(homeFilterText){
+    list = list.filter(f=>f.name.toLowerCase().includes(homeFilterText));
+  }
+  const mode = settings.homeSort || 'custom';
+  if(mode === 'name'){
+    list = list.slice().sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  } else if(mode === 'count'){
+    list = list.slice().sort((a,b)=> (data[b.id]||[]).filter(i=>!i.deleted).length - (data[a.id]||[]).filter(i=>!i.deleted).length);
+  } else if(mode === 'newest'){
+    list = list.slice().sort((a,b)=> (b.createdAt||0) - (a.createdAt||0));
+  }
+  // pinned folders always float to top regardless of chosen sort
+  list = list.slice().sort((a,b)=> (b.pinned?1:0)-(a.pinned?1:0));
+  return list;
+}
+function renderHomeStats(){
+  const folders = getFolders();
+  const items = allItemsFlat(false);
+  const favCount = items.filter(i=>i.favorite).length;
+  let bytes = 0;
+  try{
+    bytes += (localStorage.getItem('montasir_data')||'').length;
+    bytes += (localStorage.getItem('montasir_settings')||'').length;
+  }catch(e){}
+  const kb = bytes/1024;
+  const storageLine = kb>1024 ? (kb/1024).toFixed(1)+' م.ب' : kb.toFixed(0)+' ك.ب';
+  document.getElementById('homeStatsBar').innerHTML = `
+    <div class="stats-chip"><b>${folders.length}</b> حافظة</div>
+    <div class="stats-chip"><b>${items.length}</b> عنصر</div>
+    <div class="stats-chip"><b>${favCount}</b> مفضّل</div>
+    <div class="stats-chip"><b>${storageLine}</b> تخزين</div>`;
+}
+function renderRecentItems(){
+  const scroller = document.getElementById('recentScroller');
+  const section = document.getElementById('recentSection');
+  const items = allItemsFlat(false).sort((a,b)=>b.createdAt-a.createdAt).slice(0,10);
+  if(items.length===0){ section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  scroller.innerHTML = items.map(item=>{
+    let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
+    return `
+      <button type="button" class="recent-card" onclick="openHomeRecentItem('${item.folderId}','${item.id}')">
+        <div class="item-thumb">${thumb}</div>
+        <h5>${escapeHTML(item.title||'بدون عنوان')}</h5>
+        <small>${escapeHTML(item.folderName)}</small>
+      </button>`;
+  }).join('');
+}
+function openHomeRecentItem(folderId,itemId){
+  currentFolder = folderId;
+  viewItem(itemId,'home');
+}
 function renderHome(){
   applyIdentity();
   updateTrashBadge();
+  renderHomeStats();
+  renderRecentItems();
+  const sortSel = document.getElementById('homeSortSelect');
+  if(sortSel) sortSel.value = settings.homeSort || 'custom';
   const grid = document.getElementById("foldersGrid");
   grid.classList.toggle('selectable', folderSelectMode);
   grid.innerHTML = "";
-  getFolders().forEach(folder=>{
+  const folders = sortedVisibleFolders();
+  if(folders.length===0 && homeFilterText){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">${svg('search')}<p>لا حافظات تطابق "${escapeHTML(homeFilterText)}"</p></div>`;
+    return;
+  }
+  folders.forEach(folder=>{
     const count = (data[folder.id]||[]).filter(i=>!i.deleted).length;
     const checked = selectedFolderIds.has(folder.id);
     const card = document.createElement("button");
@@ -1049,6 +1233,7 @@ function renderHome(){
     card.style.setProperty("--fc2", folder.color2);
     card.innerHTML = `
       ${folderSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : (folder.pinned?`<span class="pin-flag">${svgFilled('pin')}</span>`:'')}
+      ${(!folderSelectMode && folder.locked) ? `<span class="lock-flag">${svg('lock')}</span>` : ''}
       <div class="folder-icon">${folderIconInner(folder)}</div>
       <div>
         <h3>${escapeHTML(folder.name)}</h3>
@@ -1057,7 +1242,7 @@ function renderHome(){
     card.onclick = () => { folderSelectMode ? toggleFolderChecked(folder.id) : openFolder(folder.id); };
     grid.appendChild(card);
   });
-  if(!folderSelectMode){
+  if(!folderSelectMode && !homeFilterText){
     const addCard = document.createElement("button");
     addCard.type = "button";
     addCard.className = "folder-card";
@@ -1134,9 +1319,22 @@ function openFolderModal(editId){
   document.getElementById('newFolderColor2').value = folder ? folder.color2 : '#2f7d6c';
   pickedFolderIcon = folder ? folder.icon : 'heart';
   pendingFolderCustomIcon = folder && folder.customIcon ? folder.customIcon : null;
+  pendingFolderLocked = !!(folder && folder.locked);
   renderFolderIconPicker(pickedFolderIcon);
   updateFolderImagePreview();
+  updateFolderLockToggleUI();
   document.getElementById('folderModalBackdrop').classList.add('active');
+}
+function updateFolderLockToggleUI(){
+  document.getElementById('folderLockToggle').classList.toggle('on', pendingFolderLocked);
+}
+function toggleFolderLockInModal(){
+  if(!pendingFolderLocked && !(settings.pinEnabled && settings.pin)){
+    toast('عيّن رمز PIN من الإعدادات أولًا لتتمكن من قفل الحافظات');
+    return;
+  }
+  pendingFolderLocked = !pendingFolderLocked;
+  updateFolderLockToggleUI();
 }
 function selectFolderIcon(ic){
   pickedFolderIcon = ic;
@@ -1154,7 +1352,12 @@ function submitFolderForm(){
   const kind = document.getElementById('newFolderKind').value;
   const color = document.getElementById('newFolderColor').value;
   const color2 = document.getElementById('newFolderColor2').value;
-  const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null};
+  if(pendingFolderLocked && !(settings.pinEnabled && settings.pin)){
+    toast('عيّن رمز PIN من الإعدادات أولًا قبل قفل الحافظة');
+    pendingFolderLocked = false;
+    updateFolderLockToggleUI();
+  }
+  const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null, locked: pendingFolderLocked};
 
   if(editingFolderId){
     updateFolderMeta(editingFolderId, patch);
@@ -1164,7 +1367,7 @@ function submitFolderForm(){
     toast('تم تحديث الحافظة');
   } else {
     const id = 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-    settings.customFolders.push(Object.assign({id}, patch));
+    settings.customFolders.push(Object.assign({id, createdAt: Date.now(), locked: pendingFolderLocked}, patch));
     data[id] = [];
     saveSettingsData();
     saveData();
@@ -1236,8 +1439,39 @@ function requestDeleteCurrentFolder(){
   });
 }
 
+function duplicateCurrentFolder(){
+  const folder = getFolder(currentFolder);
+  if(!folder) return;
+  closeFolderMenu();
+  const newId = 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  const clone = Object.assign({}, folder, {id:newId, name: folder.name + ' (نسخة)', pinned:false, createdAt: Date.now()});
+  settings.customFolders.push(clone);
+  data[newId] = (data[folder.id]||[]).filter(i=>!i.deleted).map(item=>Object.assign({}, item, {
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,7)
+  }));
+  saveSettingsData();
+  saveData();
+  renderHome();
+  toast('تم تكرار الحافظة مع عناصرها');
+}
+function exportCurrentFolder(){
+  const folder = getFolder(currentFolder);
+  if(!folder) return;
+  closeFolderMenu();
+  const backup = { app:'montasir', type:'single-folder', version:1, exportedAt: Date.now(), folder, items: (data[folder.id]||[]).filter(i=>!i.deleted) };
+  const blob = new Blob([JSON.stringify(backup)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'montasir_' + folder.id + '_' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 3000);
+  toast('تم تصدير الحافظة');
+}
 function getFolderView(id){
-  return Object.assign({sort:settings.defaultSort||'newest', view:settings.defaultView||'list'}, settings.folderViews[id]||{});
+  return Object.assign({sort:settings.defaultSort||'newest', view:settings.defaultView||'list', favOnly:false}, settings.folderViews[id]||{});
 }
 function setFolderView(id, patch){
   settings.folderViews[id] = Object.assign(getFolderView(id), patch);
@@ -1245,6 +1479,28 @@ function setFolderView(id, patch){
 }
 
 function openFolder(id){
+  const folder = getFolder(id);
+  if(!folder) return;
+  if(folder.locked && settings.pin){
+    pendingLockedFolderId = id;
+    pinMode = 'folder-unlock'; pinBuffer='';
+    document.getElementById('lockTitle').textContent = 'أدخل الرمز لفتح "'+folder.name+'"';
+    document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
+    document.getElementById('lockError').textContent = '';
+    document.getElementById('lockBioBtn').classList.add('hidden');
+    document.getElementById('lockCancelBtn').classList.remove('hidden');
+    renderPinPad(); renderPinDots();
+    document.getElementById('lockScreen').classList.add('active');
+    return;
+  }
+  openFolderNow(id);
+}
+function cancelFolderUnlock(){
+  pendingLockedFolderId = null;
+  document.getElementById('lockCancelBtn').classList.add('hidden');
+  document.getElementById('lockScreen').classList.remove('active');
+}
+function openFolderNow(id){
   const folder = getFolder(id);
   if(!folder) return;
   currentFolder = id;
@@ -1265,17 +1521,28 @@ function sortItems(items, sort){
   return arr;
 }
 
+function toggleFolderFavFilter(){
+  const v = getFolderView(currentFolder);
+  setFolderView(currentFolder, {favOnly: !v.favOnly});
+  renderItems();
+}
 function renderItems(){
   const list = document.getElementById('itemList');
   const v = getFolderView(currentFolder);
   list.classList.toggle('grid-view', v.view==='grid');
   list.classList.toggle('selectable', itemSelectMode);
-  const items = sortItems((data[currentFolder] || []).filter(i=>!i.deleted), v.sort);
+  const chip = document.getElementById('folderFavFilterChip');
+  if(chip) chip.classList.toggle('active', !!v.favOnly);
+  let items = (data[currentFolder] || []).filter(i=>!i.deleted);
+  if(v.favOnly) items = items.filter(i=>i.favorite);
+  items = sortItems(items, v.sort);
   const c = items.length;
   document.getElementById('folderCountBadge').textContent = c + " " + (c===1?"عنصر":"عناصر");
   if(items.length === 0){
     list.classList.remove('grid-view');
-    list.innerHTML = `<div class="empty-state">${svg('inbox')}<p>لا توجد عناصر بعد — اضغط + للإضافة</p></div>`;
+    list.innerHTML = v.favOnly
+      ? `<div class="empty-state">${svg('star')}<p>لا توجد عناصر مفضّلة في هذه الحافظة</p></div>`
+      : `<div class="empty-state">${svg('inbox')}<p>لا توجد عناصر بعد — اضغط + للإضافة</p></div>`;
     return;
   }
   list.innerHTML = items.map(item=>{
@@ -1400,6 +1667,9 @@ function viewItem(id, origin){
   } else {
     inner = `<div class="view-copy-row"><button onclick="copyItemContent()">${svg('copy')}نسخ النص</button></div><p style="white-space:pre-wrap;color:var(--text);width:100%">${escapeHTML(item.content||"")}</p>`;
   }
+  if(item.tags && item.tags.length){
+    inner += `<div class="tag-chips">${item.tags.map(t=>`<span class="tag-chip">#${escapeHTML(t)}</span>`).join('')}</div>`;
+  }
   inner += `<div class="item-meta">${fmtDate(item.createdAt)}</div>`;
   content.innerHTML = inner;
 
@@ -1512,12 +1782,25 @@ async function shareApp(){
   }catch(e){ toast('تعذّرت المشاركة'); }
 }
 
-/* ---------- Move item between folders ---------- */
+/* ---------- Move item(s) between folders ---------- */
 function openMoveModalForCurrent(){
   if(!currentViewItem || !currentViewFolder) return;
-  pendingMoveTarget = { folderId: currentViewFolder, itemId: currentViewItem.id };
+  pendingMoveTarget = { folderId: currentViewFolder, itemIds: [currentViewItem.id], bulk:false };
   renderMovePickList();
   document.getElementById('moveModalBackdrop').classList.add('active');
+}
+function openMoveModalForSelected(){
+  if(selectedItemIds.size===0){ toast('لم تختر أي عنصر'); return; }
+  pendingMoveTarget = { folderId: currentFolder, itemIds: Array.from(selectedItemIds), bulk:true };
+  renderMovePickList();
+  document.getElementById('moveModalBackdrop').classList.add('active');
+}
+function favoriteSelectedItems(){
+  if(selectedItemIds.size===0){ toast('لم تختر أي عنصر'); return; }
+  (data[currentFolder]||[]).forEach(i=>{ if(selectedItemIds.has(i.id)) i.favorite = true; });
+  saveData();
+  exitItemSelectMode();
+  toast('تم تمييز العناصر المحددة كمفضّلة');
 }
 function closeMoveModal(){
   document.getElementById('moveModalBackdrop').classList.remove('active');
@@ -1538,17 +1821,23 @@ function renderMovePickList(){
 }
 function confirmMoveTo(targetFolderId){
   if(!pendingMoveTarget) return;
-  const { folderId, itemId } = pendingMoveTarget;
+  const { folderId, itemIds, bulk } = pendingMoveTarget;
   const arr = data[folderId] || [];
-  const idx = arr.findIndex(i=>i.id===itemId);
-  if(idx === -1){ closeMoveModal(); return; }
-  const [item] = arr.splice(idx,1);
   data[targetFolderId] = data[targetFolderId] || [];
-  data[targetFolderId].push(item);
+  let moved = 0;
+  itemIds.forEach(itemId=>{
+    const idx = arr.findIndex(i=>i.id===itemId);
+    if(idx !== -1){
+      const [item] = arr.splice(idx,1);
+      data[targetFolderId].push(item);
+      moved++;
+    }
+  });
   saveData();
   closeMoveModal();
-  toast('تم نقل العنصر');
-  closeFullView();
+  toast(moved>1 ? `تم نقل ${moved} عناصر` : 'تم نقل العنصر');
+  if(bulk){ exitItemSelectMode(); }
+  else { closeFullView(); }
 }
 
 /* ---------- Edit / rename item ---------- */
@@ -1564,13 +1853,15 @@ function openEditItemModal(){
   } else if(item.kind==='code'){
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
-      <div class="field"><label>الكود</label><textarea id="addContent" class="mono">${escapeHTML(item.content||'')}</textarea></div>`;
+      <div class="field"><label>الكود</label><textarea id="addContent" class="mono">${escapeHTML(item.content||'')}</textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" value="${escapeHTML((item.tags||[]).join(', '))}"></div>`;
   } else {
     const labelMap = {text:'النص', article:'نص المقال', poem:'أبيات القصيدة / النص الشعري', note:'المحتوى'};
     const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" value="${escapeHTML(item.title||'')}"></div>
-      <div class="field"><label>${label}</label><textarea id="addContent" dir="rtl">${escapeHTML(item.content||'')}</textarea></div>`;
+      <div class="field"><label>${label}</label><textarea id="addContent" dir="rtl">${escapeHTML(item.content||'')}</textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" value="${escapeHTML((item.tags||[]).join(', '))}"></div>`;
   }
   document.getElementById('addModalBackdrop').classList.add('active');
 }
@@ -1607,7 +1898,8 @@ function openAddModal(){
   } else if(folder.kind === 'code'){
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="اسم الكود"></div>
-      <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>`;
+      <div class="field"><label>الكود</label><textarea id="addContent" class="mono" placeholder="الصق الكود هنا"></textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" placeholder="مثال: جافاسكربت, مهم"></div>`;
   } else if(folder.kind === 'file'){
     body.innerHTML = `
       <div class="field"><label>عنوان (اختياري)</label><input id="addTitle" dir="rtl" placeholder="اسم الملف"></div>
@@ -1618,7 +1910,8 @@ function openAddModal(){
     const label = labelMap[folder.kind] || 'المحتوى';
     body.innerHTML = `
       <div class="field"><label>العنوان</label><input id="addTitle" dir="rtl" placeholder="عنوان"></div>
-      <div class="field"><label>${label}</label><textarea id="addContent" dir="rtl" placeholder="اكتب هنا..." style="min-height:${folder.kind==='poem'?'170px':'110px'}"></textarea></div>`;
+      <div class="field"><label>${label}</label><textarea id="addContent" dir="rtl" placeholder="اكتب هنا..." style="min-height:${folder.kind==='poem'?'170px':'110px'}"></textarea></div>
+      <div class="field"><label>وسوم (اختياري، افصل بينها بفاصلة)</label><input id="addTags" dir="rtl" placeholder="مثال: مهم, شخصي"></div>`;
   }
   document.getElementById('addModalBackdrop').classList.add('active');
 }
@@ -1628,6 +1921,11 @@ function closeAddModal(){
   editingItemMode = false;
 }
 
+function parseTagsInput(){
+  const tagsEl = document.getElementById('addTags');
+  if(!tagsEl) return [];
+  return tagsEl.value.split(',').map(t=>t.trim()).filter(Boolean).slice(0,15);
+}
 function submitAddItem(){
   const titleEl = document.getElementById('addTitle');
   const title = titleEl ? titleEl.value.trim() : "";
@@ -1637,6 +1935,7 @@ function submitAddItem(){
     item.title = title || item.title;
     const contentEl = document.getElementById('addContent');
     if(contentEl) item.content = contentEl.value;
+    if(document.getElementById('addTags')) item.tags = parseTagsInput();
     saveData();
     document.getElementById('viewTitle').textContent = item.title || 'بدون عنوان';
     viewItem(item.id, viewOrigin==='folder'?'folder':viewOrigin);
@@ -1655,18 +1954,18 @@ function submitAddItem(){
         createdAt: Date.now(),
         kind: m.kind, src: m.src, name: m.name,
         nativeUri: m.nativeUri || null, storedPath: m.storedPath || null,
-        title: title || m.name, favorite:false, deleted:false
+        title: title || m.name, favorite:false, deleted:false, tags:[]
       };
       data[currentFolder].push(item);
     });
   } else if(folder.kind === 'code'){
     const content = document.getElementById('addContent').value;
     if(!title && !content){ toast('أضف عنوانًا أو كودًا'); return; }
-    data[currentFolder].push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now(), kind:'code', title: title || 'بدون عنوان', content, favorite:false, deleted:false });
+    data[currentFolder].push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now(), kind:'code', title: title || 'بدون عنوان', content, favorite:false, deleted:false, tags: parseTagsInput() });
   } else {
     const content = document.getElementById('addContent').value;
     if(!title && !content){ toast('أضف عنوانًا أو محتوى'); return; }
-    data[currentFolder].push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now(), kind: folder.kind, title: title || 'بدون عنوان', content, favorite:false, deleted:false });
+    data[currentFolder].push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,7), createdAt: Date.now(), kind: folder.kind, title: title || 'بدون عنوان', content, favorite:false, deleted:false, tags: parseTagsInput() });
   }
 
   saveData();
@@ -1993,6 +2292,70 @@ function refreshStorageInfo(){
   document.getElementById('storageInfoLine').textContent = line + ' — ' + total + ' عنصر إجمالًا';
 }
 
+/* ---------- Analytics ---------- */
+function renderAnalytics(){
+  const box = document.getElementById('analyticsBody');
+  if(!box) return;
+  const folders = getFolders();
+  const items = allItemsFlat(false);
+  const favCount = items.filter(i=>i.favorite).length;
+  const trashCount = allItemsFlat(true).filter(i=>i.deleted).length;
+  const counts = folders.map(f=>({name:f.name, count:(data[f.id]||[]).filter(i=>!i.deleted).length}))
+    .sort((a,b)=>b.count-a.count).slice(0,5);
+  const maxCount = Math.max(1, ...counts.map(c=>c.count));
+  let html = `
+    <div class="analytics-row"><span>إجمالي الحافظات</span><b>${folders.length}</b></div>
+    <div class="analytics-row"><span>إجمالي العناصر</span><b>${items.length}</b></div>
+    <div class="analytics-row"><span>العناصر المفضّلة</span><b>${favCount}</b></div>
+    <div class="analytics-row"><span>عناصر في سلة المحذوفات</span><b>${trashCount}</b></div>`;
+  if(counts.length){
+    html += `<p class="section-label" style="margin-top:10px">أكثر الحافظات امتلاءً</p>`;
+    html += counts.map(c=>`
+      <div class="analytics-row">
+        <span style="flex-shrink:0;min-width:90px">${escapeHTML(c.name)}</span>
+        <div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:${(c.count/maxCount*100)}%"></div></div>
+        <b>${c.count}</b>
+      </div>`).join('');
+  }
+  box.innerHTML = html;
+}
+
+/* ---------- Import items into an existing folder ---------- */
+function populateImportTargetFolder(){
+  const sel = document.getElementById('importTargetFolder');
+  if(!sel) return;
+  const current = sel.value;
+  sel.innerHTML = getFolders().map(f=>`<option value="${f.id}">${escapeHTML(f.name)}</option>`).join('');
+  if(current) sel.value = current;
+}
+document.getElementById('folderImportInput').addEventListener('change', e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const targetId = document.getElementById('importTargetFolder').value;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    try{
+      const parsed = JSON.parse(ev.target.result);
+      const incoming = Array.isArray(parsed.items) ? parsed.items : (Array.isArray(parsed.data) ? parsed.data : null);
+      if(!incoming) throw new Error('bad');
+      if(!targetId || !data[targetId]){ toast('اختر حافظة هدف صالحة'); return; }
+      showConfirm('استيراد عناصر', `سيتم إضافة ${incoming.length} عنصر إلى الحافظة المختارة.`, ()=>{
+        incoming.forEach(item=>{
+          data[targetId].push(Object.assign({}, item, {
+            id: Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+            deleted:false, deletedAt:null
+          }));
+        });
+        saveData();
+        renderHome();
+        renderAnalytics();
+        toast('تم استيراد العناصر بنجاح');
+      });
+    }catch(err){ toast('ملف الاستيراد غير صالح'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
 /* ---------- Danger zone ---------- */
 function requestDeleteAllData(){
   showConfirm('حذف كل البيانات', 'سيتم حذف جميع الحافظات والعناصر والإعدادات المخصّصة نهائيًا من هذا الجهاز. لا يمكن التراجع عن هذا الإجراء.', ()=>{
@@ -2096,6 +2459,8 @@ function loadSettingsForm(){
   document.getElementById('setAutoLock').value = String(settings.autoLockMinutes || 0);
   loadThemeForm();
   refreshStorageInfo();
+  renderAnalytics();
+  populateImportTargetFolder();
   const img = document.getElementById('settingsAvatarImg');
   const fb = document.getElementById('settingsAvatarFallback');
   if(settings.avatar){ img.src = settings.avatar; img.classList.remove('hidden'); fb.classList.add('hidden'); }
@@ -2142,6 +2507,7 @@ function startSetPin(){
   document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
   document.getElementById('lockError').textContent = '';
   document.getElementById('lockBioBtn').classList.add('hidden');
+  document.getElementById('lockCancelBtn').classList.add('hidden');
   renderPinPad(); renderPinDots();
   document.getElementById('lockScreen').classList.add('active');
 }
@@ -2170,6 +2536,16 @@ function handlePinComplete(){
       document.getElementById('lockScreen').classList.remove('active');
       settings._hiddenAt = null;
       saveSettingsData();
+    } else {
+      document.getElementById('lockError').textContent = 'رمز غير صحيح';
+      pinBuffer=''; renderPinDots();
+    }
+  } else if(pinMode==='folder-unlock'){
+    if(pinBuffer === settings.pin){
+      document.getElementById('lockScreen').classList.remove('active');
+      const id = pendingLockedFolderId;
+      pendingLockedFolderId = null;
+      if(id) openFolderNow(id);
     } else {
       document.getElementById('lockError').textContent = 'رمز غير صحيح';
       pinBuffer=''; renderPinDots();
@@ -2230,6 +2606,7 @@ function showLockScreen(){
   document.getElementById('lockTitle').textContent = 'أدخل رمز الدخول';
   document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
   document.getElementById('lockError').textContent = '';
+  document.getElementById('lockCancelBtn').classList.add('hidden');
   renderPinPad(); renderPinDots();
   document.getElementById('lockScreen').classList.add('active');
   offerBiometricOnLock();
@@ -2289,4 +2666,4 @@ function init(){
 init();
 </script>
 </body>
-        </html>
+  </html>
