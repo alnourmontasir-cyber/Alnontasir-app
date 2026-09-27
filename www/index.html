@@ -31,7 +31,7 @@ body{
   background:var(--bg);color:var(--text);
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
   font-size:calc(15px * var(--font-scale));
-  padding-top:env(safe-area-inset-top);
+  padding-top:calc(env(safe-area-inset-top) + 18px);
   padding-bottom:env(safe-area-inset-bottom);
 }
 button,input,textarea{font-family:inherit;}
@@ -50,18 +50,22 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .hidden{display:none!important;}
 .screen{display:none;min-height:100vh;padding:18px 16px 100px;}
 .screen.active{display:block;}
-.top-header{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 16px;gap:8px;}
-.brand{display:flex;align-items:center;gap:12px;min-width:0;}
+.top-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;padding:6px 2px 16px;gap:8px;}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;}
 .avatar,.avatar-fallback{width:52px;height:52px;border-radius:16px;flex-shrink:0;}
 .avatar{object-fit:cover;border:1px solid var(--border);}
 .avatar-fallback{background:linear-gradient(155deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900;color:#12151b;}
 .brand h1{margin:0;font-size:calc(20px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .brand p{margin:3px 0 0;color:var(--text-dim);font-size:calc(12px * var(--font-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.header-actions{display:flex;gap:7px;flex-shrink:0;}
+.header-actions{display:flex;gap:7px;flex-shrink:0;flex-wrap:nowrap;}
 .icon-btn{position:relative;width:41px;height:41px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .icon-btn:active{transform:scale(.94);}
 .icon-btn svg{width:19px;height:19px;}
 .icon-btn .badge-dot{position:absolute;top:-2px;inset-inline-end:-2px;min-width:16px;height:16px;padding:0 3px;border-radius:8px;background:var(--gold);color:#12151b;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.browser-quick-btn{display:flex;align-items:center;justify-content:center;gap:5px;height:41px;padding:0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--border);flex-shrink:0;}
+.browser-quick-btn:active{transform:scale(.94);}
+.browser-quick-btn svg{width:17px;height:17px;flex-shrink:0;}
+.browser-quick-btn span{display:inline;font-size:11.5px;font-weight:700;white-space:nowrap;}
 .home-search{margin-bottom:18px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .folder-card{position:relative;overflow:hidden;min-height:135px;padding:16px;text-align:right;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(160deg,var(--surface),var(--surface-2));display:flex;flex-direction:column;justify-content:space-between;transition:.12s;}
@@ -110,6 +114,11 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .fab{display:none;position:fixed;bottom:25px;inset-inline-end:22px;width:59px;height:59px;border-radius:50%;background:linear-gradient(155deg,var(--gold),var(--gold-dim));box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:100;}
 .fab.show{display:flex;}
 .fab svg{width:25px;height:25px;color:#12151b;}
+.fab-back{display:none;position:fixed;left:18px;bottom:100px;width:52px;height:52px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:998;touch-action:none;color:var(--text);}
+.fab-back.show{display:flex;}
+.fab-back svg{width:44%;height:44%;}
+.project-progress-track{height:7px;border-radius:5px;background:var(--surface-2);overflow:hidden;margin-top:10px;}
+.project-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dim));}
 .modal-backdrop{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);}
 .modal-backdrop.active{display:flex;}
 .modal{width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:var(--bg-elev);border-top:1px solid var(--border);}
@@ -163,6 +172,21 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .pin-pad{display:grid;grid-template-columns:repeat(3,68px);gap:13px;}
 .pin-key{width:68px;height:68px;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 .pin-key:active{background:var(--surface-2);}
+.lock-method-row{display:flex;gap:10px;}
+.pattern-wrap{touch-action:none;user-select:none;}
+.pattern-dot{fill:var(--surface);stroke:var(--gold-dim);stroke-width:2;}
+.pattern-dot.active{fill:var(--gold);stroke:var(--gold);}
+.pattern-line{stroke:var(--gold);stroke-width:5;stroke-linecap:round;opacity:.85;}
+.calc-screen{display:flex;flex-direction:column;height:calc(100vh - 90px);}
+.calc-display{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;padding:14px 18px 20px;gap:6px;min-height:110px;}
+.calc-expr{color:var(--text-dim);font-size:15px;min-height:18px;word-break:break-all;text-align:end;direction:ltr;}
+.calc-result{font-size:42px;font-weight:800;word-break:break-all;text-align:end;direction:ltr;}
+.calc-pad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:6px 10px calc(14px + env(safe-area-inset-bottom));}
+.calc-key{aspect-ratio:1;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.calc-key:active{background:var(--surface-2);}
+.calc-key.op{background:var(--surface-2);color:var(--gold);}
+.calc-key.eq{background:var(--gold);color:#12151b;}
+.calc-key.fn{background:var(--surface);color:var(--text-dim);font-size:15px;}
 #lockError{min-height:18px;color:var(--danger);font-size:13px;}
 .lock-bio-btn{display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:13px;color:var(--gold);}
 .lock-bio-btn svg{width:17px;height:17px;}
@@ -229,6 +253,22 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .filter-chip svg{width:13px;height:13px;}
 .filter-chip.active{background:var(--gold-dim);border-color:var(--gold);color:#fff;}
 .recent-scroller{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;}
+.tool-shortcut{flex-shrink:0;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+.tool-shortcut .t-icon{width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,var(--fc),var(--fc2));box-shadow:0 4px 10px rgba(0,0,0,.25);}
+.tool-shortcut .t-icon svg{width:46%;height:46%;color:#fff;}
+.tool-shortcut span{font-size:10.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70px;}
+.tool-shortcut:active .t-icon{transform:scale(.92);}
+.browser-topbar{display:flex;align-items:center;gap:6px;padding:6px 2px 12px;}
+.browser-urlbar{flex:1;display:flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:30px;padding:0 12px;}
+.browser-urlbar svg{width:15px;height:15px;color:var(--text-dim);flex-shrink:0;}
+.browser-urlbar input{border:0;background:transparent;padding:9px 0;font-size:13px;direction:ltr;text-align:right;}
+.browser-urlbar input:focus{outline:0;}
+.browser-frame-wrap{position:relative;width:100%;height:calc(100vh - 150px);border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--border);}
+.browser-frame-wrap iframe{width:100%;height:100%;border:0;}
+.browser-home{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;height:100%;color:var(--text-dim);padding:20px;text-align:center;}
+.browser-home svg{width:44px;height:44px;opacity:.5;}
+.browser-shortcuts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px;}
+.browser-shortcuts button{padding:9px 16px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;}
 .recent-card{flex-shrink:0;width:104px;padding:9px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);text-align:right;}
 .recent-card .item-thumb{width:100%;height:60px;border-radius:9px;margin-bottom:6px;}
 .recent-card h5{margin:0;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -336,6 +376,12 @@ input[type="text"], input:not([type]), textarea{
   <div class="pin-dots" id="pinDots"></div>
   <div id="lockError"></div>
   <div class="pin-pad" id="pinPad"></div>
+  <div class="pattern-wrap hidden" id="patternWrap">
+    <svg id="patternSvg" viewBox="0 0 240 240" width="240" height="240">
+      <g id="patternLines"></g>
+      <g id="patternDots"></g>
+    </svg>
+  </div>
   <button class="lock-bio-btn hidden" id="lockBioBtn" onclick="manualBiometricUnlock()"></button>
   <button class="lock-bio-btn hidden" id="lockCancelBtn" onclick="cancelFolderUnlock()">إلغاء والعودة</button>
 </div>
@@ -351,12 +397,22 @@ input[type="text"], input:not([type]), textarea{
       </div>
     </div>
     <div class="header-actions">
+      <button class="browser-quick-btn" onclick="openBrowser()" title="المتصفح">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg>
+        <span>المتصفح</span>
+      </button>
       <button class="icon-btn" onclick="openFavorites()" title="المفضلة">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       </button>
       <button class="icon-btn" onclick="openTrash()" title="سلة المحذوفات">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         <span class="badge-dot hidden" id="trashBadge">0</span>
+      </button>
+      <button class="icon-btn" onclick="openExtraMenu()" title="المزيد">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openCalculator()" title="الحاسبة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="16" y1="11" x2="16" y2="11.01"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="15.01"/><line x1="8" y1="19" x2="8" y2="19.01"/><line x1="12" y1="19" x2="12" y2="19.01"/><line x1="16" y1="19" x2="16" y2="19.01"/></svg>
       </button>
       <button class="icon-btn" id="editFoldersBtn" onclick="toggleFolderSelectMode()" title="تحديد الحافظات">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
@@ -427,6 +483,11 @@ input[type="text"], input:not([type]), textarea{
       <option value="count">الأكثر عناصر</option>
       <option value="newest">الأحدث إنشاءً</option>
     </select>
+  </div>
+
+  <div id="homeToolsSection" style="margin-bottom:4px">
+    <p class="section-label">مركز الأدوات</p>
+    <div class="grid compact-grid" id="homeToolsRow"></div>
   </div>
 
   <div class="select-bar" id="folderSelectBar">
@@ -514,8 +575,142 @@ input[type="text"], input:not([type]), textarea{
   <div class="item-list" id="trashList"></div>
 </div>
 
+<div class="screen" id="screen-calculator">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>الحاسبة</h2>
+    <button class="icon-btn" onclick="toggleCalcMode()" id="calcModeBtn" title="حاسبة علمية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </button>
+  </div>
+  <div class="calc-screen">
+    <div class="calc-display">
+      <div class="calc-expr" id="calcExpr">&nbsp;</div>
+      <div class="calc-result" id="calcResult">0</div>
+    </div>
+    <div class="calc-pad" id="calcPad"></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-projects">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>مشاريعي</h2>
+    <button class="icon-btn" onclick="openProjectModal()" title="مشروع جديد">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </div>
+  <div class="grid" id="projectsGrid"></div>
+</div>
+
+<div class="screen" id="screen-tools">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>مركز الأدوات</h2>
+  </div>
+  <div class="grid" id="toolsGrid"></div>
+</div>
+
+<div class="screen" id="screen-browser">
+  <div class="detail-header" style="margin-bottom:0">
+    <button class="icon-btn" onclick="goHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>المتصفح</h2>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="openBrowserExternal()" title="فتح خارجيًا">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </button>
+  </div>
+  <div class="browser-topbar">
+    <button class="icon-btn" style="width:37px;height:37px" onclick="browserGoHome()" title="الصفحة الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </button>
+    <div class="browser-urlbar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="browserUrlInput" placeholder="ابحث أو اكتب رابطًا..." onkeydown="if(event.key==='Enter')navigateBrowser()">
+    </div>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="navigateBrowser()" title="فتح">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="reloadBrowser()" title="تحديث">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </button>
+  </div>
+  <div class="browser-frame-wrap">
+    <div class="browser-home" id="browserHomeView">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg>
+      <p>اكتب رابطًا أو كلمة بحث في الأعلى للبدء بالتصفح</p>
+      <div class="browser-shortcuts">
+        <button type="button" onclick="quickBrowse('google.com')">Google</button>
+        <button type="button" onclick="quickBrowse('wikipedia.org')">Wikipedia</button>
+        <button type="button" onclick="quickBrowse('youtube.com')">YouTube</button>
+      </div>
+      <span class="hint">ملاحظة: بعض المواقع تمنع عرضها داخل التطبيقات — استخدم زر الفتح الخارجي أعلى الشاشة إن لم تظهر الصفحة.</span>
+    </div>
+    <iframe id="browserIframe" class="hidden"></iframe>
+  </div>
+</div>
+
+<div class="screen" id="screen-project-view">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="closeProjectView()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2 id="projectViewTitle" style="font-size:16px"></h2>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="editCurrentProject()" title="تعديل">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </button>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="deleteCurrentProject()" title="حذف">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    </button>
+  </div>
+  <div id="projectViewContent"></div>
+</div>
+
+<div class="modal-backdrop" id="projectModalBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 id="projectModalTitle" style="margin:0">مشروع جديد</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeProjectModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><label>اسم المشروع</label><input id="projName" dir="rtl" placeholder="مثال: مشروع الطائرة"></div>
+    <div class="color-grid">
+      <div class="field"><label>تاريخ البداية</label><input type="date" id="projStartDate"></div>
+      <div class="field"><label>التكلفة (اختياري)</label><input type="number" id="projCost" inputmode="decimal" placeholder="0"></div>
+    </div>
+    <div class="field">
+      <label>نسبة الإنجاز: <span id="projProgressVal">0%</span></label>
+      <input type="range" id="projProgress" min="0" max="100" step="5" oninput="document.getElementById('projProgressVal').textContent=this.value+'%'">
+    </div>
+    <div class="field"><label>ملاحظات</label><textarea id="projNotes" dir="rtl" placeholder="تفاصيل، خطوات، أفكار..."></textarea></div>
+    <div class="field">
+      <label>الملفات والصور المرفقة</label>
+      <button type="button" class="btn btn-ghost" style="width:100%" onclick="document.getElementById('projFilesInput').click()">إضافة ملفات أو صور</button>
+      <input type="file" id="projFilesInput" accept="image/*,.pdf,.doc,.docx" multiple class="hidden">
+      <div id="projFilesPreview" style="margin-top:8px"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeProjectModal()">إلغاء</button>
+      <button class="btn btn-primary" onclick="submitProjectForm()">حفظ</button>
+    </div>
+  </div>
+</div>
+
 <button class="fab" id="fabBtn" onclick="openAddModal()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<button class="fab-back" id="fabBackBtn" title="رجوع">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
 </button>
 
 <div class="screen" id="screen-view">
@@ -656,6 +851,28 @@ input[type="text"], input:not([type]), textarea{
       <span class="sr-label">إخفاء عدد العناصر على بطاقات الحافظات</span>
       <button class="switch" id="hideCountsToggle" onclick="toggleHideCounts()"></button>
     </div>
+    <div class="switch-row">
+      <span class="sr-label">إخفاء الحافظات المقفلة من الرئيسية<small>تبقى محفوظة، ويمكن الوصول إليها من "المزيد ← الحافظات المقفلة"</small></span>
+      <button class="switch" id="hideLockedToggle" onclick="toggleHideLockedFromHome()"></button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>زر الرجوع العائم</h4>
+    <span class="hint" style="display:block;margin-bottom:8px">زر يطفو فوق أي شاشة (غير الرئيسية) ويمكن سحبه لأي مكان تريده، ويقوم بنفس عمل زر الرجوع في أعلى الشاشة.</span>
+    <div class="switch-row">
+      <span class="sr-label">تفعيل الزر العائم</span>
+      <button class="switch" id="fabBackToggle" onclick="toggleFabBack()"></button>
+    </div>
+    <div class="field">
+      <label>حجم الزر <span id="fabBackSizeVal">52</span></label>
+      <input type="range" id="fabBackSizeRange" min="40" max="72" step="2" oninput="setFabBackSize(this.value)">
+    </div>
+    <div class="field">
+      <label>درجة الوضوح <span id="fabBackOpacityVal">90%</span></label>
+      <input type="range" id="fabBackOpacityRange" min="40" max="100" step="5" oninput="setFabBackOpacity(this.value)">
+    </div>
+    <button type="button" class="btn btn-ghost" style="width:100%" onclick="resetFabBackPosition()">إعادة ضبط موضع الزر</button>
   </div>
 
   <div class="settings-group">
@@ -693,7 +910,25 @@ input[type="text"], input:not([type]), textarea{
       </button>
     </div>
     <input type="file" id="backupImportInput" accept="application/json" class="hidden">
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:10px" onclick="shareBackup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+      مشاركة النسخة عبر البريد أو جوجل درايف
+    </button>
+    <span class="mini-hint">يفتح قائمة المشاركة في جهازك لإرسال ملف النسخة إلى بريدك أو حفظه في تطبيق سحابي مثل Google Drive — هذه مشاركة يدوية وليست نسخًا تلقائيًا مستمرًا.</span>
     <span class="mini-hint">لتصدير حافظة واحدة فقط، افتح الحافظة ثم اختر "تصدير هذه الحافظة" من قائمة خياراتها.</span>
+    <div class="field" style="margin-top:12px">
+      <label>بريدك الإلكتروني لإرسال النسخ إليه</label>
+      <input id="setBackupEmail" type="email" dir="ltr" placeholder="you@example.com">
+    </div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-top:6px" onclick="emailBackup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+      تنزيل ثم فتح البريد لإرسال النسخة
+    </button>
+    <span class="mini-hint">هذا يُنزّل ملف النسخة أولًا ثم يفتح تطبيق البريد برسالة جاهزة — أرفق الملف الذي تم تنزيله للتو يدويًا قبل الإرسال (المتصفح لا يسمح بإرفاق الملفات تلقائيًا).</span>
+    <div class="switch-row" style="margin-top:10px">
+      <span class="sr-label">تذكير أسبوعي بعمل نسخة احتياطية</span>
+      <button class="switch" id="backupReminderToggle" onclick="toggleBackupReminder()"></button>
+    </div>
     <div class="field" style="margin-top:12px">
       <label>استيراد عناصر (ملف حافظة مُصدّر) إلى حافظة موجودة</label>
       <select id="importTargetFolder"></select>
@@ -747,10 +982,17 @@ input[type="text"], input:not([type]), textarea{
   <div class="settings-group">
     <h4>الحماية</h4>
     <div class="switch-row">
-      <span class="sr-label">قفل برمز PIN</span>
+      <span class="sr-label">تفعيل قفل التطبيق</span>
       <button class="switch" id="pinToggle" onclick="togglePin()"></button>
     </div>
-    <button class="btn btn-ghost" style="width:100%;margin-top:8px;margin-bottom:12px" onclick="startSetPin()">تعيين / تغيير الرمز</button>
+    <div class="field" style="margin-top:10px">
+      <label>طريقة القفل</label>
+      <div class="lock-method-row mode-row">
+        <button type="button" class="mode-btn" id="lockMethodBtn-pin" onclick="setLockMethod('pin')">رمز PIN</button>
+        <button type="button" class="mode-btn" id="lockMethodBtn-pattern" onclick="setLockMethod('pattern')">نمط الرسم</button>
+      </div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%;margin-top:10px;margin-bottom:12px" id="setLockBtn" onclick="startSetLock()">تعيين / تغيير الرمز</button>
     <div class="switch-row">
       <span class="sr-label">فتح ببصمة الإصبع / الوجه<small>يعمل فقط داخل التطبيق المثبّت مع إضافة البصمة</small></span>
       <button class="switch" id="bioToggle" onclick="toggleBiometric()"></button>
@@ -978,6 +1220,210 @@ input[type="text"], input:not([type]), textarea{
   </div>
 </div>
 
+<div class="modal-backdrop" id="extraMenuBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">المزيد</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeExtraMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" onclick="closeExtraMenu();openProjects()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        مشاريعي
+      </button>
+      <button type="button" class="menu-item" onclick="closeExtraMenu();openToolsHub()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        مركز الأدوات
+      </button>
+    </div>
+    <div id="extraMenuLockedSection"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolPdfBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">مولّد PDF من الصور</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closePdfTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <span class="hint" style="display:block;margin-bottom:10px">أضف صورًا وسيتم ترتيبها كصفحات داخل ملف PDF واحد، كل صورة بحجمها الطبيعي.</span>
+    <div class="field"><label>اسم الملف</label><input id="pdfFileName" dir="ltr" placeholder="document"></div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-bottom:10px" onclick="document.getElementById('pdfImagesInput').click()">إضافة صور</button>
+    <input type="file" id="pdfImagesInput" accept="image/*" multiple class="hidden">
+    <div id="pdfImagesPreview" style="margin-bottom:10px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePdfTool()">إلغاء</button>
+      <button class="btn btn-primary" id="pdfGenerateBtn" disabled onclick="generatePdfFromImages()">إنشاء PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolCompressBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">ضاغط الصور</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompressTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-bottom:10px" onclick="document.getElementById('compressImageInput').click()">اختيار صورة</button>
+    <input type="file" id="compressImageInput" accept="image/*" class="hidden">
+    <div id="compressPreviewBox" class="hidden">
+      <img id="compressPreviewImg" class="preview">
+      <div class="field" style="margin-top:10px">
+        <label>جودة الضغط: <span id="compressQualityVal">70%</span></label>
+        <input type="range" id="compressQuality" min="10" max="95" step="5" value="70">
+      </div>
+      <p class="hint" id="compressResult" style="text-align:center"></p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeCompressTool()">إغلاق</button>
+      <button class="btn btn-primary" onclick="downloadCompressedImage()">تنزيل الصورة المضغوطة</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolElectricBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">حاسبة الكهرباء</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeElectricTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <span class="hint" style="display:block;margin-bottom:10px">أدخل أي قيمتين معروفتين واترك الباقي فارغًا، ثم اضغط احسب لإيجاد بقية القيم (قانون أوم والقدرة الكهربائية).</span>
+    <div class="color-grid">
+      <div class="field"><label>الجهد (فولت)</label><input type="number" inputmode="decimal" id="elecV" dir="ltr"></div>
+      <div class="field"><label>التيار (أمبير)</label><input type="number" inputmode="decimal" id="elecI" dir="ltr"></div>
+      <div class="field"><label>المقاومة (أوم)</label><input type="number" inputmode="decimal" id="elecR" dir="ltr"></div>
+      <div class="field"><label>القدرة (واط)</label><input type="number" inputmode="decimal" id="elecP" dir="ltr"></div>
+    </div>
+    <p class="hint" id="elecResultNote" style="text-align:center;min-height:16px"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="clearElectricity()">مسح</button>
+      <button class="btn btn-primary" onclick="calcElectricity()">احسب</button>
+    </div>
+    <div class="menu-divider"></div>
+    <h3 style="font-size:14px">مدة تشغيل وشحن البطارية</h3>
+    <div class="color-grid">
+      <div class="field"><label>سعة البطارية (أمبير/ساعة)</label><input type="number" inputmode="decimal" id="battCapacity" dir="ltr"></div>
+      <div class="field"><label>تيار الحمل (أمبير)</label><input type="number" inputmode="decimal" id="battLoad" dir="ltr"></div>
+    </div>
+    <div class="field"><label>تيار الشاحن (أمبير) — اختياري</label><input type="number" inputmode="decimal" id="battChargeCurrent" dir="ltr"></div>
+    <p class="hint" id="battRuntimeResult" style="text-align:center"></p>
+    <p class="hint" id="battChargeResult" style="text-align:center"></p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="flex:1" onclick="calcBattery()">احسب مدة التشغيل والشحن</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolCurrencyBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">محول العملات</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCurrencyTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><label>المبلغ</label><input type="number" inputmode="decimal" id="curAmount" dir="ltr" value="1" oninput="computeCurrencyConversion()"></div>
+    <div class="color-grid">
+      <div class="field"><label>من</label><select id="curFrom" onchange="computeCurrencyConversion()"></select></div>
+      <div class="field"><label>إلى</label><select id="curTo" onchange="computeCurrencyConversion()"></select></div>
+    </div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-bottom:10px" onclick="fetchCurrencyRates()">جلب السعر تلقائيًا</button>
+    <span class="hint" id="curRateInfo" style="display:block;margin-bottom:10px"></span>
+    <div class="field"><label>أو أدخل سعر الصرف يدويًا</label><input type="number" inputmode="decimal" id="curManualRate" dir="ltr" placeholder="مثال: 3.75" oninput="computeCurrencyConversion()"></div>
+    <p style="text-align:center;font-weight:800;font-size:15px" id="curResult"></p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="flex:1" onclick="closeCurrencyTool()">تم</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolCountdownBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">العد التنازلي</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCountdownTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="calc-result" id="cdDisplay" style="text-align:center;width:100%;direction:ltr;margin-bottom:14px">00:00:00</div>
+    <div class="color-grid" id="cdInputsRow" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="field"><label>ساعات</label><input type="number" min="0" id="cdHours" dir="ltr" value="0"></div>
+      <div class="field"><label>دقائق</label><input type="number" min="0" max="59" id="cdMinutes" dir="ltr" value="5"></div>
+      <div class="field"><label>ثوانٍ</label><input type="number" min="0" max="59" id="cdSeconds" dir="ltr" value="0"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="cdStartBtn" style="flex:1" onclick="startCountdown()">بدء</button>
+      <button class="btn btn-ghost hidden" id="cdPauseBtn" style="flex:1" onclick="pauseCountdown()">إيقاف مؤقت</button>
+      <button class="btn btn-danger hidden" id="cdResetBtn" style="flex:1" onclick="resetCountdown()">إعادة ضبط</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolStopwatchBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">ساعة التوقيت</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeStopwatchTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="calc-result" id="swDisplay" style="text-align:center;width:100%;direction:ltr;margin-bottom:14px">00:00.00</div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="swStartBtn" style="flex:1" onclick="toggleStopwatch()">بدء</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="recordLap()">تسجيل لفة</button>
+      <button class="btn btn-danger" style="flex:1" onclick="resetStopwatch()">إعادة ضبط</button>
+    </div>
+    <div class="menu-divider"></div>
+    <div id="swLapsList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolCompassBackdrop">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">البوصلة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompassTool()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;justify-content:center;margin:6px 0 12px">
+      <svg viewBox="0 0 100 100" style="width:180px;height:180px">
+        <circle cx="50" cy="50" r="47" fill="none" stroke="var(--border)" stroke-width="2"/>
+        <text x="50" y="12" text-anchor="middle" fill="var(--text-dim)" font-size="8">ش</text>
+        <text x="50" y="94" text-anchor="middle" fill="var(--text-dim)" font-size="8">ج</text>
+        <text x="10" y="53" text-anchor="middle" fill="var(--text-dim)" font-size="8">غ</text>
+        <text x="90" y="53" text-anchor="middle" fill="var(--text-dim)" font-size="8">ق</text>
+        <g id="compassNeedle" style="transform-origin:50px 50px;transition:transform .15s ease-out">
+          <polygon points="50,10 44,52 50,46 56,52" fill="var(--danger)"/>
+          <polygon points="50,90 44,52 50,58 56,52" fill="var(--text-dim)"/>
+        </g>
+      </svg>
+    </div>
+    <p style="text-align:center;font-weight:800;font-size:18px" id="compassDegrees">—</p>
+    <p class="hint" id="compassStatus" style="text-align:center"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="openCompassLocation()">فتح موقعي في الخرائط</button>
+    </div>
+    <p class="hint" id="compassLocationText" style="text-align:center"></p>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <input type="file" id="photoFallbackInput" accept="image/*" capture="environment" class="hidden">
@@ -1061,7 +1507,16 @@ const ICONS = {
   pin:'<line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79L16 12V6h1a1 1 0 0 0 0-2H7a1 1 0 0 0 0 2h1v6l-1.89 1.45A2 2 0 0 0 5 15.24z"/>',
   move:'<polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>',
   quote:'<path d="M3 21c3-2 4-4.5 4-7.5V6h-6v7h4c0 2-1 4-4 5.5z"/><path d="M14 21c3-2 4-4.5 4-7.5V6h-6v7h4c0 2-1 4-4 5.5z"/>',
-  checklist:'<path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><path d="M4 6l1 1 2-2"/><path d="M4 12l1 1 2-2"/><path d="M4 18l1 1 2-2"/>'
+  checklist:'<path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><path d="M4 6l1 1 2-2"/><path d="M4 12l1 1 2-2"/><path d="M4 18l1 1 2-2"/>',
+  battery:'<rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="10" x2="23" y2="14"/>',
+  dollar:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  pdfdoc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="9.5" cy="13.5" r="1.4"/><path d="M6 19l3-3.2 2 2 4-4.3 3 3.2"/>',
+  compressimg:'<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><circle cx="12" cy="12" r="3"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M15.2 9.3c0-1.4-1.4-2.3-3.2-2.3s-3.2.9-3.2 2.3c0 1.3 1.4 1.8 3.2 2.3s3.2 1 3.2 2.3c0 1.4-1.4 2.3-3.2 2.3s-3.2-.9-3.2-2.3"/>',
+  hourglass:'<path d="M6 2h12"/><path d="M6 22h12"/><path d="M6 2v4.5a2 2 0 0 0 .6 1.4L11 12l-4.4 4.1a2 2 0 0 0-.6 1.4V22"/><path d="M18 2v4.5a2 2 0 0 1-.6 1.4L13 12l4.4 4.1a2 2 0 0 1 .6 1.4V22"/>',
+  stopwatch2:'<circle cx="12" cy="14" r="8"/><path d="M12 14V9"/><path d="M9.5 2h5"/><path d="M17.8 6.2l1.3-1.3"/>',
+  calculatoricon:'<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><circle cx="8" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="8" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="8" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/><rect x="15" y="13" width="2.2" height="7" rx="1" fill="currentColor" stroke="none"/>',
+  browsericon:'<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/><path d="M5 7.5h14"/><path d="M5 16.5h14"/>'
 };
 const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem','mail','phone','globe','lock','key','calendar','clock','bookmark','folder2','archive','cloud','coffee','home','car','chat','mappin','flag','sun','moon','umbrella','compass','anchor','award','box','rocket','smile','paperclip','link','tag','zap','droplet','headphones','monitor','smartphone','creditcard','shoppingbag','users','activity','feather','quote','checklist'];
 const ICON_PALETTE = ['#f59e0b','#ec4899','#a855f7','#3b82f6','#22c55e','#ef4444','#06b6d4','#eab308','#f97316','#8b5cf6','#10b981','#e11d48','#14b8a6','#6366f1','#d946ef'];
@@ -1097,6 +1552,15 @@ if(!settings.widgets) settings.widgets = { clock:true, notes:true, todo:true, ca
 if(typeof settings.hapticEnabled !== 'boolean') settings.hapticEnabled = false;
 if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = false;
 if(typeof settings.hideFolderCounts !== 'boolean') settings.hideFolderCounts = false;
+if(typeof settings.fabBackEnabled !== 'boolean') settings.fabBackEnabled = false;
+if(typeof settings.fabBackSize !== 'number') settings.fabBackSize = 52;
+if(typeof settings.fabBackOpacity !== 'number') settings.fabBackOpacity = 90;
+if(!settings.fabBackPos) settings.fabBackPos = null;
+let projects = JSON.parse(localStorage.getItem("montasir_projects") || "[]");
+function saveProjects(){
+  try{ localStorage.setItem("montasir_projects", JSON.stringify(projects)); }
+  catch(e){ toast('تعذّر الحفظ — المساحة ممتلئة'); }
+}
 let widgetsData = JSON.parse(localStorage.getItem("montasir_widgets") || '{}');
 if(!Array.isArray(widgetsData.notes)) widgetsData.notes = [];
 if(!Array.isArray(widgetsData.todos)) widgetsData.todos = [];
@@ -1110,6 +1574,10 @@ let mediaRecorder = null, audioChunks = [], isRecording = false;
 let pinMode = "unlock";
 let pinBuffer = "";
 let firstNewPin = "";
+let patternBuffer = [];
+let firstNewPattern = "";
+let patternDrawing = false;
+const PATTERN_POS = [40,120,200];
 let currentViewItem = null;
 let currentViewFolder = null;
 let viewOrigin = "folder";
@@ -1219,6 +1687,108 @@ function toggleHideCounts(){
   document.getElementById('hideCountsToggle').classList.toggle('on', settings.hideFolderCounts);
   renderHome();
 }
+function toggleHideLockedFromHome(){
+  settings.hideLockedFromHome = !settings.hideLockedFromHome;
+  saveSettingsData();
+  document.getElementById('hideLockedToggle').classList.toggle('on', settings.hideLockedFromHome);
+  renderHome();
+}
+
+/* ---------- Floating draggable back button ---------- */
+function toggleFabBack(){
+  settings.fabBackEnabled = !settings.fabBackEnabled;
+  document.getElementById('fabBackToggle').classList.toggle('on', settings.fabBackEnabled);
+  saveSettingsData();
+  updateFabBackVisibility();
+  if(settings.fabBackEnabled) toast('تم تفعيل زر الرجوع العائم — اسحبه لأي مكان يناسبك');
+}
+function setFabBackSize(v){
+  settings.fabBackSize = Number(v);
+  document.getElementById('fabBackSizeVal').textContent = v;
+  applyFabBackStyle();
+  saveSettingsData();
+}
+function setFabBackOpacity(v){
+  settings.fabBackOpacity = Number(v);
+  document.getElementById('fabBackOpacityVal').textContent = v+'%';
+  applyFabBackStyle();
+  saveSettingsData();
+}
+function resetFabBackPosition(){
+  settings.fabBackPos = null;
+  applyFabBackStyle();
+  saveSettingsData();
+  toast('تمت إعادة ضبط موضع الزر');
+}
+function applyFabBackStyle(){
+  const btn = document.getElementById('fabBackBtn');
+  if(!btn) return;
+  const size = settings.fabBackSize || 52;
+  btn.style.width = size+'px';
+  btn.style.height = size+'px';
+  btn.style.opacity = (settings.fabBackOpacity||90)/100;
+  if(settings.fabBackPos && typeof settings.fabBackPos.x === 'number'){
+    btn.style.left = settings.fabBackPos.x+'px';
+    btn.style.top = settings.fabBackPos.y+'px';
+    btn.style.bottom = 'auto';
+    btn.style.right = 'auto';
+  } else {
+    btn.style.left = '18px';
+    btn.style.top = 'auto';
+    btn.style.bottom = '100px';
+    btn.style.right = 'auto';
+  }
+}
+function updateFabBackVisibility(){
+  const btn = document.getElementById('fabBackBtn');
+  if(!btn) return;
+  const activeEl = document.querySelector('.screen.active');
+  const activeId = activeEl ? activeEl.id : '';
+  const show = settings.fabBackEnabled && activeId && activeId !== 'screen-home';
+  btn.classList.toggle('show', !!show);
+}
+function floatingBackAction(){
+  const activeScreen = document.querySelector('.screen.active');
+  if(!activeScreen) return;
+  const backBtn = activeScreen.querySelector('.detail-header .icon-btn, .top-header .icon-btn');
+  if(backBtn) backBtn.click();
+}
+(function initFabBackDrag(){
+  const btn = document.getElementById('fabBackBtn');
+  if(!btn) return;
+  let dragging=false, moved=false, startX=0, startY=0, origX=0, origY=0;
+  btn.addEventListener('pointerdown', e=>{
+    dragging = true; moved = false;
+    try{ btn.setPointerCapture(e.pointerId); }catch(err){}
+    const rect = btn.getBoundingClientRect();
+    startX = e.clientX; startY = e.clientY;
+    origX = rect.left; origY = rect.top;
+  });
+  btn.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    const dx = e.clientX-startX, dy = e.clientY-startY;
+    if(Math.abs(dx)>4 || Math.abs(dy)>4) moved = true;
+    if(!moved) return;
+    const size = settings.fabBackSize || 52;
+    let nx = Math.max(4, Math.min(window.innerWidth-size-4, origX+dx));
+    let ny = Math.max(4, Math.min(window.innerHeight-size-4, origY+dy));
+    btn.style.left = nx+'px'; btn.style.top = ny+'px';
+    btn.style.bottom = 'auto'; btn.style.right = 'auto';
+  });
+  btn.addEventListener('pointerup', e=>{
+    if(dragging && moved){
+      const rect = btn.getBoundingClientRect();
+      settings.fabBackPos = { x: rect.left, y: rect.top };
+      saveSettingsData();
+    }
+    dragging = false;
+  });
+  btn.addEventListener('click', e=>{
+    if(moved){ moved = false; return; }
+    floatingBackAction();
+  });
+})();
+
 function toast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1247,6 +1817,7 @@ function runConfirmAction(){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  updateFabBackVisibility();
 }
 function goHome(){
   currentFolder=null;
@@ -1391,6 +1962,9 @@ function setHomeSort(val){
 }
 function sortedVisibleFolders(){
   let list = getFolders();
+  if(settings.hideLockedFromHome){
+    list = list.filter(f=>!f.locked);
+  }
   if(homeFilterText){
     list = list.filter(f=>f.name.toLowerCase().includes(homeFilterText));
   }
@@ -1597,6 +2171,7 @@ function renderHome(){
   renderHomeStats();
   renderRecentItems();
   renderWidgets();
+  renderHomeToolsRow();
   const sortSel = document.getElementById('homeSortSelect');
   if(sortSel) sortSel.value = settings.homeSort || 'custom';
   const grid = document.getElementById("foldersGrid");
@@ -1714,8 +2289,8 @@ function updateFolderLockToggleUI(){
   document.getElementById('folderLockToggle').classList.toggle('on', pendingFolderLocked);
 }
 function toggleFolderLockInModal(){
-  if(!pendingFolderLocked && !(settings.pinEnabled && settings.pin)){
-    toast('عيّن رمز PIN من الإعدادات أولًا لتتمكن من قفل الحافظات');
+  if(!pendingFolderLocked && !(settings.pinEnabled && hasLockCredential())){
+    toast('عيّن رمز قفل من الإعدادات أولًا لتتمكن من قفل الحافظات');
     return;
   }
   pendingFolderLocked = !pendingFolderLocked;
@@ -1737,8 +2312,8 @@ function submitFolderForm(){
   const kind = document.getElementById('newFolderKind').value;
   const color = document.getElementById('newFolderColor').value;
   const color2 = document.getElementById('newFolderColor2').value;
-  if(pendingFolderLocked && !(settings.pinEnabled && settings.pin)){
-    toast('عيّن رمز PIN من الإعدادات أولًا قبل قفل الحافظة');
+  if(pendingFolderLocked && !(settings.pinEnabled && hasLockCredential())){
+    toast('عيّن رمز قفل من الإعدادات أولًا قبل قفل الحافظة');
     pendingFolderLocked = false;
     updateFolderLockToggleUI();
   }
@@ -1866,15 +2441,23 @@ function setFolderView(id, patch){
 function openFolder(id){
   const folder = getFolder(id);
   if(!folder) return;
-  if(folder.locked && settings.pin){
+  if(folder.locked && hasLockCredential()){
     pendingLockedFolderId = id;
     pinMode = 'folder-unlock'; pinBuffer='';
-    document.getElementById('lockTitle').textContent = 'أدخل الرمز لفتح "'+folder.name+'"';
-    document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
     document.getElementById('lockError').textContent = '';
     document.getElementById('lockBioBtn').classList.add('hidden');
     document.getElementById('lockCancelBtn').classList.remove('hidden');
-    renderPinPad(); renderPinDots();
+    if((settings.lockMethod||'pin')==='pattern' && settings.pattern){
+      document.getElementById('lockTitle').textContent = 'ارسم النمط لفتح "'+folder.name+'"';
+      document.getElementById('lockSub').textContent = 'صِل النقاط بالترتيب الصحيح';
+      showPatternUI();
+      renderPatternGrid();
+    } else {
+      document.getElementById('lockTitle').textContent = 'أدخل الرمز لفتح "'+folder.name+'"';
+      document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
+      showPinUI();
+      renderPinPad(); renderPinDots();
+    }
     document.getElementById('lockScreen').classList.add('active');
     return;
   }
@@ -2772,9 +3355,179 @@ function requestEmptyTrash(){
   });
 }
 
+/* ---------- Projects ("مشاريعي") ---------- */
+let currentProjectId = null;
+let editingProjectId = null;
+let pendingProjectFiles = [];
+function openProjects(){
+  if(folderSelectMode) exitFolderSelectMode();
+  renderProjects();
+  document.getElementById('fabBtn').classList.remove('show');
+  showScreen('screen-projects');
+}
+function renderProjects(){
+  const grid = document.getElementById('projectsGrid');
+  if(!projects.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">${svg('briefcase')}<p>لا مشاريع بعد — اضغط + لإضافة أول مشروع</p></div>`;
+    return;
+  }
+  const palette = ['#3a7bd5,#1e4d8c','#c9a24b,#8a733a','#5eb1a1,#2f7d6c','#c65a4d,#8a3226','#8e6fce,#5b3f96','#e07a5f,#a3492f'];
+  grid.innerHTML = projects.slice().sort((a,b)=>b.createdAt-a.createdAt).map((p,i)=>{
+    const [c1,c2] = palette[i%palette.length].split(',');
+    const metaBits = [];
+    if(p.cost!=null && p.cost!=='') metaBits.push(Number(p.cost).toLocaleString('ar'));
+    if(p.startDate) metaBits.push(fmtDate(new Date(p.startDate).getTime()));
+    return `<div class="folder-card" style="--fc:${c1};--fc2:${c2}" onclick="openProjectView('${p.id}')">
+      <div>
+        <h3>${escapeHTML(p.name)}</h3>
+        <span>${escapeHTML(metaBits.join(' • ') || 'بدون تفاصيل')}</span>
+      </div>
+      <div class="project-progress-track"><div class="project-progress-fill" style="width:${p.progress||0}%"></div></div>
+    </div>`;
+  }).join('');
+}
+function openProjectModal(editId){
+  editingProjectId = editId || null;
+  const p = editId ? projects.find(x=>x.id===editId) : null;
+  pendingProjectFiles = p ? (p.attachments||[]).slice() : [];
+  document.getElementById('projectModalTitle').textContent = p ? 'تعديل المشروع' : 'مشروع جديد';
+  document.getElementById('projName').value = p ? p.name : '';
+  document.getElementById('projStartDate').value = p ? (p.startDate||'') : '';
+  document.getElementById('projCost').value = (p && p.cost!=null) ? p.cost : '';
+  document.getElementById('projProgress').value = p ? (p.progress||0) : 0;
+  document.getElementById('projProgressVal').textContent = (p ? (p.progress||0) : 0)+'%';
+  document.getElementById('projNotes').value = p ? (p.notes||'') : '';
+  renderProjectFilesPreview();
+  document.getElementById('projectModalBackdrop').classList.add('active');
+}
+function closeProjectModal(){
+  document.getElementById('projectModalBackdrop').classList.remove('active');
+}
+function renderProjectFilesPreview(){
+  const box = document.getElementById('projFilesPreview');
+  if(!pendingProjectFiles.length){ box.innerHTML=''; return; }
+  box.innerHTML = pendingProjectFiles.map((f,i)=>
+    `<div class="mp-row"><span style="flex:1">${escapeHTML(f.name||'ملف')}</span><button type="button" onclick="removePendingProjectFile(${i})" style="width:24px;height:24px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center">${svg('trash')}</button></div>`
+  ).join('');
+}
+function removePendingProjectFile(i){
+  pendingProjectFiles.splice(i,1);
+  renderProjectFilesPreview();
+}
+document.getElementById('projFilesInput').addEventListener('change', async e=>{
+  const files = Array.from(e.target.files||[]);
+  for(const f of files){
+    try{ pendingProjectFiles.push(await persistFile(f, f.name)); }
+    catch(err){ toast('تعذّر إضافة أحد الملفات'); }
+  }
+  renderProjectFilesPreview();
+  e.target.value = '';
+});
+function submitProjectForm(){
+  const name = document.getElementById('projName').value.trim();
+  if(!name){ toast('اكتب اسم المشروع'); return; }
+  const costVal = document.getElementById('projCost').value;
+  const patch = {
+    name,
+    startDate: document.getElementById('projStartDate').value || '',
+    cost: costVal !== '' ? Number(costVal) : null,
+    progress: Number(document.getElementById('projProgress').value) || 0,
+    notes: document.getElementById('projNotes').value.trim(),
+    attachments: pendingProjectFiles.slice()
+  };
+  if(editingProjectId){
+    const p = projects.find(x=>x.id===editingProjectId);
+    if(p) Object.assign(p, patch);
+  } else {
+    projects.push(Object.assign({ id: genId(), createdAt: Date.now() }, patch));
+  }
+  saveProjects();
+  closeProjectModal();
+  renderProjects();
+  toast('تم حفظ المشروع');
+  if(editingProjectId){ openProjectView(editingProjectId); }
+}
+function openProjectView(id){
+  currentProjectId = id;
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('projectViewTitle').textContent = p.name;
+  const isImg = a => (a.src||'').startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(a.name||'');
+  const attachHtml = (p.attachments && p.attachments.length)
+    ? `<div class="grid">${p.attachments.map(a=>
+        isImg(a)
+          ? `<img src="${a.src}" style="width:100%;border-radius:14px;aspect-ratio:1;object-fit:cover;border:1px solid var(--border)">`
+          : `<div class="item-card"><div class="item-thumb">${svg('file')}</div><div class="item-body"><h4 style="font-size:12.5px">${escapeHTML(a.name||'ملف')}</h4></div></div>`
+      ).join('')}</div>`
+    : `<p style="color:var(--text-dim);font-size:13px;margin:0">لا مرفقات بعد</p>`;
+  document.getElementById('projectViewContent').innerHTML = `
+    <div class="settings-group">
+      <div class="switch-row"><span class="sr-label">نسبة الإنجاز</span><b style="color:var(--gold)">${p.progress||0}%</b></div>
+      <div class="project-progress-track"><div class="project-progress-fill" style="width:${p.progress||0}%"></div></div>
+    </div>
+    <div class="settings-group">
+      <div class="switch-row"><span class="sr-label">تاريخ البداية</span><span>${p.startDate?fmtDate(new Date(p.startDate).getTime()):'—'}</span></div>
+      <div class="switch-row"><span class="sr-label">التكلفة</span><span>${p.cost!=null?Number(p.cost).toLocaleString('ar'):'—'}</span></div>
+    </div>
+    <div class="settings-group"><h4>ملاحظات</h4><p style="white-space:pre-wrap;margin:0;font-size:13.5px;color:var(--text)">${p.notes?escapeHTML(p.notes):'لا ملاحظات'}</p></div>
+    <div class="settings-group"><h4>الملفات والصور</h4>${attachHtml}</div>
+  `;
+  showScreen('screen-project-view');
+}
+function closeProjectView(){
+  currentProjectId = null;
+  showScreen('screen-projects');
+}
+function editCurrentProject(){
+  if(currentProjectId) openProjectModal(currentProjectId);
+}
+function deleteCurrentProject(){
+  if(!currentProjectId) return;
+  showConfirm('حذف المشروع', 'سيتم حذف هذا المشروع ومرفقاته نهائيًا. هل تريد المتابعة؟', ()=>{
+    projects = projects.filter(x=>x.id!==currentProjectId);
+    saveProjects();
+    currentProjectId = null;
+    renderProjects();
+    showScreen('screen-projects');
+    toast('تم حذف المشروع');
+  });
+}
+
 /* ---------- Backup export / import ---------- */
+async function shareBackup(){
+  try{
+    const backup = { app:'montasir', version:1, exportedAt: Date.now(), data, settings, widgetsData, projects };
+    const json = JSON.stringify(backup);
+    const filename = 'montasir_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    const Filesystem = window.Capacitor?.Plugins?.Filesystem;
+    const Share = window.Capacitor?.Plugins?.Share;
+    const isNative = window.Capacitor?.isNativePlatform ? window.Capacitor.isNativePlatform() : false;
+    if(Filesystem && Share && isNative){
+      const base64 = btoa(unescape(encodeURIComponent(json)));
+      await Filesystem.writeFile({ path: filename, data: base64, directory: 'CACHE' });
+      const uriRes = await Filesystem.getUri({ directory: 'CACHE', path: filename });
+      await Share.share({
+        title: 'نسخة احتياطية - ' + (settings.appName || 'المنتصر'),
+        text: 'أرسل هذا الملف إلى بريدك أو احفظه في تطبيق سحابي مثل Google Drive لتأمين نسخة خارج جهازك.',
+        url: uriRes.uri
+      });
+      return;
+    }
+    if(navigator.canShare && navigator.share){
+      const file = new File([json], filename, { type:'application/json' });
+      if(navigator.canShare({ files:[file] })){
+        await navigator.share({ files:[file], title:'نسخة احتياطية - ' + (settings.appName || 'المنتصر') });
+        return;
+      }
+    }
+    exportBackup();
+    toast('تم تنزيل الملف — ارفعه يدويًا إلى بريدك أو جوجل درايف');
+  }catch(e){
+    toast('تعذّرت المشاركة، جرّب زر "تصدير نسخة" بدلًا منها');
+  }
+}
 function exportBackup(){
-  const backup = { app:'montasir', version:1, exportedAt: Date.now(), data, settings, widgetsData };
+  const backup = { app:'montasir', version:1, exportedAt: Date.now(), data, settings, widgetsData, projects };
   const blob = new Blob([JSON.stringify(backup)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2784,7 +3537,44 @@ function exportBackup(){
   a.click();
   a.remove();
   setTimeout(()=>URL.revokeObjectURL(url), 3000);
+  settings.lastBackupAt = Date.now();
+  saveSettingsData();
   toast('تم تصدير النسخة الاحتياطية');
+}
+function emailBackup(){
+  const email = (document.getElementById('setBackupEmail').value || '').trim();
+  settings.backupEmail = email;
+  saveSettingsData();
+  exportBackup();
+  const subject = encodeURIComponent('نسخة احتياطية - ' + (settings.appName || 'المنتصر'));
+  const body = encodeURIComponent('تم تنزيل ملف النسخة الاحتياطية الآن على جهازك.\nمن فضلك أرفقه بهذه الرسالة قبل الإرسال (باسم يبدأ بـ montasir_backup).');
+  const mailto = 'mailto:' + encodeURIComponent(email) + '?subject=' + subject + '&body=' + body;
+  setTimeout(()=>{ window.location.href = mailto; }, 400);
+}
+async function toggleBackupReminder(){
+  const willEnable = !settings.backupReminder;
+  const LN = window.Capacitor?.Plugins?.LocalNotifications;
+  if(willEnable){
+    if(LN){
+      try{
+        const perm = await LN.requestPermissions();
+        if(perm.display !== 'granted'){ toast('لم يتم منح إذن الإشعارات'); return; }
+        await LN.schedule({ notifications:[{
+          id: 2,
+          title: settings.appName || 'المنتصر',
+          body: 'تذكير أسبوعي: لا تنسَ عمل نسخة احتياطية من بياناتك',
+          schedule: { on: { weekday: 6, hour: 20, minute: 0 }, repeats: true }
+        }]});
+      }catch(e){ toast('تعذّر جدولة التذكير'); return; }
+    } else {
+      toast('سيتم تذكيرك عند فتح التطبيق إذا مرّ أكثر من أسبوع بدون نسخة احتياطية');
+    }
+  } else {
+    if(LN){ try{ await LN.cancel({ notifications:[{id:2}] }); }catch(e){} }
+  }
+  settings.backupReminder = willEnable;
+  saveSettingsData();
+  document.getElementById('backupReminderToggle').classList.toggle('on', willEnable);
 }
 document.getElementById('backupImportInput').addEventListener('change', e=>{
   const file = e.target.files[0]; if(!file) return;
@@ -2810,8 +3600,9 @@ document.getElementById('backupImportInput').addEventListener('change', e=>{
           if(!Array.isArray(widgetsData.notes)) widgetsData.notes = [];
           if(!Array.isArray(widgetsData.todos)) widgetsData.todos = [];
         }
+        if(Array.isArray(parsed.projects)) projects = parsed.projects;
         getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
-        saveData(); saveSettingsData(); saveWidgetsData();
+        saveData(); saveSettingsData(); saveWidgetsData(); saveProjects();
         applyTheme(); applyIdentity(); renderHome();
         toast('تم استيراد النسخة الاحتياطية بنجاح');
       });
@@ -2820,6 +3611,155 @@ document.getElementById('backupImportInput').addEventListener('change', e=>{
   reader.readAsText(file);
   e.target.value = '';
 });
+
+/* ---------- Calculator ---------- */
+let calcExpr = '';
+let calcMode = 'basic';
+function openCalculator(){
+  if(folderSelectMode) exitFolderSelectMode();
+  calcExpr = '';
+  document.getElementById('fabBtn').classList.remove('show');
+  renderCalcPad();
+  updateCalcDisplay();
+  showScreen('screen-calculator');
+}
+function toggleCalcMode(){
+  calcMode = calcMode === 'basic' ? 'scientific' : 'basic';
+  document.getElementById('calcModeBtn').classList.toggle('on', calcMode==='scientific');
+  renderCalcPad();
+}
+function renderCalcPad(){
+  const pad = document.getElementById('calcPad');
+  const basicKeys = [
+    {k:'AC',c:'fn'},{k:'(',c:'fn'},{k:')',c:'fn'},{k:'÷',c:'op'},
+    {k:'7'},{k:'8'},{k:'9'},{k:'×',c:'op'},
+    {k:'4'},{k:'5'},{k:'6'},{k:'−',c:'op'},
+    {k:'1'},{k:'2'},{k:'3'},{k:'+',c:'op'},
+    {k:'⌫',c:'fn'},{k:'0'},{k:'.'},{k:'=',c:'eq'}
+  ];
+  const sciExtra = [
+    {k:'√',c:'fn'},{k:'x²',c:'fn'},{k:'^',c:'fn'},{k:'%',c:'fn'},
+    {k:'sin',c:'fn'},{k:'cos',c:'fn'},{k:'tan',c:'fn'},{k:'!',c:'fn'},
+    {k:'ln',c:'fn'},{k:'log',c:'fn'},{k:'π',c:'fn'},{k:'e',c:'fn'}
+  ];
+  const keys = calcMode==='scientific' ? sciExtra.concat(basicKeys) : basicKeys;
+  pad.innerHTML = keys.map(o=>`<button type="button" class="calc-key ${o.c||''}" onclick="pressCalcKey('${o.k.replace(/'/g,"\\'")}')">${o.k}</button>`).join('');
+}
+function updateCalcDisplay(){
+  document.getElementById('calcExpr').textContent = calcExpr || '\u00a0';
+  let resultText = '0';
+  try{
+    if(calcExpr.trim()){
+      const v = evaluateCalcExpr(calcExpr);
+      if(v !== null && isFinite(v)) resultText = formatCalcNumber(v);
+    }
+  }catch(e){}
+  document.getElementById('calcResult').textContent = resultText;
+}
+function formatCalcNumber(v){
+  if(Math.abs(v) < 1e-12) v = 0;
+  let s = Number(v.toFixed(10)).toString();
+  if(s.length > 14) s = v.toExponential(6);
+  return s;
+}
+function pressCalcKey(k){
+  if(navigator.vibrate && settings.hapticEnabled) navigator.vibrate(8);
+  if(k==='AC'){ calcExpr=''; updateCalcDisplay(); return; }
+  if(k==='⌫'){ calcExpr = calcExpr.slice(0,-1); updateCalcDisplay(); return; }
+  if(k==='='){
+    try{
+      const v = evaluateCalcExpr(calcExpr);
+      if(v===null || !isFinite(v)){ toast('تعبير غير صالح'); return; }
+      calcExpr = formatCalcNumber(v);
+      updateCalcDisplay();
+    }catch(e){ toast('تعبير غير صالح'); }
+    return;
+  }
+  const map = {'×':'×','÷':'÷','−':'−','√':'√(','x²':'^2','ln':'ln(','log':'log(','sin':'sin(','cos':'cos(','tan':'tan(','!':'!','π':'π','e':'e'};
+  calcExpr += (map[k] !== undefined ? map[k] : k);
+  updateCalcDisplay();
+}
+function evaluateCalcExpr(str){
+  const expr = str.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/π/g,'(3.14159265358979)').replace(/(?<![a-zA-Z])e(?![a-zA-Z(])/g,'(2.71828182845905)');
+  let i = 0;
+  function peek(){ return expr[i]; }
+  function err(){ throw new Error('bad expr'); }
+  function parseExpression(){
+    let v = parseTerm();
+    while(true){
+      if(peek()==='+'){ i++; v += parseTerm(); }
+      else if(peek()==='-'){ i++; v -= parseTerm(); }
+      else break;
+    }
+    return v;
+  }
+  function parseTerm(){
+    let v = parsePower();
+    while(true){
+      if(peek()==='*'){ i++; v *= parsePower(); }
+      else if(peek()==='/'){ i++; const d=parsePower(); v /= d; }
+      else break;
+    }
+    return v;
+  }
+  function parsePower(){
+    let v = parseUnary();
+    if(peek()==='^'){ i++; const p = parsePower(); v = Math.pow(v,p); }
+    return v;
+  }
+  function parseUnary(){
+    if(peek()==='-'){ i++; return -parseUnary(); }
+    if(peek()==='+'){ i++; return parseUnary(); }
+    return parsePostfix();
+  }
+  function parsePostfix(){
+    let v = parsePrimary();
+    while(peek()==='%' || peek()==='!'){
+      if(peek()==='%'){ i++; v = v/100; }
+      else if(peek()==='!'){ i++; v = factorial(v); }
+    }
+    return v;
+  }
+  function factorial(n){
+    n = Math.round(n);
+    if(n<0) return NaN;
+    let r=1; for(let x=2;x<=n;x++) r*=x;
+    return r;
+  }
+  function parseFuncArg(){
+    if(peek()!=='(') err();
+    i++;
+    const v = parseExpression();
+    if(peek()!==')') err();
+    i++;
+    return v;
+  }
+  function parsePrimary(){
+    if(peek()==='('){
+      i++;
+      const v = parseExpression();
+      if(peek()!==')') err();
+      i++;
+      return v;
+    }
+    if(expr.startsWith('sin',i)){ i+=3; return Math.sin(parseFuncArg()); }
+    if(expr.startsWith('cos',i)){ i+=3; return Math.cos(parseFuncArg()); }
+    if(expr.startsWith('tan',i)){ i+=3; return Math.tan(parseFuncArg()); }
+    if(expr.startsWith('ln',i)){ i+=2; return Math.log(parseFuncArg()); }
+    if(expr.startsWith('log',i)){ i+=3; return Math.log10(parseFuncArg()); }
+    if(expr.startsWith('√',i)){ i+=1; return Math.sqrt(parseFuncArg()); }
+    const start = i;
+    while(/[0-9.]/.test(peek()||'')) i++;
+    if(i===start) err();
+    const num = parseFloat(expr.slice(start,i));
+    if(isNaN(num)) err();
+    return num;
+  }
+  if(!expr.trim()) return null;
+  const v = parseExpression();
+  if(i < expr.length) err();
+  return v;
+}
 
 /* ---------- Storage info ---------- */
 function refreshStorageInfo(){
@@ -2995,8 +3935,11 @@ function loadSettingsForm(){
   document.getElementById('setPublisher').value = settings.publisher || '';
   document.getElementById('setVersion').value = settings.version || '';
   document.getElementById('pinToggle').classList.toggle('on', !!settings.pinEnabled);
+  updateLockMethodUI();
   document.getElementById('bioToggle').classList.toggle('on', !!settings.biometricEnabled);
   document.getElementById('notifToggle').classList.toggle('on', !!settings.dailyReminder);
+  document.getElementById('setBackupEmail').value = settings.backupEmail || '';
+  document.getElementById('backupReminderToggle').classList.toggle('on', !!settings.backupReminder);
   document.getElementById('setDefaultSort').value = settings.defaultSort || 'newest';
   document.getElementById('setDefaultView').value = settings.defaultView || 'list';
   document.getElementById('setAutoLock').value = String(settings.autoLockMinutes || 0);
@@ -3006,6 +3949,12 @@ function loadSettingsForm(){
   document.getElementById('hapticToggle').classList.toggle('on', !!settings.hapticEnabled);
   document.getElementById('compactGridToggle').classList.toggle('on', !!settings.compactHomeGrid);
   document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
+  document.getElementById('hideLockedToggle').classList.toggle('on', !!settings.hideLockedFromHome);
+  document.getElementById('fabBackToggle').classList.toggle('on', !!settings.fabBackEnabled);
+  document.getElementById('fabBackSizeRange').value = settings.fabBackSize;
+  document.getElementById('fabBackSizeVal').textContent = settings.fabBackSize;
+  document.getElementById('fabBackOpacityRange').value = settings.fabBackOpacity;
+  document.getElementById('fabBackOpacityVal').textContent = settings.fabBackOpacity+'%';
   loadThemeForm();
   refreshStorageInfo();
   renderAnalytics();
@@ -3034,11 +3983,29 @@ document.getElementById('avatarInput').addEventListener('change', async e=>{
   applyIdentity();
 });
 
+function hasLockCredential(){
+  return !!(settings.pin || (settings.pattern && settings.pattern.length>=4));
+}
 function togglePin(){
-  if(!settings.pinEnabled && !settings.pin){ toast('عيّن رمزًا أولًا'); return; }
+  if(!settings.pinEnabled && !hasLockCredential()){ toast('عيّن رمز الدخول أولًا'); return; }
   settings.pinEnabled = !settings.pinEnabled;
   saveSettingsData();
   document.getElementById('pinToggle').classList.toggle('on', settings.pinEnabled);
+}
+function setLockMethod(method){
+  settings.lockMethod = method;
+  saveSettingsData();
+  updateLockMethodUI();
+}
+function updateLockMethodUI(){
+  const method = settings.lockMethod || 'pin';
+  document.getElementById('lockMethodBtn-pin').classList.toggle('active', method==='pin');
+  document.getElementById('lockMethodBtn-pattern').classList.toggle('active', method==='pattern');
+  document.getElementById('setLockBtn').textContent = method==='pattern' ? 'تعيين / تغيير النمط' : 'تعيين / تغيير الرمز';
+}
+function startSetLock(){
+  if((settings.lockMethod||'pin')==='pattern') startSetPattern();
+  else startSetPin();
 }
 async function toggleBiometric(){
   const willEnable = !settings.biometricEnabled;
@@ -3057,8 +4024,164 @@ function startSetPin(){
   document.getElementById('lockError').textContent = '';
   document.getElementById('lockBioBtn').classList.add('hidden');
   document.getElementById('lockCancelBtn').classList.add('hidden');
+  showPinUI();
   renderPinPad(); renderPinDots();
   document.getElementById('lockScreen').classList.add('active');
+}
+function showPinUI(){
+  document.getElementById('pinDots').classList.remove('hidden');
+  document.getElementById('pinPad').classList.remove('hidden');
+  document.getElementById('patternWrap').classList.add('hidden');
+}
+function showPatternUI(){
+  document.getElementById('pinDots').classList.add('hidden');
+  document.getElementById('pinPad').classList.add('hidden');
+  document.getElementById('patternWrap').classList.remove('hidden');
+}
+function startSetPattern(){
+  pinMode = 'set-new'; patternBuffer=[]; firstNewPattern='';
+  document.getElementById('lockTitle').textContent = 'ارسم نمطًا جديدًا';
+  document.getElementById('lockSub').textContent = 'وصّل 4 نقاط على الأقل';
+  document.getElementById('lockError').textContent = '';
+  document.getElementById('lockBioBtn').classList.add('hidden');
+  document.getElementById('lockCancelBtn').classList.add('hidden');
+  showPatternUI();
+  renderPatternGrid();
+  document.getElementById('lockScreen').classList.add('active');
+}
+function renderPatternGrid(){
+  const dotsG = document.getElementById('patternDots');
+  let html = '';
+  for(let r=0;r<3;r++){
+    for(let c=0;c<3;c++){
+      const idx = r*3+c;
+      html += `<circle class="pattern-dot" data-idx="${idx}" cx="${PATTERN_POS[c]}" cy="${PATTERN_POS[r]}" r="14"></circle>`;
+    }
+  }
+  dotsG.innerHTML = html;
+  drawPatternState();
+  bindPatternEvents();
+}
+function patternDotCenter(idx){
+  const r = Math.floor(idx/3), c = idx%3;
+  return { x: PATTERN_POS[c], y: PATTERN_POS[r] };
+}
+function drawPatternState(){
+  document.querySelectorAll('#patternDots .pattern-dot').forEach(d=>{
+    d.classList.toggle('active', patternBuffer.includes(Number(d.dataset.idx)));
+  });
+  const linesG = document.getElementById('patternLines');
+  let html = '';
+  for(let i=0;i<patternBuffer.length-1;i++){
+    const a = patternDotCenter(patternBuffer[i]);
+    const b = patternDotCenter(patternBuffer[i+1]);
+    html += `<line class="pattern-line" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>`;
+  }
+  linesG.innerHTML = html;
+}
+function resetPatternInput(){
+  patternBuffer = [];
+  patternDrawing = false;
+  drawPatternState();
+}
+function svgPointFromEvent(svg, evt){
+  const pt = svg.createSVGPoint();
+  const cx = evt.touches ? evt.touches[0].clientX : evt.clientX;
+  const cy = evt.touches ? evt.touches[0].clientY : evt.clientY;
+  pt.x = cx; pt.y = cy;
+  const ctm = svg.getScreenCTM();
+  if(!ctm) return null;
+  return pt.matrixTransform(ctm.inverse());
+}
+function patternDotAt(svg, evt){
+  const p = svgPointFromEvent(svg, evt);
+  if(!p) return -1;
+  for(let idx=0; idx<9; idx++){
+    const c = patternDotCenter(idx);
+    if(Math.hypot(c.x-p.x, c.y-p.y) <= 18) return idx;
+  }
+  return -1;
+}
+function bindPatternEvents(){
+  const svgEl = document.getElementById('patternSvg');
+  if(svgEl._bound) return;
+  svgEl._bound = true;
+  const start = evt=>{
+    evt.preventDefault();
+    patternDrawing = true;
+    patternBuffer = [];
+    const idx = patternDotAt(svgEl, evt);
+    if(idx>=0) patternBuffer.push(idx);
+    drawPatternState();
+  };
+  const move = evt=>{
+    if(!patternDrawing) return;
+    evt.preventDefault();
+    const idx = patternDotAt(svgEl, evt);
+    if(idx>=0 && !patternBuffer.includes(idx)){
+      patternBuffer.push(idx);
+      drawPatternState();
+    }
+  };
+  const end = evt=>{
+    if(!patternDrawing) return;
+    patternDrawing = false;
+    if(patternBuffer.length < 4){
+      document.getElementById('lockError').textContent = 'وصّل 4 نقاط على الأقل';
+      setTimeout(resetPatternInput, 500);
+      return;
+    }
+    handlePatternComplete();
+  };
+  svgEl.addEventListener('mousedown', start);
+  svgEl.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  svgEl.addEventListener('touchstart', start, {passive:false});
+  svgEl.addEventListener('touchmove', move, {passive:false});
+  svgEl.addEventListener('touchend', end);
+}
+function handlePatternComplete(){
+  const code = patternBuffer.join('-');
+  if(pinMode==='unlock'){
+    if(code === settings.pattern){
+      document.getElementById('lockScreen').classList.remove('active');
+      settings._hiddenAt = null;
+      saveSettingsData();
+    } else {
+      document.getElementById('lockError').textContent = 'نمط غير صحيح';
+      setTimeout(resetPatternInput, 400);
+    }
+  } else if(pinMode==='folder-unlock'){
+    if(code === settings.pattern){
+      document.getElementById('lockScreen').classList.remove('active');
+      const id = pendingLockedFolderId;
+      pendingLockedFolderId = null;
+      if(id) openFolderNow(id);
+    } else {
+      document.getElementById('lockError').textContent = 'نمط غير صحيح';
+      setTimeout(resetPatternInput, 400);
+    }
+  } else if(pinMode==='set-new'){
+    firstNewPattern = code;
+    pinMode = 'set-confirm';
+    document.getElementById('lockTitle').textContent = 'أعد رسم النمط';
+    document.getElementById('lockError').textContent='';
+    setTimeout(resetPatternInput, 250);
+  } else if(pinMode==='set-confirm'){
+    if(code === firstNewPattern){
+      settings.pattern = code;
+      settings.pinEnabled = true;
+      saveSettingsData();
+      document.getElementById('pinToggle').classList.add('on');
+      document.getElementById('lockScreen').classList.remove('active');
+      toast('تم تعيين نمط القفل');
+    } else {
+      document.getElementById('lockError').textContent = 'النمطان غير متطابقين، حاول مجددًا';
+      pinMode='set-new'; firstNewPattern='';
+      document.getElementById('lockTitle').textContent = 'ارسم نمطًا جديدًا';
+      setTimeout(resetPatternInput, 400);
+    }
+  }
 }
 function renderPinPad(){
   const pad = document.getElementById('pinPad');
@@ -3152,11 +4275,19 @@ async function toggleDailyReminder(){
 /* ---------- Auto-lock ---------- */
 function showLockScreen(){
   pinMode='unlock'; pinBuffer='';
-  document.getElementById('lockTitle').textContent = 'أدخل رمز الدخول';
-  document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
   document.getElementById('lockError').textContent = '';
   document.getElementById('lockCancelBtn').classList.add('hidden');
-  renderPinPad(); renderPinDots();
+  if((settings.lockMethod||'pin')==='pattern' && settings.pattern){
+    document.getElementById('lockTitle').textContent = 'ارسم النمط للدخول';
+    document.getElementById('lockSub').textContent = 'صِل النقاط بالترتيب الصحيح';
+    showPatternUI();
+    renderPatternGrid();
+  } else {
+    document.getElementById('lockTitle').textContent = 'أدخل رمز الدخول';
+    document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
+    showPinUI();
+    renderPinPad(); renderPinDots();
+  }
   document.getElementById('lockScreen').classList.add('active');
   offerBiometricOnLock();
 }
@@ -3196,7 +4327,7 @@ document.addEventListener('visibilitychange', ()=>{
   }
 });
 function checkAutoLock(){
-  if(!settings.pinEnabled || !settings.pin) return;
+  if(!settings.pinEnabled || !hasLockCredential()) return;
   const mins = Number(settings.autoLockMinutes || 0);
   if(!mins) return;
   const hiddenAt = settings._hiddenAt || 0;
@@ -3205,14 +4336,595 @@ function checkAutoLock(){
   }
 }
 
+/* ================= المزيد (قائمة موحّدة للمشاريع والأدوات) ================= */
+function openExtraMenu(){
+  const locked = getFolders().filter(f=>f.locked);
+  const box = document.getElementById('extraMenuLockedSection');
+  if(locked.length){
+    box.innerHTML = `<div class="menu-divider"></div>
+      <div class="menu-section-label">الحافظات المقفلة</div>
+      <div class="menu-list">
+        ${locked.map(f=>`<button type="button" class="menu-item" onclick="closeExtraMenu();openFolder('${f.id}')">${svg('lock')}${escapeHTML(f.name)}</button>`).join('')}
+      </div>`;
+  } else {
+    box.innerHTML = '';
+  }
+  document.getElementById('extraMenuBackdrop').classList.add('active');
+}
+function closeExtraMenu(){
+  document.getElementById('extraMenuBackdrop').classList.remove('active');
+}
+
+/* ================= مركز الأدوات ================= */
+const TOOLS_LIST = [
+  {id:'pdf', name:'PDF من الصور', desc:'حوّل صورك إلى ملف واحد', icon:'pdfdoc', c1:'#3a7bd5', c2:'#1e4d8c', open:'openPdfTool'},
+  {id:'compress', name:'ضاغط الصور', desc:'قلّل حجم الصورة', icon:'compressimg', c1:'#5eb1a1', c2:'#2f7d6c', open:'openCompressTool'},
+  {id:'electric', name:'حاسبة الكهرباء', desc:'قانون أوم والبطاريات', icon:'zap', c1:'#c9a24b', c2:'#8a733a', open:'openElectricTool'},
+  {id:'currency', name:'محول العملات', desc:'أسعار صرف فورية', icon:'coin', c1:'#e07a5f', c2:'#a3492f', open:'openCurrencyTool'},
+  {id:'countdown', name:'العد التنازلي', desc:'مؤقت لمهامك', icon:'hourglass', c1:'#8e6fce', c2:'#5b3f96', open:'openCountdownTool'},
+  {id:'stopwatch', name:'ساعة التوقيت', desc:'قياس الوقت واللفات', icon:'stopwatch2', c1:'#c65a4d', c2:'#8a3226', open:'openStopwatchTool'},
+  {id:'compass', name:'البوصلة', desc:'اتجاه وموقعك الحالي', icon:'compass', c1:'#3a9188', c2:'#215a54', open:'openCompassTool'},
+  {id:'calculator', name:'الحاسبة', desc:'حاسبة عادية وعلمية', icon:'calculatoricon', c1:'#4a5568', c2:'#2d3748', open:'openCalculator'},
+  {id:'browser', name:'المتصفح', desc:'تصفّح الإنترنت', icon:'browsericon', c1:'#2b8a9e', c2:'#175a68', open:'openBrowser'}
+];
+function renderHomeToolsRow(){
+  const wrap = document.getElementById('homeToolsRow');
+  const section = document.getElementById('homeToolsSection');
+  if(!wrap || !section) return;
+  if(folderSelectMode){ section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  wrap.innerHTML = TOOLS_LIST.map(t=>`
+    <button type="button" class="folder-card" style="--fc:${t.c1};--fc2:${t.c2}" onclick="${t.open}()">
+      <div class="folder-icon">${svg(t.icon)}</div>
+      <div><h3>${t.name}</h3><span>${t.desc}</span></div>
+    </button>`).join('');
+}
+function openToolsHub(){
+  renderToolsGrid();
+  document.getElementById('fabBtn').classList.remove('show');
+  showScreen('screen-tools');
+}
+function renderToolsGrid(){
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = TOOLS_LIST.map(t=>`
+    <button type="button" class="folder-card" style="--fc:${t.c1};--fc2:${t.c2}" onclick="${t.open}()">
+      <div class="folder-icon">${svg(t.icon)}</div>
+      <div><h3>${t.name}</h3><span>${t.desc}</span></div>
+    </button>`).join('');
+}
+function downloadBytes(bytes, filename, mime){
+  const blob = new Blob([bytes], {type: mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+
+/* ---------- أداة: مولّد PDF من الصور ---------- */
+let pdfImages = [];
+function openPdfTool(){
+  pdfImages = [];
+  document.getElementById('pdfFileName').value = '';
+  renderPdfImagesList();
+  document.getElementById('toolPdfBackdrop').classList.add('active');
+}
+function closePdfTool(){ document.getElementById('toolPdfBackdrop').classList.remove('active'); }
+document.getElementById('pdfImagesInput').addEventListener('change', async e=>{
+  const files = Array.from(e.target.files||[]);
+  for(const f of files){
+    try{ pdfImages.push({dataUrl: await readFileAsDataURL(f)}); }catch(err){}
+  }
+  e.target.value = '';
+  renderPdfImagesList();
+});
+function renderPdfImagesList(){
+  const wrap = document.getElementById('pdfImagesPreview');
+  const btn = document.getElementById('pdfGenerateBtn');
+  if(!pdfImages.length){
+    wrap.innerHTML = '<p class="hint" style="text-align:center">لم تُضف صور بعد</p>';
+    btn.disabled = true;
+    return;
+  }
+  btn.disabled = false;
+  wrap.innerHTML = pdfImages.map((img,i)=>`
+    <div class="mp-row" style="align-items:center">
+      <img src="${img.dataUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0">
+      <span style="flex:1">صفحة ${i+1}</span>
+      <button type="button" onclick="removePdfImage(${i})">${svg('trash')}</button>
+    </div>`).join('');
+}
+function removePdfImage(i){ pdfImages.splice(i,1); renderPdfImagesList(); }
+function dataUrlToJpegBytes(dataUrl){
+  return new Promise((resolve,reject)=>{
+    const image = new Image();
+    image.onload = ()=>{
+      const canvas = document.createElement('canvas');
+      canvas.width = image.naturalWidth || 1;
+      canvas.height = image.naturalHeight || 1;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      canvas.toBlob(blob=>{
+        if(!blob){ reject(new Error('toBlob failed')); return; }
+        const reader = new FileReader();
+        reader.onload = ()=> resolve({bytes: new Uint8Array(reader.result), width: canvas.width, height: canvas.height});
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(blob);
+      }, 'image/jpeg', 0.88);
+    };
+    image.onerror = reject;
+    image.src = dataUrl;
+  });
+}
+/* بناء ملف PDF يدويًا من صور JPEG مع حساب جدول مرجعي (xref) دقيق قائم على الإزاحات الثنائية الفعلية */
+function buildPdfFromJpegs(jpegs){
+  const enc = new TextEncoder();
+  const parts = [];
+  let offset = 0;
+  const offsets = [0];
+  function push(chunk){
+    const bytes = (typeof chunk === 'string') ? enc.encode(chunk) : chunk;
+    parts.push(bytes);
+    offset += bytes.length;
+  }
+  function startObj(num){
+    offsets[num] = offset;
+    push(num + ' 0 obj\n');
+  }
+  const N = jpegs.length;
+  const totalObjs = 2 + 3*N; // 1: Catalog, 2: Pages, ثم لكل صورة: صفحة + محتوى + كائن صورة
+
+  push('%PDF-1.4\n');
+
+  startObj(1);
+  push('<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+
+  const kidsRefs = [];
+  for(let i=0;i<N;i++){ kidsRefs.push((3+i*3) + ' 0 R'); }
+  startObj(2);
+  push('<< /Type /Pages /Kids [' + kidsRefs.join(' ') + '] /Count ' + N + ' >>\nendobj\n');
+
+  jpegs.forEach((img,i)=>{
+    const pageNum = 3 + i*3;
+    const contentNum = 4 + i*3;
+    const imageNum = 5 + i*3;
+    const w = img.width, h = img.height;
+
+    startObj(pageNum);
+    push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + w + ' ' + h + '] /Resources << /XObject << /Im0 ' + imageNum + ' 0 R >> /ProcSet [/PDF /ImageC] >> /Contents ' + contentNum + ' 0 R >>\nendobj\n');
+
+    const stream = 'q ' + w + ' 0 0 ' + h + ' 0 0 cm /Im0 Do Q';
+    startObj(contentNum);
+    push('<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream\nendobj\n');
+
+    startObj(imageNum);
+    push('<< /Type /XObject /Subtype /Image /Width ' + w + ' /Height ' + h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + img.bytes.length + ' >>\nstream\n');
+    push(img.bytes);
+    push('\nendstream\nendobj\n');
+  });
+
+  const xrefOffset = offset;
+  push('xref\n0 ' + (totalObjs+1) + '\n');
+  push('0000000000 65535 f \n');
+  for(let n=1;n<=totalObjs;n++){
+    push(String(offsets[n]).padStart(10,'0') + ' 00000 n \n');
+  }
+  push('trailer\n<< /Size ' + (totalObjs+1) + ' /Root 1 0 R >>\nstartxref\n' + xrefOffset + '\n%%EOF');
+
+  const out = new Uint8Array(offset);
+  let pos = 0;
+  for(const p of parts){ out.set(p, pos); pos += p.length; }
+  return out;
+}
+async function generatePdfFromImages(){
+  if(!pdfImages.length) return;
+  toast('جارٍ إنشاء ملف PDF...');
+  try{
+    const jpegs = [];
+    for(const img of pdfImages){ jpegs.push(await dataUrlToJpegBytes(img.dataUrl)); }
+    const pdfBytes = buildPdfFromJpegs(jpegs);
+    const name = (document.getElementById('pdfFileName').value || 'document').trim() || 'document';
+    downloadBytes(pdfBytes, name.replace(/\.pdf$/i,'') + '.pdf', 'application/pdf');
+    toast('تم إنشاء ملف PDF بنجاح');
+    closePdfTool();
+  }catch(e){
+    console.error(e);
+    toast('تعذّر إنشاء الملف');
+  }
+}
+
+/* ---------- أداة: ضاغط الصور ---------- */
+let compressSrcDataUrl = null, compressOriginalSize = 0, compressResultBlob = null;
+function openCompressTool(){
+  compressSrcDataUrl = null; compressResultBlob = null;
+  document.getElementById('compressPreviewBox').classList.add('hidden');
+  document.getElementById('compressResult').textContent = '';
+  document.getElementById('toolCompressBackdrop').classList.add('active');
+}
+function closeCompressTool(){ document.getElementById('toolCompressBackdrop').classList.remove('active'); }
+document.getElementById('compressImageInput').addEventListener('change', async e=>{
+  const f = e.target.files[0]; if(!f) return;
+  compressSrcDataUrl = await readFileAsDataURL(f);
+  compressOriginalSize = f.size;
+  document.getElementById('compressPreviewImg').src = compressSrcDataUrl;
+  document.getElementById('compressPreviewBox').classList.remove('hidden');
+  e.target.value = '';
+  updateCompressPreview();
+});
+document.getElementById('compressQuality').addEventListener('input', ()=>{
+  document.getElementById('compressQualityVal').textContent = document.getElementById('compressQuality').value + '%';
+  updateCompressPreview();
+});
+function compressImage(dataUrl, quality){
+  return new Promise((resolve,reject)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+      canvas.getContext('2d').drawImage(img, 0, 0);
+      canvas.toBlob(blob=>resolve({blob, width:canvas.width, height:canvas.height}), 'image/jpeg', quality);
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+async function updateCompressPreview(){
+  if(!compressSrcDataUrl) return;
+  const q = Number(document.getElementById('compressQuality').value)/100;
+  const {blob, width, height} = await compressImage(compressSrcDataUrl, q);
+  compressResultBlob = blob;
+  const kb1 = (compressOriginalSize/1024).toFixed(0);
+  const kb2 = (blob.size/1024).toFixed(0);
+  document.getElementById('compressResult').textContent = `الحجم الأصلي: ${kb1} ك.ب — بعد الضغط: ${kb2} ك.ب (${width}×${height})`;
+}
+function downloadCompressedImage(){
+  if(!compressResultBlob){ toast('اختر صورة أولًا'); return; }
+  const url = URL.createObjectURL(compressResultBlob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'صورة-مضغوطة.jpg';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+
+/* ---------- أداة: حاسبة الكهرباء (قانون أوم + البطارية) ---------- */
+function openElectricTool(){
+  clearElectricity();
+  document.getElementById('battCapacity').value='';
+  document.getElementById('battLoad').value='';
+  document.getElementById('battChargeCurrent').value='';
+  document.getElementById('battRuntimeResult').textContent='';
+  document.getElementById('battChargeResult').textContent='';
+  document.getElementById('toolElectricBackdrop').classList.add('active');
+}
+function closeElectricTool(){ document.getElementById('toolElectricBackdrop').classList.remove('active'); }
+function round4(n){ return Math.round(n*10000)/10000; }
+function clearElectricity(){
+  ['elecV','elecI','elecR','elecP'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('elecResultNote').textContent='';
+}
+function calcElectricity(){
+  const ids = {V:'elecV', I:'elecI', R:'elecR', P:'elecP'};
+  const raw = {};
+  Object.keys(ids).forEach(k=>{
+    const v = document.getElementById(ids[k]).value;
+    raw[k] = (v!=='' && !isNaN(parseFloat(v))) ? parseFloat(v) : null;
+  });
+  const filled = Object.keys(raw).filter(k=>raw[k]!==null);
+  if(filled.length < 2){ toast('أدخل قيمتين على الأقل للحساب'); return; }
+  let note = 'تم الحساب';
+  if(filled.length > 2){
+    note = 'تم الحساب باستخدام ' + filled[0] + ' و' + filled[1] + ' (تجاهل باقي الحقول الممتلئة)';
+  }
+  const has = k=>filled.slice(0,2).includes(k);
+  const val = k=>raw[k];
+  let V=null,I=null,R=null,P=null;
+  if(has('V') && has('I')){ V=val('V'); I=val('I'); R=V/I; P=V*I; }
+  else if(has('V') && has('R')){ V=val('V'); R=val('R'); I=V/R; P=(V*V)/R; }
+  else if(has('I') && has('R')){ I=val('I'); R=val('R'); V=I*R; P=I*I*R; }
+  else if(has('V') && has('P')){ V=val('V'); P=val('P'); I=P/V; R=(V*V)/P; }
+  else if(has('I') && has('P')){ I=val('I'); P=val('P'); V=P/I; R=P/(I*I); }
+  else if(has('R') && has('P')){ R=val('R'); P=val('P'); V=Math.sqrt(P*R); I=Math.sqrt(P/R); }
+  else { toast('تعذّر تحديد قيمتين صالحتين للحساب'); return; }
+  document.getElementById('elecV').value = round4(V);
+  document.getElementById('elecI').value = round4(I);
+  document.getElementById('elecR').value = round4(R);
+  document.getElementById('elecP').value = round4(P);
+  document.getElementById('elecResultNote').textContent = note;
+}
+function formatHoursToHM(h){
+  if(!isFinite(h) || h<=0) return '—';
+  const totalMin = Math.round(h*60);
+  return Math.floor(totalMin/60) + ' ساعة و ' + (totalMin%60) + ' دقيقة';
+}
+function calcBattery(){
+  const capAh = parseFloat(document.getElementById('battCapacity').value);
+  const loadA = parseFloat(document.getElementById('battLoad').value);
+  const chargeA = parseFloat(document.getElementById('battChargeCurrent').value);
+  if(!capAh || !loadA){ toast('أدخل سعة البطارية وتيار الحمل'); return; }
+  document.getElementById('battRuntimeResult').textContent = 'مدة التشغيل التقريبية: ' + formatHoursToHM(capAh/loadA);
+  document.getElementById('battChargeResult').textContent = chargeA ? ('زمن الشحن التقريبي: ' + formatHoursToHM(capAh/chargeA/0.85)) : '';
+}
+
+/* ---------- أداة: محول العملات ---------- */
+const CURRENCY_LIST = ['USD','EUR','GBP','SAR','AED','EGP','KWD','QAR','BHD','OMR','JOD','TRY','JPY','CNY','INR','CAD','AUD'];
+let currencyRatesCache = null;
+function populateCurrencySelects(){
+  const from = document.getElementById('curFrom'), to = document.getElementById('curTo');
+  if(from.options.length) return;
+  CURRENCY_LIST.forEach(c=>{ from.appendChild(new Option(c,c)); to.appendChild(new Option(c,c)); });
+  from.value = 'USD'; to.value = 'SAR';
+}
+function openCurrencyTool(){
+  populateCurrencySelects();
+  document.getElementById('curManualRate').value = '';
+  document.getElementById('curAmount').value = '1';
+  document.getElementById('curResult').textContent = '';
+  document.getElementById('curRateInfo').textContent = currencyRatesCache ? 'تم الجلب مسبقًا — اضغط تحديث لأحدث سعر' : 'اضغط "جلب السعر تلقائيًا" لتحميل أحدث الأسعار';
+  document.getElementById('toolCurrencyBackdrop').classList.add('active');
+  computeCurrencyConversion();
+}
+function closeCurrencyTool(){ document.getElementById('toolCurrencyBackdrop').classList.remove('active'); }
+async function fetchCurrencyRates(){
+  const from = document.getElementById('curFrom').value;
+  document.getElementById('curRateInfo').textContent = 'جارٍ الجلب...';
+  try{
+    const res = await fetch('https://open.er-api.com/v6/latest/' + from);
+    const data = await res.json();
+    if(data.result !== 'success' || !data.rates) throw new Error('bad response');
+    currencyRatesCache = {base: from, rates: data.rates};
+    document.getElementById('curRateInfo').textContent = 'تم التحديث — القاعدة: ' + from;
+    computeCurrencyConversion();
+  }catch(e){
+    document.getElementById('curRateInfo').textContent = 'تعذّر الاتصال بخدمة الأسعار — يمكنك إدخال السعر يدويًا بالأسفل';
+    toast('تعذّر جلب الأسعار، تحقق من الاتصال بالإنترنت');
+  }
+}
+function computeCurrencyConversion(){
+  const amount = parseFloat(document.getElementById('curAmount').value) || 0;
+  const from = document.getElementById('curFrom').value;
+  const to = document.getElementById('curTo').value;
+  const manual = parseFloat(document.getElementById('curManualRate').value);
+  let rate = null;
+  if(manual && manual>0){ rate = manual; }
+  else if(currencyRatesCache && currencyRatesCache.base===from && currencyRatesCache.rates[to]){ rate = currencyRatesCache.rates[to]; }
+  if(!rate){ document.getElementById('curResult').textContent = 'اجلب السعر تلقائيًا أو أدخله يدويًا'; return; }
+  const result = amount * rate;
+  document.getElementById('curResult').textContent = amount + ' ' + from + ' = ' + result.toLocaleString('en-US',{maximumFractionDigits:4}) + ' ' + to + '  (السعر: ' + rate + ')';
+}
+
+/* ---------- أداة: العد التنازلي ---------- */
+let countdownInterval = null, countdownRemaining = 0, countdownRunning = false;
+function openCountdownTool(){
+  resetCountdownUI();
+  document.getElementById('toolCountdownBackdrop').classList.add('active');
+}
+function closeCountdownTool(){ document.getElementById('toolCountdownBackdrop').classList.remove('active'); }
+function resetCountdownUI(){
+  clearInterval(countdownInterval); countdownInterval = null; countdownRunning = false; countdownRemaining = 0;
+  document.getElementById('cdDisplay').textContent = '00:00:00';
+  document.getElementById('cdInputsRow').classList.remove('hidden');
+  document.getElementById('cdStartBtn').classList.remove('hidden');
+  document.getElementById('cdStartBtn').textContent = 'بدء';
+  document.getElementById('cdPauseBtn').classList.add('hidden');
+  document.getElementById('cdResetBtn').classList.add('hidden');
+}
+function updateCountdownDisplay(){
+  const h = Math.floor(countdownRemaining/3600);
+  const m = Math.floor((countdownRemaining%3600)/60);
+  const s = countdownRemaining%60;
+  document.getElementById('cdDisplay').textContent = [h,m,s].map(v=>String(v).padStart(2,'0')).join(':');
+}
+function startCountdown(){
+  if(!countdownRunning && countdownRemaining<=0){
+    const h = parseInt(document.getElementById('cdHours').value)||0;
+    const m = parseInt(document.getElementById('cdMinutes').value)||0;
+    const s = parseInt(document.getElementById('cdSeconds').value)||0;
+    countdownRemaining = h*3600 + m*60 + s;
+    if(countdownRemaining<=0){ toast('أدخل مدة صحيحة'); return; }
+  }
+  countdownRunning = true;
+  document.getElementById('cdInputsRow').classList.add('hidden');
+  document.getElementById('cdStartBtn').classList.add('hidden');
+  document.getElementById('cdPauseBtn').classList.remove('hidden');
+  document.getElementById('cdResetBtn').classList.remove('hidden');
+  updateCountdownDisplay();
+  countdownInterval = setInterval(()=>{
+    countdownRemaining--;
+    updateCountdownDisplay();
+    if(countdownRemaining<=0){
+      clearInterval(countdownInterval); countdownInterval = null; countdownRunning = false;
+      toast('انتهى الوقت!');
+      if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
+      document.getElementById('cdPauseBtn').classList.add('hidden');
+      document.getElementById('cdStartBtn').classList.remove('hidden');
+      document.getElementById('cdStartBtn').textContent = 'بدء من جديد';
+      document.getElementById('cdInputsRow').classList.remove('hidden');
+    }
+  }, 1000);
+}
+function pauseCountdown(){
+  clearInterval(countdownInterval); countdownInterval = null; countdownRunning = false;
+  document.getElementById('cdPauseBtn').classList.add('hidden');
+  document.getElementById('cdStartBtn').classList.remove('hidden');
+  document.getElementById('cdStartBtn').textContent = 'استئناف';
+}
+function resetCountdown(){ resetCountdownUI(); }
+
+/* ---------- أداة: ساعة التوقيت (Stopwatch) ---------- */
+let swInterval = null, swStart = 0, swElapsed = 0, swRunning = false, swLaps = [];
+function openStopwatchTool(){
+  clearInterval(swInterval); swInterval = null; swElapsed = 0; swRunning = false; swLaps = [];
+  document.getElementById('swDisplay').textContent = '00:00.00';
+  document.getElementById('swStartBtn').textContent = 'بدء';
+  renderSwLaps();
+  document.getElementById('toolStopwatchBackdrop').classList.add('active');
+}
+function closeStopwatchTool(){
+  document.getElementById('toolStopwatchBackdrop').classList.remove('active');
+}
+function formatStopwatch(ms){
+  const totalCs = Math.floor(ms/10);
+  const cs = totalCs%100;
+  const totalSec = Math.floor(totalCs/100);
+  return String(Math.floor(totalSec/60)).padStart(2,'0') + ':' + String(totalSec%60).padStart(2,'0') + '.' + String(cs).padStart(2,'0');
+}
+function updateSwDisplay(){
+  const total = swElapsed + (swRunning ? Date.now()-swStart : 0);
+  document.getElementById('swDisplay').textContent = formatStopwatch(total);
+}
+function toggleStopwatch(){
+  if(swRunning){
+    swRunning = false; clearInterval(swInterval); swInterval = null;
+    swElapsed += Date.now()-swStart;
+    document.getElementById('swStartBtn').textContent = 'استئناف';
+  } else {
+    swRunning = true; swStart = Date.now();
+    document.getElementById('swStartBtn').textContent = 'إيقاف';
+    swInterval = setInterval(updateSwDisplay, 30);
+  }
+}
+function recordLap(){
+  const total = swElapsed + (swRunning ? Date.now()-swStart : 0);
+  swLaps.unshift(total);
+  renderSwLaps();
+}
+function renderSwLaps(){
+  const wrap = document.getElementById('swLapsList');
+  wrap.innerHTML = swLaps.length
+    ? swLaps.map((t,i)=>`<div class="mp-row"><span>لفة ${swLaps.length-i}</span><span dir="ltr">${formatStopwatch(t)}</span></div>`).join('')
+    : '<p class="hint" style="text-align:center">لا توجد لفات مسجلة</p>';
+}
+function resetStopwatch(){
+  swRunning = false; clearInterval(swInterval); swInterval = null; swElapsed = 0; swLaps = [];
+  document.getElementById('swDisplay').textContent = '00:00.00';
+  document.getElementById('swStartBtn').textContent = 'بدء';
+  renderSwLaps();
+}
+
+/* ---------- أداة: البوصلة ---------- */
+let compassListenerActive = false;
+function compassEventHandler(e){ handleCompassEvent(e); }
+async function openCompassTool(){
+  document.getElementById('compassStatus').textContent = '';
+  document.getElementById('compassDegrees').textContent = '—';
+  document.getElementById('compassLocationText').textContent = '';
+  document.getElementById('toolCompassBackdrop').classList.add('active');
+  await startCompass();
+}
+function closeCompassTool(){
+  document.getElementById('toolCompassBackdrop').classList.remove('active');
+  stopCompass();
+}
+async function startCompass(){
+  if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+    try{
+      const perm = await DeviceOrientationEvent.requestPermission();
+      if(perm !== 'granted'){ document.getElementById('compassStatus').textContent = 'تم رفض إذن حساس الاتجاه'; return; }
+    }catch(e){ document.getElementById('compassStatus').textContent = 'تعذّر طلب إذن الحساس'; return; }
+  }
+  if(!window.DeviceOrientationEvent){
+    document.getElementById('compassStatus').textContent = 'حساس الاتجاه غير مدعوم في هذا الجهاز';
+    return;
+  }
+  window.addEventListener('deviceorientationabsolute', compassEventHandler, true);
+  window.addEventListener('deviceorientation', compassEventHandler, true);
+  compassListenerActive = true;
+}
+function stopCompass(){
+  window.removeEventListener('deviceorientationabsolute', compassEventHandler, true);
+  window.removeEventListener('deviceorientation', compassEventHandler, true);
+  compassListenerActive = false;
+}
+function compassDirLabel(h){
+  const dirs = ['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب'];
+  return dirs[Math.round(h/45)%8];
+}
+function handleCompassEvent(e){
+  let heading = null;
+  if(typeof e.webkitCompassHeading === 'number'){ heading = e.webkitCompassHeading; }
+  else if(e.alpha !== null && e.alpha !== undefined){ heading = 360 - e.alpha; }
+  if(heading===null || isNaN(heading)){ document.getElementById('compassStatus').textContent = 'لا توجد بيانات اتجاه متاحة الآن'; return; }
+  document.getElementById('compassStatus').textContent = '';
+  const needle = document.getElementById('compassNeedle');
+  if(needle) needle.style.transform = 'rotate(' + (-heading) + 'deg)';
+  document.getElementById('compassDegrees').textContent = Math.round(heading) + '°  ' + compassDirLabel(heading);
+}
+function openCompassLocation(){
+  if(!navigator.geolocation){ toast('تحديد الموقع غير مدعوم في هذا الجهاز'); return; }
+  document.getElementById('compassLocationText').textContent = 'جارٍ تحديد الموقع...';
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude, longitude} = pos.coords;
+    document.getElementById('compassLocationText').textContent = latitude.toFixed(5) + ', ' + longitude.toFixed(5);
+    window.open('https://www.google.com/maps?q=' + latitude + ',' + longitude, '_blank');
+  }, ()=>{
+    document.getElementById('compassLocationText').textContent = 'تعذّر تحديد الموقع';
+    toast('تعذّر الحصول على إذن الموقع');
+  }, {enableHighAccuracy:true, timeout:10000});
+}
+
+/* ---------- أداة: المتصفح ---------- */
+function openBrowser(){
+  document.getElementById('fabBtn').classList.remove('show');
+  showScreen('screen-browser');
+}
+function normalizeUrl(input){
+  let v = (input||'').trim();
+  if(!v) return null;
+  const looksLikeUrl = /^https?:\/\//i.test(v) || (/^[\w-]+(\.[\w-]+)+/.test(v) && !v.includes(' '));
+  if(/^https?:\/\//i.test(v)) return v;
+  if(looksLikeUrl) return 'https://' + v;
+  return 'https://www.google.com/search?q=' + encodeURIComponent(v);
+}
+function navigateBrowser(){
+  const input = document.getElementById('browserUrlInput');
+  const url = normalizeUrl(input.value);
+  if(!url) return;
+  input.value = url;
+  document.getElementById('browserHomeView').classList.add('hidden');
+  const frame = document.getElementById('browserIframe');
+  frame.classList.remove('hidden');
+  frame.src = url;
+}
+function quickBrowse(site){
+  document.getElementById('browserUrlInput').value = site;
+  navigateBrowser();
+}
+function browserGoHome(){
+  document.getElementById('browserUrlInput').value = '';
+  document.getElementById('browserIframe').src = 'about:blank';
+  document.getElementById('browserIframe').classList.add('hidden');
+  document.getElementById('browserHomeView').classList.remove('hidden');
+}
+function reloadBrowser(){
+  const frame = document.getElementById('browserIframe');
+  if(frame.src && frame.src!=='about:blank'){ frame.src = frame.src; }
+}
+function openBrowserExternal(){
+  const input = document.getElementById('browserUrlInput');
+  const url = normalizeUrl(input.value);
+  if(!url){ toast('اكتب رابطًا أولًا'); return; }
+  window.open(url, '_blank');
+}
+
 function init(){
   applyTheme();
-  if(settings.pinEnabled && settings.pin){
+  if(settings.pinEnabled && hasLockCredential()){
     showLockScreen();
   }
   renderHome();
+  applyFabBackStyle();
+  updateFabBackVisibility();
+  maybeShowBackupReminder();
+}
+function maybeShowBackupReminder(){
+  const LN = window.Capacitor?.Plugins?.LocalNotifications;
+  if(!settings.backupReminder || LN) return;
+  const last = settings.lastBackupAt || 0;
+  if(Date.now() - last >= 7*24*60*60*1000){
+    setTimeout(()=>toast('مضى أكثر من أسبوع — لا تنسَ عمل نسخة احتياطية'), 1200);
+  }
 }
 init();
 </script>
 </body>
-        </html>
+  </html>
