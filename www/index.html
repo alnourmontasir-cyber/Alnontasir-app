@@ -114,9 +114,22 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .fab{display:none;position:fixed;bottom:25px;inset-inline-end:22px;width:59px;height:59px;border-radius:50%;background:linear-gradient(155deg,var(--gold),var(--gold-dim));box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:100;}
 .fab.show{display:flex;}
 .fab svg{width:25px;height:25px;color:#12151b;}
-.fab-back{display:none;position:fixed;left:18px;bottom:100px;width:52px;height:52px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:998;touch-action:none;color:var(--text);}
+.fab-back{display:none;position:fixed;left:18px;bottom:100px;width:52px;height:52px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:998;touch-action:none;color:var(--text);transition:transform .35s ease, opacity .35s ease;}
 .fab-back.show{display:flex;}
 .fab-back svg{width:44%;height:44%;}
+.fab-back.docked{opacity:.5;}
+.fab-back.docked.docked-left{transform:translateX(-62%);}
+.fab-back.docked.docked-right{transform:translateX(62%);}
+.color-dot-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;align-items:center;}
+.color-dot{width:32px;height:32px;border-radius:50%;border:2px solid transparent;flex-shrink:0;position:relative;padding:0;}
+.color-dot.selected{border-color:var(--text);}
+.color-dot.selected::after{content:'';position:absolute;inset:0;margin:auto;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);}
+.color-dot-reset{width:32px;height:32px;border-radius:50%;border:2px dashed var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text-dim);background:transparent;}
+.color-dot-custom{width:32px;height:32px;border-radius:50%;flex-shrink:0;padding:0;border:2px solid var(--border);overflow:hidden;}
+.color-dot-custom input[type=color]{width:150%;height:150%;transform:translate(-15%,-15%);border:0;padding:0;cursor:pointer;}
+.icon-btn.active{background:var(--gold);color:#12151b;border-color:var(--gold);}
+.folder-card{touch-action:pan-y;}
+.folder-card.dragging{opacity:.55;transform:scale(1.05);box-shadow:var(--shadow);z-index:5;transition:none;}
 .project-progress-track{height:7px;border-radius:5px;background:var(--surface-2);overflow:hidden;margin-top:10px;}
 .project-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dim));}
 .modal-backdrop{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);}
@@ -494,6 +507,7 @@ input[type="text"], input:not([type]), textarea{
     <button onclick="exitFolderSelectMode()">إلغاء</button>
   </div>
 
+  <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة ثم اسحبها لتغيير ترتيبها</span>
   <div class="grid" id="foldersGrid"></div>
 </div>
 
@@ -840,9 +854,12 @@ input[type="text"], input:not([type]), textarea{
       <span class="sr-label">اهتزاز خفيف عند الإجراءات<small>عند الحفظ، الحذف، والتحديد</small></span>
       <button class="switch" id="hapticToggle" onclick="toggleHaptic()"></button>
     </div>
-    <div class="switch-row">
-      <span class="sr-label">شبكة حافظات مضغوطة في الرئيسية<small>3 أعمدة بدل عمودين لعرض أكبر عدد ممكن</small></span>
-      <button class="switch" id="compactGridToggle" onclick="toggleCompactGrid()"></button>
+    <div class="field">
+      <label>عدد أعمدة الشاشة الرئيسية<small>يتحكم في شكل عرض الحافظات وكل عناصر الرئيسية</small></label>
+      <select id="setHomeColumns" onchange="setHomeColumns(this.value)">
+        <option value="2">عمودان</option>
+        <option value="3">ثلاثة أعمدة</option>
+      </select>
     </div>
     <div class="switch-row">
       <span class="sr-label">إخفاء عدد العناصر على بطاقات الحافظات</span>
@@ -856,7 +873,7 @@ input[type="text"], input:not([type]), textarea{
 
   <div class="settings-group">
     <h4>زر الرجوع العائم</h4>
-    <span class="hint" style="display:block;margin-bottom:8px">زر يطفو فوق أي شاشة (غير الرئيسية) ويمكن سحبه لأي مكان تريده، ويقوم بنفس عمل زر الرجوع في أعلى الشاشة.</span>
+    <span class="hint" style="display:block;margin-bottom:8px">زر يطفو فوق كل الشاشات ويمكن سحبه لأي مكان تريده، ويقوم بنفس عمل زر الرجوع. عند عدم استخدامه لفترة، ينزلق تلقائيًا إلى أقرب حافة من الشاشة ليخلي مساحة أكبر، وتكفي لمسة واحدة لإرجاعه.</span>
     <div class="switch-row">
       <span class="sr-label">تفعيل الزر العائم</span>
       <button class="switch" id="fabBackToggle" onclick="toggleFabBack()"></button>
@@ -869,12 +886,20 @@ input[type="text"], input:not([type]), textarea{
       <label>درجة الوضوح <span id="fabBackOpacityVal">90%</span></label>
       <input type="range" id="fabBackOpacityRange" min="40" max="100" step="5" oninput="setFabBackOpacity(this.value)">
     </div>
+    <div class="field">
+      <label>لون الزر</label>
+      <div class="color-dot-row" id="fabBackColorGrid"></div>
+    </div>
     <button type="button" class="btn btn-ghost" style="width:100%" onclick="resetFabBackPosition()">إعادة ضبط موضع الزر</button>
   </div>
 
   <div class="settings-group">
     <h4>أدوات الشاشة الرئيسية</h4>
     <span class="hint" style="display:block;margin-bottom:8px">فعّل ما يفيدك واترك الباقي — الشاشة الرئيسية ليست مقصورة على الحافظات فقط.</span>
+    <div class="switch-row">
+      <span class="sr-label">قسم "أحدث الإضافات"<small>شريط أحدث العناصر المضافة أعلى الرئيسية</small></span>
+      <button class="switch" id="widgetToggle-recent" onclick="toggleWidget('recent')"></button>
+    </div>
     <div class="switch-row">
       <span class="sr-label">الساعة والتاريخ والتحية</span>
       <button class="switch" id="widgetToggle-clock" onclick="toggleWidget('clock')"></button>
@@ -1537,7 +1562,56 @@ const DEFAULT_FOLDERS = [
   {id:"other", name:"أخرى", color:"#64748b", color2:"#334155", kind:"file", icon:"grid"}
 ];
 
-let data = JSON.parse(localStorage.getItem("montasir_data") || "{}");
+/* ---------- محرك تخزين موسّع (IndexedDB) — يسمح بحفظ نصوص/أكواد طويلة جدًا وأعداد كبيرة من الصور
+   دون الاصطدام بحدود التخزين الصغيرة لـ localStorage (عادة 5-10 م.ب فقط).
+   يتم الانتقال تلقائيًا من أي بيانات قديمة محفوظة في localStorage عند أول تشغيل. ---------- */
+const IDB_NAME = 'montasirStore';
+const IDB_STORE = 'kv';
+function idbOpen(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB){ reject(new Error('no-idb')); return; }
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = ()=>{ if(!req.result.objectStoreNames.contains(IDB_STORE)) req.result.createObjectStore(IDB_STORE); };
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+async function idbGet(key){
+  const db = await idbOpen();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(IDB_STORE, 'readonly');
+    const req = tx.objectStore(IDB_STORE).get(key);
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+async function idbSet(key, value){
+  const db = await idbOpen();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(value, key);
+    tx.oncomplete = ()=>resolve(true);
+    tx.onerror = ()=>reject(tx.error);
+  });
+}
+async function loadAppData(){
+  try{
+    const stored = await idbGet('montasir_data');
+    if(stored && typeof stored === 'object'){ data = stored; return; }
+  }catch(e){}
+  // ترحيل تلقائي لمرّة واحدة من التخزين القديم المحدود (localStorage) إن وُجد
+  try{
+    const legacy = localStorage.getItem('montasir_data');
+    if(legacy){
+      data = JSON.parse(legacy);
+      try{ await idbSet('montasir_data', data); }catch(e){}
+      try{ localStorage.removeItem('montasir_data'); }catch(e){}
+      return;
+    }
+  }catch(e){}
+  data = {};
+}
+let data = {};
 let settings = JSON.parse(localStorage.getItem("montasir_settings") || "{}");
 if(!Array.isArray(settings.customFolders)) settings.customFolders = [];
 if(!settings.folderViews) settings.folderViews = {};
@@ -1545,14 +1619,17 @@ if(!settings.folderOverrides) settings.folderOverrides = {};
 if(!settings.defaultSort) settings.defaultSort = 'newest';
 if(!settings.defaultView) settings.defaultView = 'list';
 if(typeof settings.autoLockMinutes !== 'number') settings.autoLockMinutes = 0;
-if(!settings.widgets) settings.widgets = { clock:true, notes:true, todo:true, capture:true };
+if(!settings.widgets) settings.widgets = { clock:true, notes:false, todo:false, capture:true, recent:true };
+if(typeof settings.widgets.recent !== 'boolean') settings.widgets.recent = true;
 if(typeof settings.hapticEnabled !== 'boolean') settings.hapticEnabled = false;
-if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = false;
+if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = true;
 if(typeof settings.hideFolderCounts !== 'boolean') settings.hideFolderCounts = false;
-if(typeof settings.fabBackEnabled !== 'boolean') settings.fabBackEnabled = false;
+if(typeof settings.fabBackEnabled !== 'boolean') settings.fabBackEnabled = true;
 if(typeof settings.fabBackSize !== 'number') settings.fabBackSize = 52;
 if(typeof settings.fabBackOpacity !== 'number') settings.fabBackOpacity = 90;
 if(!settings.fabBackPos) settings.fabBackPos = null;
+if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
+if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
 let projects = JSON.parse(localStorage.getItem("montasir_projects") || "[]");
 function saveProjects(){
   try{ localStorage.setItem("montasir_projects", JSON.stringify(projects)); }
@@ -1612,15 +1689,10 @@ function updateFolderMeta(id, patch){
   saveSettingsData();
 }
 
-getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
-saveData();
-
 function saveData(){
-  try{
-    localStorage.setItem("montasir_data", JSON.stringify(data));
-  }catch(e){
-    toast('المساحة الداخلية ممتلئة — احذف بعض العناصر الكبيرة لإفساح المجال');
-  }
+  idbSet('montasir_data', data).catch(()=>{
+    toast('تعذّر حفظ البيانات — حاول مجددًا');
+  });
 }
 function saveSettingsData(){
   try{ localStorage.setItem("montasir_settings", JSON.stringify(settings)); }
@@ -1672,10 +1744,11 @@ function toggleHaptic(){
   document.getElementById('hapticToggle').classList.toggle('on', settings.hapticEnabled);
   haptic();
 }
-function toggleCompactGrid(){
-  settings.compactHomeGrid = !settings.compactHomeGrid;
+function setHomeColumns(val){
+  settings.compactHomeGrid = (String(val) === '3');
   saveSettingsData();
-  document.getElementById('compactGridToggle').classList.toggle('on', settings.compactHomeGrid);
+  const sel = document.getElementById('setHomeColumns');
+  if(sel) sel.value = settings.compactHomeGrid ? '3' : '2';
   renderHome();
 }
 function toggleHideCounts(){
@@ -1692,6 +1765,7 @@ function toggleHideLockedFromHome(){
 }
 
 /* ---------- Floating draggable back button ---------- */
+const FAB_BACK_PALETTE = ['#c9a24b','#ef4444','#3b82f6','#22c55e','#a855f7','#ec4899','#06b6d4','#f97316','#ffffff','#12151b'];
 function toggleFabBack(){
   settings.fabBackEnabled = !settings.fabBackEnabled;
   document.getElementById('fabBackToggle').classList.toggle('on', settings.fabBackEnabled);
@@ -1717,6 +1791,30 @@ function resetFabBackPosition(){
   saveSettingsData();
   toast('تمت إعادة ضبط موضع الزر');
 }
+function contrastColorFor(hex){
+  try{
+    let h = hex.replace('#','');
+    if(h.length===3) h = h.split('').map(c=>c+c).join('');
+    const r=parseInt(h.substr(0,2),16), g=parseInt(h.substr(2,2),16), b=parseInt(h.substr(4,2),16);
+    const yiq = (r*299+g*587+b*114)/1000;
+    return yiq>=140 ? '#12151b' : '#ffffff';
+  }catch(e){ return 'var(--text)'; }
+}
+function setFabBackColor(color){
+  settings.fabBackColor = color;
+  applyFabBackStyle();
+  saveSettingsData();
+  renderFabBackColorPicker();
+}
+function renderFabBackColorPicker(){
+  const box = document.getElementById('fabBackColorGrid');
+  if(!box) return;
+  const current = settings.fabBackColor;
+  let html = `<button type="button" class="color-dot-reset" onclick="setFabBackColor(null)" title="افتراضي">افتراضي</button>`;
+  html += FAB_BACK_PALETTE.map(c=>`<button type="button" class="color-dot ${current===c?'selected':''}" style="background:${c}" onclick="setFabBackColor('${c}')"></button>`).join('');
+  html += `<label class="color-dot-custom" title="لون مخصص"><input type="color" value="${current&&current[0]==='#'&&current.length===7?current:'#c9a24b'}" oninput="setFabBackColor(this.value)"></label>`;
+  box.innerHTML = html;
+}
 function applyFabBackStyle(){
   const btn = document.getElementById('fabBackBtn');
   if(!btn) return;
@@ -1724,6 +1822,15 @@ function applyFabBackStyle(){
   btn.style.width = size+'px';
   btn.style.height = size+'px';
   btn.style.opacity = (settings.fabBackOpacity||90)/100;
+  if(settings.fabBackColor){
+    btn.style.background = settings.fabBackColor;
+    btn.style.color = contrastColorFor(settings.fabBackColor);
+    btn.style.borderColor = settings.fabBackColor;
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
   if(settings.fabBackPos && typeof settings.fabBackPos.x === 'number'){
     btn.style.left = settings.fabBackPos.x+'px';
     btn.style.top = settings.fabBackPos.y+'px';
@@ -1741,14 +1848,35 @@ function updateFabBackVisibility(){
   if(!btn) return;
   const activeEl = document.querySelector('.screen.active');
   const activeId = activeEl ? activeEl.id : '';
-  const show = settings.fabBackEnabled && activeId && activeId !== 'screen-home';
+  const show = settings.fabBackEnabled && !!activeId;
   btn.classList.toggle('show', !!show);
+  if(show) scheduleFabBackIdleDock();
+  else clearTimeout(fabBackIdleTimer);
 }
 function floatingBackAction(){
   const activeScreen = document.querySelector('.screen.active');
   if(!activeScreen) return;
+  if(activeScreen.id === 'screen-home') return;
   const backBtn = activeScreen.querySelector('.detail-header .icon-btn, .top-header .icon-btn');
   if(backBtn) backBtn.click();
+}
+let fabBackIdleTimer = null;
+function scheduleFabBackIdleDock(){
+  clearTimeout(fabBackIdleTimer);
+  const btn = document.getElementById('fabBackBtn');
+  if(!btn) return;
+  btn.classList.remove('docked');
+  fabBackIdleTimer = setTimeout(dockFabBackToEdge, 2500);
+}
+function dockFabBackToEdge(){
+  const btn = document.getElementById('fabBackBtn');
+  if(!btn || !btn.classList.contains('show')) return;
+  const rect = btn.getBoundingClientRect();
+  const center = rect.left + rect.width/2;
+  const goLeft = center < window.innerWidth/2;
+  btn.classList.toggle('docked-left', goLeft);
+  btn.classList.toggle('docked-right', !goLeft);
+  btn.classList.add('docked');
 }
 (function initFabBackDrag(){
   const btn = document.getElementById('fabBackBtn');
@@ -1756,6 +1884,8 @@ function floatingBackAction(){
   let dragging=false, moved=false, startX=0, startY=0, origX=0, origY=0;
   btn.addEventListener('pointerdown', e=>{
     dragging = true; moved = false;
+    clearTimeout(fabBackIdleTimer);
+    btn.classList.remove('docked','docked-left','docked-right');
     try{ btn.setPointerCapture(e.pointerId); }catch(err){}
     const rect = btn.getBoundingClientRect();
     startX = e.clientX; startY = e.clientY;
@@ -1779,6 +1909,7 @@ function floatingBackAction(){
       saveSettingsData();
     }
     dragging = false;
+    scheduleFabBackIdleDock();
   });
   btn.addEventListener('click', e=>{
     if(moved){ moved = false; return; }
@@ -1957,6 +2088,119 @@ function setHomeSort(val){
   saveSettingsData();
   renderHome();
 }
+function ensureFolderOrder(){
+  const ids = getFolders().map(f=>f.id);
+  if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
+  settings.folderOrder = settings.folderOrder.filter(id=>ids.includes(id));
+  ids.forEach(id=>{ if(!settings.folderOrder.includes(id)) settings.folderOrder.push(id); });
+}
+
+/* ---------- إعادة ترتيب الحافظات بالضغط المطوّل ثم السحب ---------- */
+const LONG_PRESS_MS = 380;
+const DRAG_CANCEL_DIST = 10;
+function attachFolderDrag(card, folderId){
+  let pressTimer = null;
+  let startX = 0, startY = 0;
+  let isDragging = false;
+  let justDragged = false;
+  let scrollRAF = null;
+  let lastClientY = 0;
+
+  function autoScrollTick(){
+    if(!isDragging){ scrollRAF = null; return; }
+    const margin = 80, maxSpeed = 16;
+    if(lastClientY < margin){
+      window.scrollBy(0, -maxSpeed * (1 - lastClientY/margin));
+    } else if(window.innerHeight - lastClientY < margin){
+      const d = window.innerHeight - lastClientY;
+      window.scrollBy(0, maxSpeed * (1 - d/margin));
+    }
+    scrollRAF = requestAnimationFrame(autoScrollTick);
+  }
+
+  function cleanupPending(){
+    clearTimeout(pressTimer);
+    pressTimer = null;
+    document.removeEventListener('pointermove', onPreMove);
+    document.removeEventListener('pointerup', onPreUp);
+    document.removeEventListener('pointercancel', onPreUp);
+  }
+  function onPreMove(e){
+    if(Math.hypot(e.clientX - startX, e.clientY - startY) > DRAG_CANCEL_DIST){
+      cleanupPending();
+    }
+  }
+  function onPreUp(){
+    cleanupPending();
+  }
+  function onPointerDown(e){
+    if(folderSelectMode || homeFilterText) return;
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    startX = e.clientX; startY = e.clientY;
+    document.addEventListener('pointermove', onPreMove);
+    document.addEventListener('pointerup', onPreUp, {once:true});
+    document.addEventListener('pointercancel', onPreUp, {once:true});
+    pressTimer = setTimeout(()=>beginDrag(e), LONG_PRESS_MS);
+  }
+  function beginDrag(e){
+    cleanupPending();
+    isDragging = true;
+    if(settings.homeSort !== 'custom'){
+      settings.homeSort = 'custom';
+      saveSettingsData();
+      const sel = document.getElementById('homeSortSelect');
+      if(sel) sel.value = 'custom';
+    }
+    card.classList.add('dragging');
+    if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(12); }catch(err){} }
+    try{ card.setPointerCapture(e.pointerId); }catch(err){}
+    document.addEventListener('pointermove', onDragMove, {passive:false});
+    document.addEventListener('pointerup', onDragEnd, {once:true});
+    document.addEventListener('pointercancel', onDragEnd, {once:true});
+  }
+  function onDragMove(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    lastClientY = e.clientY;
+    if(!scrollRAF) scrollRAF = requestAnimationFrame(autoScrollTick);
+    const grid = document.getElementById('foldersGrid');
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const overCard = el && el.closest ? el.closest('.folder-card') : null;
+    if(overCard && overCard !== card && grid.contains(overCard) && !overCard.classList.contains('add-folder-card')){
+      const kids = Array.from(grid.children);
+      const curIdx = kids.indexOf(card);
+      const overIdx = kids.indexOf(overCard);
+      if(curIdx > -1 && overIdx > -1){
+        if(curIdx < overIdx) grid.insertBefore(card, overCard.nextSibling);
+        else grid.insertBefore(card, overCard);
+      }
+    }
+  }
+  function onDragEnd(e){
+    document.removeEventListener('pointermove', onDragMove, {passive:false});
+    if(scrollRAF){ cancelAnimationFrame(scrollRAF); scrollRAF = null; }
+    card.classList.remove('dragging');
+    isDragging = false;
+    justDragged = true;
+    try{ card.releasePointerCapture(e.pointerId); }catch(err){}
+    persistFolderOrderFromDOM();
+    setTimeout(()=>{ justDragged = false; }, 60);
+  }
+  card.addEventListener('pointerdown', onPointerDown);
+  card.addEventListener('click', function(ev){
+    if(isDragging || justDragged){ ev.stopPropagation(); ev.preventDefault(); }
+  }, true);
+}
+function persistFolderOrderFromDOM(){
+  const grid = document.getElementById('foldersGrid');
+  const ids = Array.from(grid.children).map(c=>c.dataset && c.dataset.folderId).filter(Boolean);
+  if(!ids.length) return;
+  ensureFolderOrder();
+  const remaining = settings.folderOrder.filter(id=>!ids.includes(id));
+  settings.folderOrder = ids.concat(remaining);
+  saveSettingsData();
+  renderHome();
+}
 function sortedVisibleFolders(){
   let list = getFolders();
   if(settings.hideLockedFromHome){
@@ -1966,7 +2210,10 @@ function sortedVisibleFolders(){
     list = list.filter(f=>f.name.toLowerCase().includes(homeFilterText));
   }
   const mode = settings.homeSort || 'custom';
-  if(mode === 'name'){
+  if(mode === 'custom'){
+    ensureFolderOrder();
+    list = list.slice().sort((a,b)=> settings.folderOrder.indexOf(a.id) - settings.folderOrder.indexOf(b.id));
+  } else if(mode === 'name'){
     list = list.slice().sort((a,b)=>a.name.localeCompare(b.name,'ar'));
   } else if(mode === 'count'){
     list = list.slice().sort((a,b)=> (data[b.id]||[]).filter(i=>!i.deleted).length - (data[a.id]||[]).filter(i=>!i.deleted).length);
@@ -1983,8 +2230,8 @@ function renderHomeStats(){
   const favCount = items.filter(i=>i.favorite).length;
   let bytes = 0;
   try{
-    bytes += (localStorage.getItem('montasir_data')||'').length;
-    bytes += (localStorage.getItem('montasir_settings')||'').length;
+    bytes += JSON.stringify(data).length;
+    bytes += JSON.stringify(settings).length;
   }catch(e){}
   const kb = bytes/1024;
   const storageLine = kb>1024 ? (kb/1024).toFixed(1)+' م.ب' : kb.toFixed(0)+' ك.ب';
@@ -1997,6 +2244,7 @@ function renderHomeStats(){
 function renderRecentItems(){
   const scroller = document.getElementById('recentScroller');
   const section = document.getElementById('recentSection');
+  if(settings.widgets && settings.widgets.recent===false){ section.classList.add('hidden'); return; }
   const items = allItemsFlat(false).sort((a,b)=>b.createdAt-a.createdAt).slice(0,10);
   if(items.length===0){ section.classList.add('hidden'); return; }
   section.classList.remove('hidden');
@@ -2025,6 +2273,7 @@ function toggleWidget(key){
 let _clockTimer = null;
 function renderWidgets(){
   const w = settings.widgets || {};
+  renderRecentItems();
   document.getElementById('widgetClockBlock').classList.toggle('hidden', !w.clock);
   document.getElementById('widgetNotesBlock').classList.toggle('hidden', !w.notes);
   document.getElementById('widgetTodoBlock').classList.toggle('hidden', !w.todo);
@@ -2180,12 +2429,13 @@ function renderHome(){
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">${svg('search')}<p>لا حافظات تطابق "${escapeHTML(homeFilterText)}"</p></div>`;
     return;
   }
-  folders.forEach(folder=>{
+  folders.forEach((folder, idx)=>{
     const count = (data[folder.id]||[]).filter(i=>!i.deleted).length;
     const checked = selectedFolderIds.has(folder.id);
     const card = document.createElement("button");
     card.type = "button";
     card.className = "folder-card";
+    card.dataset.folderId = folder.id;
     card.style.setProperty("--fc", folder.color);
     card.style.setProperty("--fc2", folder.color2);
     card.innerHTML = `
@@ -2197,12 +2447,15 @@ function renderHome(){
         ${settings.hideFolderCounts ? '' : `<span>${count} ${count===1?"عنصر":"عناصر"}</span>`}
       </div>`;
     card.onclick = () => { folderSelectMode ? toggleFolderChecked(folder.id) : openFolder(folder.id); };
+    if(!folderSelectMode && !homeFilterText){
+      attachFolderDrag(card, folder.id);
+    }
     grid.appendChild(card);
   });
   if(!folderSelectMode && !homeFilterText){
     const addCard = document.createElement("button");
     addCard.type = "button";
-    addCard.className = "folder-card";
+    addCard.className = "folder-card add-folder-card";
     addCard.style.setProperty("--fc", "#c9a24b");
     addCard.style.setProperty("--fc2", "#8a733a");
     addCard.innerHTML = `
@@ -3590,7 +3843,11 @@ document.getElementById('backupImportInput').addEventListener('change', e=>{
           if(!settings.defaultSort) settings.defaultSort = 'newest';
           if(!settings.defaultView) settings.defaultView = 'list';
           if(typeof settings.autoLockMinutes !== 'number') settings.autoLockMinutes = 0;
-          if(!settings.widgets) settings.widgets = { clock:true, notes:true, todo:true, capture:true };
+          if(!settings.widgets) settings.widgets = { clock:true, notes:false, todo:false, capture:true, recent:true };
+          if(typeof settings.widgets.recent !== 'boolean') settings.widgets.recent = true;
+          if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = true;
+          if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
+          if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
         }
         if(parsed.widgetsData){
           widgetsData = parsed.widgetsData;
@@ -3762,13 +4019,13 @@ function evaluateCalcExpr(str){
 function refreshStorageInfo(){
   let bytes = 0;
   try{
-    bytes += (localStorage.getItem('montasir_data')||'').length;
-    bytes += (localStorage.getItem('montasir_settings')||'').length;
+    bytes += JSON.stringify(data).length;
+    bytes += JSON.stringify(settings).length;
   }catch(e){}
   const kb = bytes/1024;
   const line = kb>1024 ? (kb/1024).toFixed(2)+' ميجابايت تقريبًا' : kb.toFixed(0)+' كيلوبايت تقريبًا';
   const total = allItemsFlat(true).length;
-  document.getElementById('storageInfoLine').textContent = line + ' — ' + total + ' عنصر إجمالًا';
+  document.getElementById('storageInfoLine').textContent = line + ' — ' + total + ' عنصر إجمالًا (التخزين الموسّع مفعّل، لا حدود عملية على طول النصوص أو عدد الصور)';
 }
 
 /* ---------- Analytics ---------- */
@@ -3940,11 +4197,11 @@ function loadSettingsForm(){
   document.getElementById('setDefaultSort').value = settings.defaultSort || 'newest';
   document.getElementById('setDefaultView').value = settings.defaultView || 'list';
   document.getElementById('setAutoLock').value = String(settings.autoLockMinutes || 0);
-  ['clock','notes','todo','capture'].forEach(k=>{
+  ['clock','notes','todo','capture','recent'].forEach(k=>{
     document.getElementById('widgetToggle-'+k).classList.toggle('on', !!(settings.widgets && settings.widgets[k]));
   });
   document.getElementById('hapticToggle').classList.toggle('on', !!settings.hapticEnabled);
-  document.getElementById('compactGridToggle').classList.toggle('on', !!settings.compactHomeGrid);
+  document.getElementById('setHomeColumns').value = settings.compactHomeGrid ? '3' : '2';
   document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
   document.getElementById('hideLockedToggle').classList.toggle('on', !!settings.hideLockedFromHome);
   document.getElementById('fabBackToggle').classList.toggle('on', !!settings.fabBackEnabled);
@@ -3952,6 +4209,7 @@ function loadSettingsForm(){
   document.getElementById('fabBackSizeVal').textContent = settings.fabBackSize;
   document.getElementById('fabBackOpacityRange').value = settings.fabBackOpacity;
   document.getElementById('fabBackOpacityVal').textContent = settings.fabBackOpacity+'%';
+  renderFabBackColorPicker();
   loadThemeForm();
   refreshStorageInfo();
   renderAnalytics();
@@ -4933,7 +5191,13 @@ function maybeShowBackupReminder(){
     setTimeout(()=>toast('مضى أكثر من أسبوع — لا تنسَ عمل نسخة احتياطية'), 1200);
   }
 }
-init();
+async function boot(){
+  await loadAppData();
+  getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
+  saveData();
+  init();
+}
+boot();
 </script>
 </body>
-                                                                                                               </html>
+  </html>
