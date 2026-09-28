@@ -269,6 +269,35 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .select-bar .sb-count{flex-shrink:0;font-size:12.5px;color:var(--text-dim);white-space:nowrap;padding-inline-end:2px;}
 .select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
 .select-bar button.danger{background:var(--danger);color:#fff;}
+
+/* ---- رسالة الصباح / المساء ---- */
+#dayGreetBackdrop{z-index:900;align-items:center;padding:22px;background:rgba(6,8,12,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.greet-box{width:100%;max-width:380px;border-radius:28px;overflow:hidden;background:var(--surface);border:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;animation:greetIn .55s cubic-bezier(.2,.9,.3,1) both;}
+.greet-hero{position:relative;padding:34px 20px 54px;overflow:hidden;color:#fff;}
+.greet-box.morning .greet-hero{background:linear-gradient(160deg,#f6c453 0%,#e9913a 55%,#c9603a 100%);}
+.greet-box.evening .greet-hero{background:linear-gradient(160deg,#2b3a72 0%,#1d2550 55%,#111634 100%);}
+.greet-hero::before,.greet-hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none;}
+.greet-hero::before{width:190px;height:190px;top:-70px;inset-inline-start:-60px;}
+.greet-hero::after{width:130px;height:130px;bottom:-50px;inset-inline-end:-30px;}
+.greet-box.evening .greet-hero .gh-star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.8;animation:greetTwinkle 3s ease-in-out infinite;}
+.greet-icon{position:relative;z-index:1;width:84px;height:84px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);box-shadow:0 0 0 10px rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.25);}
+.greet-icon svg{width:44px;height:44px;color:#fff;}
+.greet-box.morning .greet-icon svg{animation:greetSpin 24s linear infinite;}
+.greet-title{position:relative;z-index:1;margin:0;font-size:calc(28px * var(--font-scale));font-weight:900;letter-spacing:.3px;}
+.greet-curve{position:absolute;bottom:-1px;left:0;right:0;height:26px;z-index:2;}
+.greet-curve path{fill:var(--surface);}
+.greet-body{padding:6px 24px 24px;}
+.greet-eyebrow{font-size:12px;color:var(--text-dim);margin:0 0 6px;}
+.greet-brand{margin:0 0 14px;font-size:calc(17px * var(--font-scale));font-weight:900;color:var(--gold);}
+.greet-sep{width:54px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 14px;}
+.greet-text{margin:0 0 6px;font-size:calc(14px * var(--font-scale));line-height:1.9;color:var(--text);}
+.greet-wish{margin:0 0 18px;font-size:calc(13px * var(--font-scale));line-height:1.8;color:var(--text-dim);}
+.greet-date{display:inline-block;margin:0 0 16px;padding:5px 14px;border-radius:30px;background:var(--surface-2);border:1px solid var(--border);font-size:11.5px;color:var(--text-dim);}
+.greet-btn{width:100%;padding:14px;border-radius:30px;background:var(--gold);color:#12151b;font-size:15px;font-weight:800;box-shadow:0 6px 18px rgba(201,162,75,.28);}
+.greet-btn:active{transform:scale(.98);}
+@keyframes greetIn{from{opacity:0;transform:translateY(18px) scale(.94);}to{opacity:1;transform:none;}}
+@keyframes greetSpin{to{transform:rotate(360deg);}}
+@keyframes greetTwinkle{0%,100%{opacity:.25;}50%{opacity:1;}}
 .select-bar.compact{gap:6px;padding:6px 8px;margin-bottom:10px;overflow-x:visible;justify-content:flex-start;}
 .select-bar.compact .sb-count{font-size:12px;padding-inline:4px;margin-inline-end:auto;}
 .select-bar button.sb-ico{width:34px;height:34px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;}
@@ -975,6 +1004,10 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
   <div class="settings-group">
     <h4>تحكمات إضافية</h4>
     <div class="switch-row">
+      <span class="sr-label">رسالة الصباح والمساء<small>تظهر عند فتح التطبيق</small></span>
+      <button class="switch" id="dayGreetToggle" onclick="toggleDayGreeting()"></button>
+    </div>
+    <div class="switch-row">
       <span class="sr-label">اهتزاز خفيف عند الإجراءات<small>عند الحفظ، الحذف، والتحديد</small></span>
       <button class="switch" id="hapticToggle" onclick="toggleHaptic()"></button>
     </div>
@@ -1391,6 +1424,26 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     <div id="sharePreviewBox" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px"></div>
     <p class="mini-hint" style="margin:0 0 8px">اختر الحافظة التي تريد الحفظ فيها</p>
     <div class="folder-pick-list" id="sharePickList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop center-modal" id="dayGreetBackdrop" role="dialog" aria-modal="true" aria-labelledby="dayGreetTitle" onclick="if(event.target===this)closeDayGreeting()">
+  <div class="greet-box morning" id="dayGreetBox">
+    <div class="greet-hero">
+      <span id="dayGreetStars"></span>
+      <div class="greet-icon" id="dayGreetIcon"></div>
+      <h2 class="greet-title" id="dayGreetTitle">صباح الخير</h2>
+      <svg class="greet-curve" viewBox="0 0 400 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 26V14C70 0 130 0 200 8s130 12 200 2v16z"/></svg>
+    </div>
+    <div class="greet-body">
+      <p class="greet-eyebrow">تحية طيبة من</p>
+      <p class="greet-brand">منصة منتصر النور حسين</p>
+      <div class="greet-sep"></div>
+      <p class="greet-text" id="dayGreetText"></p>
+      <p class="greet-wish" id="dayGreetWish"></p>
+      <span class="greet-date" id="dayGreetDate"></span>
+      <button class="greet-btn" onclick="closeDayGreeting()" id="dayGreetBtn">ابدأ الآن</button>
+    </div>
   </div>
 </div>
 
@@ -5172,6 +5225,7 @@ function loadSettingsForm(){
     document.getElementById('widgetToggle-'+k).classList.toggle('on', !!(settings.widgets && settings.widgets[k]));
   });
   document.getElementById('hapticToggle').classList.toggle('on', !!settings.hapticEnabled);
+  document.getElementById('dayGreetToggle').classList.toggle('on', settings.dayGreeting !== false);
   document.getElementById('setHomeColumns').value = settings.compactHomeGrid ? '3' : '2';
   document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
   document.getElementById('hideLockedToggle').classList.toggle('on', !!settings.hideLockedFromHome);
@@ -6844,6 +6898,46 @@ function maybeShowOnboarding(){
   if(!seen) setTimeout(openHelpGuide, 700);
 }
 
+/* ---------- رسالة الصباح / المساء ---------- */
+const GREET_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" fill-opacity=".25"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.85 1.85M16.85 16.85l1.85 1.85M18.7 5.3l-1.85 1.85M7.15 16.85L5.3 18.7"/></svg>';
+const GREET_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" fill="currentColor" fill-opacity=".25"/></svg>';
+function toggleDayGreeting(){
+  settings.dayGreeting = !(settings.dayGreeting !== false);
+  saveSettingsData();
+  document.getElementById('dayGreetToggle').classList.toggle('on', settings.dayGreeting !== false);
+}
+function showDayGreeting(force){
+  const h = new Date().getHours();
+  const morning = h >= 4 && h < 12;
+  const box = document.getElementById('dayGreetBox');
+  box.classList.toggle('morning', morning);
+  box.classList.toggle('evening', !morning);
+  document.getElementById('dayGreetIcon').innerHTML = morning ? GREET_SUN : GREET_MOON;
+  document.getElementById('dayGreetTitle').textContent = morning ? 'صباح الخير' : 'مساء الخير';
+  document.getElementById('dayGreetText').textContent = 'نقدّم لكم كل ما يلزمكم لتنظيم محتواكم وحفظه بأمان وسهولة، في مكان واحد.';
+  document.getElementById('dayGreetWish').textContent = morning
+    ? 'نتمنى لكم صباحًا مشرقًا ويومًا مليئًا بالإنجاز والتوفيق.'
+    : 'نتمنى لكم مساءً هادئًا وأوقاتًا مليئة بالراحة والسكينة.';
+  let dateTxt = '';
+  try{ dateTxt = new Date().toLocaleDateString('ar', {weekday:'long', day:'numeric', month:'long', year:'numeric'}); }catch(e){}
+  const dEl = document.getElementById('dayGreetDate');
+  dEl.textContent = dateTxt; dEl.style.display = dateTxt ? '' : 'none';
+  const stars = document.getElementById('dayGreetStars');
+  stars.innerHTML = morning ? '' : [[12,18],[28,60],[45,14],[70,40],[85,20],[92,66],[20,80],[60,78]]
+    .map((p,i)=>`<i class="gh-star" style="top:${p[1]}%;inset-inline-start:${p[0]}%;animation-delay:${(i*0.4).toFixed(1)}s"></i>`).join('');
+  document.getElementById('dayGreetBackdrop').classList.add('active');
+}
+function closeDayGreeting(){
+  document.getElementById('dayGreetBackdrop').classList.remove('active');
+}
+function maybeShowDayGreeting(){
+  if(settings.dayGreeting === false) return;
+  let onboarded = true;
+  try{ onboarded = !!localStorage.getItem('montasir_onboarded'); }catch(e){}
+  if(!onboarded) return; // المستخدم الجديد يرى دليل الاستخدام أولًا
+  setTimeout(showDayGreeting, 500);
+}
+
 function init(){
   applyTheme();
   applyA11ySettings();
@@ -6856,6 +6950,7 @@ function init(){
   maybeShowBackupReminder();
   setupA11yObserver();
   maybeShowOnboarding();
+  maybeShowDayGreeting();
 }
 function maybeShowBackupReminder(){
   const LN = window.Capacitor?.Plugins?.LocalNotifications;
@@ -6875,4 +6970,4 @@ async function boot(){
 boot();
 </script>
 </body>
-          </html>
+        </html>
