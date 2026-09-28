@@ -185,6 +185,13 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .icon-pick{aspect-ratio:1;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
 .icon-pick svg{width:18px;height:18px;}
 .icon-pick.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;}
+.icon-tab-row{display:flex;gap:8px;margin-top:8px;}
+.icon-tab-btn{flex:1;padding:9px 6px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:12.5px;font-weight:700;color:var(--text-dim);}
+.icon-tab-btn.active{background:var(--gold);color:#12151b;border-color:var(--gold);}
+.emoji-pick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px;}
+.emoji-pick{aspect-ratio:1;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;}
+.emoji-pick.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;}
+.folder-emoji{font-size:calc(var(--icon-size) * 0.52);line-height:1;}
 .mode-row{display:flex;gap:10px;}
 .mode-btn{flex:1;padding:14px 10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;}
 .mode-btn svg{width:20px;height:20px;}
@@ -638,6 +645,7 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
     <span class="sb-count" id="folderSelCount">0 محدد</span>
     <button onclick="openOrderModal('folders')">ترتيب</button>
+    <button id="folderEditSelBtn" onclick="editSelectedFolder()">تعديل</button>
     <button onclick="hideSelectedFolders()">إخفاء</button>
     <button class="danger" onclick="deleteSelectedFolders()">حذف</button>
     <button class="accent" onclick="lockSelectedFolders()"><span id="folderLockLabel">قفل</span></button>
@@ -1315,7 +1323,12 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     </div>
     <div class="field">
       <label>الأيقونة</label>
+      <div class="icon-tab-row">
+        <button type="button" class="icon-tab-btn" id="iconTabBtn-icons" onclick="switchFolderIconTab('icons')">رموز</button>
+        <button type="button" class="icon-tab-btn" id="iconTabBtn-emoji" onclick="switchFolderIconTab('emoji')">إيموجي</button>
+      </div>
       <div class="icon-pick-grid" id="folderIconPicker"></div>
+      <div class="emoji-pick-grid hidden" id="folderEmojiPicker"></div>
     </div>
     <div class="field">
       <label>أو استخدم صورة من المعرض كأيقونة</label>
@@ -1880,10 +1893,13 @@ const ICONS = {
 };
 const FOLDER_ICON_CHOICES = ['heart','star','shield','layers','film','music','code','grid','book','briefcase','gift','plane','target','camera','mic','file','text','article','poem','mail','phone','globe','lock','key','calendar','clock','bookmark','folder2','archive','cloud','coffee','home','car','chat','mappin','flag','sun','moon','umbrella','compass','anchor','award','box','rocket','smile','paperclip','link','tag','zap','droplet','headphones','monitor','smartphone','creditcard','shoppingbag','users','activity','feather','quote','checklist'];
 const ICON_PALETTE = ['#f59e0b','#ec4899','#a855f7','#3b82f6','#22c55e','#ef4444','#06b6d4','#eab308','#f97316','#8b5cf6','#10b981','#e11d48','#14b8a6','#6366f1','#d946ef'];
+/* مجموعة إيموجي متنوعة وملوّنة يمكن اختيارها كأيقونة للحافظة */
+const FOLDER_EMOJI_CHOICES = ['❤️','⭐','🔥','✨','🎯','📌','📎','🔑','🔒','🎁','📷','🎬','🎵','🎧','📚','📝','✏️','📁','🗂️','💼','💰','💡','🌟','🌈','☀️','🌙','☁️','🌸','🍀','🌵','🍎','☕','🍕','🎂','⚽','🏆','🎮','🧩','✈️','🚗','🏠','🕌','📍','💬','📞','✉️','🔔','🎉','🎈','🐱','🐶','🦋','📅','⏰','🧠','💻','🛒','👜','🩺'];
 function svg(name,extra){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
 function svgFilled(name,extra){return `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none" ${extra||""}>${ICONS[name]||ICONS.file}</svg>`;}
 function folderIconInner(folder){
   if(folder.customIcon) return `<img src="${folder.customIcon}">`;
+  if(folder.emoji) return `<span class="folder-emoji">${folder.emoji}</span>`;
   return svg(folder.icon);
 }
 
@@ -1950,10 +1966,20 @@ async function loadAppData(){
   data = {};
 }
 let data = {};
-let settings = JSON.parse(localStorage.getItem("montasir_settings") || "{}");
+const _rawSettingsStr = localStorage.getItem("montasir_settings");
+const _isFirstEverRun = !_rawSettingsStr;
+let settings = JSON.parse(_rawSettingsStr || "{}");
 if(!Array.isArray(settings.customFolders)) settings.customFolders = [];
 if(!settings.folderViews) settings.folderViews = {};
 if(!settings.folderOverrides) settings.folderOverrides = {};
+/* عند أول تشغيل للتطبيق فقط: حذف بعض الحافظات الافتراضية نهائيًا من التطبيق بالكامل
+   (لا تظهر في الرئيسية ولا في سلة المحذوفات؛ ولإضافتها من جديد يمكن إنشاء
+   حافظة جديدة يدويًا من زر "إضافة حافظة") */
+if(_isFirstEverRun){
+  ['other','mymemory','tambour'].forEach(fid=>{
+    settings.folderOverrides[fid] = Object.assign({}, settings.folderOverrides[fid]||{}, {purged:true});
+  });
+}
 if(!settings.defaultSort) settings.defaultSort = 'newest';
 if(!settings.defaultView) settings.defaultView = 'list';
 if(typeof settings.autoLockMinutes !== 'number') settings.autoLockMinutes = 0;
@@ -2002,6 +2028,7 @@ let currentViewFolder = null;
 let viewOrigin = "folder";
 let pickedFolderIcon = "heart";
 let pendingFolderCustomIcon = null;
+let pendingFolderEmoji = null;
 let editingFolderId = null;
 let editingItemMode = false;
 let pendingMoveTarget = null;
@@ -2025,7 +2052,10 @@ let pendingFolderLockData = null;
 let searchFavOnly = false;
 
 function getAllFolders(){
-  return DEFAULT_FOLDERS.map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{})).concat(settings.customFolders);
+  return DEFAULT_FOLDERS
+    .filter(f => !(settings.folderOverrides[f.id] && settings.folderOverrides[f.id].purged))
+    .map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{}))
+    .concat(settings.customFolders);
 }
 function getFolders(){
   const list = getAllFolders().filter(f=>!f.deleted);
@@ -2470,6 +2500,14 @@ function updateFolderSelCount(){
   const lb = document.getElementById('folderLockLabel');
   if(lb){ const ids=[...selectedFolderIds]; lb.textContent = (ids.length && ids.every(id=>{const f=getFolder(id);return f&&f.locked;})) ? 'إلغاء القفل' : 'قفل'; }
   document.getElementById('selAllFoldersLabel').textContent = (all.length>0 && all.every(id=>selectedFolderIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
+  const editBtn = document.getElementById('folderEditSelBtn');
+  if(editBtn) editBtn.classList.toggle('hidden', selectedFolderIds.size !== 1);
+}
+/* فتح نافذة تعديل الاسم/الصورة/الأيقونة للحافظة المحددة (عند تحديد حافظة واحدة فقط) */
+function editSelectedFolder(){
+  if(selectedFolderIds.size !== 1){ toast('اختر حافظة واحدة فقط للتعديل'); return; }
+  const id = [...selectedFolderIds][0];
+  openFolderModal(id);
 }
 function deleteSelectedFolders(){
   if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
@@ -3074,9 +3112,31 @@ function renderFolderIconPicker(selected){
   const pick = document.getElementById('folderIconPicker');
   pick.innerHTML = FOLDER_ICON_CHOICES.map((ic,i)=>{
     const col = ICON_PALETTE[i % ICON_PALETTE.length];
-    const sel = (!pendingFolderCustomIcon && ic===selected) ? 'selected' : '';
+    const sel = (!pendingFolderCustomIcon && !pendingFolderEmoji && ic===selected) ? 'selected' : '';
     return `<button type="button" class="icon-pick ${sel}" data-icon="${ic}" style="color:${col};background:${col}26" onclick="selectFolderIcon('${ic}')">${svg(ic)}</button>`;
   }).join('');
+}
+function renderFolderEmojiPicker(){
+  const pick = document.getElementById('folderEmojiPicker');
+  pick.innerHTML = FOLDER_EMOJI_CHOICES.map(em=>{
+    const sel = (pendingFolderEmoji===em) ? 'selected' : '';
+    return `<button type="button" class="emoji-pick ${sel}" onclick="selectFolderEmoji('${em}')">${em}</button>`;
+  }).join('');
+}
+/* تبديل بين تبويب الأيقونات وتبويب الإيموجي داخل نافذة إضافة/تعديل الحافظة */
+function switchFolderIconTab(tab){
+  const showEmoji = tab === 'emoji';
+  document.getElementById('folderIconPicker').classList.toggle('hidden', showEmoji);
+  document.getElementById('folderEmojiPicker').classList.toggle('hidden', !showEmoji);
+  document.getElementById('iconTabBtn-icons').classList.toggle('active', !showEmoji);
+  document.getElementById('iconTabBtn-emoji').classList.toggle('active', showEmoji);
+}
+function selectFolderEmoji(em){
+  pendingFolderEmoji = em;
+  pendingFolderCustomIcon = null;
+  updateFolderImagePreview();
+  renderFolderEmojiPicker();
+  renderFolderIconPicker(pickedFolderIcon);
 }
 function updateFolderImagePreview(){
   const img = document.getElementById('folderIconImagePreview');
@@ -3099,8 +3159,10 @@ document.getElementById('folderIconImageInput').addEventListener('change', async
   const file = e.target.files[0]; if(!file) return;
   const dataUrl = await readFileAsDataURL(file);
   pendingFolderCustomIcon = dataUrl;
+  pendingFolderEmoji = null;
   updateFolderImagePreview();
   renderFolderIconPicker(pickedFolderIcon);
+  renderFolderEmojiPicker();
   e.target.value = '';
 });
 
@@ -3115,9 +3177,12 @@ function openFolderModal(editId){
   document.getElementById('newFolderColor2').value = folder ? folder.color2 : '#2f7d6c';
   pickedFolderIcon = folder ? folder.icon : 'heart';
   pendingFolderCustomIcon = folder && folder.customIcon ? folder.customIcon : null;
+  pendingFolderEmoji = folder && folder.emoji ? folder.emoji : null;
   pendingFolderLocked = !!(folder && folder.locked);
   pendingFolderLockData = null;
   renderFolderIconPicker(pickedFolderIcon);
+  renderFolderEmojiPicker();
+  switchFolderIconTab(pendingFolderEmoji ? 'emoji' : 'icons');
   updateFolderImagePreview();
   updateFolderLockToggleUI();
   document.getElementById('folderModalBackdrop').classList.add('active');
@@ -3147,8 +3212,10 @@ function toggleFolderLockInModal(){
 function selectFolderIcon(ic){
   pickedFolderIcon = ic;
   pendingFolderCustomIcon = null;
+  pendingFolderEmoji = null;
   updateFolderImagePreview();
   renderFolderIconPicker(ic);
+  renderFolderEmojiPicker();
 }
 function closeFolderModal(){
   document.getElementById('folderModalBackdrop').classList.remove('active');
@@ -3160,7 +3227,7 @@ function submitFolderForm(){
   const kind = document.getElementById('newFolderKind').value;
   const color = document.getElementById('newFolderColor').value;
   const color2 = document.getElementById('newFolderColor2').value;
-  const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null, locked: pendingFolderLocked};
+  const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null, emoji: pendingFolderEmoji || null, locked: pendingFolderLocked};
   if(pendingFolderLocked && pendingFolderLockData){
     Object.assign(patch, pendingFolderLockData);
     if(editingFolderId && settings.folderLockState) delete settings.folderLockState[editingFolderId];
@@ -3185,6 +3252,7 @@ function submitFolderForm(){
   }
   editingFolderId = null;
   closeFolderModal();
+  if(folderSelectMode) exitFolderSelectMode();
   renderHome();
 }
 function editCurrentFolder(){
@@ -3311,27 +3379,30 @@ function openFolder(id){
     flVerifyFolder(id, 'أدخل رمز حافظة "'+folder.name+'"', ()=>openFolderNow(id), null);
     return;
   }
-  if(folder.locked && hasLockCredential()){
-    pendingLockedFolderId = id; pendingUnlockCb = null;
-    flResetUI(); pinMode = 'folder-unlock'; pinBuffer='';
-    document.getElementById('lockError').textContent = '';
-    document.getElementById('lockBioBtn').classList.add('hidden');
-    document.getElementById('lockCancelBtn').classList.remove('hidden');
-    if((settings.lockMethod||'pin')==='pattern' && settings.pattern){
-      document.getElementById('lockTitle').textContent = 'ارسم النمط لفتح "'+folder.name+'"';
-      document.getElementById('lockSub').textContent = 'صِل النقاط بالترتيب الصحيح';
-      showPatternUI();
-      renderPatternGrid();
-    } else {
-      document.getElementById('lockTitle').textContent = 'أدخل الرمز لفتح "'+folder.name+'"';
-      document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
-      showPinUI();
-      renderPinPad(); renderPinDots();
-    }
-    document.getElementById('lockScreen').classList.add('active');
+  if(folder.locked && !folder.lockHash){
+    /* حافظة مقفلة بالطريقة القديمة (رمز التطبيق العام المشترك) — نحوّلها الآن
+       لرمز خاص مستقل بها، بدل أن يبقى القفل قاصرًا على الحافظات الجديدة فقط */
+    migrateLegacyFolderLock(id, ()=>openFolderNow(id));
     return;
   }
   openFolderNow(id);
+}
+/* تحويل حافظة كانت مقفلة بالرمز العام القديم إلى رمز خاص ومستقل بها */
+function migrateLegacyFolderLock(id, cb){
+  const folder = getFolder(id);
+  if(!folder){ if(cb) cb(); return; }
+  const proceed = ()=>{
+    flSetupLock('عيّن رمزًا خاصًا لحافظة "'+folder.name+'"', d=>{
+      updateFolderMeta(id, d);
+      toast('أصبح لحافظة "'+folder.name+'" رمز خاص بها مستقل');
+      if(cb) cb();
+    }, ()=>{});
+  };
+  if(hasLockCredential()){
+    promptUnlock('لفتح حافظة "'+folder.name+'" وتحويلها لرمز مستقل', proceed);
+  } else {
+    proceed();
+  }
 }
 function cancelFolderUnlock(){
   const _fc = (typeof flCtx!=='undefined') ? flCtx : null;
@@ -6868,6 +6939,18 @@ function mirrorTitlesToAria(root){
     el.setAttribute('aria-label', el.getAttribute('title'));
   });
 }
+/* الضغط خارج بطاقات الحافظات في الرئيسية يُلغي وضع التحديد */
+function setupFolderSelectOutsideTap(){
+  const home = document.getElementById('screen-home');
+  if(!home || home._outsideTapBound) return;
+  home._outsideTapBound = true;
+  home.addEventListener('click', function(e){
+    if(!folderSelectMode) return;
+    if(e.target.closest('.folder-card')) return;
+    if(e.target.closest('#folderSelectBar')) return;
+    exitFolderSelectMode();
+  });
+}
 function setupA11yObserver(){
   mirrorTitlesToAria(document);
   const obs = new MutationObserver(muts=>{
@@ -6930,11 +7013,25 @@ function showDayGreeting(force){
 function closeDayGreeting(){
   document.getElementById('dayGreetBackdrop').classList.remove('active');
 }
+/* مفتاح يمثّل يوم اليوم + الفترة الحالية (صباح/مساء)، لعرض الرسالة مرة واحدة فقط لكل فترة كل يوم */
+function currentGreetPeriodKey(){
+  const now = new Date();
+  const h = now.getHours();
+  const morning = h >= 4 && h < 12;
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+d+'-'+(morning ? 'morning' : 'evening');
+}
 function maybeShowDayGreeting(){
   if(settings.dayGreeting === false) return;
   let onboarded = true;
   try{ onboarded = !!localStorage.getItem('montasir_onboarded'); }catch(e){}
   if(!onboarded) return; // المستخدم الجديد يرى دليل الاستخدام أولًا
+  const key = currentGreetPeriodKey();
+  if(settings.lastDayGreetKey === key) return; // سبق عرض رسالة هذه الفترة اليوم
+  settings.lastDayGreetKey = key;
+  saveSettingsData();
   setTimeout(showDayGreeting, 500);
 }
 
@@ -6949,6 +7046,7 @@ function init(){
   updateFabBackVisibility();
   maybeShowBackupReminder();
   setupA11yObserver();
+  setupFolderSelectOutsideTap();
   maybeShowOnboarding();
   maybeShowDayGreeting();
 }
