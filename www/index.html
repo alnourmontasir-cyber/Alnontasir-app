@@ -269,6 +269,10 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .select-bar .sb-count{flex-shrink:0;font-size:12.5px;color:var(--text-dim);white-space:nowrap;padding-inline-end:2px;}
 .select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
 .select-bar button.danger{background:var(--danger);color:#fff;}
+.select-bar.compact{gap:6px;padding:6px 8px;margin-bottom:10px;overflow-x:visible;justify-content:flex-start;}
+.select-bar.compact .sb-count{font-size:12px;padding-inline:4px;margin-inline-end:auto;}
+.select-bar button.sb-ico{width:34px;height:34px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;}
+.select-bar button.sb-ico svg{width:16px;height:16px;}
 .selectable .item-card{position:relative;}
 .select-check{position:absolute;top:8px;inset-inline-start:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.5);border:2px solid #fff;display:flex;align-items:center;justify-content:center;z-index:3;flex-shrink:0;}
 .select-check svg{width:13px;height:13px;color:#fff;opacity:0;}
@@ -494,6 +498,7 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     </svg>
   </div>
   <button class="lock-bio-btn hidden" id="lockBioBtn" onclick="manualBiometricUnlock()"></button>
+  <button class="lock-bio-btn hidden" id="lockForgotBtn" onclick="startForgotFolderCode()">نسيت الرمز؟</button>
   <button class="lock-bio-btn hidden" id="lockCancelBtn" onclick="cancelFolderUnlock()">إلغاء والعودة</button>
 </div>
 
@@ -621,7 +626,7 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     </button>
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" placeholder="ابحث في كل محتوياتك..." oninput="renderSearchResults(this.value)">
+      <input id="searchInput" placeholder="ابحث في كل محتوياتك..." oninput="renderSearchResults(this.value)" onkeyup="renderSearchResults(this.value)" oncompositionend="renderSearchResults(this.value)" enterkeyhint="search" autocomplete="off">
     </div>
   </div>
   <div class="home-tools">
@@ -656,13 +661,13 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       <span>المفضلة فقط</span>
     </button>
   </div>
-  <div class="select-bar" id="itemSelectBar">
-    <button onclick="toggleSelectAllItems()"><span id="selAllItemsLabel">تحديد الكل</span></button>
+  <div class="select-bar compact" id="itemSelectBar">
+    <button class="sb-ico" id="selAllItemsBtn" title="تحديد الكل" aria-label="تحديد الكل" onclick="toggleSelectAllItems()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span id="selAllItemsLabel" style="display:none">تحديد الكل</span></button>
     <span class="sb-count" id="itemSelCount">0 محدد</span>
-    <button onclick="openMoveModalForSelected()">نقل المحدد</button>
-    <button onclick="favoriteSelectedItems()">تمييز المحدد</button>
-    <button class="danger" onclick="deleteSelectedItems()">نقل للمحذوفات</button>
-    <button onclick="exitItemSelectMode()">إلغاء</button>
+    <button class="sb-ico" title="نقل المحدد" aria-label="نقل المحدد" onclick="openMoveModalForSelected()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></button>
+    <button class="sb-ico" title="تمييز المحدد" aria-label="تمييز المحدد" onclick="favoriteSelectedItems()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+    <button class="sb-ico danger" title="نقل للمحذوفات" aria-label="نقل للمحذوفات" onclick="deleteSelectedItems()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+    <button class="sb-ico" title="إلغاء" aria-label="إلغاء" onclick="exitItemSelectMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
   <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي عنصر لتحديده مباشرة</span>
   <div class="item-list" id="itemList"></div>
@@ -1272,7 +1277,7 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       <div class="field"><label>اللون الثانوي</label><input type="color" id="newFolderColor2" value="#2f7d6c"></div>
     </div>
     <div class="switch-row" style="padding:4px 0 10px">
-      <span class="sr-label">قفل هذه الحافظة برمز PIN التطبيق<small>يجب تعيين رمز PIN من الإعدادات أولًا</small></span>
+      <span class="sr-label">قفل هذه الحافظة برمز خاص بها<small>رمز من 4 أرقام مستقل لهذه الحافظة، مع سؤال أمان لاستعادته</small></span>
       <button type="button" class="switch" id="folderLockToggle" onclick="toggleFolderLockInModal()"></button>
     </div>
     <div class="field">
@@ -1386,6 +1391,33 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     <div id="sharePreviewBox" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px"></div>
     <p class="mini-hint" style="margin:0 0 8px">اختر الحافظة التي تريد الحفظ فيها</p>
     <div class="folder-pick-list" id="sharePickList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop center-modal" id="flQBackdrop" role="dialog" aria-modal="true" style="z-index:1100">
+  <div class="confirm-box" style="text-align:right">
+    <h3 id="flQTitle" style="text-align:center">سؤال الأمان</h3>
+    <p id="flQMsg" style="text-align:center"></p>
+    <div class="field" id="flQSelectWrap">
+      <label>السؤال</label>
+      <select id="flQSelect" onchange="flQSelectChanged()"></select>
+    </div>
+    <div class="field hidden" id="flQCustomWrap">
+      <input id="flQCustom" dir="rtl" placeholder="اكتب سؤالك الخاص" autocomplete="off">
+    </div>
+    <div class="field hidden" id="flQShowWrap">
+      <label>السؤال</label>
+      <div id="flQShow" style="font-weight:700;font-size:14px"></div>
+    </div>
+    <div class="field">
+      <label>الإجابة</label>
+      <input id="flQAnswer" dir="rtl" autocomplete="off" onkeydown="if(event.key==='Enter')flQSubmit()">
+    </div>
+    <div id="flQError" style="color:var(--danger);font-size:13px;min-height:18px;text-align:center"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="flQCancel()">إلغاء</button>
+      <button class="btn btn-primary" id="flQOk" onclick="flQSubmit()">حفظ</button>
+    </div>
   </div>
 </div>
 
@@ -1936,6 +1968,7 @@ let toolSelectMode = false;
 let toolSelectScope = 'screen-home';
 const selectedToolIds = new Set();
 let pendingFolderLocked = false;
+let pendingFolderLockData = null;
 let searchFavOnly = false;
 
 function getAllFolders(){
@@ -2267,9 +2300,10 @@ function toggleSearchFavOnly(){
   renderSearchResults(document.getElementById('searchInput').value);
 }
 
-function allItemsFlat(includeDeleted){
+function allItemsFlat(includeDeleted, excludeLocked){
   let out = [];
   getFolders().forEach(f=>{
+    if(excludeLocked && f.locked) return;
     (data[f.id]||[]).forEach(item=>{
       if(includeDeleted || !item.deleted) out.push(Object.assign({}, item, {folderId:f.id, folderName:f.name}));
     });
@@ -2277,38 +2311,72 @@ function allItemsFlat(includeDeleted){
   return out;
 }
 
+function normalizeArabic(str){
+  return String(str==null?'':str)
+    .replace(/[\u064B-\u065F\u0670\u0640]/g,'')      // التشكيل والتطويل
+    .replace(/[أإآٱ]/g,'ا')
+    .replace(/ى/g,'ي')
+    .replace(/ة/g,'ه')
+    .replace(/ؤ/g,'و').replace(/ئ/g,'ي')
+    .replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-0x0660))
+    .replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-0x06F0))
+    .toLowerCase();
+}
+function itemSearchText(item){
+  const parts = [];
+  const add = v=>{
+    if(v==null) return;
+    if(Array.isArray(v)) v.forEach(add);
+    else if(typeof v==='object'){ try{ add(Object.values(v)); }catch(e){} }
+    else parts.push(String(v));
+  };
+  add(item.title); add(item.content); add(item.name); add(item.folderName);
+  add(item.tags); add(item.url); add(item.phone); add(item.email);
+  add(item.eventDate); add(item.eventTime);
+  if(Array.isArray(item.checklist)) item.checklist.forEach(t=>add(t && t.text));
+  return normalizeArabic(parts.join(' '));
+}
+
 function renderSearchResults(q){
-  q = (q||'').trim().toLowerCase();
   const list = document.getElementById('searchResults');
-  const folderFilterEl = document.getElementById('searchFolderFilter');
-  const folderFilter = folderFilterEl ? folderFilterEl.value : '';
-  if(!q && !folderFilter && !searchFavOnly){
-    list.innerHTML = `<div class="empty-state">${svg('search')}<p>اكتب للبحث في كل عناصرك عبر جميع المجلدات</p></div>`;
-    return;
-  }
-  let results = allItemsFlat(false).filter(item=>{
-    if(folderFilter && item.folderId !== folderFilter) return false;
-    if(searchFavOnly && !item.favorite) return false;
-    if(!q) return true;
-    const hay = ((item.title||'')+' '+(item.content||'')+' '+(item.name||'')+' '+item.folderName+' '+((item.tags||[]).join(' '))).toLowerCase();
-    return hay.includes(q);
-  });
-  results.sort((a,b)=>b.createdAt-a.createdAt);
-  if(results.length===0){
-    list.innerHTML = `<div class="empty-state">${svg('search')}<p>لا نتائج مطابقة${q?` لـ "${escapeHTML(q)}"`:''}</p></div>`;
-    return;
-  }
-  list.innerHTML = results.map(item=>{
-    let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
-    return `
+  try{
+    q = (q||'').trim();
+    const nq = normalizeArabic(q);
+    const words = nq.split(/\s+/).filter(Boolean);
+    const folderFilterEl = document.getElementById('searchFolderFilter');
+    const folderFilter = folderFilterEl ? folderFilterEl.value : '';
+    if(!q && !folderFilter && !searchFavOnly){
+      list.innerHTML = `<div class="empty-state">${svg('search')}<p>اكتب للبحث في كل عناصرك عبر جميع المجلدات</p></div>`;
+      return;
+    }
+    let results = allItemsFlat(false, true).filter(item=>{
+      if(folderFilter && item.folderId !== folderFilter) return false;
+      if(searchFavOnly && !item.favorite) return false;
+      if(!words.length) return true;
+      const hay = itemSearchText(item);
+      return words.every(w=>hay.includes(w));
+    });
+    results.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    if(results.length===0){
+      list.innerHTML = `<div class="empty-state">${svg('search')}<p>لا نتائج مطابقة${q?` لـ "${escapeHTML(q)}"`:''}</p></div>`;
+      return;
+    }
+    list.innerHTML = results.map(item=>{
+      let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
+      const prev = String(itemPreviewText(item)||'').replace(/\s+/g,' ').trim().slice(0,90);
+      return `
       <div class="item-card">
         <div class="item-thumb">${thumb}${item.favorite?`<span class="fav-star">${svgFilled('star')}</span>`:''}</div>
         <div class="item-body" onclick="openSearchResult('${item.folderId}','${item.id}')">
           <h4>${escapeHTML(item.title||'بدون عنوان')}</h4>
-          <p>${escapeHTML(item.folderName)}</p>
+          <p>${escapeHTML(item.folderName)}${prev?' — '+escapeHTML(prev):''}</p>
         </div>
       </div>`;
-  }).join('');
+    }).join('');
+  }catch(err){
+    console.error('search error', err);
+    list.innerHTML = `<div class="empty-state">${svg('search')}<p>تعذّر إتمام البحث</p></div>`;
+  }
 }
 function openSearchResult(folderId, itemId){
   currentFolder = folderId;
@@ -2385,17 +2453,36 @@ function lockSelectedFolders(){
   if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
   const ids = Array.from(selectedFolderIds);
   const allLocked = ids.every(id=>{ const f=getFolder(id); return f && f.locked; });
+  exitFolderSelectMode();
   if(!allLocked){
-    if(!(settings.pinEnabled && hasLockCredential())){ toast('عيّن رمز قفل من الإعدادات أولًا لتتمكن من قفل الحافظات'); return; }
-    ids.forEach(id=>updateFolderMeta(id,{locked:true}));
-    exitFolderSelectMode();
-    toast('تم قفل الحافظات المحددة');
+    flSetupChain(ids.filter(id=>{ const f=getFolder(id); return f && !f.locked; }));
   } else {
-    promptUnlock('لإلغاء قفل الحافظات المحددة', ()=>{
-      ids.forEach(id=>updateFolderMeta(id,{locked:false}));
-      exitFolderSelectMode();
-      toast('تم إلغاء القفل');
-    });
+    flUnlockChain(ids);
+  }
+}
+function flSetupChain(list){
+  if(!list.length){ renderHome(); toast('تم قفل الحافظات'); return; }
+  const id = list[0], f = getFolder(id);
+  if(!f){ flSetupChain(list.slice(1)); return; }
+  flSetupLock('رمز جديد لحافظة "'+f.name+'"', d=>{
+    updateFolderMeta(id, Object.assign({locked:true}, d));
+    renderHome();
+    flSetupChain(list.slice(1));
+  }, ()=>{ renderHome(); });
+}
+function flClearFolderLock(id){
+  updateFolderMeta(id,{locked:false, lockHash:null, lockSalt:null, secQ:null, secSalt:null, secHash:null});
+  if(settings.folderLockState) delete settings.folderLockState[id];
+  saveSettingsData();
+}
+function flUnlockChain(list){
+  if(!list.length){ renderHome(); toast('تم إلغاء القفل'); return; }
+  const id = list[0], f = getFolder(id);
+  if(!f || !f.locked){ flUnlockChain(list.slice(1)); return; }
+  if(f.lockHash){
+    flVerifyFolder(id, 'أدخل رمز "'+f.name+'" لإلغاء قفلها', ()=>{ flClearFolderLock(id); flUnlockChain(list.slice(1)); }, ()=>{ renderHome(); });
+  } else {
+    promptUnlock('لإلغاء قفل "'+f.name+'"', ()=>{ flClearFolderLock(id); flUnlockChain(list.slice(1)); });
   }
 }
 function unhideFolder(id){
@@ -2409,7 +2496,7 @@ function promptUnlock(what, cb){
   if(!hasLockCredential()){ cb(); return; }
   pendingUnlockCb = cb;
   pendingLockedFolderId = null;
-  pinMode = 'folder-unlock'; pinBuffer='';
+  flResetUI(); pinMode = 'folder-unlock'; pinBuffer='';
   document.getElementById('lockError').textContent = '';
   document.getElementById('lockBioBtn').classList.add('hidden');
   document.getElementById('lockCancelBtn').classList.remove('hidden');
@@ -2689,7 +2776,7 @@ function renderRecentItems(){
   const scroller = document.getElementById('recentScroller');
   const section = document.getElementById('recentSection');
   if(settings.widgets && settings.widgets.recent===false){ section.classList.add('hidden'); return; }
-  const items = allItemsFlat(false).sort((a,b)=>b.createdAt-a.createdAt).slice(0,10);
+  const items = allItemsFlat(false, true).sort((a,b)=>b.createdAt-a.createdAt).slice(0,10);
   if(items.length===0){ section.classList.add('hidden'); return; }
   section.classList.remove('hidden');
   scroller.innerHTML = items.map(item=>{
@@ -2976,6 +3063,7 @@ function openFolderModal(editId){
   pickedFolderIcon = folder ? folder.icon : 'heart';
   pendingFolderCustomIcon = folder && folder.customIcon ? folder.customIcon : null;
   pendingFolderLocked = !!(folder && folder.locked);
+  pendingFolderLockData = null;
   renderFolderIconPicker(pickedFolderIcon);
   updateFolderImagePreview();
   updateFolderLockToggleUI();
@@ -2985,12 +3073,23 @@ function updateFolderLockToggleUI(){
   document.getElementById('folderLockToggle').classList.toggle('on', pendingFolderLocked);
 }
 function toggleFolderLockInModal(){
-  if(!pendingFolderLocked && !(settings.pinEnabled && hasLockCredential())){
-    toast('عيّن رمز قفل من الإعدادات أولًا لتتمكن من قفل الحافظات');
+  if(!pendingFolderLocked){
+    flSetupLock('رمز خاص بهذه الحافظة', d=>{
+      pendingFolderLockData = d;
+      pendingFolderLocked = true;
+      updateFolderLockToggleUI();
+    }, ()=>{});
     return;
   }
-  pendingFolderLocked = !pendingFolderLocked;
-  updateFolderLockToggleUI();
+  const f = editingFolderId ? getFolder(editingFolderId) : null;
+  const turnOff = ()=>{ pendingFolderLocked = false; pendingFolderLockData = null; updateFolderLockToggleUI(); };
+  if(f && f.lockHash && !pendingFolderLockData){
+    flVerifyFolder(f.id, 'أدخل رمز الحافظة لإلغاء قفلها', turnOff, null);
+  } else if(f && f.locked && !f.lockHash && !pendingFolderLockData && hasLockCredential()){
+    promptUnlock('لإلغاء قفل الحافظة', turnOff);
+  } else {
+    turnOff();
+  }
 }
 function selectFolderIcon(ic){
   pickedFolderIcon = ic;
@@ -3008,12 +3107,14 @@ function submitFolderForm(){
   const kind = document.getElementById('newFolderKind').value;
   const color = document.getElementById('newFolderColor').value;
   const color2 = document.getElementById('newFolderColor2').value;
-  if(pendingFolderLocked && !(settings.pinEnabled && hasLockCredential())){
-    toast('عيّن رمز قفل من الإعدادات أولًا قبل قفل الحافظة');
-    pendingFolderLocked = false;
-    updateFolderLockToggleUI();
-  }
   const patch = {name, kind, color, color2, icon: pickedFolderIcon, customIcon: pendingFolderCustomIcon || null, locked: pendingFolderLocked};
+  if(pendingFolderLocked && pendingFolderLockData){
+    Object.assign(patch, pendingFolderLockData);
+    if(editingFolderId && settings.folderLockState) delete settings.folderLockState[editingFolderId];
+  } else if(!pendingFolderLocked){
+    Object.assign(patch, {lockHash:null, lockSalt:null, secQ:null, secSalt:null, secHash:null});
+    if(editingFolderId && settings.folderLockState) delete settings.folderLockState[editingFolderId];
+  }
 
   if(editingFolderId){
     updateFolderMeta(editingFolderId, patch);
@@ -3153,9 +3254,13 @@ function setFolderView(id, patch){
 function openFolder(id){
   const folder = getFolder(id);
   if(!folder) return;
+  if(folder.locked && folder.lockHash){
+    flVerifyFolder(id, 'أدخل رمز حافظة "'+folder.name+'"', ()=>openFolderNow(id), null);
+    return;
+  }
   if(folder.locked && hasLockCredential()){
     pendingLockedFolderId = id; pendingUnlockCb = null;
-    pinMode = 'folder-unlock'; pinBuffer='';
+    flResetUI(); pinMode = 'folder-unlock'; pinBuffer='';
     document.getElementById('lockError').textContent = '';
     document.getElementById('lockBioBtn').classList.add('hidden');
     document.getElementById('lockCancelBtn').classList.remove('hidden');
@@ -3176,6 +3281,9 @@ function openFolder(id){
   openFolderNow(id);
 }
 function cancelFolderUnlock(){
+  const _fc = (typeof flCtx!=='undefined') ? flCtx : null;
+  flResetUI();
+  if(_fc && _fc.onCancel){ try{ _fc.onCancel(); }catch(e){} }
   pendingLockedFolderId = null;
   pendingUnlockCb = null;
   document.getElementById('lockCancelBtn').classList.add('hidden');
@@ -3318,6 +3426,15 @@ function bindItemLongPress(){
   }, true);
 }
 
+document.addEventListener('click', e=>{
+  if(!itemSelectMode) return;
+  const t = e.target;
+  if(!t || !t.closest) return;
+  if(!document.body.contains(t)) return; // العنصر أُعيد رسمه أثناء النقرة
+  if(t.closest('.item-card, .visual-card, #itemSelectBar, .modal-backdrop, .modal, .toast, #fabBtn')) return;
+  exitItemSelectMode();
+});
+
 function toggleFavorite(folderId, itemId){
   const item = (data[folderId]||[]).find(i=>i.id===itemId);
   if(!item) return;
@@ -3381,7 +3498,10 @@ function toggleSelectAllItems(){
 function updateItemSelCount(){
   document.getElementById('itemSelCount').textContent = selectedItemIds.size + ' محدد';
   const all = (data[currentFolder]||[]).filter(i=>!i.deleted).map(i=>i.id);
-  document.getElementById('selAllItemsLabel').textContent = (all.length>0 && all.every(id=>selectedItemIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
+  const _allSel = (all.length>0 && all.every(id=>selectedItemIds.has(id)));
+  document.getElementById('selAllItemsLabel').textContent = _allSel ? 'إلغاء تحديد الكل' : 'تحديد الكل';
+  const _sab = document.getElementById('selAllItemsBtn');
+  if(_sab){ _sab.title = _allSel ? 'إلغاء تحديد الكل' : 'تحديد الكل'; _sab.setAttribute('aria-label', _sab.title); }
 }
 function deleteSelectedItems(){
   if(selectedItemIds.size===0){ toast('لم تختر أي عنصر'); return; }
@@ -4244,7 +4364,7 @@ function openFavorites(){
   showScreen('screen-favorites');
 }
 function renderFavorites(){
-  const items = allItemsFlat(false).filter(i=>i.favorite).sort((a,b)=>b.createdAt-a.createdAt);
+  const items = allItemsFlat(false, true).filter(i=>i.favorite).sort((a,b)=>b.createdAt-a.createdAt);
   document.getElementById('favStatsBar').innerHTML = `<div class="stats-chip"><b>${items.length}</b> عنصر مفضّل</div>`;
   const list = document.getElementById('favList');
   if(items.length===0){
@@ -5125,6 +5245,7 @@ async function toggleBiometric(){
   document.getElementById('bioToggle').classList.toggle('on', willEnable);
 }
 function startSetPin(){
+  flResetUI();
   pinMode = 'set-new'; pinBuffer=''; firstNewPin='';
   document.getElementById('lockTitle').textContent = 'أدخل رمزًا جديدًا';
   document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
@@ -5146,6 +5267,7 @@ function showPatternUI(){
   document.getElementById('patternWrap').classList.remove('hidden');
 }
 function startSetPattern(){
+  flResetUI();
   pinMode = 'set-new'; patternBuffer=[]; firstNewPattern='';
   document.getElementById('lockTitle').textContent = 'ارسم نمطًا جديدًا';
   document.getElementById('lockSub').textContent = 'وصّل 4 نقاط على الأقل';
@@ -5304,6 +5426,7 @@ function renderPinDots(){
   dots.innerHTML = Array.from({length:4}).map((_,i)=>`<div class="pin-dot ${i<pinBuffer.length?'filled':''}"></div>`).join('');
 }
 function pressPinKey(k){
+  if(pinMode==='fl-verify' && flCtx && flRemaining(flCtx.folderId)>0) return;
   if(k==='⌫'){ pinBuffer = pinBuffer.slice(0,-1); renderPinDots(); return; }
   if(pinBuffer.length>=4) return;
   pinBuffer += k;
@@ -5311,6 +5434,7 @@ function pressPinKey(k){
   if(pinBuffer.length===4) setTimeout(handlePinComplete, 150);
 }
 function handlePinComplete(){
+  if(String(pinMode).indexOf('fl-')===0){ flHandlePin(); return; }
   if(pinMode==='unlock'){
     if(pinBuffer === settings.pin){
       document.getElementById('lockScreen').classList.remove('active');
@@ -5381,8 +5505,298 @@ async function toggleDailyReminder(){
   document.getElementById('notifToggle').classList.toggle('on', willEnable);
 }
 
+/* ---------- قفل مستقل لكل حافظة: رمز خاص + 3 محاولات + سؤال أمان ---------- */
+const FL_MAX_FAILS = 3;
+const FL_LOCK_MS = 60*60*1000;
+const FL_QUESTIONS = [
+  'ما اسم أول مدرسة درستَ فيها؟',
+  'ما اسم المدينة التي وُلدتَ فيها؟',
+  'ما اسم أقرب صديق في طفولتك؟',
+  'ما اسم أول حيوان أليف امتلكته؟',
+  'ما اسم الشارع الذي نشأتَ فيه؟',
+  'ما هو طبقك المفضل؟'
+];
+let flCtx = null;
+let flTimer = null;
+let flQCfg = null;
+
+async function flHash(str, salt){
+  const input = String(salt)+'|'+String(str);
+  try{
+    if(window.crypto && crypto.subtle){
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+  }catch(e){}
+  let h1=0xdeadbeef, h2=0x41c6ce57;
+  for(let i=0;i<input.length;i++){
+    const ch = input.charCodeAt(i);
+    h1 = Math.imul(h1^ch, 2654435761);
+    h2 = Math.imul(h2^ch, 1597334677);
+  }
+  h1 = Math.imul(h1^(h1>>>16), 2246822507) ^ Math.imul(h2^(h2>>>13), 3266489909);
+  h2 = Math.imul(h2^(h2>>>16), 2246822507) ^ Math.imul(h1^(h1>>>13), 3266489909);
+  return 'x'+(4294967296*(2097151&h2)+(h1>>>0)).toString(16);
+}
+function flSalt(){ return Math.random().toString(36).slice(2)+Date.now().toString(36); }
+function flNormAnswer(a){ return normalizeArabic(a).replace(/\s+/g,' ').trim(); }
+
+function flState(id){
+  if(!settings.folderLockState) settings.folderLockState = {};
+  if(!settings.folderLockState[id]) settings.folderLockState[id] = {fails:0, until:0};
+  return settings.folderLockState[id];
+}
+function flRemaining(id){
+  const st = settings.folderLockState && settings.folderLockState[id];
+  return st ? Math.max(0, (st.until||0) - Date.now()) : 0;
+}
+function flFmt(ms){
+  const t = Math.ceil(ms/1000);
+  const h = Math.floor(t/3600), m = Math.floor((t%3600)/60), sec = t%60;
+  const two = n=>String(n).padStart(2,'0');
+  return two(h)+':'+two(m)+':'+two(sec);
+}
+function flRegisterFail(id){
+  const st = flState(id);
+  st.fails = (st.fails||0) + 1;
+  let lockedNow = false;
+  if(st.fails >= FL_MAX_FAILS){
+    st.fails = 0;
+    st.until = Date.now() + FL_LOCK_MS;
+    lockedNow = true;
+  }
+  saveSettingsData();
+  return {lockedNow, left: Math.max(0, FL_MAX_FAILS - st.fails)};
+}
+function flResetFails(id){
+  if(settings.folderLockState && settings.folderLockState[id]){
+    settings.folderLockState[id] = {fails:0, until:0};
+    saveSettingsData();
+  }
+}
+
+function flStopTimer(){ if(flTimer){ clearInterval(flTimer); flTimer = null; } }
+function flResetUI(){
+  flStopTimer();
+  flCtx = null;
+  const fb = document.getElementById('lockForgotBtn');
+  if(fb) fb.classList.add('hidden');
+}
+function flTick(){
+  if(!flCtx || flCtx.mode!=='verify'){ flStopTimer(); return; }
+  const ms = flRemaining(flCtx.folderId);
+  const err = document.getElementById('lockError');
+  if(ms>0){
+    err.textContent = 'تجاوزت 3 محاولات خاطئة. أعد المحاولة بعد '+flFmt(ms);
+    pinBuffer=''; renderPinDots();
+  } else {
+    flStopTimer();
+    err.textContent = '';
+  }
+}
+function flStartCountdown(){
+  flStopTimer();
+  if(!flCtx || flCtx.mode!=='verify') return;
+  if(flRemaining(flCtx.folderId)>0){
+    flTick();
+    flTimer = setInterval(flTick, 1000);
+  }
+}
+function flFinishScreen(){
+  flStopTimer();
+  const ctx = flCtx;
+  flCtx = null;
+  document.getElementById('lockScreen').classList.remove('active');
+  document.getElementById('lockCancelBtn').classList.add('hidden');
+  document.getElementById('lockForgotBtn').classList.add('hidden');
+  pinBuffer = '';
+  return ctx;
+}
+function flShowScreen(title, sub, showForgot){
+  document.getElementById('lockTitle').textContent = title;
+  document.getElementById('lockSub').textContent = sub;
+  document.getElementById('lockError').textContent = '';
+  document.getElementById('lockBioBtn').classList.add('hidden');
+  document.getElementById('lockCancelBtn').classList.remove('hidden');
+  document.getElementById('lockForgotBtn').classList.toggle('hidden', !showForgot);
+  pinBuffer = ''; firstNewPin = '';
+  showPinUI();
+  renderPinPad(); renderPinDots();
+  document.getElementById('lockScreen').classList.add('active');
+}
+
+/* التحقق من رمز حافظة */
+function flVerifyFolder(folderId, title, onSuccess, onCancel){
+  flStopTimer();
+  flCtx = {mode:'verify', folderId, onSuccess, onCancel};
+  pinMode = 'fl-verify';
+  flShowScreen(title, 'رمز مكوّن من 4 أرقام', true);
+  flStartCountdown();
+}
+/* تعيين رمز جديد (بدون سؤال أمان) */
+function flStartSetPin(title, onSet, onCancel){
+  flStopTimer();
+  flCtx = {mode:'set', onSet, onCancel};
+  pinMode = 'fl-set-new';
+  flShowScreen(title, 'اختر رمزًا من 4 أرقام', false);
+}
+/* تعيين رمز + سؤال أمان */
+function flSetupLock(title, onDone, onCancel){
+  flStartSetPin(title, async lock=>{
+    flQOpen({
+      mode:'setup',
+      onSubmit: async (ans, q)=>{
+        const secSalt = flSalt();
+        const secHash = await flHash(flNormAnswer(ans), secSalt);
+        onDone(Object.assign({}, lock, {secQ:q, secSalt, secHash}));
+        return {ok:true};
+      },
+      onCancel: onCancel
+    });
+  }, onCancel);
+}
+
+async function flHandlePin(){
+  const ctx = flCtx;
+  if(!ctx) return;
+  const code = pinBuffer;
+  const err = document.getElementById('lockError');
+  if(pinMode==='fl-verify'){
+    const id = ctx.folderId;
+    if(flRemaining(id)>0){ pinBuffer=''; renderPinDots(); return; }
+    const f = getFolder(id);
+    if(!f || !f.lockHash){ flFinishScreen(); return; }
+    const h = await flHash(code, f.lockSalt);
+    if(flCtx !== ctx) return;
+    if(h === f.lockHash){
+      flResetFails(id);
+      flFinishScreen();
+      if(ctx.onSuccess) ctx.onSuccess();
+    } else {
+      const r = flRegisterFail(id);
+      pinBuffer=''; renderPinDots();
+      if(r.lockedNow){ flStartCountdown(); }
+      else { err.textContent = 'رمز غير صحيح — تبقّى '+r.left+(r.left===1?' محاولة':' محاولات'); }
+    }
+  } else if(pinMode==='fl-set-new'){
+    ctx.first = code;
+    pinMode = 'fl-set-confirm';
+    pinBuffer = '';
+    document.getElementById('lockTitle').textContent = 'أعد إدخال الرمز';
+    err.textContent = '';
+    renderPinDots();
+  } else if(pinMode==='fl-set-confirm'){
+    if(code === ctx.first){
+      const lockSalt = flSalt();
+      const lockHash = await flHash(code, lockSalt);
+      flFinishScreen();
+      if(ctx.onSet) ctx.onSet({lockSalt, lockHash});
+    } else {
+      err.textContent = 'الرمزان غير متطابقين، حاول مجددًا';
+      pinMode = 'fl-set-new'; ctx.first = ''; pinBuffer = '';
+      document.getElementById('lockTitle').textContent = 'أدخل رمزًا جديدًا';
+      renderPinDots();
+    }
+  }
+}
+
+/* نسيت الرمز */
+function startForgotFolderCode(){
+  const ctx = flCtx;
+  if(!ctx || ctx.mode!=='verify') return;
+  const f = getFolder(ctx.folderId);
+  if(!f || !f.secQ){ toast('لا يوجد سؤال أمان لهذه الحافظة'); return; }
+  if(flRemaining(f.id)>0){ toast('انتظر انتهاء مدة المنع ثم حاول مجددًا'); return; }
+  flQOpen({
+    mode:'answer',
+    question: f.secQ,
+    onSubmit: async (ans)=>{
+      if(flRemaining(f.id)>0) return {ok:false, msg:'انتظر انتهاء مدة المنع', close:true};
+      const h = await flHash(flNormAnswer(ans), f.secSalt);
+      if(h === f.secHash){
+        flResetFails(f.id);
+        setTimeout(()=>{
+          flStartSetPin('اختر رمزًا جديدًا للحافظة', lock=>{
+            updateFolderMeta(f.id, lock);
+            flResetFails(f.id);
+            toast('تم تعيين رمز جديد');
+            if(ctx.onSuccess) ctx.onSuccess();
+          }, ()=>{ if(ctx.onCancel) ctx.onCancel(); });
+        }, 50);
+        return {ok:true};
+      }
+      const r = flRegisterFail(f.id);
+      if(r.lockedNow){
+        setTimeout(()=>flStartCountdown(), 50);
+        return {ok:false, msg:'', close:true};
+      }
+      return {ok:false, msg:'إجابة غير صحيحة — تبقّى '+r.left+(r.left===1?' محاولة':' محاولات')};
+    },
+    onCancel: ()=>{}
+  });
+}
+
+/* نافذة سؤال الأمان */
+function flQOpen(cfg){
+  flQCfg = cfg;
+  const setup = cfg.mode==='setup';
+  document.getElementById('flQTitle').textContent = setup ? 'سؤال الأمان' : 'استعادة الرمز';
+  document.getElementById('flQMsg').textContent = setup
+    ? 'اختر سؤالًا وأجب عنه. ستستعمله لاستعادة الوصول إذا نسيت الرمز، فاختر إجابة تتذكرها ولا يعرفها غيرك.'
+    : 'أجب عن سؤال الأمان لتعيين رمز جديد.';
+  const sel = document.getElementById('flQSelect');
+  sel.innerHTML = FL_QUESTIONS.map(q=>`<option value="${escapeHTML(q)}">${escapeHTML(q)}</option>`).join('') + '<option value="__custom">سؤال آخر من اختياري…</option>';
+  document.getElementById('flQSelectWrap').classList.toggle('hidden', !setup);
+  document.getElementById('flQCustomWrap').classList.add('hidden');
+  document.getElementById('flQShowWrap').classList.toggle('hidden', setup);
+  document.getElementById('flQShow').textContent = setup ? '' : (cfg.question||'');
+  document.getElementById('flQCustom').value = '';
+  document.getElementById('flQAnswer').value = '';
+  document.getElementById('flQError').textContent = '';
+  document.getElementById('flQOk').textContent = setup ? 'حفظ وقفل' : 'تحقق';
+  document.getElementById('flQBackdrop').classList.add('active');
+  setTimeout(()=>document.getElementById('flQAnswer').focus(), 150);
+}
+function flQSelectChanged(){
+  const custom = document.getElementById('flQSelect').value==='__custom';
+  document.getElementById('flQCustomWrap').classList.toggle('hidden', !custom);
+}
+function flQClose(){
+  document.getElementById('flQBackdrop').classList.remove('active');
+  document.getElementById('flQAnswer').value = '';
+  document.getElementById('flQCustom').value = '';
+  flQCfg = null;
+}
+function flQCancel(){
+  const cfg = flQCfg;
+  flQClose();
+  if(cfg && cfg.onCancel) cfg.onCancel();
+}
+async function flQSubmit(){
+  const cfg = flQCfg;
+  if(!cfg) return;
+  const errEl = document.getElementById('flQError');
+  const ans = document.getElementById('flQAnswer').value;
+  let q = null;
+  if(cfg.mode==='setup'){
+    const v = document.getElementById('flQSelect').value;
+    q = v==='__custom' ? document.getElementById('flQCustom').value.trim() : v;
+    if(!q || q.length<3){ errEl.textContent = 'اكتب السؤال'; return; }
+  }
+  if(flNormAnswer(ans).length<2){ errEl.textContent = 'اكتب الإجابة'; return; }
+  const r = await cfg.onSubmit(ans, q);
+  if(r && r.ok===false){
+    errEl.textContent = r.msg || '';
+    if(r.close) flQClose();
+    else document.getElementById('flQAnswer').value = '';
+    return;
+  }
+  flQClose();
+}
+
 /* ---------- Auto-lock ---------- */
 function showLockScreen(){
+  flResetUI();
   pinMode='unlock'; pinBuffer='';
   document.getElementById('lockError').textContent = '';
   document.getElementById('lockCancelBtn').classList.add('hidden');
@@ -6461,4 +6875,4 @@ async function boot(){
 boot();
 </script>
 </body>
-  </html>
+          </html>
