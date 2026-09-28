@@ -444,6 +444,31 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
 .help-row .help-icon svg{width:18px;height:18px;}
 .help-row h5{margin:0 0 3px;font-size:13.5px;}
 .help-row p{margin:0;font-size:12px;color:var(--text-dim);line-height:1.6;}
+
+/* ---- مركز الأدوات: تحديد / ترتيب / إخفاء / قفل ---- */
+.tool-card{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 8px;}
+.section-head .section-label{margin:0;}
+.mini-btn{font-size:11.5px;padding:5px 11px;border-radius:999px;background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border);white-space:nowrap;flex-shrink:0;}
+.mini-btn:active{transform:scale(.95);}
+.mgr-title{margin:14px 2px 8px;font-size:12px;font-weight:700;color:var(--text-dim);}
+.mgr-row{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:8px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.mgr-row .folder-icon{width:36px;height:36px;flex-shrink:0;border-radius:11px;}
+.mgr-row span.mgr-name{flex:1;font-size:13.5px;text-align:right;}
+.mgr-row button{font-size:12px;padding:7px 12px;border-radius:var(--radius-sm);background:var(--gold);color:#1a1a1a;font-weight:700;flex-shrink:0;}
+
+.select-bar button.accent{background:var(--gold);color:#1a1a1a;font-weight:700;}
+.ord-row{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:8px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.ord-row.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;}
+.ord-row .folder-icon{width:34px;height:34px;flex-shrink:0;border-radius:10px;}
+.ord-row .ord-name{flex:1;font-size:13.5px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ord-row .ord-btn{width:38px;height:38px;border-radius:10px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text);}
+.ord-row .ord-btn svg{width:18px;height:18px;}
+.ord-row .ord-btn:disabled{opacity:.3;}
+.ord-row .ord-btn:active:not(:disabled){transform:scale(.92);}
+.ord-quick{display:flex;gap:8px;margin-bottom:12px;}
+.ord-quick button{flex:1;padding:10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:12.5px;}
+.ord-quick button:disabled{opacity:.4;}
 </style>
 </head>
 <body>
@@ -496,9 +521,6 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       </button>
       <button class="icon-btn" onclick="openExtraMenu()" title="المزيد">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-      </button>
-      <button class="icon-btn" id="editFoldersBtn" onclick="toggleFolderSelectMode()" title="تحديد الحافظات">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
       </button>
       <button class="icon-btn" onclick="openSettings()" title="الإعدادات">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -569,18 +591,26 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
   </div>
 
   <div id="homeToolsSection" style="margin-bottom:4px">
-    <p class="section-label">مركز الأدوات</p>
+    <div class="section-head">
+      <p class="section-label">مركز الأدوات</p>
+      <button type="button" class="mini-btn hidden" id="toolsManageBtnHome" onclick="openToolsManager()"></button>
+    </div>
+    <div class="select-bar" id="toolSelectBarHome"></div>
+    <span class="mini-hint" style="margin:-2px 0 8px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
     <div class="grid compact-grid" id="homeToolsRow"></div>
   </div>
 
   <div class="select-bar" id="folderSelectBar">
     <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
     <span class="sb-count" id="folderSelCount">0 محدد</span>
-    <button class="danger" onclick="deleteSelectedFolders()">حذف المحدد</button>
+    <button onclick="openOrderModal('folders')">ترتيب</button>
+    <button onclick="hideSelectedFolders()">إخفاء</button>
+    <button class="danger" onclick="deleteSelectedFolders()">حذف</button>
+    <button class="accent" onclick="lockSelectedFolders()"><span id="folderLockLabel">قفل</span></button>
     <button onclick="exitFolderSelectMode()">إلغاء</button>
   </div>
 
-  <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة ثم اسحبها لتغيير ترتيبها</span>
+  <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة لتحديدها مباشرة، أو استمر بالسحب لتغيير ترتيبها</span>
   <div class="grid" id="foldersGrid"></div>
 </div>
 
@@ -701,7 +731,10 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>مركز الأدوات</h2>
+    <button type="button" class="mini-btn hidden" id="toolsManageBtnScreen" style="margin-inline-start:auto" onclick="openToolsManager()"></button>
   </div>
+  <div class="select-bar" id="toolSelectBarScreen"></div>
+  <span class="mini-hint" style="margin:-4px 0 10px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
   <div class="grid" id="toolsGrid"></div>
 </div>
 
@@ -735,9 +768,9 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg>
       <p>اكتب رابطًا أو كلمة بحث في الأعلى للبدء بالتصفح</p>
       <div class="browser-shortcuts">
-        <button type="button" onclick="quickBrowse('google.com')">Google</button>
         <button type="button" onclick="quickBrowse('wikipedia.org')">Wikipedia</button>
-        <button type="button" onclick="quickBrowse('youtube.com')">YouTube</button>
+        <button type="button" onclick="quickBrowse('duckduckgo.com/html/')">DuckDuckGo</button>
+        <button type="button" onclick="quickBrowse('archive.org')">Internet Archive</button>
       </div>
       <span class="hint">ملاحظة: بعض المواقع تمنع عرضها داخل التطبيقات — استخدم زر الفتح الخارجي أعلى الشاشة إن لم تظهر الصفحة.</span>
     </div>
@@ -1341,6 +1374,21 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
   </div>
 </div>
 
+<div class="modal-backdrop" id="shareSaveModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">حفظ المحتوى المُشارك</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeShareSaveModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="sharePreviewBox" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px"></div>
+    <p class="mini-hint" style="margin:0 0 8px">اختر الحافظة التي تريد الحفظ فيها</p>
+    <div class="folder-pick-list" id="sharePickList"></div>
+  </div>
+</div>
+
 <div class="modal-backdrop center-modal" id="confirmModalBackdrop" role="dialog" aria-modal="true">
   <div class="confirm-box">
     <div class="confirm-icon">
@@ -1369,6 +1417,38 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       <button class="btn btn-ghost" onclick="closeQuickNoteModal()" title="إغلاق">إلغاء</button>
       <button class="btn btn-primary btn-compact" onclick="submitQuickNote()">حفظ</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="orderBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0" id="orderTitle">ترتيب</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeOrderModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <span class="hint" style="display:block;margin-bottom:10px">حرّك أي عنصر بالأسهم. العناصر المحدّدة مؤطّرة بالذهبي.</span>
+    <div class="ord-quick">
+      <button type="button" id="ordTopBtn" onclick="moveSelectedInOrder(true)">المحدد إلى الأعلى</button>
+      <button type="button" id="ordBottomBtn" onclick="moveSelectedInOrder(false)">المحدد إلى الأسفل</button>
+    </div>
+    <div id="orderList"></div>
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeOrderModal()">تم</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolsManagerBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">إدارة الأدوات</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeToolsManager()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="toolsManagerBody"></div>
   </div>
 </div>
 
@@ -1411,7 +1491,7 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
     <div class="help-list">
       <div class="help-row">
         <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
-        <div><h5>الحافظات</h5><p>كل مربع في الرئيسية "حافظة" تجمع نوعًا من العناصر (صور، ملاحظات، روابط...). اضغط عليها لفتحها، واضغط مطوّلًا لسحبها وإعادة ترتيبها.</p></div>
+        <div><h5>الحافظات</h5><p>كل مربع في الرئيسية "حافظة" تجمع نوعًا من العناصر (صور، ملاحظات، روابط...). اضغط عليها لفتحها. اضغط مطوّلًا لتحديدها ثم احذفها أو أخفِها أو اقفلها، أو استمر بالسحب لإعادة ترتيبها. وينطبق الأمر نفسه على أدوات «مركز الأدوات». كل ما تحذفه ينتقل إلى سلة المحذوفات ويمكنك استعادته منها.</p></div>
       </div>
       <div class="help-row">
         <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
@@ -1803,6 +1883,7 @@ if(typeof settings.fabBackOpacity !== 'number') settings.fabBackOpacity = 90;
 if(!settings.fabBackPos) settings.fabBackPos = null;
 if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
 if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
+if(!settings.toolPrefs) settings.toolPrefs = {order:[],hidden:[],locked:[],deleted:[]};
 if(!settings.a11y) settings.a11y = {};
 if(typeof settings.a11y.highContrast !== 'boolean') settings.a11y.highContrast = false;
 if(typeof settings.a11y.reduceMotion !== 'boolean') settings.a11y.reduceMotion = false;
@@ -1850,11 +1931,18 @@ let _confirmCallback = null;
 let homeFilterText = "";
 if(!settings.homeSort) settings.homeSort = 'custom';
 let pendingLockedFolderId = null;
+let pendingUnlockCb = null;
+let toolSelectMode = false;
+let toolSelectScope = 'screen-home';
+const selectedToolIds = new Set();
 let pendingFolderLocked = false;
 let searchFavOnly = false;
 
+function getAllFolders(){
+  return DEFAULT_FOLDERS.map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{})).concat(settings.customFolders);
+}
 function getFolders(){
-  const list = DEFAULT_FOLDERS.map(f => Object.assign({}, f, settings.folderOverrides[f.id]||{})).concat(settings.customFolders);
+  const list = getAllFolders().filter(f=>!f.deleted);
   return list.slice().sort((a,b)=> (b.pinned?1:0)-(a.pinned?1:0));
 }
 function getFolder(id){ return getFolders().find(f=>f.id===id); }
@@ -2137,6 +2225,7 @@ function runConfirmAction(){
 }
 
 function showScreen(id){
+  if(toolSelectMode && id!==toolSelectScope) exitToolSelectMode();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el = document.getElementById(id);
   el.classList.add('active');
@@ -2228,6 +2317,7 @@ function openSearchResult(folderId, itemId){
 
 function toggleFolderSelectMode(){
   if(folderSelectMode){ exitFolderSelectMode(); return; }
+  if(toolSelectMode) exitToolSelectMode();
   folderSelectMode = true;
   selectedFolderIds.clear();
   document.getElementById('folderSelectBar').classList.add('show');
@@ -2246,7 +2336,7 @@ function toggleFolderChecked(id){
   renderHome();
 }
 function toggleSelectAllFolders(){
-  const all = getFolders().map(f=>f.id);
+  const all = sortedVisibleFolders().map(f=>f.id);
   const allSelected = all.length>0 && all.every(id=>selectedFolderIds.has(id));
   if(allSelected) selectedFolderIds.clear();
   else all.forEach(id=>selectedFolderIds.add(id));
@@ -2255,25 +2345,164 @@ function toggleSelectAllFolders(){
 }
 function updateFolderSelCount(){
   document.getElementById('folderSelCount').textContent = selectedFolderIds.size + ' محدد';
-  const all = getFolders().map(f=>f.id);
+  const all = sortedVisibleFolders().map(f=>f.id);
+  const lb = document.getElementById('folderLockLabel');
+  if(lb){ const ids=[...selectedFolderIds]; lb.textContent = (ids.length && ids.every(id=>{const f=getFolder(id);return f&&f.locked;})) ? 'إلغاء القفل' : 'قفل'; }
   document.getElementById('selAllFoldersLabel').textContent = (all.length>0 && all.every(id=>selectedFolderIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
 }
 function deleteSelectedFolders(){
   if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
   const n = selectedFolderIds.size;
-  showConfirm('حذف الحافظات المحددة', `سيتم حذف ${n} ${n===1?'حافظة':'حافظات'} وكل محتوياتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+  showConfirm('نقل الحافظات إلى المحذوفات', `سيتم نقل ${n} ${n===1?'حافظة':'حافظات'} بكل محتوياتها إلى سلة المحذوفات. يمكنك استعادتها منها لاحقًا.`, ()=>{
     selectedFolderIds.forEach(id=>deleteFolderNow(id));
     exitFolderSelectMode();
-    toast('تم الحذف');
+    toast('نُقلت إلى سلة المحذوفات');
   });
 }
 function deleteFolderNow(id){
+  /* حذف مؤقت: تنتقل الحافظة بكل محتوياتها إلى سلة المحذوفات ويمكن استعادتها */
+  updateFolderMeta(id,{deleted:true, deletedAt:Date.now()});
+}
+function purgeFolder(id){
   settings.customFolders = settings.customFolders.filter(f=>f.id!==id);
-  delete data[id];
   delete settings.folderViews[id];
   delete settings.folderOverrides[id];
+  if(Array.isArray(settings.folderOrder)) settings.folderOrder = settings.folderOrder.filter(x=>x!==id);
+  if(DEFAULT_FOLDERS.some(f=>f.id===id)) data[id] = []; else delete data[id];
   saveSettingsData();
   saveData();
+}
+
+
+function hideSelectedFolders(){
+  if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
+  const n = selectedFolderIds.size;
+  selectedFolderIds.forEach(id=>updateFolderMeta(id,{hidden:true}));
+  exitFolderSelectMode();
+  toast('تم إخفاء '+n+' — تجدها في «المزيد ← الحافظات المخفية»');
+}
+function lockSelectedFolders(){
+  if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
+  const ids = Array.from(selectedFolderIds);
+  const allLocked = ids.every(id=>{ const f=getFolder(id); return f && f.locked; });
+  if(!allLocked){
+    if(!(settings.pinEnabled && hasLockCredential())){ toast('عيّن رمز قفل من الإعدادات أولًا لتتمكن من قفل الحافظات'); return; }
+    ids.forEach(id=>updateFolderMeta(id,{locked:true}));
+    exitFolderSelectMode();
+    toast('تم قفل الحافظات المحددة');
+  } else {
+    promptUnlock('لإلغاء قفل الحافظات المحددة', ()=>{
+      ids.forEach(id=>updateFolderMeta(id,{locked:false}));
+      exitFolderSelectMode();
+      toast('تم إلغاء القفل');
+    });
+  }
+}
+function unhideFolder(id){
+  updateFolderMeta(id,{hidden:false});
+  renderHome();
+  openExtraMenu();
+  toast('أُظهرت الحافظة في الرئيسية');
+}
+/* مطالبة بالرمز/النمط ثم تنفيذ إجراء (يُستخدم لفتح الأدوات المقفلة وإلغاء القفل) */
+function promptUnlock(what, cb){
+  if(!hasLockCredential()){ cb(); return; }
+  pendingUnlockCb = cb;
+  pendingLockedFolderId = null;
+  pinMode = 'folder-unlock'; pinBuffer='';
+  document.getElementById('lockError').textContent = '';
+  document.getElementById('lockBioBtn').classList.add('hidden');
+  document.getElementById('lockCancelBtn').classList.remove('hidden');
+  if((settings.lockMethod||'pin')==='pattern' && settings.pattern){
+    document.getElementById('lockTitle').textContent = 'ارسم النمط '+what;
+    document.getElementById('lockSub').textContent = 'صِل النقاط بالترتيب الصحيح';
+    showPatternUI();
+    renderPatternGrid();
+  } else {
+    document.getElementById('lockTitle').textContent = 'أدخل الرمز '+what;
+    document.getElementById('lockSub').textContent = 'رمز مكوّن من 4 أرقام';
+    showPinUI();
+    renderPinPad(); renderPinDots();
+  }
+  document.getElementById('lockScreen').classList.add('active');
+}
+
+
+/* ================= نافذة الترتيب (للحافظات والأدوات) ================= */
+let orderKind = null;
+const UP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+const DOWN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+function orderItems(){
+  if(orderKind==='tools'){
+    return visibleTools().map(t=>({id:t.id, name:t.name, c1:t.c1, c2:t.c2, icon:svg(t.icon), pinned:false}));
+  }
+  return sortedVisibleFolders().map(f=>({id:f.id, name:f.name, c1:f.color, c2:f.color2, icon:folderIconInner(f), pinned:!!f.pinned}));
+}
+function isOrderSelected(id){
+  return orderKind==='tools' ? selectedToolIds.has(id) : selectedFolderIds.has(id);
+}
+function openOrderModal(kind){
+  if(kind==='folders' && homeFilterText){ toast('امسح التصفية أولًا لتتمكن من الترتيب'); return; }
+  orderKind = kind;
+  document.getElementById('orderTitle').textContent = kind==='tools' ? 'ترتيب الأدوات' : 'ترتيب الحافظات';
+  renderOrderModal();
+  document.getElementById('orderBackdrop').classList.add('active');
+}
+function closeOrderModal(){
+  document.getElementById('orderBackdrop').classList.remove('active');
+  orderKind = null;
+}
+function renderOrderModal(){
+  const items = orderItems();
+  const selCount = items.filter(i=>isOrderSelected(i.id)).length;
+  document.getElementById('ordTopBtn').disabled = selCount===0;
+  document.getElementById('ordBottomBtn').disabled = selCount===0;
+  document.getElementById('orderList').innerHTML = items.map((it,i)=>{
+    const prev = items[i-1], next = items[i+1];
+    const canUp = !!prev && prev.pinned===it.pinned;
+    const canDown = !!next && next.pinned===it.pinned;
+    return `<div class="ord-row ${isOrderSelected(it.id)?'sel':''}">
+      <div class="folder-icon" style="--fc:${it.c1};--fc2:${it.c2}">${it.icon}</div>
+      <span class="ord-name">${escapeHTML(it.name)}</span>
+      <button type="button" class="ord-btn" ${canUp?'':'disabled'} onclick="moveInOrder('${it.id}',-1)" title="للأعلى">${UP_SVG}</button>
+      <button type="button" class="ord-btn" ${canDown?'':'disabled'} onclick="moveInOrder('${it.id}',1)" title="للأسفل">${DOWN_SVG}</button>
+    </div>`;
+  }).join('');
+}
+function moveInOrder(id, dir){
+  const items = orderItems();
+  const ids = items.map(i=>i.id);
+  const i = ids.indexOf(id), j = i + dir;
+  if(i<0 || j<0 || j>=ids.length) return;
+  if(items[i].pinned !== items[j].pinned) return;
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  applyOrder(ids);
+}
+function moveSelectedInOrder(toTop){
+  const items = orderItems();
+  const sel = items.filter(i=>isOrderSelected(i.id)).map(i=>i.id);
+  if(!sel.length) return;
+  const rest = items.filter(i=>!isOrderSelected(i.id)).map(i=>i.id);
+  applyOrder(toTop ? sel.concat(rest) : rest.concat(sel));
+}
+function applyOrder(ids){
+  if(orderKind==='tools'){
+    const p = toolPrefs();
+    const full = orderedTools().map(t=>t.id);
+    const vis = new Set(ids);
+    let k = 0;
+    p.order = full.map(id=> vis.has(id) ? ids[k++] : id);
+    saveSettingsData();
+    renderAllTools();
+  } else {
+    settings.homeSort = 'custom';
+    ensureFolderOrder();
+    const remaining = settings.folderOrder.filter(id=>!ids.includes(id));
+    settings.folderOrder = ids.concat(remaining);
+    saveSettingsData();
+    renderHome();
+  }
+  renderOrderModal();
 }
 
 function filterHomeFolders(val){
@@ -2286,7 +2515,7 @@ function setHomeSort(val){
   renderHome();
 }
 function ensureFolderOrder(){
-  const ids = getFolders().map(f=>f.id);
+  const ids = getAllFolders().map(f=>f.id);
   if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
   settings.folderOrder = settings.folderOrder.filter(id=>ids.includes(id));
   ids.forEach(id=>{ if(!settings.folderOrder.includes(id)) settings.folderOrder.push(id); });
@@ -2295,6 +2524,18 @@ function ensureFolderOrder(){
 /* ---------- إعادة ترتيب الحافظات بالضغط المطوّل ثم السحب ---------- */
 const LONG_PRESS_MS = 380;
 const DRAG_CANCEL_DIST = 10;
+function selectFolderViaLongPress(id){
+  if(toolSelectMode) exitToolSelectMode();
+  if(!folderSelectMode){
+    folderSelectMode = true;
+    selectedFolderIds.clear();
+    document.getElementById('folderSelectBar').classList.add('show');
+  }
+  if(selectedFolderIds.has(id)) selectedFolderIds.delete(id); else selectedFolderIds.add(id);
+  if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(12); }catch(err){} }
+  updateFolderSelCount();
+  renderHome();
+}
 function attachFolderDrag(card, folderId){
   let pressTimer = null;
   let startX = 0, startY = 0;
@@ -2302,6 +2543,7 @@ function attachFolderDrag(card, folderId){
   let justDragged = false;
   let scrollRAF = null;
   let lastClientY = 0;
+  let movedEnough = false;
 
   function autoScrollTick(){
     if(!isDragging){ scrollRAF = null; return; }
@@ -2342,14 +2584,8 @@ function attachFolderDrag(card, folderId){
   function beginDrag(e){
     cleanupPending();
     isDragging = true;
-    if(settings.homeSort !== 'custom'){
-      settings.homeSort = 'custom';
-      saveSettingsData();
-      const sel = document.getElementById('homeSortSelect');
-      if(sel) sel.value = 'custom';
-    }
+    movedEnough = false;
     card.classList.add('dragging');
-    if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(12); }catch(err){} }
     try{ card.setPointerCapture(e.pointerId); }catch(err){}
     document.addEventListener('pointermove', onDragMove, {passive:false});
     document.addEventListener('pointerup', onDragEnd, {once:true});
@@ -2368,6 +2604,13 @@ function attachFolderDrag(card, folderId){
       const curIdx = kids.indexOf(card);
       const overIdx = kids.indexOf(overCard);
       if(curIdx > -1 && overIdx > -1){
+        if(!movedEnough && settings.homeSort !== 'custom'){
+          settings.homeSort = 'custom';
+          saveSettingsData();
+          const sel = document.getElementById('homeSortSelect');
+          if(sel) sel.value = 'custom';
+        }
+        movedEnough = true;
         if(curIdx < overIdx) grid.insertBefore(card, overCard.nextSibling);
         else grid.insertBefore(card, overCard);
       }
@@ -2380,7 +2623,11 @@ function attachFolderDrag(card, folderId){
     isDragging = false;
     justDragged = true;
     try{ card.releasePointerCapture(e.pointerId); }catch(err){}
-    persistFolderOrderFromDOM();
+    if(movedEnough){
+      persistFolderOrderFromDOM();
+    } else {
+      selectFolderViaLongPress(folderId);
+    }
     setTimeout(()=>{ justDragged = false; }, 60);
   }
   card.addEventListener('pointerdown', onPointerDown);
@@ -2399,7 +2646,7 @@ function persistFolderOrderFromDOM(){
   renderHome();
 }
 function sortedVisibleFolders(){
-  let list = getFolders();
+  let list = getFolders().filter(f=>!f.hidden);
   if(settings.hideLockedFromHome){
     list = list.filter(f=>!f.locked);
   }
@@ -2515,17 +2762,21 @@ function submitQuickNote(){
   toast('تم الحفظ');
 }
 function deleteQuickNote(id){
-  widgetsData.notes = widgetsData.notes.filter(n=>n.id!==id);
+  const n = widgetsData.notes.find(x=>x.id===id);
+  if(n){ n.deleted = true; n.deletedAt = Date.now(); }
   saveWidgetsData();
   renderQuickNotes();
+  updateTrashBadge();
+  toast('نُقلت الملاحظة إلى سلة المحذوفات');
 }
 function renderQuickNotes(){
   const box = document.getElementById('notesScroller');
-  if(!widgetsData.notes.length){
+  const liveNotes = widgetsData.notes.filter(n=>!n.deleted);
+  if(!liveNotes.length){
     box.innerHTML = `<div class="notes-empty">لا ملاحظات بعد — اضغط + لإضافة ملاحظة سريعة لا ترتبط بأي حافظة</div>`;
     return;
   }
-  box.innerHTML = widgetsData.notes.map(n=>`
+  box.innerHTML = liveNotes.map(n=>`
     <div class="note-card" onclick="openQuickNoteModal('${n.id}')">
       <p>${escapeHTML(n.text)}</p>
       <div class="nc-row"><button type="button" class="nc-del" onclick="event.stopPropagation();deleteQuickNote('${n.id}')">${svg('trash')}</button></div>
@@ -2548,17 +2799,21 @@ function toggleTodo(id){
   renderTodos();
 }
 function deleteTodo(id){
-  widgetsData.todos = widgetsData.todos.filter(t=>t.id!==id);
+  const t = widgetsData.todos.find(x=>x.id===id);
+  if(t){ t.deleted = true; t.deletedAt = Date.now(); }
   saveWidgetsData();
   renderTodos();
+  updateTrashBadge();
+  toast('نُقلت المهمة إلى سلة المحذوفات');
 }
 function renderTodos(){
   const box = document.getElementById('todoList');
-  if(!widgetsData.todos.length){
+  const liveTodos = widgetsData.todos.filter(t=>!t.deleted);
+  if(!liveTodos.length){
     box.innerHTML = `<div class="todo-empty">لا توجد مهام بعد — أضف مهمتك الأولى أعلاه</div>`;
     return;
   }
-  const sorted = widgetsData.todos.slice().sort((a,b)=> (a.done===b.done) ? b.createdAt-a.createdAt : (a.done?1:-1));
+  const sorted = liveTodos.slice().sort((a,b)=> (a.done===b.done) ? b.createdAt-a.createdAt : (a.done?1:-1));
   box.innerHTML = sorted.map(t=>`
     <div class="todo-row ${t.done?'done':''}">
       <button type="button" class="todo-check" onclick="toggleTodo('${t.id}')">${svg('check')}</button>
@@ -2637,7 +2892,7 @@ function renderHome(){
     card.style.setProperty("--fc2", folder.color2);
     card.innerHTML = `
       ${folderSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : (folder.pinned?`<span class="pin-flag">${svgFilled('pin')}</span>`:'')}
-      ${(!folderSelectMode && folder.locked) ? `<span class="lock-flag">${svg('lock')}</span>` : ''}
+      ${folder.locked ? `<span class="lock-flag">${svg('lock')}</span>` : ''}
       <div class="folder-icon">${folderIconInner(folder)}</div>
       <div>
         <h3>${escapeHTML(folder.name)}</h3>
@@ -2663,12 +2918,6 @@ function renderHome(){
   }
 }
 
-function updateTrashBadge(){
-  const n = allItemsFlat(true).filter(i=>i.deleted).length;
-  const b = document.getElementById('trashBadge');
-  if(n>0){ b.textContent = n>99?'99+':n; b.classList.remove('hidden'); }
-  else b.classList.add('hidden');
-}
 
 function applyIdentity(){
   const name = settings.appName || "المنتصر";
@@ -2837,12 +3086,12 @@ function requestDeleteCurrentFolder(){
   closeFolderMenu();
   const folder = getFolder(currentFolder);
   if(!folder) return;
-  showConfirm('حذف الحافظة', `سيتم حذف حافظة "${folder.name}" وكل محتوياتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+  showConfirm('نقل الحافظة إلى المحذوفات', `سيتم نقل حافظة "${folder.name}" بكل محتوياتها إلى سلة المحذوفات. يمكنك استعادتها منها لاحقًا.`, ()=>{
     const id = currentFolder;
     goHome();
     deleteFolderNow(id);
     renderHome();
-    toast('تم حذف الحافظة');
+    toast('نُقلت الحافظة إلى سلة المحذوفات');
   });
 }
 
@@ -2905,7 +3154,7 @@ function openFolder(id){
   const folder = getFolder(id);
   if(!folder) return;
   if(folder.locked && hasLockCredential()){
-    pendingLockedFolderId = id;
+    pendingLockedFolderId = id; pendingUnlockCb = null;
     pinMode = 'folder-unlock'; pinBuffer='';
     document.getElementById('lockError').textContent = '';
     document.getElementById('lockBioBtn').classList.add('hidden');
@@ -2928,6 +3177,7 @@ function openFolder(id){
 }
 function cancelFolderUnlock(){
   pendingLockedFolderId = null;
+  pendingUnlockCb = null;
   document.getElementById('lockCancelBtn').classList.add('hidden');
   document.getElementById('lockScreen').classList.remove('active');
 }
@@ -3312,6 +3562,149 @@ async function shareApp(){
     await navigator.clipboard.writeText(text);
     toast('تم نسخ نص المشاركة — الصقه في أي مكان');
   }catch(e){ toast('تعذّرت المشاركة'); }
+}
+
+/* ================= استقبال المشاركة من تطبيقات أخرى (Share Intent) =================
+   الجزء الأصلي (Java/Kotlin + AndroidManifest.xml) يبقى من مسؤوليتك:
+   - أضف intent-filter لـ android.intent.action.SEND و SEND_MULTIPLE في AndroidManifest.xml.
+   - في MainActivity، عند استقبال الـ Intent، مرّر البيانات إلى الواجهة بإحدى الطريقتين:
+     1) استدعاء مباشر عبر WebView: 
+        webView.post(() -> webView.evaluateJavascript(
+          "window.handleSharedContent(" + jsonPayload + ")", null));
+     2) أو حقن متغيّر قبل اكتمال تحميل الصفحة (يفيد عند فتح التطبيق بالكامل من المشاركة):
+        window.__pendingShareIntent = { text, url, subject, files: [...] };
+        سيتم التقاطه تلقائيًا عند الإقلاع (boot).
+   شكل البيانات المتوقع (payload):
+   { text: "نص أو رابط", subject: "عنوان اختياري",
+     files: [ { name, mime, dataUrl } ]  أو  [ { name, mime, base64 } ] }
+------------------------------------------------------------------------------- */
+let pendingShare = null;
+
+function normalizeSharedPayload(payload){
+  payload = payload || {};
+  let text = (typeof payload.text === 'string') ? payload.text.trim() : '';
+  let url = (typeof payload.url === 'string') ? payload.url.trim() : '';
+  if(!url && /^https?:\/\/\S+$/i.test(text)) url = text;
+  const files = Array.isArray(payload.files) ? payload.files : [];
+  return { text, url, subject: (payload.subject||'').trim(), files };
+}
+window.handleSharedContent = function(payload){
+  pendingShare = normalizeSharedPayload(payload);
+  if(!pendingShare.text && !pendingShare.url && !pendingShare.files.length){ toast('لم يصل أي محتوى قابل للحفظ'); return; }
+  openShareSaveModal();
+};
+document.addEventListener('sharedContentReceived', function(e){ window.handleSharedContent(e.detail); });
+function checkPendingShareIntent(){
+  try{
+    if(window.__pendingShareIntent){
+      const payload = window.__pendingShareIntent;
+      window.__pendingShareIntent = null;
+      window.handleSharedContent(payload);
+    }
+  }catch(e){}
+}
+
+function openShareSaveModal(){
+  if(!pendingShare) return;
+  if(getFolders().length===0){ toast('أنشئ حافظة أولًا لتتمكن من الحفظ فيها'); return; }
+  renderSharePreview();
+  renderSharePickList();
+  document.getElementById('shareSaveModalBackdrop').classList.add('active');
+}
+function closeShareSaveModal(){
+  document.getElementById('shareSaveModalBackdrop').classList.remove('active');
+  pendingShare = null;
+}
+function renderSharePreview(){
+  const box = document.getElementById('sharePreviewBox');
+  if(!pendingShare){ box.innerHTML=''; return; }
+  const parts = [];
+  if(pendingShare.files.length){
+    parts.push(`<div style="font-size:12px;color:var(--text-dim);margin-bottom:6px">${pendingShare.files.length} ${pendingShare.files.length===1?'ملف مُشارك':'ملفات مُشاركة'}</div>`);
+    parts.push(pendingShare.files.map(f=>`<div style="font-size:12.5px;color:var(--text-dim)">• ${escapeHTML(f.name||'ملف بلا اسم')}</div>`).join(''));
+  }
+  if(pendingShare.url){
+    parts.push(`<div style="font-size:13px;word-break:break-all;margin-top:6px">${escapeHTML(pendingShare.url)}</div>`);
+  } else if(pendingShare.text){
+    parts.push(`<p style="margin:6px 0 0;white-space:pre-wrap;color:var(--text-dim);font-size:13px;max-height:90px;overflow:hidden">${escapeHTML(pendingShare.text)}</p>`);
+  }
+  box.innerHTML = parts.join('') || `<div style="font-size:12px;color:var(--text-dim)">لا توجد معاينة متاحة</div>`;
+}
+function renderSharePickList(){
+  const list = document.getElementById('sharePickList');
+  const targets = getFolders();
+  list.innerHTML = targets.map(f=>`
+    <button type="button" class="folder-pick-item" onclick="confirmSaveShareTo('${f.id}')" style="--fc:${f.color}">
+      <div class="folder-icon" style="--fc:${f.color};--fc2:${f.color2}">${folderIconInner(f)}</div>
+      <span>${escapeHTML(f.name)}</span>
+    </button>`).join('');
+}
+function guessKindFromMime(mime){
+  mime = mime || '';
+  if(mime.startsWith('image/')) return 'photo';
+  if(mime.startsWith('video/')) return 'video';
+  if(mime.startsWith('audio/')) return 'music';
+  return 'file';
+}
+async function sharedFileToFile(f){
+  try{
+    if(f.dataUrl){
+      const blob = await (await fetch(f.dataUrl)).blob();
+      return new File([blob], f.name || ('مشارك_'+Date.now()), { type: f.mime || blob.type });
+    }
+    if(f.base64){
+      const mime = f.mime || guessMimeFromName(f.name||'');
+      const byteChars = atob(f.base64);
+      const byteNumbers = new Array(byteChars.length);
+      for(let i=0;i<byteChars.length;i++) byteNumbers[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([new Uint8Array(byteNumbers)], { type: mime });
+      return new File([blob], f.name || ('مشارك_'+Date.now()), { type: mime });
+    }
+  }catch(e){ console.warn('تعذّر تحويل الملف المُشارك', e); }
+  return null;
+}
+async function confirmSaveShareTo(folderId){
+  if(!pendingShare) return;
+  data[folderId] = data[folderId] || [];
+  const folder = getFolder(folderId);
+  let savedCount = 0;
+  try{
+    for(const f of pendingShare.files){
+      const file = await sharedFileToFile(f);
+      if(!file) continue;
+      const saved = await persistFile(file, file.name);
+      const kind = guessKindFromMime(saved.mime || file.type);
+      data[folderId].push({
+        id: genId(), createdAt: Date.now(), kind, src: saved.src, name: saved.name,
+        mime: saved.mime || null, nativeUri: saved.nativeUri, storedPath: saved.storedPath,
+        title: pendingShare.subject || file.name, favorite:false, deleted:false, tags:[]
+      });
+      savedCount++;
+    }
+    if(pendingShare.url){
+      data[folderId].push({
+        id: genId(), createdAt: Date.now(), kind:'link',
+        title: pendingShare.subject || pendingShare.url, url: pendingShare.url,
+        content: (pendingShare.text && pendingShare.text !== pendingShare.url) ? pendingShare.text : '',
+        favorite:false, deleted:false, tags:[]
+      });
+      savedCount++;
+    } else if(pendingShare.text){
+      data[folderId].push({
+        id: genId(), createdAt: Date.now(), kind: (folder && folder.kind) || 'note',
+        title: pendingShare.subject || (pendingShare.text.slice(0,40) || 'محتوى مُشارك'),
+        content: pendingShare.text, favorite:false, deleted:false, tags:[]
+      });
+      savedCount++;
+    }
+    saveData();
+    if(currentFolder===folderId) renderItems();
+    renderHome();
+    toast(savedCount ? 'تم حفظ المحتوى المُشارك في ' + (folder ? folder.name : 'الحافظة') : 'لا يوجد محتوى لحفظه');
+  }catch(e){
+    toast('تعذّر حفظ المحتوى المُشارك: ' + (e && e.message || 'خطأ غير معروف'));
+  }
+  closeShareSaveModal();
 }
 
 /* ---------- Move item(s) between folders ---------- */
@@ -3882,39 +4275,74 @@ function openFavItem(folderId,itemId){
   viewItem(itemId,'favorites');
 }
 
-/* ---------- Trash screen ---------- */
+/* ---------- Trash screen (موحّدة: عناصر + حافظات + مشاريع + أدوات + ملاحظات + مهام) ---------- */
+const RESTORE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>';
+function trashFolders(){ return getAllFolders().filter(f=>f.deleted).sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0)); }
+function trashProjects(){ return projects.filter(x=>x.deleted).sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0)); }
+function trashTools(){ const p = toolPrefs(); return TOOLS_LIST.filter(t=>p.deleted.includes(t.id)).sort((a,b)=>(p.deletedAt[b.id]||0)-(p.deletedAt[a.id]||0)); }
+function trashNotes(){ return widgetsData.notes.filter(n=>n.deleted).sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0)); }
+function trashTodos(){ return widgetsData.todos.filter(t=>t.deleted).sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0)); }
+function trashItems(){ return allItemsFlat(true).filter(i=>i.deleted).sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0)); }
+function trashCount(){
+  return trashItems().length + trashFolders().length + trashProjects().length + trashTools().length + trashNotes().length + trashTodos().length;
+}
+function updateTrashBadge(){
+  const n = trashCount();
+  const b = document.getElementById('trashBadge');
+  if(!b) return;
+  if(n>0){ b.textContent = n>99?'99+':n; b.classList.remove('hidden'); }
+  else b.classList.add('hidden');
+}
 function openTrash(){
   renderTrash();
   document.getElementById('fabBtn').classList.remove('show');
   showScreen('screen-trash');
 }
+function trashRow(thumb, title, sub, when, restoreCall, purgeCall){
+  return `
+    <div class="item-card">
+      <div class="item-thumb">${thumb}</div>
+      <div class="item-body">
+        <h4>${escapeHTML(title||'بدون عنوان')}</h4>
+        <p>${escapeHTML(sub||'')}</p>
+        <div class="item-meta">حُذف بتاريخ ${fmtDate(when||Date.now())}</div>
+      </div>
+      <div class="item-actions">
+        <button onclick="${restoreCall}" title="استعادة">${RESTORE_SVG}</button>
+        ${purgeCall ? `<button onclick="${purgeCall}" title="حذف نهائي">${svg('trash')}</button>` : ''}
+      </div>
+    </div>`;
+}
 function renderTrash(){
-  const items = allItemsFlat(true).filter(i=>i.deleted).sort((a,b)=>(b.deletedAt||0)-(a.deletedAt||0));
-  document.getElementById('trashStatsBar').innerHTML = `<div class="stats-chip"><b>${items.length}</b> عنصر في السلة</div>`;
+  const items = trashItems(), folders = trashFolders(), projs = trashProjects(), tools = trashTools(), notes = trashNotes(), todos = trashTodos();
+  const total = items.length + folders.length + projs.length + tools.length + notes.length + todos.length;
+  document.getElementById('trashStatsBar').innerHTML = `<div class="stats-chip"><b>${total}</b> عنصر في السلة</div>`;
   updateTrashBadge();
   const list = document.getElementById('trashList');
-  if(items.length===0){
+  if(total===0){
     list.innerHTML = `<div class="empty-state">${svg('trash')}<p>سلة المحذوفات فارغة</p></div>`;
     return;
   }
-  list.innerHTML = items.map(item=>{
-    let thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
-    return `
-      <div class="item-card">
-        <div class="item-thumb">${thumb}</div>
-        <div class="item-body">
-          <h4>${escapeHTML(item.title||'بدون عنوان')}</h4>
-          <p>${escapeHTML(item.folderName)}</p>
-          <div class="item-meta">حُذف بتاريخ ${fmtDate(item.deletedAt||item.createdAt)}</div>
-        </div>
-        <div class="item-actions">
-          <button onclick="restoreItem('${item.folderId}','${item.id}')" title="استعادة">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-          </button>
-          <button onclick="requestPermanentDelete('${item.folderId}','${item.id}')" title="حذف نهائي">${svg('trash')}</button>
-        </div>
-      </div>`;
-  }).join('');
+  const sec = (label, rows)=> rows.length ? `<p class="section-label" style="margin:14px 2px 8px">${label}</p>` + rows.join('') : '';
+  let html = '';
+  html += sec('الحافظات', folders.map(f=>{
+    const n = (data[f.id]||[]).filter(i=>!i.deleted).length;
+    const thumb = `<div class="folder-icon" style="--fc:${f.color};--fc2:${f.color2};width:100%;height:100%;border-radius:inherit">${folderIconInner(f)}</div>`;
+    return trashRow(thumb, f.name, n+' '+(n===1?'عنصر':'عناصر')+' بداخلها', f.deletedAt, `restoreFolderFromTrash('${f.id}')`, `requestPurgeFolder('${f.id}')`);
+  }));
+  html += sec('المشاريع', projs.map(x=>trashRow(svg('layers'), x.name, 'مشروع', x.deletedAt, `restoreProjectFromTrash('${x.id}')`, `requestPurgeProject('${x.id}')`)));
+  html += sec('الأدوات', tools.map(t=>{
+    const p = toolPrefs();
+    const thumb = `<div class="folder-icon" style="--fc:${t.c1};--fc2:${t.c2};width:100%;height:100%;border-radius:inherit">${svg(t.icon)}</div>`;
+    return trashRow(thumb, t.name, t.desc, p.deletedAt[t.id], `restoreToolFromTrash('${t.id}')`, '');
+  }));
+  html += sec('الملاحظات السريعة', notes.map(n=>trashRow(svg('file'), (n.text||'').slice(0,60), 'ملاحظة سريعة', n.deletedAt, `restoreNoteFromTrash('${n.id}')`, `requestPurgeNote('${n.id}')`)));
+  html += sec('المهام', todos.map(t=>trashRow(svg('check'), (t.text||'').slice(0,60), 'مهمة', t.deletedAt, `restoreTodoFromTrash('${t.id}')`, `requestPurgeTodo('${t.id}')`)));
+  html += sec('العناصر', items.map(item=>{
+    const thumb = (item.kind==='photo' && item.src) ? `<img src="${item.src}">` : svg(iconForKind(item.kind));
+    return trashRow(thumb, item.title, item.folderName, item.deletedAt||item.createdAt, `restoreItem('${item.folderId}','${item.id}')`, `requestPermanentDelete('${item.folderId}','${item.id}')`);
+  }));
+  list.innerHTML = html;
 }
 function restoreItem(folderId,itemId){
   const item = (data[folderId]||[]).find(i=>i.id===itemId);
@@ -3932,14 +4360,79 @@ function requestPermanentDelete(folderId,itemId){
     toast('تم الحذف نهائيًا');
   });
 }
+function restoreFolderFromTrash(id){
+  updateFolderMeta(id,{deleted:false, deletedAt:null});
+  renderTrash(); renderHome();
+  toast('تمت استعادة الحافظة');
+}
+function requestPurgeFolder(id){
+  const f = getAllFolders().find(x=>x.id===id);
+  showConfirm('حذف نهائي', `سيتم حذف حافظة "${f?f.name:''}" وكل محتوياتها نهائيًا ولا يمكن التراجع عن هذا الإجراء.`, ()=>{
+    purgeFolder(id);
+    renderTrash();
+    toast('تم الحذف نهائيًا');
+  });
+}
+function restoreProjectFromTrash(id){
+  const x = projects.find(p=>p.id===id);
+  if(x){ x.deleted = false; x.deletedAt = null; saveProjects(); }
+  renderTrash(); renderProjects();
+  toast('تمت استعادة المشروع');
+}
+function requestPurgeProject(id){
+  showConfirm('حذف نهائي', 'سيتم حذف هذا المشروع ومرفقاته نهائيًا ولا يمكن التراجع عن هذا الإجراء.', ()=>{
+    projects = projects.filter(p=>p.id!==id);
+    saveProjects();
+    renderTrash();
+    toast('تم الحذف نهائيًا');
+  });
+}
+function restoreToolFromTrash(id){
+  const p = toolPrefs();
+  p.deleted = p.deleted.filter(x=>x!==id);
+  delete p.deletedAt[id];
+  saveSettingsData();
+  renderAllTools(); renderTrash();
+  toast('تمت استعادة الأداة');
+}
+function restoreNoteFromTrash(id){
+  const n = widgetsData.notes.find(x=>x.id===id);
+  if(n){ n.deleted = false; n.deletedAt = null; saveWidgetsData(); }
+  renderTrash();
+  toast('تمت استعادة الملاحظة');
+}
+function requestPurgeNote(id){
+  showConfirm('حذف نهائي', 'سيتم حذف هذه الملاحظة نهائيًا ولا يمكن التراجع عن هذا الإجراء.', ()=>{
+    widgetsData.notes = widgetsData.notes.filter(x=>x.id!==id);
+    saveWidgetsData(); renderTrash(); toast('تم الحذف نهائيًا');
+  });
+}
+function restoreTodoFromTrash(id){
+  const t = widgetsData.todos.find(x=>x.id===id);
+  if(t){ t.deleted = false; t.deletedAt = null; saveWidgetsData(); }
+  renderTrash();
+  toast('تمت استعادة المهمة');
+}
+function requestPurgeTodo(id){
+  showConfirm('حذف نهائي', 'سيتم حذف هذه المهمة نهائيًا ولا يمكن التراجع عن هذا الإجراء.', ()=>{
+    widgetsData.todos = widgetsData.todos.filter(x=>x.id!==id);
+    saveWidgetsData(); renderTrash(); toast('تم الحذف نهائيًا');
+  });
+}
 function requestEmptyTrash(){
-  const n = allItemsFlat(true).filter(i=>i.deleted).length;
-  if(n===0){ toast('سلة المحذوفات فارغة بالفعل'); return; }
-  showConfirm('إفراغ سلة المحذوفات', `سيتم حذف ${n} ${n===1?'عنصر':'عناصر'} نهائيًا من كل الحافظات. لا يمكن التراجع عن هذا الإجراء.`, ()=>{
+  const nTools = trashTools().length;
+  const n = trashCount() - nTools;
+  if(trashCount()===0){ toast('سلة المحذوفات فارغة بالفعل'); return; }
+  if(n===0){ toast('الأدوات المحذوفة تُستعاد فقط، ولا تُحذف نهائيًا'); return; }
+  showConfirm('إفراغ سلة المحذوفات', `سيتم حذف ${n} ${n===1?'عنصر':'عناصر'} نهائيًا (حافظات ومشاريع وملاحظات ومهام وعناصر). لا يمكن التراجع عن هذا الإجراء.${nTools?' الأدوات المحذوفة تبقى قابلة للاستعادة.':''}`, ()=>{
+    trashFolders().forEach(f=>purgeFolder(f.id));
     getFolders().forEach(f=>{ data[f.id] = (data[f.id]||[]).filter(i=>!i.deleted); });
+    projects = projects.filter(x=>!x.deleted); saveProjects();
+    widgetsData.notes = widgetsData.notes.filter(x=>!x.deleted);
+    widgetsData.todos = widgetsData.todos.filter(x=>!x.deleted);
+    saveWidgetsData();
     saveData();
     renderTrash();
-    updateTrashBadge();
     toast('تم إفراغ سلة المحذوفات');
   });
 }
@@ -3956,12 +4449,12 @@ function openProjects(){
 }
 function renderProjects(){
   const grid = document.getElementById('projectsGrid');
-  if(!projects.length){
+  if(!projects.some(p=>!p.deleted)){
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">${svg('briefcase')}<p>لا مشاريع بعد — اضغط + لإضافة أول مشروع</p></div>`;
     return;
   }
   const palette = ['#3a7bd5,#1e4d8c','#c9a24b,#8a733a','#5eb1a1,#2f7d6c','#c65a4d,#8a3226','#8e6fce,#5b3f96','#e07a5f,#a3492f'];
-  grid.innerHTML = projects.slice().sort((a,b)=>b.createdAt-a.createdAt).map((p,i)=>{
+  grid.innerHTML = projects.filter(p=>!p.deleted).sort((a,b)=>b.createdAt-a.createdAt).map((p,i)=>{
     const [c1,c2] = palette[i%palette.length].split(',');
     const metaBits = [];
     if(p.cost!=null && p.cost!=='') metaBits.push(Number(p.cost).toLocaleString('ar'));
@@ -4072,13 +4565,14 @@ function editCurrentProject(){
 }
 function deleteCurrentProject(){
   if(!currentProjectId) return;
-  showConfirm('حذف المشروع', 'سيتم حذف هذا المشروع ومرفقاته نهائيًا. هل تريد المتابعة؟', ()=>{
-    projects = projects.filter(x=>x.id!==currentProjectId);
+  showConfirm('نقل المشروع إلى المحذوفات', 'سيتم نقل هذا المشروع بمرفقاته إلى سلة المحذوفات. يمكنك استعادته منها لاحقًا.', ()=>{
+    const pr = projects.find(x=>x.id===currentProjectId);
+    if(pr){ pr.deleted = true; pr.deletedAt = Date.now(); }
     saveProjects();
     currentProjectId = null;
     renderProjects();
     showScreen('screen-projects');
-    toast('تم حذف المشروع');
+    toast('نُقل المشروع إلى سلة المحذوفات');
   });
 }
 
@@ -4769,7 +5263,8 @@ function handlePatternComplete(){
       document.getElementById('lockScreen').classList.remove('active');
       const id = pendingLockedFolderId;
       pendingLockedFolderId = null;
-      if(id) openFolderNow(id);
+      const ucb = pendingUnlockCb; pendingUnlockCb = null;
+      if(ucb) ucb(); else if(id) openFolderNow(id);
     } else {
       document.getElementById('lockError').textContent = 'نمط غير صحيح';
       setTimeout(resetPatternInput, 400);
@@ -4830,7 +5325,8 @@ function handlePinComplete(){
       document.getElementById('lockScreen').classList.remove('active');
       const id = pendingLockedFolderId;
       pendingLockedFolderId = null;
-      if(id) openFolderNow(id);
+      const ucb = pendingUnlockCb; pendingUnlockCb = null;
+      if(ucb) ucb(); else if(id) openFolderNow(id);
     } else {
       document.getElementById('lockError').textContent = 'رمز غير صحيح';
       pinBuffer=''; renderPinDots();
@@ -4951,17 +5447,28 @@ function checkAutoLock(){
 
 /* ================= المزيد (قائمة موحّدة للمشاريع والأدوات) ================= */
 function openExtraMenu(){
-  const locked = getFolders().filter(f=>f.locked);
+  const locked = getFolders().filter(f=>f.locked && !f.hidden);
+  const hiddenF = getFolders().filter(f=>f.hidden);
   const box = document.getElementById('extraMenuLockedSection');
+  let html = '';
+  if(hiddenF.length){
+    html += `<div class="menu-divider"></div>
+      <div class="menu-section-label">الحافظات المخفية</div>
+      <div class="menu-list">
+        ${hiddenF.map(f=>`<div class="menu-item" style="padding-block:6px">
+          <button type="button" style="flex:1;display:flex;align-items:center;gap:12px;text-align:right;padding-block:7px" onclick="closeExtraMenu();openFolder('${f.id}')">${svg(f.locked?'lock':'eye')}${escapeHTML(f.name)}</button>
+          <button type="button" class="mini-btn" onclick="unhideFolder('${f.id}')">إظهار</button>
+        </div>`).join('')}
+      </div>`;
+  }
   if(locked.length){
-    box.innerHTML = `<div class="menu-divider"></div>
+    html += `<div class="menu-divider"></div>
       <div class="menu-section-label">الحافظات المقفلة</div>
       <div class="menu-list">
         ${locked.map(f=>`<button type="button" class="menu-item" onclick="closeExtraMenu();openFolder('${f.id}')">${svg('lock')}${escapeHTML(f.name)}</button>`).join('')}
       </div>`;
-  } else {
-    box.innerHTML = '';
   }
+  box.innerHTML = html;
   document.getElementById('extraMenuBackdrop').classList.add('active');
 }
 function closeExtraMenu(){
@@ -4980,17 +5487,95 @@ const TOOLS_LIST = [
   {id:'calculator', name:'الحاسبة', desc:'حاسبة عادية وعلمية', icon:'calculatoricon', c1:'#4a5568', c2:'#2d3748', open:'openCalculator'},
   {id:'browser', name:'المتصفح', desc:'تصفّح الإنترنت', icon:'browsericon', c1:'#2b8a9e', c2:'#175a68', open:'openBrowser'}
 ];
+/* ---- تفضيلات الأدوات: ترتيب / إخفاء / قفل / حذف (تُحفظ في الإعدادات) ---- */
+function toolPrefs(){
+  const p = settings.toolPrefs || (settings.toolPrefs = {});
+  ['order','hidden','locked','deleted'].forEach(k=>{ if(!Array.isArray(p[k])) p[k] = []; });
+  if(!p.deletedAt || typeof p.deletedAt!=='object') p.deletedAt = {};
+  return p;
+}
+function orderedTools(){
+  const p = toolPrefs();
+  const ids = TOOLS_LIST.map(t=>t.id);
+  const order = p.order.filter(id=>ids.includes(id));
+  ids.forEach(id=>{ if(!order.includes(id)) order.push(id); });
+  return order.map(id=>TOOLS_LIST.find(t=>t.id===id));
+}
+function visibleTools(){
+  const p = toolPrefs();
+  return orderedTools().filter(t=>!p.hidden.includes(t.id) && !p.deleted.includes(t.id));
+}
+function toolCardHTML(t){
+  const p = toolPrefs();
+  const checked = selectedToolIds.has(t.id);
+  return `
+    <button type="button" class="folder-card tool-card" data-tool-id="${t.id}" style="--fc:${t.c1};--fc2:${t.c2}">
+      ${toolSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : ''}
+      ${p.locked.includes(t.id) ? `<span class="lock-flag">${svg('lock')}</span>` : ''}
+      <div class="folder-icon">${svg(t.icon)}</div>
+      <div><h3>${t.name}</h3><span>${t.desc}</span></div>
+    </button>`;
+}
+function fillToolsGrid(grid){
+  const list = visibleTools();
+  grid.classList.toggle('selectable', toolSelectMode);
+  if(!list.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>لا توجد أدوات ظاهرة — استعدها من «إدارة» أو من سلة المحذوفات</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(toolCardHTML).join('');
+  grid.querySelectorAll('.tool-card').forEach(card=>{
+    const id = card.dataset.toolId;
+    card.addEventListener('click', ()=>onToolTap(id));
+    card.addEventListener('contextmenu', e=>e.preventDefault());
+    attachToolDrag(card, id, grid);
+  });
+}
+function renderToolSelectBars(){
+  const p = toolPrefs();
+  const vis = visibleTools();
+  const n = selectedToolIds.size;
+  const allSel = vis.length>0 && vis.every(t=>selectedToolIds.has(t.id));
+  const allLocked = n>0 && Array.from(selectedToolIds).every(id=>p.locked.includes(id));
+  const html = `
+    <button onclick="toggleSelectAllTools()">${allSel?'إلغاء تحديد الكل':'تحديد الكل'}</button>
+    <span class="sb-count">${n} محدد</span>
+    <button onclick="openOrderModal('tools')">ترتيب</button>
+    <button onclick="hideSelectedTools()">إخفاء</button>
+    <button class="danger" onclick="deleteSelectedTools()">حذف</button>
+    <button class="accent" onclick="lockSelectedTools()">${allLocked?'إلغاء القفل':'قفل'}</button>
+    <button onclick="exitToolSelectMode()">إلغاء</button>`;
+  ['toolSelectBarHome','toolSelectBarScreen'].forEach(id=>{
+    const bar = document.getElementById(id);
+    if(!bar) return;
+    bar.classList.toggle('show', toolSelectMode);
+    bar.innerHTML = toolSelectMode ? html : '';
+  });
+}
+function updateToolsManageButtons(){
+  const p = toolPrefs();
+  const n = TOOLS_LIST.filter(t=>p.hidden.includes(t.id) && !p.deleted.includes(t.id)).length;
+  ['toolsManageBtnHome','toolsManageBtnScreen'].forEach(id=>{
+    const b = document.getElementById(id);
+    if(!b) return;
+    b.textContent = 'إدارة ('+n+')';
+    b.classList.toggle('hidden', n===0);
+  });
+}
+function renderAllTools(){
+  renderHomeToolsRow();
+  renderToolsGrid();
+}
 function renderHomeToolsRow(){
   const wrap = document.getElementById('homeToolsRow');
   const section = document.getElementById('homeToolsSection');
   if(!wrap || !section) return;
   if(folderSelectMode){ section.classList.add('hidden'); return; }
   section.classList.remove('hidden');
-  wrap.innerHTML = TOOLS_LIST.map(t=>`
-    <button type="button" class="folder-card" style="--fc:${t.c1};--fc2:${t.c2}" onclick="${t.open}()">
-      <div class="folder-icon">${svg(t.icon)}</div>
-      <div><h3>${t.name}</h3><span>${t.desc}</span></div>
-    </button>`).join('');
+  fillToolsGrid(wrap);
+  renderToolSelectBars();
+  updateToolsManageButtons();
+  updateTrashBadge();
 }
 function openToolsHub(){
   renderToolsGrid();
@@ -4999,11 +5584,231 @@ function openToolsHub(){
 }
 function renderToolsGrid(){
   const grid = document.getElementById('toolsGrid');
-  grid.innerHTML = TOOLS_LIST.map(t=>`
-    <button type="button" class="folder-card" style="--fc:${t.c1};--fc2:${t.c2}" onclick="${t.open}()">
-      <div class="folder-icon">${svg(t.icon)}</div>
-      <div><h3>${t.name}</h3><span>${t.desc}</span></div>
-    </button>`).join('');
+  if(!grid) return;
+  fillToolsGrid(grid);
+  renderToolSelectBars();
+  updateToolsManageButtons();
+}
+
+/* ---- فتح الأداة (مع القفل) ---- */
+function onToolTap(id){
+  if(toolSelectMode){ toggleToolChecked(id); return; }
+  const t = TOOLS_LIST.find(x=>x.id===id);
+  if(!t) return;
+  const run = ()=>{ const fn = window[t.open]; if(typeof fn==='function') fn(); };
+  if(toolPrefs().locked.includes(id) && hasLockCredential()){
+    promptUnlock('لفتح "'+t.name+'"', run);
+  } else {
+    run();
+  }
+}
+
+/* ---- وضع التحديد ---- */
+function enterToolSelect(scope){
+  if(folderSelectMode) exitFolderSelectMode();
+  toolSelectMode = true;
+  toolSelectScope = scope;
+  selectedToolIds.clear();
+}
+function exitToolSelectMode(){
+  toolSelectMode = false;
+  selectedToolIds.clear();
+  renderAllTools();
+}
+function toggleToolChecked(id){
+  if(selectedToolIds.has(id)) selectedToolIds.delete(id); else selectedToolIds.add(id);
+  renderAllTools();
+}
+function toggleSelectAllTools(){
+  const vis = visibleTools().map(t=>t.id);
+  const allSel = vis.length>0 && vis.every(id=>selectedToolIds.has(id));
+  if(allSel) selectedToolIds.clear(); else vis.forEach(id=>selectedToolIds.add(id));
+  renderAllTools();
+}
+function selectToolViaLongPress(id, grid){
+  if(!toolSelectMode) enterToolSelect(grid.id==='homeToolsRow' ? 'screen-home' : 'screen-tools');
+  if(selectedToolIds.has(id)) selectedToolIds.delete(id); else selectedToolIds.add(id);
+  if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(12); }catch(err){} }
+  renderAllTools();
+}
+function hideSelectedTools(){
+  if(selectedToolIds.size===0){ toast('لم تختر أي أداة'); return; }
+  const p = toolPrefs();
+  const n = selectedToolIds.size;
+  selectedToolIds.forEach(id=>{ if(!p.hidden.includes(id)) p.hidden.push(id); });
+  saveSettingsData();
+  exitToolSelectMode();
+  toast('تم إخفاء '+n+' — تجدها في «إدارة»');
+}
+function lockSelectedTools(){
+  if(selectedToolIds.size===0){ toast('لم تختر أي أداة'); return; }
+  const p = toolPrefs();
+  const ids = Array.from(selectedToolIds);
+  const allLocked = ids.every(id=>p.locked.includes(id));
+  if(!allLocked){
+    if(!(settings.pinEnabled && hasLockCredential())){ toast('عيّن رمز قفل من الإعدادات أولًا لتتمكن من قفل الأدوات'); return; }
+    ids.forEach(id=>{ if(!p.locked.includes(id)) p.locked.push(id); });
+    saveSettingsData();
+    exitToolSelectMode();
+    toast('تم قفل الأدوات المحددة');
+  } else {
+    promptUnlock('لإلغاء قفل الأدوات المحددة', ()=>{
+      const q = toolPrefs();
+      q.locked = q.locked.filter(id=>!ids.includes(id));
+      saveSettingsData();
+      exitToolSelectMode();
+      toast('تم إلغاء القفل');
+    });
+  }
+}
+function deleteSelectedTools(){
+  if(selectedToolIds.size===0){ toast('لم تختر أي أداة'); return; }
+  const ids = Array.from(selectedToolIds);
+  const n = ids.length;
+  showConfirm('نقل الأدوات إلى المحذوفات', `سيتم نقل ${n} ${n===1?'أداة':'أدوات'} إلى سلة المحذوفات. يمكنك استعادتها منها لاحقًا.`, ()=>{
+    const p = toolPrefs();
+    ids.forEach(id=>{
+      if(!p.deleted.includes(id)) p.deleted.push(id);
+      p.deletedAt[id] = Date.now();
+    });
+    saveSettingsData();
+    exitToolSelectMode();
+    toast('نُقلت إلى سلة المحذوفات');
+  });
+}
+
+/* ---- إدارة الأدوات المخفية والمحذوفة ---- */
+function openToolsManager(){
+  renderToolsManager();
+  document.getElementById('toolsManagerBackdrop').classList.add('active');
+}
+function closeToolsManager(){
+  document.getElementById('toolsManagerBackdrop').classList.remove('active');
+}
+function renderToolsManager(){
+  const p = toolPrefs();
+  const all = orderedTools();
+  const hid = all.filter(t=>p.hidden.includes(t.id) && !p.deleted.includes(t.id));
+  const row = (t, label)=>`
+    <div class="mgr-row">
+      <div class="folder-icon" style="--fc:${t.c1};--fc2:${t.c2}">${svg(t.icon)}</div>
+      <span class="mgr-name">${t.name}</span>
+      <button type="button" onclick="restoreTool('${t.id}')">${label}</button>
+    </div>`;
+  let html = '';
+  if(hid.length) html += `<p class="mgr-title">أدوات مخفية</p>` + hid.map(t=>row(t,'إظهار')).join('');
+  if(!html) html = `<p class="hint" style="text-align:center;margin:18px 0">لا توجد أدوات مخفية — الأدوات المحذوفة تجدها في سلة المحذوفات</p>`;
+  else html += `<button type="button" class="btn btn-ghost" style="width:100%;margin-top:6px" onclick="restoreAllTools()">إظهار الكل</button>`;
+  document.getElementById('toolsManagerBody').innerHTML = html;
+}
+function restoreTool(id){
+  const p = toolPrefs();
+  p.hidden = p.hidden.filter(x=>x!==id);
+  p.deleted = p.deleted.filter(x=>x!==id);
+  saveSettingsData();
+  renderAllTools();
+  renderToolsManager();
+}
+function restoreAllTools(){
+  const p = toolPrefs();
+  p.hidden = [];
+  saveSettingsData();
+  renderAllTools();
+  renderToolsManager();
+}
+
+/* ---- ضغط مطوّل ثم سحب لإعادة الترتيب (أو رفع الإصبع للتحديد) ---- */
+function attachToolDrag(card, id, grid){
+  let pressTimer = null, startX = 0, startY = 0;
+  let isDragging = false, justDragged = false, moved = false;
+  let scrollRAF = null, lastClientY = 0;
+
+  function autoScrollTick(){
+    if(!isDragging){ scrollRAF = null; return; }
+    const margin = 80, maxSpeed = 16;
+    if(lastClientY < margin){
+      window.scrollBy(0, -maxSpeed * (1 - lastClientY/margin));
+    } else if(window.innerHeight - lastClientY < margin){
+      const d = window.innerHeight - lastClientY;
+      window.scrollBy(0, maxSpeed * (1 - d/margin));
+    }
+    scrollRAF = requestAnimationFrame(autoScrollTick);
+  }
+  function blockTouchScroll(e){ if(isDragging && e.cancelable) e.preventDefault(); }
+  function cleanupPending(){
+    clearTimeout(pressTimer); pressTimer = null;
+    document.removeEventListener('pointermove', onPreMove);
+    document.removeEventListener('pointerup', onPreUp);
+    document.removeEventListener('pointercancel', onPreUp);
+  }
+  function onPreMove(e){
+    if(Math.hypot(e.clientX - startX, e.clientY - startY) > DRAG_CANCEL_DIST) cleanupPending();
+  }
+  function onPreUp(){ cleanupPending(); }
+  function onPointerDown(e){
+    if(toolSelectMode) return;
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    startX = e.clientX; startY = e.clientY;
+    document.addEventListener('pointermove', onPreMove);
+    document.addEventListener('pointerup', onPreUp, {once:true});
+    document.addEventListener('pointercancel', onPreUp, {once:true});
+    pressTimer = setTimeout(()=>beginDrag(e), LONG_PRESS_MS);
+  }
+  function beginDrag(e){
+    cleanupPending();
+    isDragging = true; moved = false;
+    card.classList.add('dragging');
+    if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(10); }catch(err){} }
+    try{ card.setPointerCapture(e.pointerId); }catch(err){}
+    document.addEventListener('pointermove', onDragMove, {passive:false});
+    document.addEventListener('touchmove', blockTouchScroll, {passive:false});
+    document.addEventListener('pointerup', onDragEnd, {once:true});
+    document.addEventListener('pointercancel', onDragEnd, {once:true});
+  }
+  function onDragMove(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    lastClientY = e.clientY;
+    if(!scrollRAF) scrollRAF = requestAnimationFrame(autoScrollTick);
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const overCard = el && el.closest ? el.closest('.tool-card') : null;
+    if(overCard && overCard !== card && grid.contains(overCard)){
+      const kids = Array.from(grid.children);
+      const curIdx = kids.indexOf(card), overIdx = kids.indexOf(overCard);
+      if(curIdx > -1 && overIdx > -1){
+        moved = true;
+        if(curIdx < overIdx) grid.insertBefore(card, overCard.nextSibling);
+        else grid.insertBefore(card, overCard);
+      }
+    }
+  }
+  function onDragEnd(e){
+    document.removeEventListener('pointermove', onDragMove, {passive:false});
+    document.removeEventListener('touchmove', blockTouchScroll, {passive:false});
+    if(scrollRAF){ cancelAnimationFrame(scrollRAF); scrollRAF = null; }
+    card.classList.remove('dragging');
+    isDragging = false;
+    justDragged = true;
+    try{ card.releasePointerCapture(e.pointerId); }catch(err){}
+    if(moved) persistToolOrderFromDOM(grid);
+    else selectToolViaLongPress(id, grid);
+    setTimeout(()=>{ justDragged = false; }, 60);
+  }
+  card.addEventListener('pointerdown', onPointerDown);
+  card.addEventListener('click', function(ev){
+    if(isDragging || justDragged){ ev.stopImmediatePropagation(); ev.preventDefault(); }
+  }, true);
+}
+function persistToolOrderFromDOM(grid){
+  const domIds = Array.from(grid.querySelectorAll('.tool-card')).map(c=>c.dataset.toolId).filter(Boolean);
+  if(!domIds.length) return;
+  const p = toolPrefs();
+  const full = orderedTools().map(t=>t.id);
+  const vis = new Set(domIds);
+  let i = 0;
+  p.order = full.map(id=> vis.has(id) ? domIds[i++] : id);
+  saveSettingsData();
+  renderAllTools();
 }
 function downloadBytes(bytes, filename, mime){
   const blob = new Blob([bytes], {type: mime});
@@ -5488,10 +6293,14 @@ function normalizeUrl(input){
   if(looksLikeUrl) return 'https://' + v;
   return 'https://duckduckgo.com/html/?q=' + encodeURIComponent(v);
 }
-const BROWSER_IFRAME_BLOCKED_HOSTS = ['youtube.com','google.com','facebook.com','instagram.com','twitter.com','x.com','tiktok.com','whatsapp.com','linkedin.com','amazon.com','netflix.com'];
+const BROWSER_IFRAME_BLOCKED_HOSTS = ['youtube.com','google.com','facebook.com','instagram.com','twitter.com','x.com','tiktok.com','whatsapp.com','linkedin.com','amazon.com','netflix.com','reddit.com','github.com','spotify.com','pinterest.com','duckduckgo.com'];
+const BROWSER_IFRAME_ALLOWED_PATHS = ['duckduckgo.com/html'];
 function hostBlocksIframe(url){
   try{
-    const host = new URL(url).hostname.replace(/^www\./,'');
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./,'');
+    const fullPath = (host + u.pathname).replace(/\/$/,'');
+    if(BROWSER_IFRAME_ALLOWED_PATHS.some(p=> fullPath===p || fullPath.startsWith(p+'/'))) return false;
     return BROWSER_IFRAME_BLOCKED_HOSTS.some(h=> host===h || host.endsWith('.'+h));
   }catch(e){ return false; }
 }
@@ -5647,8 +6456,9 @@ async function boot(){
   getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
   saveData();
   init();
+  checkPendingShareIntent();
 }
 boot();
 </script>
 </body>
-        </html>
+  </html>
