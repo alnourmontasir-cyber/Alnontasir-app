@@ -509,6 +509,21 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
 .ord-quick{display:flex;gap:8px;margin-bottom:12px;}
 .ord-quick button{flex:1;padding:10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:12.5px;}
 .ord-quick button:disabled{opacity:.4;}
+
+/* ---- ركن الإبداع والمرح ---- */
+.fun-emoji{font-style:normal;font-size:calc(var(--icon-size)*.5);line-height:1;}
+.grid.compact-grid .folder-icon .fun-emoji{font-size:16px;}
+.mgr-row .folder-icon .fun-emoji,.ord-row .folder-icon .fun-emoji{font-size:18px;}
+.item-thumb .fun-emoji{font-size:22px;}
+.fun-list{display:flex;flex-direction:column;gap:9px;margin-top:14px;}
+.fun-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.fun-item p{margin:0;flex:1;line-height:1.7;font-size:14px;}
+.fun-copy{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);}
+.fun-copy svg{width:16px;height:16px;}
+.fun-copy:active{transform:scale(.92);}
+.fun-result{margin-top:14px;padding:14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.fun-pre{white-space:pre-wrap;line-height:1.9;font-size:14px;}
+.fun-result .modal-actions{margin-top:12px;}
 </style>
 </head>
 <body>
@@ -634,6 +649,7 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
   <div id="homeToolsSection" style="margin-bottom:4px">
     <div class="section-head">
       <p class="section-label">مركز الأدوات</p>
+      <button type="button" class="mini-btn" onclick="restoreAllTools()">إظهار كل الأدوات</button>
       <button type="button" class="mini-btn hidden" id="toolsManageBtnHome" onclick="openToolsManager()"></button>
     </div>
     <div class="select-bar" id="toolSelectBarHome"></div>
@@ -773,7 +789,8 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <h2>مركز الأدوات</h2>
-    <button type="button" class="mini-btn hidden" id="toolsManageBtnScreen" style="margin-inline-start:auto" onclick="openToolsManager()"></button>
+    <button type="button" class="mini-btn" style="margin-inline-start:auto" onclick="restoreAllTools()">إظهار كل الأدوات</button>
+    <button type="button" class="mini-btn hidden" id="toolsManageBtnScreen" onclick="openToolsManager()"></button>
   </div>
   <div class="select-bar" id="toolSelectBarScreen"></div>
   <span class="mini-hint" style="margin:-4px 0 10px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
@@ -1805,6 +1822,19 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
 <input type="file" id="musicFallbackInput" accept="audio/*" multiple class="hidden">
 <input type="file" id="fileGenericInput" multiple class="hidden">
 
+<div class="modal-backdrop" id="funToolBackdrop" role="dialog" aria-modal="true" aria-labelledby="funToolTitle">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0" id="funToolTitle"></h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="FUN.close()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="funToolBody"></div>
+  </div>
+</div>
+
 <script>
 const ICONS = {
   code:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
@@ -2612,7 +2642,7 @@ const UP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 const DOWN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 function orderItems(){
   if(orderKind==='tools'){
-    return visibleTools().map(t=>({id:t.id, name:t.name, c1:t.c1, c2:t.c2, icon:svg(t.icon), pinned:false}));
+    return visibleTools().map(t=>({id:t.id, name:t.name, c1:t.c1, c2:t.c2, icon:toolIconHTML(t), pinned:false}));
   }
   return sortedVisibleFolders().map(f=>({id:f.id, name:f.name, c1:f.color, c2:f.color2, icon:folderIconInner(f), pinned:!!f.pinned}));
 }
@@ -3044,10 +3074,10 @@ async function quickCapturePhoto(){
 function renderHome(){
   applyIdentity();
   updateTrashBadge();
-  renderHomeStats();
-  renderRecentItems();
-  renderWidgets();
-  renderHomeToolsRow();
+  try{ renderHomeStats(); }catch(e){ console.error(e); }
+  try{ renderRecentItems(); }catch(e){ console.error(e); }
+  try{ renderWidgets(); }catch(e){ console.error(e); }
+  try{ renderHomeToolsRow(); }catch(e){ console.error(e); }
   const sortSel = document.getElementById('homeSortSelect');
   if(sortSel) sortSel.value = settings.homeSort || 'custom';
   const grid = document.getElementById("foldersGrid");
@@ -4577,7 +4607,7 @@ function renderTrash(){
   html += sec('المشاريع', projs.map(x=>trashRow(svg('layers'), x.name, 'مشروع', x.deletedAt, `restoreProjectFromTrash('${x.id}')`, `requestPurgeProject('${x.id}')`)));
   html += sec('الأدوات', tools.map(t=>{
     const p = toolPrefs();
-    const thumb = `<div class="folder-icon" style="--fc:${t.c1};--fc2:${t.c2};width:100%;height:100%;border-radius:inherit">${svg(t.icon)}</div>`;
+    const thumb = `<div class="folder-icon" style="--fc:${t.c1};--fc2:${t.c2};width:100%;height:100%;border-radius:inherit">${toolIconHTML(t)}</div>`;
     return trashRow(thumb, t.name, t.desc, p.deletedAt[t.id], `restoreToolFromTrash('${t.id}')`, '');
   }));
   html += sec('الملاحظات السريعة', notes.map(n=>trashRow(svg('file'), (n.text||'').slice(0,60), 'ملاحظة سريعة', n.deletedAt, `restoreNoteFromTrash('${n.id}')`, `requestPurgeNote('${n.id}')`)));
@@ -6016,15 +6046,11 @@ function closeExtraMenu(){
 
 /* ================= مركز الأدوات ================= */
 const TOOLS_LIST = [
-  {id:'pdf', name:'PDF من الصور', desc:'حوّل صورك إلى ملف واحد', icon:'pdfdoc', c1:'#3a7bd5', c2:'#1e4d8c', open:'openPdfTool'},
-  {id:'compress', name:'ضاغط الصور', desc:'قلّل حجم الصورة', icon:'compressimg', c1:'#5eb1a1', c2:'#2f7d6c', open:'openCompressTool'},
   {id:'electric', name:'حاسبة الكهرباء', desc:'قانون أوم والبطاريات', icon:'zap', c1:'#c9a24b', c2:'#8a733a', open:'openElectricTool'},
   {id:'currency', name:'محول العملات', desc:'أسعار صرف فورية', icon:'coin', c1:'#e07a5f', c2:'#a3492f', open:'openCurrencyTool'},
   {id:'countdown', name:'العد التنازلي', desc:'مؤقت لمهامك', icon:'hourglass', c1:'#8e6fce', c2:'#5b3f96', open:'openCountdownTool'},
-  {id:'stopwatch', name:'ساعة التوقيت', desc:'قياس الوقت واللفات', icon:'stopwatch2', c1:'#c65a4d', c2:'#8a3226', open:'openStopwatchTool'},
   {id:'compass', name:'البوصلة', desc:'اتجاه وموقعك الحالي', icon:'compass', c1:'#3a9188', c2:'#215a54', open:'openCompassTool'},
-  {id:'calculator', name:'الحاسبة', desc:'حاسبة عادية وعلمية', icon:'calculatoricon', c1:'#4a5568', c2:'#2d3748', open:'openCalculator'},
-  {id:'browser', name:'المتصفح', desc:'تصفّح الإنترنت', icon:'browsericon', c1:'#2b8a9e', c2:'#175a68', open:'openBrowser'}
+  {id:'calculator', name:'الحاسبة', desc:'حاسبة عادية وعلمية', icon:'calculatoricon', c1:'#4a5568', c2:'#2d3748', open:'openCalculator'}
 ];
 /* ---- تفضيلات الأدوات: ترتيب / إخفاء / قفل / حذف (تُحفظ في الإعدادات) ---- */
 function toolPrefs(){
@@ -6044,6 +6070,10 @@ function visibleTools(){
   const p = toolPrefs();
   return orderedTools().filter(t=>!p.hidden.includes(t.id) && !p.deleted.includes(t.id));
 }
+/* أيقونة الأداة: إيموجي للأدوات الإبداعية أو SVG للأدوات الأصلية */
+function toolIconHTML(t){
+  return t.emoji ? '<i class="fun-emoji" aria-hidden="true">'+t.emoji+'</i>' : svg(t.icon);
+}
 function toolCardHTML(t){
   const p = toolPrefs();
   const checked = selectedToolIds.has(t.id);
@@ -6051,7 +6081,7 @@ function toolCardHTML(t){
     <button type="button" class="folder-card tool-card" data-tool-id="${t.id}" style="--fc:${t.c1};--fc2:${t.c2}">
       ${toolSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : ''}
       ${p.locked.includes(t.id) ? `<span class="lock-flag">${svg('lock')}</span>` : ''}
-      <div class="folder-icon">${svg(t.icon)}</div>
+      <div class="folder-icon">${toolIconHTML(t)}</div>
       <div><h3>${t.name}</h3><span>${t.desc}</span></div>
     </button>`;
 }
@@ -6100,6 +6130,13 @@ function updateToolsManageButtons(){
     b.textContent = 'إدارة ('+n+')';
     b.classList.toggle('hidden', n===0);
   });
+}
+function restoreAllTools(){
+  const p = toolPrefs();
+  p.hidden = []; p.deleted = [];
+  saveSettingsData();
+  renderAllTools();
+  toast('تمت إعادة إظهار كل الأدوات');
 }
 function renderAllTools(){
   renderHomeToolsRow();
@@ -6230,7 +6267,7 @@ function renderToolsManager(){
   const hid = all.filter(t=>p.hidden.includes(t.id) && !p.deleted.includes(t.id));
   const row = (t, label)=>`
     <div class="mgr-row">
-      <div class="folder-icon" style="--fc:${t.c1};--fc2:${t.c2}">${svg(t.icon)}</div>
+      <div class="folder-icon" style="--fc:${t.c1};--fc2:${t.c2}">${toolIconHTML(t)}</div>
       <span class="mgr-name">${t.name}</span>
       <button type="button" onclick="restoreTool('${t.id}')">${label}</button>
     </div>`;
@@ -7036,6 +7073,20 @@ function maybeShowDayGreeting(){
 }
 
 function init(){
+  /* إصلاح ظهور الأدوات: إعادة إظهار الأدوات الإبداعية مرة واحدة إن كانت مخفية/محذوفة من إعدادات قديمة */
+  try{
+    const _p = toolPrefs();
+    if(!_p.fixV2){
+      _p.fixV2 = true;
+      const isFun = id=>String(id).indexOf('fun_')===0;
+      _p.hidden = _p.hidden.filter(id=>!isFun(id));
+      _p.deleted = _p.deleted.filter(id=>!isFun(id));
+      saveSettingsData();
+    }
+  }catch(e){}
+  /* إعادة رسم الأدوات عند العودة للتطبيق أو اكتمال التحميل */
+  window.addEventListener('load', ()=>{ try{ renderAllTools(); }catch(e){} });
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ try{ if(!toolSelectMode) renderAllTools(); }catch(e){} } });
   applyTheme();
   applyA11ySettings();
   if(settings.pinEnabled && hasLockCredential()){
@@ -7058,6 +7109,613 @@ function maybeShowBackupReminder(){
     setTimeout(()=>toast('مضى أكثر من أسبوع — لا تنسَ عمل نسخة احتياطية'), 1200);
   }
 }
+/* ================= ركن الإبداع والمرح — النواة (FUN) ================= */
+/* تسجّل الأدوات الإبداعية داخل «مركز الأدوات» وتفتحها في نافذة موحّدة */
+(function(){
+  'use strict';
+  const reg = {};
+  const FUN = window.FUN = {
+    tools: reg,
+    register: function(def){
+      if(!def || !def.id || typeof def.render !== 'function' || reg[def.id]) return;
+      if(def.id === 'ideas') return; /* مولد الأفكار محذوف من مركز الأدوات */
+      reg[def.id] = def;
+      const fn = 'openFunTool_' + def.id;
+      window[fn] = function(){ FUN.open(def.id); };
+      TOOLS_LIST.push({
+        id:'fun_' + def.id, name:def.name, desc:def.desc, emoji:def.emoji,
+        icon:'star', c1:def.c1, c2:def.c2, cat:def.cat, open:fn
+      });
+    },
+    /* خلط عشوائي (Fisher-Yates) على نسخة — لا يغيّر المصفوفة الأصلية */
+    shuffle: function(arr){
+      const a = arr.slice();
+      for(let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    },
+    esc: function(s){ return escapeHTML(String(s == null ? '' : s)); },
+    /* قائمة نتائج قابلة للنسخ بضغطة */
+    items: function(list){
+      return '<div class="fun-list">' + list.map(function(s){
+        return '<div class="fun-item"><p class="fun-text">' + FUN.esc(s) + '</p>'
+          + '<button type="button" class="fun-copy" data-fun-copy title="نسخ">' + svg('copy') + '</button></div>';
+      }).join('') + '</div>';
+    },
+    /* نتيجة نصية طويلة (تحافظ على الأسطر) مع نسخ ومشاركة */
+    result: function(text){
+      return '<div class="fun-result"><div class="fun-text fun-pre">' + FUN.esc(text) + '</div>'
+        + '<div class="modal-actions"><button type="button" class="btn btn-ghost" data-fun-copy>' + svg('copy') + ' نسخ</button>'
+        + '<button type="button" class="btn btn-ghost" data-fun-share>' + svg('upload') + ' مشاركة</button></div></div>';
+    },
+    copy: async function(text){
+      try{
+        await navigator.clipboard.writeText(text);
+      }catch(e){
+        try{
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          const ok = document.execCommand('copy');
+          ta.remove();
+          if(!ok) throw new Error('copy failed');
+        }catch(e2){ toast('تعذّر النسخ في هذا المتصفح'); return; }
+      }
+      toast('تم النسخ');
+    },
+    share: async function(text){
+      const Share = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share;
+      try{
+        if(Share){ await Share.share({ title:settings.appName || 'المنتصر', text:text }); return; }
+        if(navigator.share){ await navigator.share({ title:settings.appName || 'المنتصر', text:text }); return; }
+        await FUN.copy(text);
+      }catch(e){
+        if(e && e.name === 'AbortError') return; /* المستخدم أغلق نافذة المشاركة */
+        toast('تعذّرت المشاركة');
+      }
+    },
+    open: function(id){
+      const d = reg[id]; if(!d) return;
+      document.getElementById('funToolTitle').textContent = d.name;
+      const root = document.getElementById('funToolBody');
+      root.innerHTML = '';
+      try{ d.render(root); }
+      catch(e){ console.error(e); root.innerHTML = '<p class="hint" style="text-align:center">تعذّر فتح الأداة</p>'; }
+      document.getElementById('funToolBackdrop').classList.add('active');
+    },
+    close: function(){ document.getElementById('funToolBackdrop').classList.remove('active'); }
+  };
+  /* نسخ/مشاركة بالتفويض — يعمل مع أي أداة تُرسم داخل النافذة */
+  document.getElementById('funToolBody').addEventListener('click', function(e){
+    const cp = e.target.closest('[data-fun-copy]');
+    const sh = e.target.closest('[data-fun-share]');
+    const btn = cp || sh; if(!btn) return;
+    const box = btn.closest('.fun-item, .fun-result'); if(!box) return;
+    const txt = box.querySelector('.fun-text').textContent;
+    if(cp) FUN.copy(txt); else FUN.share(txt);
+  });
+})();
+
+/* ================= ركن الإبداع والمرح — الجزء 1: الأدوات الذكية ================= */
+(function(){
+  'use strict';
+  const F = window.FUN;
+  const q = function(root, s){ return root.querySelector(s); };
+
+  /* ---------- 1) مولد الأفكار ---------- */
+  const IDEA = {
+    project:{label:'مشروع صغير', t:[
+      'متجر إلكتروني صغير متخصص في {t}',
+      'اشتراك شهري يوصّل لعملائك منتجات مختارة عن {t}',
+      'ورشة تعليمية قصيرة للمبتدئين في {t}',
+      'مجموعة مجتمعية على واتساب تجمع المهتمين بمجال {t}',
+      'منتجات يدوية مستوحاة من {t} تُباع حسب الطلب',
+      'خدمة استشارات سريعة لمن يريد البدء في {t}',
+      'قناة محتوى تشرح {t} بأسلوب مبسّط وتربح من الرعاية والإعلانات'
+    ]},
+    content:{label:'محتوى ومنشورات', t:[
+      'سلسلة منشورات قصيرة بعنوان «٥ أخطاء شائعة في {t}»',
+      'فيديو «قبل وبعد» يوضح تجربتك مع {t}',
+      'سلسلة أسئلة وأجوبة يومية عن {t} في القصص',
+      'مقارنة بين خيارين مشهورين في {t} مع رأيك الصريح',
+      'منشور «أشياء تمنيت لو عرفتها مبكرًا عن {t}»',
+      'تحدٍّ لمدة ٧ أيام حول {t} تشارك فيه متابعيك',
+      'قصة قصيرة من الواقع عن موقف طريف حدث معك في {t}'
+    ]},
+    gift:{label:'هدية', t:[
+      'هدية مخصصة تحمل اسم صاحبها وتتعلق بمجال {t}',
+      'صندوق مفاجآت صغير يجمع ٥ أشياء بسيطة عن {t}',
+      'كتاب أو دورة قصيرة في {t} مع بطاقة كتبتها بخط يدك',
+      'تجربة بدل الهدية المادية: حضور فعالية أو ورشة عن {t}',
+      'ألبوم صور أو فيديو قصير يحكي ذكرياتكما مع {t}',
+      'أداة عملية تسهّل ممارسة {t} كل يوم',
+      'اشتراك في مجلة أو منصة متخصصة في {t}'
+    ]},
+    app:{label:'تطبيق', t:[
+      'تطبيق يتتبّع تقدّمك اليومي في {t} برسوم بيانية بسيطة',
+      'تطبيق مجتمعي يجمع القريبين منك المهتمين بمجال {t}',
+      'تطبيق تحديات يومية قصيرة في {t} مع نقاط وشارات',
+      'مساعد يقترح عليك كل صباح مهمة صغيرة في {t}',
+      'سوق صغير لتبادل الأغراض والخبرات في {t}',
+      'تطبيق يحوّل تعلّم {t} إلى لعبة أسئلة سريعة',
+      'دفتر ملاحظات ذكي مخصص لأفكار {t}'
+    ]},
+    activity:{label:'نشاط ومغامرة', t:[
+      'جلسة عائلية أسبوعية مخصصة لموضوع {t}',
+      'مسابقة ودّية بين الأصدقاء في {t} مع جائزة رمزية',
+      'يوم كامل بلا جوال تقضيه في تجربة {t}',
+      'زيارة مكان يرتبط بمجال {t} وتصوير الرحلة',
+      'تعلّم مهارة صغيرة في {t} خلال ٣٠ دقيقة فقط',
+      'تنظيم لقاء صغير مع شخص خبير في {t} لتسأله عمّا يشغلك',
+      'تحدٍّ شخصي: جرّب شيئًا جديدًا في {t} كل يوم هذا الأسبوع'
+    ]}
+  };
+  F.register({id:'ideas', cat:'ai', name:'مولد الأفكار', desc:'أفكار جاهزة لأي موضوع', emoji:'💡', c1:'#e0a83a', c2:'#a5731a',
+    render:function(root){
+      root.innerHTML =
+        '<div class="field"><label>الموضوع أو المجال</label><input id="fIdeaTopic" placeholder="مثال: القهوة، البرمجة، السفر"></div>'
+      + '<div class="field"><label>نوع الأفكار</label><select id="fIdeaType">'
+      + Object.keys(IDEA).map(function(k){ return '<option value="'+k+'">'+IDEA[k].label+'</option>'; }).join('')
+      + '</select></div>'
+      + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="fIdeaGo">✨ ولّد الأفكار</button></div>'
+      + '<div id="fIdeaOut"></div>';
+      function go(){
+        const topic = q(root,'#fIdeaTopic').value.trim() || 'مجالك المفضل';
+        const set = IDEA[q(root,'#fIdeaType').value].t;
+        /* دالة بدل نص مباشر حتى لا تُفسَّر رموز مثل $& داخل الموضوع */
+        const picks = F.shuffle(set).slice(0,5).map(function(s){ return s.replace(/\{t\}/g, function(){ return topic; }); });
+        q(root,'#fIdeaOut').innerHTML = F.items(picks);
+      }
+      q(root,'#fIdeaGo').addEventListener('click', go);
+      q(root,'#fIdeaTopic').addEventListener('keydown', function(e){ if(e.key==='Enter') go(); });
+    }});
+
+  /* ---------- 2) مساعد الكتابة ---------- */
+  const greet = function(to, fallback){ return to ? 'السيد/ة '+to+' المحترم/ة،' : fallback; };
+  const hi = function(to){ return to ? 'أهلًا '+to+'،' : 'أهلًا،'; };
+  const sign = function(me){ return me ? '\n'+me : ''; };
+  const WR = {
+    request:{label:'رسالة طلب', ph:'مثال: الحصول على إجازة يومين', def:'أمر أودّ عرضه عليكم',
+      formal:function(to,t,me){ return greet(to,'السيد/ة المحترم/ة،')+'\n\nتحية طيبة وبعد،\n\nأكتب إليكم بخصوص '+t+'. وآمل أن أجد منكم التعاون والاهتمام اللازمين لإتمام هذا الأمر في أقرب وقت ممكن.\n\nأشكر لكم وقتكم وحسن تعاونكم، وأتطلع إلى ردكم الكريم.\n\nوتفضلوا بقبول فائق الاحترام والتقدير،'+sign(me); },
+      friendly:function(to,t,me){ return hi(to)+'\n\nأتمنى أن تكون بأفضل حال. عندي طلب بسيط بخصوص '+t+'، وأقدّر لك كثيرًا لو ساعدتني فيه متى تيسّر لك.\n\nشكرًا جزيلًا مقدّمًا!'+sign(me); }},
+    thanks:{label:'رسالة شكر', ph:'مثال: مساعدتك لي في المشروع', def:'ما قدّمتموه من دعم',
+      formal:function(to,t,me){ return greet(to,'السيد/ة المحترم/ة،')+'\n\nتحية طيبة وبعد،\n\nيسرّني أن أتقدم إليكم بجزيل الشكر والتقدير على '+t+'، فقد كان لذلك أثر كبير وقيمة أعتز بها.\n\nمع أطيب التمنيات لكم بدوام التوفيق،'+sign(me); },
+      friendly:function(to,t,me){ return hi(to)+'\n\nشكرًا من القلب على '+t+'! فعلًا أسعدني ذلك ولن أنساه لك. 🌷'+sign(me); }},
+    apology:{label:'رسالة اعتذار', ph:'مثال: التأخر عن الموعد', def:'ما حدث',
+      formal:function(to,t,me){ return greet(to,'السيد/ة المحترم/ة،')+'\n\nتحية طيبة وبعد،\n\nأعتذر إليكم بصدق عن '+t+'، وأتفهّم ما قد يكون سبّبه ذلك من إزعاج. سأحرص على ألا يتكرر مستقبلًا، وآمل أن تتقبلوا اعتذاري.\n\nمع خالص التقدير،'+sign(me); },
+      friendly:function(to,t,me){ return hi(to)+'\n\nأعتذر لك من قلبي عن '+t+'، ولم أقصد إزعاجك أبدًا. أعدك أن أتفادى ذلك مرة أخرى، وأرجو أن تسامحني. 🤍'+sign(me); }},
+    invite:{label:'رسالة دعوة', ph:'مثال: حفل عائلي مساء الجمعة', def:'مناسبة خاصة',
+      formal:function(to,t,me){ return greet(to,'السيد/ة المحترم/ة،')+'\n\nتحية طيبة وبعد،\n\nيسرّني دعوتكم لحضور '+t+'، ولحضوركم الكريم أثر طيب في نفوسنا. نأمل تأكيد الحضور في أقرب وقت ممكن.\n\nمع فائق الاحترام والتقدير،'+sign(me); },
+      friendly:function(to,t,me){ return hi(to)+'\n\nيسعدني أن تكون معنا في '+t+'، فالمكان لا يكتمل إلا بوجودك! خبّرني إن كان بإمكانك الحضور. 🎈'+sign(me); }},
+    congrats:{label:'رسالة تهنئة', ph:'مثال: نجاحك في الامتحان', def:'هذه المناسبة السعيدة',
+      formal:function(to,t,me){ return greet(to,'السيد/ة المحترم/ة،')+'\n\nتحية طيبة وبعد،\n\nيسرّني أن أتقدم إليكم بأحر التهاني وأصدق التبريكات بمناسبة '+t+'، وأتمنى لكم دوام التوفيق والنجاح.\n\nمع أطيب التمنيات،'+sign(me); },
+      friendly:function(to,t,me){ return hi(to)+'\n\nألف مبروك على '+t+'! 🎉 تستحق كل خير، وفرحتي لك كبيرة.'+sign(me); }}
+  };
+  F.register({id:'writer', cat:'ai', name:'مساعد الكتابة', desc:'رسائل جاهزة بلمسة واحدة', emoji:'✍️', c1:'#5b8def', c2:'#2f5bb8',
+    render:function(root){
+      root.innerHTML =
+        '<div class="field"><label>نوع الرسالة</label><select id="fWrType">'
+      + Object.keys(WR).map(function(k){ return '<option value="'+k+'">'+WR[k].label+'</option>'; }).join('')
+      + '</select></div>'
+      + '<div class="field"><label>الأسلوب</label><select id="fWrTone"><option value="formal">رسمي</option><option value="friendly">ودّي</option></select></div>'
+      + '<div class="field"><label>الموضوع</label><input id="fWrTopic" placeholder="'+WR.request.ph+'"></div>'
+      + '<div class="field"><label>المرسَل إليه (اختياري)</label><input id="fWrTo" placeholder="مثال: أحمد"></div>'
+      + '<div class="field"><label>اسمك (اختياري)</label><input id="fWrMe" placeholder="يظهر في ختام الرسالة"></div>'
+      + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="fWrGo">✍️ اكتب الرسالة</button></div>'
+      + '<div id="fWrOut"></div>';
+      q(root,'#fWrType').addEventListener('change', function(){
+        q(root,'#fWrTopic').placeholder = WR[this.value].ph;
+      });
+      function go(){
+        const w = WR[q(root,'#fWrType').value];
+        const tone = q(root,'#fWrTone').value;
+        const t = q(root,'#fWrTopic').value.trim() || w.def;
+        const to = q(root,'#fWrTo').value.trim();
+        const me = q(root,'#fWrMe').value.trim();
+        q(root,'#fWrOut').innerHTML = F.result(w[tone](to, t, me));
+      }
+      q(root,'#fWrGo').addEventListener('click', go);
+      q(root,'#fWrTopic').addEventListener('keydown', function(e){ if(e.key==='Enter') go(); });
+    }});
+})();
+
+/* ================= أسئلة وأجوبة ذكية + مدرس إنجليزي ذكي ================= */
+(function(){
+  'use strict';
+  const F = window.FUN;
+  const q = function(root, s){ return root.querySelector(s); };
+  const esc = function(s){ return F.esc(String(s)); };
+  const optBtn = 'display:block;width:100%;text-align:right;padding:12px 14px;margin-bottom:8px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:14px;';
+  const tabBtn = function(id, label, on){
+    return '<button type="button" data-tab="'+id+'" class="filter-chip" style="'+(on?'background:var(--gold);color:#12151b;':'')+'">'+label+'</button>';
+  };
+
+  /* ---------- بنك الأسئلة: [السؤال، الصحيحة، [3 خاطئة]، معلومة] ---------- */
+  const QA = {
+    general:{label:'ثقافة عامة', list:[
+      ['ما عاصمة اليابان؟','طوكيو',['أوساكا','كيوتو','سيول'],'طوكيو أكبر مدن اليابان وعاصمتها.'],
+      ['ما أكبر كوكب في المجموعة الشمسية؟','المشتري',['زحل','نبتون','الأرض'],'المشتري أكبر من كل الكواكب الأخرى مجتمعة.'],
+      ['كم يومًا في السنة الكبيسة؟','366',['365','364','367'],'يُضاف يوم 29 فبراير كل أربع سنوات تقريبًا.'],
+      ['ما أسرع حيوان بري؟','الفهد',['الأسد','الحصان','الغزال'],'يصل الفهد إلى نحو 100 كم/س في مسافات قصيرة.'],
+      ['ما أكبر المحيطات؟','الهادئ',['الأطلسي','الهندي','المتجمد الشمالي'],'المحيط الهادئ يغطي نحو ثلث سطح الأرض.'],
+      ['كم عدد قارات العالم (حسب التقسيم الشائع)؟','7',['5','6','8'],'آسيا، أفريقيا، أمريكا الشمالية، أمريكا الجنوبية، أنتاركتيكا، أوروبا، أستراليا.'],
+      ['ما أكبر دولة في العالم مساحةً؟','روسيا',['كندا','الصين','الولايات المتحدة'],'تمتد روسيا على أكثر من 17 مليون كم².'],
+      ['ما عاصمة أستراليا؟','كانبيرا',['سيدني','ملبورن','بيرث'],'كثيرون يظنون أنها سيدني، لكن العاصمة كانبيرا.'],
+      ['ما عاصمة تركيا؟','أنقرة',['إسطنبول','إزمير','بورصة'],'إسطنبول الأكبر سكانًا لكن العاصمة أنقرة.'],
+      ['أي غاز يحتاجه الإنسان للتنفس؟','الأكسجين',['النيتروجين','الهيدروجين','الهيليوم'],'يشكّل الأكسجين نحو 21% من الهواء.']
+    ]},
+    science:{label:'علوم', list:[
+      ['ما الرمز الكيميائي للماء؟','H2O',['CO2','O2','NaCl'],'جزيء الماء ذرتا هيدروجين وذرة أكسجين.'],
+      ['ما أقرب كوكب إلى الشمس؟','عطارد',['الزهرة','المريخ','الأرض'],'عطارد أصغر كواكب المجموعة الشمسية.'],
+      ['كم عدد عظام جسم الإنسان البالغ؟','206',['150','300','412'],'يولد الطفل بعظام أكثر تلتحم مع النمو.'],
+      ['عند أي درجة يغلي الماء على مستوى سطح البحر؟','100 درجة مئوية',['90 درجة مئوية','80 درجة مئوية','120 درجة مئوية'],'تنخفض درجة الغليان كلما ارتفعنا عن سطح البحر.'],
+      ['أي عضو يضخّ الدم في الجسم؟','القلب',['الكبد','الرئتان','الكلية'],'القلب عضلة تنبض نحو 100 ألف مرة يوميًا.'],
+      ['ما الغاز الذي تمتصه النباتات في البناء الضوئي؟','ثاني أكسيد الكربون',['الأكسجين','النيتروجين','الميثان'],'وتنتج الأكسجين والسكر.'],
+      ['ما أكبر عضو في جسم الإنسان؟','الجلد',['الكبد','الأمعاء','القلب'],'يغطي الجلد كامل الجسم ويحميه.'],
+      ['ما وحدة قياس القوة؟','نيوتن',['جول','واط','باسكال'],'سُميت تكريمًا للعالم إسحاق نيوتن.'],
+      ['كم تبلغ سرعة الضوء تقريبًا؟','300,000 كم/ث',['3,000 كم/ث','30,000 كم/ث','3,000,000 كم/ث'],'يصل ضوء الشمس إلى الأرض خلال نحو 8 دقائق.'],
+      ['أي معدن يكون سائلًا في درجة حرارة الغرفة؟','الزئبق',['الحديد','النحاس','الألمنيوم'],'الزئبق سام ويُستخدم في بعض موازين الحرارة القديمة.']
+    ]},
+    geo:{label:'جغرافيا وتاريخ', list:[
+      ['في أي مدينة يقع برج إيفل؟','باريس',['لندن','روما','مدريد'],'أُنشئ البرج عام 1889.'],
+      ['ما أعلى قمة جبلية في العالم؟','إيفرست',['كيه 2','كليمنجارو','مونت بلانك'],'يبلغ ارتفاعها نحو 8,849 مترًا.'],
+      ['ما أكبر صحراء حارة في العالم؟','الصحراء الكبرى',['صحراء غوبي','صحراء كالاهاري','الربع الخالي'],'تقع في شمال أفريقيا.'],
+      ['في أي قارة تقع مصر؟','أفريقيا',['آسيا','أوروبا','أستراليا'],'وتمتد سيناء المصرية داخل قارة آسيا.'],
+      ['ما عاصمة المغرب؟','الرباط',['الدار البيضاء','مراكش','فاس'],'الدار البيضاء أكبر مدنها لكن العاصمة الرباط.'],
+      ['ما عاصمة الأردن؟','عمّان',['إربد','الزرقاء','العقبة'],'عمّان مبنية على عدة جبال.'],
+      ['من الذي بنى الأهرامات في مصر؟','قدماء المصريين',['الرومان','الإغريق','الفينيقيون'],'بُني هرم خوفو قبل أكثر من 4,500 سنة.'],
+      ['من أول إنسان وطئت قدماه القمر؟','نيل أرمسترونغ',['يوري غاغارين','بوز ألدرين','جون غلين'],'حدث ذلك عام 1969 في مهمة أبولو 11.'],
+      ['أي بحر يفصل بين مصر والسعودية؟','البحر الأحمر',['البحر المتوسط','بحر العرب','البحر الأسود'],'يتصل بالمحيط الهندي عبر باب المندب.'],
+      ['ما أكبر قارة في العالم مساحةً؟','آسيا',['أفريقيا','أوروبا','أمريكا الشمالية'],'وفيها أكثر من نصف سكان العالم.']
+    ]},
+    math:{label:'رياضيات', list:[
+      ['ما ناتج 12 × 12؟','144',['124','122','154'],'مربع العدد 12.'],
+      ['ما الجذر التربيعي للعدد 81؟','9',['8','7','11'],'لأن 9 × 9 = 81.'],
+      ['كم يساوي 15% من 200؟','30',['15','20','25'],'10% = 20 و5% = 10 فالمجموع 30.'],
+      ['كم مجموع زوايا المثلث؟','180 درجة',['90 درجة','270 درجة','360 درجة'],'ينطبق هذا على كل المثلثات المستوية.'],
+      ['أي عدد مما يلي عدد أولي؟','17',['15','21','27'],'العدد الأولي لا يقبل القسمة إلا على 1 ونفسه.'],
+      ['ما ناتج 7 × 8؟','56',['54','63','48'],'تذكّرها: 5-6-7-8 (56 = 7 × 8).'],
+      ['ما نصف العدد 250؟','125',['120','150','115'],'250 ÷ 2 = 125.'],
+      ['ما ناتج 2 مرفوعة للأس 5؟','32',['16','25','64'],'2×2×2×2×2 = 32.'],
+      ['كم عدد أضلاع الشكل السداسي؟','6',['5','7','8'],'سداسي = ستة أضلاع وستة رؤوس.'],
+      ['ما ناتج 100 ÷ 4 + 5؟','30',['20','25','35'],'القسمة أولًا: 25 ثم نضيف 5.']
+    ]}
+  };
+
+  F.register({id:'qa', cat:'ai', name:'أسئلة وأجوبة ذكية', desc:'اختبر معلوماتك واحصل على معلومة', emoji:'🧠', c1:'#7b61d1', c2:'#4a3a94',
+    render:function(root){
+      function menu(){
+        root.innerHTML = '<p class="hint" style="text-align:center;margin:0 0 12px">اختر مجالًا — 10 أسئلة في كل جولة</p>'
+          + Object.keys(QA).map(function(k){ return '<button type="button" data-cat="'+k+'" style="'+optBtn+'">'+esc(QA[k].label)+'</button>'; }).join('')
+          + '<button type="button" data-cat="mix" style="'+optBtn+'">🎲 مختلط من كل المجالات</button>';
+        root.querySelectorAll('[data-cat]').forEach(function(b){ b.addEventListener('click', function(){ start(b.dataset.cat); }); });
+      }
+      function start(cat){
+        let pool = [];
+        if(cat==='mix'){ Object.keys(QA).forEach(function(k){ pool = pool.concat(QA[k].list); }); pool = F.shuffle(pool).slice(0,10); }
+        else pool = F.shuffle(QA[cat].list);
+        let i = 0, score = 0;
+        function show(){
+          if(i >= pool.length){ return end(); }
+          const it = pool[i];
+          const opts = F.shuffle([it[1]].concat(it[2]));
+          root.innerHTML = '<p class="hint" style="margin:0 0 8px">سؤال '+(i+1)+' من '+pool.length+' · النقاط: '+score+'</p>'
+            + '<p style="font-size:16px;font-weight:700;line-height:1.7;margin:0 0 14px">'+esc(it[0])+'</p>'
+            + opts.map(function(o){ return '<button type="button" data-o="'+esc(o)+'" style="'+optBtn+'">'+esc(o)+'</button>'; }).join('')
+            + '<div id="qaFb"></div>';
+          root.querySelectorAll('[data-o]').forEach(function(b){
+            b.addEventListener('click', function(){
+              const ok = b.dataset.o === it[1];
+              if(ok) score++;
+              root.querySelectorAll('[data-o]').forEach(function(x){
+                x.disabled = true;
+                if(x.dataset.o === it[1]) x.style.background = '#2f7d4f';
+                else if(x === b) x.style.background = '#a3402f';
+              });
+              q(root,'#qaFb').innerHTML = '<div class="fun-result"><p class="fun-text" style="margin:0 0 6px;font-weight:700">'+(ok?'✅ إجابة صحيحة!':'❌ الإجابة الصحيحة: '+esc(it[1]))+'</p>'
+                + '<p class="hint" style="margin:0">'+esc(it[3])+'</p></div>'
+                + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="qaNext">'+(i+1>=pool.length?'النتيجة':'التالي')+'</button></div>';
+              q(root,'#qaNext').addEventListener('click', function(){ i++; show(); });
+            });
+          });
+        }
+        function end(){
+          const pct = Math.round(score/pool.length*100);
+          const msg = pct>=90?'ممتاز! معلوماتك رائعة 🌟':pct>=60?'جيد جدًا، واصل التقدم 👏':'لا بأس، جرّب مرة أخرى وستتحسن 💪';
+          root.innerHTML = '<div class="fun-result" style="text-align:center"><p style="font-size:34px;margin:0">'+score+' / '+pool.length+'</p><p class="hint" style="margin:6px 0 0">'+msg+'</p></div>'
+            + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="qaMenu">المجالات</button><button type="button" class="btn btn-primary" id="qaAgain">جولة جديدة</button></div>';
+          q(root,'#qaMenu').addEventListener('click', menu);
+          q(root,'#qaAgain').addEventListener('click', function(){ start(cat); });
+        }
+        show();
+      }
+      menu();
+    }});
+
+  /* ---------- المدرس الإنجليزي ---------- */
+  const VOC = {
+    daily:{label:'يومية', w:[
+      ['water','ماء','I drink water every day.'],['food','طعام','The food is delicious.'],['house','بيت','We live in a big house.'],
+      ['family','عائلة','I love my family.'],['friend','صديق','He is my best friend.'],['work','عمل','I go to work at eight.'],
+      ['school','مدرسة','The school is near my home.'],['time','وقت','What time is it?'],['money','مال','I need some money.'],
+      ['book','كتاب','This book is interesting.'],['car','سيارة','My car is new.'],['phone','هاتف','Where is my phone?']]},
+    verbs:{label:'أفعال', w:[
+      ['go','يذهب','I go to school by bus.'],['come','يأتي','Please come here.'],['eat','يأكل','We eat dinner at seven.'],
+      ['drink','يشرب','She drinks tea.'],['write','يكتب','Write your name here.'],['read','يقرأ','I read a book every week.'],
+      ['speak','يتحدث','Do you speak English?'],['listen','يستمع','Listen to the teacher.'],['buy','يشتري','I want to buy a shirt.'],
+      ['help','يساعد','Can you help me?'],['learn','يتعلم','I learn new words daily.'],['sleep','ينام','The baby sleeps early.']]},
+    adj:{label:'صفات', w:[
+      ['big','كبير','It is a big city.'],['small','صغير','I have a small bag.'],['hot','حار','The tea is hot.'],
+      ['cold','بارد','The water is cold.'],['fast','سريع','He is a fast runner.'],['slow','بطيء','The bus is slow today.'],
+      ['happy','سعيد','I am happy today.'],['sad','حزين','Why are you sad?'],['easy','سهل','This lesson is easy.'],
+      ['difficult','صعب','The exam was difficult.'],['new','جديد','I bought a new phone.'],['old','قديم','This is an old building.']]},
+    travel:{label:'سفر', w:[
+      ['airport','مطار','We arrived at the airport.'],['ticket','تذكرة','I need a ticket to Cairo.'],['passport','جواز سفر','Show your passport, please.'],
+      ['hotel','فندق','The hotel is near the beach.'],['luggage','أمتعة','My luggage is heavy.'],['map','خريطة','Do you have a map?'],
+      ['station','محطة','Where is the train station?'],['flight','رحلة جوية','The flight is delayed.'],['reservation','حجز','I have a reservation.'],
+      ['taxi','سيارة أجرة','Let us take a taxi.'],['tourist','سائح','He is a tourist.'],['road','طريق','This road is long.']]}
+  };
+  const ALLW = []; Object.keys(VOC).forEach(function(k){ VOC[k].w.forEach(function(w){ ALLW.push(w); }); });
+
+  const GR = [
+    ['الفعل To Be (am / is / are)','نستخدمه للتعريف بالشخص أو وصفه.\nI → am | he, she, it → is | we, you, they → are',
+      ['I am a student. — أنا طالب.','She is happy. — هي سعيدة.','They are at home. — هم في البيت.']],
+    ['المضارع البسيط (Present Simple)','للعادات والحقائق. نضيف s للفعل مع he / she / it.',
+      ['I work every day. — أعمل كل يوم.','He works in a bank. — هو يعمل في بنك.','The sun rises in the east. — الشمس تشرق من الشرق.']],
+    ['المضارع المستمر (Present Continuous)','لما يحدث الآن. الصيغة: am/is/are + الفعل + ing',
+      ['I am reading now. — أنا أقرأ الآن.','She is cooking. — هي تطبخ.','They are playing outside. — هم يلعبون في الخارج.']],
+    ['الماضي البسيط (Past Simple)','لأحداث انتهت في الماضي. نضيف ed للأفعال المنتظمة، وللأفعال الشاذة صيغة خاصة (go → went).',
+      ['I visited my uncle. — زرت عمي.','We went to the market. — ذهبنا إلى السوق.','She did not come. — هي لم تأتِ.']],
+    ['المستقبل (will / going to)','will للقرار اللحظي والوعود، و going to للخطط المقررة.',
+      ['I will help you. — سأساعدك.','I am going to travel next week. — سأسافر الأسبوع القادم.']],
+    ['أدوات التعريف (a / an / the)','a قبل الصوت الساكن، an قبل الصوت المتحرك (a, e, i, o, u)، و the لشيء معروف.',
+      ['a book — كتاب','an apple — تفاحة','The book on the table — الكتاب الذي على الطاولة']],
+    ['أسئلة Wh','What = ماذا، Where = أين، When = متى، Who = من، Why = لماذا، How = كيف',
+      ['What is your name? — ما اسمك؟','Where do you live? — أين تسكن؟','Why are you late? — لماذا تأخرت؟']]
+  ];
+
+  const PH = [
+    ['Good morning','صباح الخير'],['Hello, how are you?','مرحبًا، كيف حالك؟'],['I am fine, thank you','أنا بخير، شكرًا'],
+    ['What is your name?','ما اسمك؟'],['Nice to meet you','تشرفت بمعرفتك'],['Excuse me','لو سمحت'],
+    ['How much is this?','كم سعر هذا؟'],['Where is the bathroom?','أين دورة المياه؟'],['I do not understand','أنا لا أفهم'],
+    ['Could you repeat that, please?','هل يمكنك أن تعيد ذلك من فضلك؟'],['I need help','أحتاج إلى مساعدة'],
+    ['Thank you very much','شكرًا جزيلًا'],['You are welcome','عفوًا'],['See you later','أراك لاحقًا']
+  ];
+
+  function speak(text){
+    try{
+      if(!('speechSynthesis' in window)){ toast('النطق غير متاح على هذا الجهاز'); return; }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = .85;
+      window.speechSynthesis.speak(u);
+    }catch(e){ toast('النطق غير متاح على هذا الجهاز'); }
+  }
+
+  F.register({id:'english', cat:'ai', name:'مدرس إنجليزي ذكي', desc:'كلمات وقواعد وعبارات واختبارات', emoji:'🎓', c1:'#2e9c6a', c2:'#1a6644',
+    render:function(root){
+      let tab = 'words';
+      function draw(){
+        root.innerHTML = '<div class="chip-row" style="margin-bottom:12px">'
+          + tabBtn('words','📖 كلمات',tab==='words') + tabBtn('quiz','📝 اختبار',tab==='quiz')
+          + tabBtn('grammar','📚 قواعد',tab==='grammar') + tabBtn('phrases','💬 عبارات',tab==='phrases') + '</div><div id="enBody"></div>';
+        root.querySelectorAll('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){ tab = b.dataset.tab; draw(); }); });
+        const body = q(root,'#enBody');
+        if(tab==='words') words(body); else if(tab==='quiz') quiz(body);
+        else if(tab==='grammar') grammar(body); else phrases(body);
+      }
+      function words(body){
+        let cat = 'daily', i = 0, shown = false, list = [];
+        function load(){ list = F.shuffle(VOC[cat].w); i = 0; shown = false; card(); }
+        function card(){
+          const w = list[i];
+          body.innerHTML = '<select id="enCat" style="margin-bottom:12px">'
+            + Object.keys(VOC).map(function(k){ return '<option value="'+k+'"'+(k===cat?' selected':'')+'>'+esc(VOC[k].label)+'</option>'; }).join('') + '</select>'
+            + '<div class="fun-result" style="text-align:center;padding:22px 14px"><p class="hint" style="margin:0 0 8px">'+(i+1)+' / '+list.length+'</p>'
+            + '<p style="font-size:30px;font-weight:700;margin:0;direction:ltr">'+esc(w[0])+'</p>'
+            + '<div style="min-height:70px;margin-top:12px">'+(shown?'<p style="font-size:20px;margin:0 0 8px;color:var(--gold)">'+esc(w[1])+'</p><p class="hint" style="margin:0;direction:ltr">'+esc(w[2])+'</p>':'<p class="hint" style="margin:0">اضغط «أظهر المعنى»</p>')+'</div></div>'
+            + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="enSay">🔊 نطق</button>'
+            + '<button type="button" class="btn btn-ghost" id="enShow">أظهر المعنى</button>'
+            + '<button type="button" class="btn btn-primary" id="enNext">التالي</button></div>';
+          q(body,'#enCat').addEventListener('change', function(){ cat = this.value; load(); });
+          q(body,'#enSay').addEventListener('click', function(){ speak(w[0] + '. ' + (shown ? w[2] : '')); });
+          q(body,'#enShow').addEventListener('click', function(){ shown = true; card(); });
+          q(body,'#enNext').addEventListener('click', function(){ i = (i+1) % list.length; shown = false; card(); });
+        }
+        load();
+      }
+      function quiz(body){
+        const qs = F.shuffle(ALLW).slice(0,10); let i = 0, score = 0;
+        function show(){
+          if(i >= qs.length){
+            body.innerHTML = '<div class="fun-result" style="text-align:center"><p style="font-size:34px;margin:0">'+score+' / '+qs.length+'</p><p class="hint" style="margin:6px 0 0">'+(score>=8?'ممتاز! 🌟':score>=5?'جيد، كرّر الكلمات وحاول مجددًا 👏':'راجع تبويب «كلمات» ثم أعد المحاولة 💪')+'</p></div>'
+              + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="enAgain">اختبار جديد</button></div>';
+            q(body,'#enAgain').addEventListener('click', function(){ quiz(body); });
+            return;
+          }
+          const it = qs[i];
+          const wrong = F.shuffle(ALLW.filter(function(w){ return w[1] !== it[1]; })).slice(0,3).map(function(w){ return w[1]; });
+          const opts = F.shuffle([it[1]].concat(wrong));
+          body.innerHTML = '<p class="hint" style="margin:0 0 8px">سؤال '+(i+1)+' من '+qs.length+'</p>'
+            + '<p style="font-size:14px;margin:0 0 4px">ما معنى الكلمة:</p><p style="font-size:26px;font-weight:700;margin:0 0 14px;direction:ltr;text-align:right">'+esc(it[0])+'</p>'
+            + opts.map(function(o){ return '<button type="button" data-o="'+esc(o)+'" style="'+optBtn+'">'+esc(o)+'</button>'; }).join('') + '<div id="enFb"></div>';
+          body.querySelectorAll('[data-o]').forEach(function(b){
+            b.addEventListener('click', function(){
+              const ok = b.dataset.o === it[1]; if(ok) score++;
+              body.querySelectorAll('[data-o]').forEach(function(x){
+                x.disabled = true;
+                if(x.dataset.o === it[1]) x.style.background = '#2f7d4f'; else if(x === b) x.style.background = '#a3402f';
+              });
+              q(body,'#enFb').innerHTML = '<p class="hint" style="direction:ltr;text-align:right;margin:4px 0 0">'+esc(it[2])+'</p>'
+                + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="enSay2">🔊 نطق</button><button type="button" class="btn btn-primary" id="enNx">'+(i+1>=qs.length?'النتيجة':'التالي')+'</button></div>';
+              q(body,'#enSay2').addEventListener('click', function(){ speak(it[0]); });
+              q(body,'#enNx').addEventListener('click', function(){ i++; show(); });
+            });
+          });
+        }
+        show();
+      }
+      function grammar(body){
+        body.innerHTML = GR.map(function(g){
+          return '<details style="margin-bottom:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 14px">'
+            + '<summary style="font-weight:700;font-size:14px;cursor:pointer">'+esc(g[0])+'</summary>'
+            + '<p style="white-space:pre-wrap;line-height:1.8;font-size:13.5px;margin:10px 0">'+esc(g[1])+'</p>'
+            + '<div style="direction:ltr;text-align:left;font-size:13.5px;line-height:1.9;color:var(--gold)">'+g[2].map(esc).join('<br>')+'</div></details>';
+        }).join('');
+      }
+      function phrases(body){
+        body.innerHTML = '<div class="fun-list">' + PH.map(function(p,idx){
+          return '<div class="fun-item"><div style="flex:1"><p style="margin:0;font-weight:700;direction:ltr;text-align:left">'+esc(p[0])+'</p><p class="hint" style="margin:2px 0 0">'+esc(p[1])+'</p></div>'
+            + '<button type="button" class="fun-copy" data-say="'+idx+'" title="نطق">🔊</button></div>';
+        }).join('') + '</div>';
+        body.querySelectorAll('[data-say]').forEach(function(b){ b.addEventListener('click', function(){ speak(PH[+b.dataset.say][0]); }); });
+      }
+      draw();
+    }});
+
+  /* ---------- 😂 ذكاء الضحك والمرح ---------- */
+  const JOKES = [
+    'سأل المعلم تلميذًا: لو كان عندك 10 تفاحات وأخذ أخوك 3، كم يبقى؟ قال: لا شيء يا أستاذ، أخي لا يترك شيئًا!',
+    'ذهب رجل إلى الطبيب وقال: كلما شربت القهوة أشعر بألم في عيني. قال الطبيب: أخرج الملعقة من الكوب أولًا.',
+    'اتصل رجل بشركة الإنترنت وقال: الشبكة بطيئة جدًا. سأله الموظف: هل جرّبت إعادة التشغيل؟ قال: جرّبت... حتى أعدت تشغيل حياتي!',
+    'سأل طفل أباه: يا أبي ما هو الصبر؟ قال الأب: أن تنتظر اتصال الواي فاي.',
+    'قال الحلاق للزبون: هل تريد قصة شعر جديدة؟ قال الزبون: لا، أريد أن تسكت عن قصصك أنت!',
+    'المعلم: اذكر لي حيوانًا يعيش في الماء. التلميذ: السمكة. المعلم: وآخر؟ التلميذ: سمكة أخرى!',
+    'قال الراكب للسائق: أسرع فأنا متأخر. رد السائق: أسرع ما أستطيع، وإن زدت سرعتي سأصل قبل أن أنطلق!',
+    'نسي رجل رقم هاتفه، فاتصل بنفسه ليعرفه، فقيل له: الرقم مشغول!',
+    'سألوا كسولًا: ما أخطر مرض؟ قال: الكسل، لأن المريض به لا يريد أن يتعالج.',
+    'قالت الزوجة: ليس عندي ما ألبسه! قال الزوج: والخزانة التي فيها ثلاثمئة فستان؟ قالت: كلها قديمة، لبستها مرة!',
+    'قال طالب لصديقه: هل ذاكرت للامتحان؟ قال: نعم، ذاكرت بعيني... ثم نمت بهما!',
+    'سأل الأب ابنه: لماذا نتائجك سيئة؟ قال: لأن المعلم يسأل عن أشياء لم أذاكرها!'
+  ];
+  const RIDDLES = [
+    ['ما الشيء الذي كلما أخذت منه كبر؟','الحفرة'],
+    ['ما الشيء الذي يمشي بلا رجلين ويبكي بلا عينين؟','السحابة'],
+    ['ما الشيء الذي له أسنان ولا يعضّ؟','المشط'],
+    ['ما الشيء الذي يكتب ولا يقرأ؟','القلم'],
+    ['ما الشيء الذي كلما زاد نقص؟','العمر'],
+    ['ما الشيء الذي يسمع بلا أذن ويتكلم بلا لسان؟','الهاتف (صدى الصوت)'],
+    ['ما الحرف الذي يوجد في وسط كلمة «باريس»؟','حرف الراء'],
+    ['ما الشيء الذي له عين ولا يرى؟','الإبرة'],
+    ['ما الشيء الذي يدور حول العالم وهو ثابت في مكانه؟','الطابع البريدي'],
+    ['ما الشيء الذي كلما جفّ ابتلّ؟','المنشفة'],
+    ['ما الشيء الذي يحمل أطنانًا ولا يقدر على حمل مسمار؟','البحر'],
+    ['ما الشيء الذي يلاحقك أينما ذهبت في الشمس؟','الظل'],
+    ['ما الشيء الذي يرتفع وينخفض ولا يتحرك من مكانه؟','درجة الحرارة'],
+    ['ما الشيء الذي كلما زاد جفافه زاد بلله؟','المنشفة'],
+    ['ما الشيء الذي تملكه ويستعمله الآخرون أكثر منك؟','اسمك']
+  ];
+  const DARES = [
+    'قلّد صوت حيوان لمدة 10 ثوانٍ.','غنِّ اسمك بصوت أوبرالي.','قل «سلة سمك» خمس مرات بسرعة دون خطأ.',
+    'امشِ مثل البطريق عشر خطوات.','انظر إلى المرآة 30 ثانية دون أن تضحك.','ارسم وجهًا على ورقة وأنت مغمض العينين.',
+    'تحدّث بلكنة ملك لمدة دقيقة.','اخترع اسمًا مضحكًا لنفسك واعرّف الجميع به.','احكِ قصة قصيرة بثلاث كلمات فقط.',
+    'قلّد مذيع نشرة الأخبار وأنت تقرأ قائمة مشترياتك.','ارقص دقيقة كاملة دون موسيقى.','اجعل شخصًا يضحك بدون أن تتكلم.'
+  ];
+  const BALL = [
+    'نعم بالتأكيد! ✅','لا أظن ذلك 🤔','الاحتمال كبير جدًا 👍','اسأل مرة أخرى بعد فنجان قهوة ☕','مستحيل! 🚫',
+    'جرّب وشوف، ما عندك ما تخسره 😄','الأمر واضح كالشمس ☀️','50/50... ارمِ عملة معدنية 🪙','لا تعتمد عليّ، أنا مجرد كرة! 🔮',
+    'الأجوبة كلها عندك، فقط ثق بنفسك 💪','نعم، لكن بعد أن تنام قليلًا 😴','الإشارات تقول: لا 🙅'
+  ];
+  F.register({id:'laugh', cat:'fun', name:'ذكاء الضحك والمرح', desc:'نكت وألغاز وتحديات وكرة الحظ', emoji:'😂', c1:'#e0723a', c2:'#a8481d',
+    render:function(root){
+      let tab = 'joke', lastJ = -1, lastR = -1, lastD = -1;
+      function pick(len, last){ let n; do{ n = Math.floor(Math.random()*len); }while(len>1 && n===last); return n; }
+      function draw(){
+        root.innerHTML = '<div class="chip-row" style="margin-bottom:12px">'
+          + tabBtn('joke','😂 نكتة',tab==='joke') + tabBtn('riddle','🧩 لغز',tab==='riddle')
+          + tabBtn('dare','🎯 تحدي',tab==='dare') + tabBtn('ball','🔮 الكرة الذكية',tab==='ball') + '</div><div id="lgBody"></div>';
+        root.querySelectorAll('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){ tab = b.dataset.tab; draw(); }); });
+        const body = q(root,'#lgBody');
+        if(tab==='joke') joke(body); else if(tab==='riddle') riddle(body); else if(tab==='dare') dare(body); else ball(body);
+      }
+      function joke(body){
+        lastJ = pick(JOKES.length, lastJ);
+        body.innerHTML = F.result(JOKES[lastJ]) + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="lgNext">😂 نكتة أخرى</button></div>';
+        q(body,'#lgNext').addEventListener('click', function(){ joke(body); });
+      }
+      function riddle(body){
+        lastR = pick(RIDDLES.length, lastR); const r = RIDDLES[lastR];
+        body.innerHTML = '<div class="fun-result"><p class="fun-text" style="font-size:16px;font-weight:700;line-height:1.8;margin:0">'+esc(r[0])+'</p><p id="lgAns" style="margin:12px 0 0;color:var(--gold);font-size:16px"></p></div>'
+          + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="lgShow">أظهر الجواب</button><button type="button" class="btn btn-primary" id="lgNext">لغز آخر</button></div>';
+        q(body,'#lgShow').addEventListener('click', function(){ q(body,'#lgAns').textContent = '✅ ' + r[1]; });
+        q(body,'#lgNext').addEventListener('click', function(){ riddle(body); });
+      }
+      function dare(body){
+        lastD = pick(DARES.length, lastD);
+        body.innerHTML = F.result('🎯 ' + DARES[lastD]) + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="lgNext">تحدٍّ آخر</button></div>';
+        q(body,'#lgNext').addEventListener('click', function(){ dare(body); });
+      }
+      function ball(body){
+        body.innerHTML = '<div class="field"><label>اكتب سؤالك (نعم / لا)</label><input id="lgQ" placeholder="مثال: هل سأنجح هذا الأسبوع؟"></div>'
+          + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="lgAsk">🔮 اسأل الكرة</button></div><div id="lgOut"></div>';
+        function ask(){
+          const a = BALL[Math.floor(Math.random()*BALL.length)];
+          q(body,'#lgOut').innerHTML = '<div class="fun-result" style="text-align:center"><p class="fun-text" style="font-size:18px;font-weight:700;margin:0">'+esc(a)+'</p></div>';
+        }
+        q(body,'#lgAsk').addEventListener('click', ask);
+        q(body,'#lgQ').addEventListener('keydown', function(e){ if(e.key==='Enter') ask(); });
+      }
+      draw();
+    }});
+
+  /* ---------- 🏆 منو الأذكى؟ — مسابقة بين لاعبين ---------- */
+  F.register({id:'duel', cat:'fun', name:'منو الأذكى؟', desc:'مسابقة أسئلة بين شخصين', emoji:'🏆', c1:'#c9a24b', c2:'#8a5a1a',
+    render:function(root){
+      function setup(){
+        root.innerHTML = '<p class="hint" style="text-align:center;margin:0 0 12px">مسابقة على جهاز واحد: كل لاعب يجيب بالتناوب</p>'
+          + '<div class="field"><label>اللاعب الأول</label><input id="dP1" placeholder="الاسم" maxlength="16"></div>'
+          + '<div class="field"><label>اللاعب الثاني</label><input id="dP2" placeholder="الاسم" maxlength="16"></div>'
+          + '<div class="field"><label>عدد الأسئلة لكل لاعب</label><select id="dN"><option value="5">5 أسئلة</option><option value="10">10 أسئلة</option></select></div>'
+          + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="dGo">ابدأ التحدي</button></div>';
+        q(root,'#dGo').addEventListener('click', function(){
+          const names = [q(root,'#dP1').value.trim() || 'اللاعب 1', q(root,'#dP2').value.trim() || 'اللاعب 2'];
+          start(names, parseInt(q(root,'#dN').value, 10));
+        });
+      }
+      function start(names, n){
+        let pool = []; Object.keys(QA).forEach(function(k){ pool = pool.concat(QA[k].list); });
+        pool = F.shuffle(pool).slice(0, n*2);
+        const score = [0,0]; let i = 0;
+        function scoreBar(){
+          return '<div style="display:flex;gap:8px;margin-bottom:12px">' + [0,1].map(function(p){
+            return '<div style="flex:1;text-align:center;padding:8px;border-radius:12px;background:var(--surface-2);border:1px solid '+(i<pool.length && i%2===p?'var(--gold)':'var(--border)')+'"><div style="font-size:12px;color:var(--text-dim)">'+esc(names[p])+'</div><div style="font-size:22px;font-weight:700">'+score[p]+'</div></div>';
+          }).join('') + '</div>';
+        }
+        function show(){
+          if(i >= pool.length) return end();
+          const p = i % 2, it = pool[i];
+          const opts = F.shuffle([it[1]].concat(it[2]));
+          root.innerHTML = scoreBar()
+            + '<p class="hint" style="margin:0 0 6px">سؤال '+(i+1)+' من '+pool.length+' — الدور على: <b style="color:var(--gold)">'+esc(names[p])+'</b></p>'
+            + '<p style="font-size:16px;font-weight:700;line-height:1.7;margin:0 0 12px">'+esc(it[0])+'</p>'
+            + opts.map(function(o){ return '<button type="button" data-o="'+esc(o)+'" style="'+optBtn+'">'+esc(o)+'</button>'; }).join('') + '<div id="dFb"></div>';
+          root.querySelectorAll('[data-o]').forEach(function(b){
+            b.addEventListener('click', function(){
+              const ok = b.dataset.o === it[1]; if(ok) score[p]++;
+              root.querySelectorAll('[data-o]').forEach(function(x){
+                x.disabled = true;
+                if(x.dataset.o === it[1]) x.style.background = '#2f7d4f'; else if(x === b) x.style.background = '#a3402f';
+              });
+              q(root,'#dFb').innerHTML = '<p class="hint" style="margin:4px 0 0">'+(ok?'✅ أحسنت!':'❌ الصحيحة: '+esc(it[1]))+' — '+esc(it[3])+'</p>'
+                + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="dNx">'+(i+1>=pool.length?'النتيجة':'التالي')+'</button></div>';
+              q(root,'#dNx').addEventListener('click', function(){ i++; show(); });
+            });
+          });
+        }
+        function end(){
+          const win = score[0]===score[1] ? '🤝 تعادل! كلاكما ذكي' : '🏆 الفائز: ' + esc(names[score[0]>score[1]?0:1]);
+          root.innerHTML = scoreBar() + '<div class="fun-result" style="text-align:center"><p style="font-size:20px;font-weight:700;margin:0">'+win+'</p></div>'
+            + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="dNew">لاعبان جديدان</button><button type="button" class="btn btn-primary" id="dAgain">جولة أخرى</button></div>';
+          q(root,'#dNew').addEventListener('click', setup);
+          q(root,'#dAgain').addEventListener('click', function(){ start(names, n); });
+        }
+        show();
+      }
+      setup();
+    }});
+})();
+
 async function boot(){
   await loadAppData();
   getFolders().forEach(f=>{ if(!Array.isArray(data[f.id])) data[f.id]=[]; });
@@ -7068,4 +7726,4 @@ async function boot(){
 boot();
 </script>
 </body>
-        </html>
+      </html>
