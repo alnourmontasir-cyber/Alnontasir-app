@@ -24,6 +24,7 @@
   --shadow:0 6px 20px rgba(16,24,40,.14);
   --icon-size:47px;
   --font-scale:1;
+  --status-h:env(safe-area-inset-top,0px);
   color-scheme:light;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -32,7 +33,7 @@ body{
   background:var(--bg);color:var(--text);
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
   font-size:calc(15px * var(--font-scale));
-  padding-top:calc(env(safe-area-inset-top) + 18px);
+  padding-top:calc(var(--status-h) + 2px);
   padding-bottom:env(safe-area-inset-bottom);
 }
 button,input,textarea{font-family:inherit;}
@@ -49,9 +50,10 @@ textarea{min-height:110px;resize:vertical;}
 textarea.mono{font-family:ui-monospace,Menlo,Consolas,monospace;}
 input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .hidden{display:none!important;}
-.screen{display:none;min-height:100vh;padding:18px 16px 110px;}
+.screen{display:none;min-height:100vh;padding:4px 16px 110px;}
+#statusStrip{position:fixed;top:0;left:0;right:0;height:var(--status-h);background:var(--bg);z-index:2000;pointer-events:none;}
 .screen.active{display:block;}
-.top-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;padding:6px 2px 16px;gap:8px;}
+.top-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;padding:0 2px 12px;gap:8px;}
 .brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;}
 .avatar,.avatar-fallback{width:52px;height:52px;border-radius:16px;flex-shrink:0;}
 .avatar{object-fit:cover;border:1px solid var(--border);}
@@ -119,9 +121,8 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .fab-nav{position:fixed;inset:0;display:none;z-index:998;direction:ltr;pointer-events:none;}
 .fab-back{position:absolute;right:14px;bottom:14px;}
 .fab-nav.show{display:flex;}
-.fab-back{transition:opacity .25s, transform .3s ease;width:48px;height:48px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;color:var(--text);opacity:.55;pointer-events:auto;transition:opacity .2s, transform .15s;-webkit-tap-highlight-color:transparent;}
+.fab-back{transition:opacity .25s, transform .3s ease;width:48px;height:48px;border-radius:50%;background:#f5c518;border:1px solid #d4a800;box-shadow:0 4px 14px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#1a1500;opacity:.92;pointer-events:auto;transition:opacity .2s, transform .15s;-webkit-tap-highlight-color:transparent;}
 .fab-back:active{opacity:.95;transform:scale(.92);}
-.fab-back.idle{transform:translateY(calc(50% + 14px));opacity:.4 !important;}
 .fab-back svg{width:38%;height:38%;}
 .fab-back.hide{display:none;}
 .color-dot-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;align-items:center;}
@@ -138,6 +139,9 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .project-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dim));}
 .modal-backdrop{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);}
 .modal-backdrop.active{display:flex;}
+.modal-backdrop#funToolBackdrop,.modal-backdrop#toolCompassBackdrop{align-items:stretch;background:var(--bg-elev);}
+#funToolBackdrop .modal,#toolCompassBackdrop .modal{max-width:none;max-height:none;height:100%;border-radius:0;border-top:0;padding:calc(var(--status-h) + 14px) 16px calc(90px + env(safe-area-inset-bottom));}
+#funToolBackdrop .modal-handle,#toolCompassBackdrop .modal-handle{display:none;}
 .modal{width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:var(--bg-elev);border-top:1px solid var(--border);}
 .modal-handle{width:40px;height:4px;margin:0 auto 15px;border-radius:3px;background:var(--border);}
 .modal-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;}
@@ -577,47 +581,20 @@ html[data-mode="light"] .modal-handle{background:#b8c0cf;}
 html[data-mode="light"] input,html[data-mode="light"] textarea,html[data-mode="light"] select{background:#ffffff;border-color:#b9c1cf;color:var(--text);}
 html[data-mode="light"] .modal input,html[data-mode="light"] .modal textarea,html[data-mode="light"] .modal select{background:var(--surface-2);}
 html[data-mode="light"] .btn-ghost{background:#e4e8f0;color:var(--text);border:1px solid var(--border);}
-html[data-mode="light"] .fab-back{color:var(--text);}
+html[data-mode="light"] .fab-back{background:#f5c518;border-color:#d4a800;color:#1a1500;box-shadow:0 4px 14px rgba(16,24,40,.28);}
+html[data-mode="dark"] .fab-back{background:#f5c518;border-color:#d4a800;color:#1a1500;}
 html[data-mode="light"] .toast{color:var(--text);box-shadow:0 8px 24px rgba(16,24,40,.2);}
 html[data-mode="light"] .folder-card::after{opacity:.10;}
 html[data-mode="light"] .greet-box{box-shadow:0 24px 60px rgba(16,24,40,.25);}
 html[data-mode="light"] .confirm-box{box-shadow:0 25px 60px rgba(16,24,40,.25);}
 html[data-mode="light"] #lockScreen{color:var(--text);}
-/* ================= ألعاب التحدي ضد الكمبيوتر ================= */
-.gm-map{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:6px;}
-.gm-lv{position:relative;aspect-ratio:1;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:17px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;}
-.gm-lv small{font-size:8.5px;font-weight:600;min-height:11px;letter-spacing:-1px;}
-.gm-lv.cur{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold);}
-.gm-lv.lock{opacity:.45;}
-.gm-lv:active:not(:disabled){transform:scale(.94);}
-.gm-stage{margin:14px 2px 6px;font-size:12.5px;font-weight:800;color:var(--gold);}
+/* ================= ألعاب الاختبارات ================= */
 .gm-stats + .hint{margin-top:0;}
 .modal-actions .btn:disabled{opacity:.45;}
-.c4-board{direction:ltr;display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px;border-radius:18px;background:#2f5fd0;max-width:420px;margin:0 auto;box-shadow:0 6px 16px rgba(20,40,110,.35);}
-.c4-cell{aspect-ratio:1;border-radius:50%;background:var(--bg);box-shadow:inset 0 3px 6px rgba(0,0,0,.35);padding:0;min-width:0;}
-.c4-cell.p1{background:radial-gradient(circle at 35% 30%,#ff8a8e,#e5484d 60%,#b3262b);}
-.c4-cell.p2{background:radial-gradient(circle at 35% 30%,#ffe98a,#f5c518 60%,#c99a08);}
-.c4-cell.last{outline:3px solid rgba(255,255,255,.85);outline-offset:-3px;}
-.c4-cell.win{animation:c4win .7s ease-in-out infinite alternate;outline:3px solid #fff;outline-offset:-3px;}
-.c4-cell.new{animation:c4in .3s ease-out;}
-.c4-cell.hintcol:not(.p1):not(.p2){background:#ffe08a;box-shadow:inset 0 3px 6px rgba(0,0,0,.18),0 0 0 2px #f5c518;animation:c4hint 1s ease-in-out infinite alternate;}
-@keyframes c4hint{from{filter:brightness(1);}to{filter:brightness(1.12);}}
-.gm-row .btn{white-space:nowrap;padding-inline:6px;font-size:13px;}
-@keyframes c4in{from{transform:translateY(calc(var(--r) * -110% - 110%));}to{transform:none;}}
-@keyframes c4win{from{transform:scale(1);}to{transform:scale(1.12);}}
-.nm-board{display:flex;flex-direction:column;gap:9px;padding:12px 10px;border-radius:16px;background:var(--surface-2);border:1px solid var(--border);}
-.nm-row{display:flex;align-items:center;gap:8px;}
-.nm-lbl{flex:0 0 22px;height:22px;border-radius:50%;background:var(--gold);color:var(--on-gold);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;}
-.nm-cnt{flex:0 0 22px;text-align:center;font-size:12px;font-weight:800;color:var(--text-dim);}
-.nm-sticks{flex:1;display:flex;flex-wrap:wrap;gap:6px;min-height:44px;align-items:center;}
-.nm-stick{width:22px;height:44px;border-radius:7px;padding:0;background:linear-gradient(90deg,#e0a35a,#b9752d 55%,#8a5420);border:1px solid rgba(0,0,0,.25);box-shadow:0 2px 3px rgba(0,0,0,.25);transition:transform .12s ease,box-shadow .12s ease,opacity .12s ease;}
-.nm-stick.sel{background:linear-gradient(90deg,#ff8a7a,#e5484d 55%,#a8262b);transform:translateY(-6px);box-shadow:0 6px 10px rgba(229,72,77,.4);}
-.nm-stick.comp{background:linear-gradient(90deg,#ffe98a,#f5c518 55%,#c99a08);transform:translateY(-6px);box-shadow:0 6px 10px rgba(245,197,24,.45);}
-.nm-stick.hint{outline:3px solid var(--gold);outline-offset:1px;}
-.nm-empty{font-size:11.5px;color:var(--text-dim);font-style:normal;}
 </style>
 </head>
 <body>
+<div id="statusStrip" aria-hidden="true"></div>
 <a href="#" class="skip-link" onclick="event.preventDefault();skipToMainContent();">تخطَّ إلى المحتوى الرئيسي</a>
 <div id="a11yAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="lockScreen">
@@ -683,8 +660,6 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
       </button>
     </div>
   </div>
-
-  <div class="stats-bar" id="homeStatsBar"></div>
 
   <div id="recentSection">
     <p class="section-label">أحدث الإضافات</p>
@@ -769,6 +744,7 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
   </div>
 
   <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة لتحديدها مباشرة، أو استمر بالسحب لتغيير ترتيبها</span>
+  <div class="stats-bar" id="homeStatsBar" style="margin-bottom:10px"></div>
   <div class="grid" id="foldersGrid"></div>
 </div>
 
@@ -1127,6 +1103,10 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
       <button class="switch" id="dayGreetToggle" onclick="toggleDayGreeting()"></button>
     </div>
     <div class="switch-row">
+      <span class="sr-label">صوت لمس خفيف<small>نقرة هادئة عند الضغط على أي زر</small></span>
+      <button class="switch" id="soundToggle" onclick="toggleTapSound()"></button>
+    </div>
+    <div class="switch-row">
       <span class="sr-label">اهتزاز خفيف عند الإجراءات<small>عند الحفظ، الحذف، والتحديد</small></span>
       <button class="switch" id="hapticToggle" onclick="toggleHaptic()"></button>
     </div>
@@ -1182,7 +1162,7 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
 
   <div class="settings-group">
     <h4>زر الرجوع العائم</h4>
-    <span class="hint" style="display:block;margin-bottom:8px">زر رجوع باهت أسفل يمين الشاشة، يختفي نصفه عند عدم الاستخدام.</span>
+    <span class="hint" style="display:block;margin-bottom:8px">زر رجوع باهت ثابت أسفل يمين الشاشة، ويغلق الأداة المفتوحة إن وُجدت.</span>
     <div class="switch-row">
       <span class="sr-label">تفعيل الزر العائم</span>
       <button class="switch" id="fabBackToggle" onclick="toggleFabBack()"></button>
@@ -2035,7 +2015,8 @@ if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = tru
 if(typeof settings.hideFolderCounts !== 'boolean') settings.hideFolderCounts = false;
 if(typeof settings.fabBackEnabled !== 'boolean') settings.fabBackEnabled = true;
 if(typeof settings.fabBackSize !== 'number' || settings.fabBackSize<40 || settings.fabBackSize>72 || settings.fabBackSize===56 || settings.fabBackSize===46) settings.fabBackSize = 48;
-if(typeof settings.fabBackOpacity !== 'number' || settings.fabBackOpacity>70) settings.fabBackOpacity = 55;
+if(typeof settings.fabBackOpacity !== 'number' || settings.fabBackOpacity<25 || settings.fabBackOpacity>100) settings.fabBackOpacity = 92;
+if(!settings.fabYellowV1){ settings.fabYellowV1 = true; settings.fabBackOpacity = 92; }
 if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
 if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
 if(!settings.toolPrefs) settings.toolPrefs = {order:[],hidden:[],locked:[],deleted:[]};
@@ -2165,6 +2146,65 @@ function itemPreviewText(item){
 function haptic(){
   if(settings.hapticEnabled && navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} }
 }
+/* ---------- شريط الحالة (البطارية والشبكة) ---------- */
+function syncStatusBar(){
+  try{
+    const SB = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
+    if(!SB) return;
+    const th = getTheme();
+    if(SB.setBackgroundColor) SB.setBackgroundColor({color: th.bg}).catch(function(){});
+    if(SB.setStyle) SB.setStyle({style: th.mode === 'dark' ? 'DARK' : 'LIGHT'}).catch(function(){});
+  }catch(e){}
+}
+(function initStatusBar(){
+  const cap = window.Capacitor;
+  if(!cap || !cap.isNativePlatform || !cap.isNativePlatform()) return;
+  const SB = cap.Plugins && cap.Plugins.StatusBar;
+  (async function(){
+    if(SB && SB.setOverlaysWebView){
+      try{ await SB.setOverlaysWebView({overlay:false}); if(SB.show) await SB.show(); syncStatusBar(); return; }catch(e){}
+    }
+    /* لا توجد إضافة: نحجز شريطًا رقيقًا بأعلى الشاشة إن كانت الحواف تحت شريط الحالة */
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;top:0;left:0;height:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden';
+    document.body.appendChild(probe);
+    const h = probe.offsetHeight; probe.remove();
+    if(h < 20) document.documentElement.style.setProperty('--status-h', '26px');
+  })();
+})();
+
+/* ---------- صوت لمس خفيف ---------- */
+let _tapCtx = null, _tapLast = 0;
+function tapSound(){
+  if(settings.soundEnabled === false) return;
+  const now = Date.now(); if(now - _tapLast < 40) return; _tapLast = now;
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+    _tapCtx = _tapCtx || new AC();
+    if(_tapCtx.state === 'suspended') _tapCtx.resume();
+    const t = _tapCtx.currentTime, o = _tapCtx.createOscillator(), g = _tapCtx.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(950, t); o.frequency.exponentialRampToValueAtTime(600, t + .05);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05, t + .004); g.gain.exponentialRampToValueAtTime(0.0001, t + .06);
+    o.connect(g); g.connect(_tapCtx.destination); o.start(t); o.stop(t + .07);
+  }catch(e){}
+}
+function _isTappable(el){
+  for(let i = 0; el && el !== document.body && i < 6; i++, el = el.parentElement){
+    if(el.disabled) return false;
+    const tg = el.tagName;
+    if(tg === 'BUTTON' || tg === 'A' || tg === 'SUMMARY' || tg === 'SELECT' || tg === 'LABEL' || el.hasAttribute('onclick') || el.getAttribute('role') === 'button') return true;
+    if(tg === 'INPUT' && /^(checkbox|radio|button|submit|range|color|file)$/.test(el.type)) return true;
+    if(getComputedStyle(el).cursor === 'pointer') return true;
+  }
+  return false;
+}
+document.addEventListener('click', function(e){ if(e.isTrusted && _isTappable(e.target)) tapSound(); }, true);
+function toggleTapSound(){
+  settings.soundEnabled = settings.soundEnabled === false;
+  saveSettingsData();
+  document.getElementById('soundToggle').classList.toggle('on', settings.soundEnabled !== false);
+  if(settings.soundEnabled !== false) tapSound();
+}
 function toggleHaptic(){
   settings.hapticEnabled = !settings.hapticEnabled;
   saveSettingsData();
@@ -2240,7 +2280,7 @@ function applyFabBackStyle(){
   const nav = document.getElementById('fabNav');
   if(!nav) return;
   const size = settings.fabBackSize || 48;
-  const op = (settings.fabBackOpacity||55)/100;
+  const op = (settings.fabBackOpacity||92)/100;
   ['fabBackBtn'].forEach(id=>{
     const btn = document.getElementById(id); if(!btn) return;
     btn.style.width = size+'px'; btn.style.height = size+'px';
@@ -2252,13 +2292,6 @@ function applyFabBackStyle(){
     } else { btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
   });
 }
-let fabIdleTimer = null;
-function wakeFabNav(){
-  clearTimeout(fabIdleTimer);
-  const b = document.getElementById('fabBackBtn'); if(!b) return;
-  b.classList.remove('idle');
-  fabIdleTimer = setTimeout(()=>{ b.classList.add('idle'); }, 2500);
-}
 function updateFabBackVisibility(){
   const nav = document.getElementById('fabNav');
   if(!nav) return;
@@ -2267,22 +2300,32 @@ function updateFabBackVisibility(){
   const onHome = activeId === 'screen-home';
   const show = settings.fabBackEnabled && !!activeId;
   nav.classList.toggle('show', !!show);
-  document.getElementById('fabBackBtn').classList.toggle('hide', onHome);
-  if(show) wakeFabNav();
+  const toolOpen = !!document.querySelector('#funToolBackdrop.active, #toolCompassBackdrop.active');
+  document.getElementById('fabBackBtn').classList.toggle('hide', onHome && !toolOpen);
 }
 function floatingBackAction(){
+  const openBd = Array.from(document.querySelectorAll('.modal-backdrop.active')).pop();
+  if(openBd){
+    if(openBd.id === 'funToolBackdrop' && window.FUN){ FUN.close(); return; }
+    if(openBd.id === 'toolCompassBackdrop' && typeof closeCompassTool === 'function'){ closeCompassTool(); return; }
+  }
   const activeScreen = document.querySelector('.screen.active');
   if(!activeScreen) return;
   if(activeScreen.id === 'screen-home') return;
   const backBtn = activeScreen.querySelector('.detail-header .icon-btn, .top-header .icon-btn');
   if(backBtn) backBtn.click();
 }
+(function watchToolModals(){
+  let raf = 0;
+  new MutationObserver(function(muts){
+    if(!muts.some(function(m){ return m.target.classList && m.target.classList.contains('modal-backdrop'); })) return;
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(updateFabBackVisibility);
+  }).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
+})();
 (function initFabNav(){
   const b = document.getElementById('fabBackBtn');
   if(!b) return;
   b.addEventListener('click', floatingBackAction);
-  b.addEventListener('pointerdown', wakeFabNav);
-  b.addEventListener('pointerup', wakeFabNav);
 })();
 
 function toast(msg){
@@ -5245,6 +5288,7 @@ function applyTheme(){
   r.setProperty('--radius-sm', Math.round(rad*0.45)+'px');
   r.setProperty('--icon-size', Number(th.iconSize)+'px');
   r.setProperty('--font-scale', (Number(th.fontScale)/100));
+  try{ syncStatusBar(); }catch(e){}
   const tb = document.getElementById('themeQuickToggle');
   if(tb){
     tb.setAttribute('aria-pressed', th.mode==='dark' ? 'true' : 'false');
@@ -5332,6 +5376,7 @@ function loadSettingsForm(){
     document.getElementById('widgetToggle-'+k).classList.toggle('on', !!(settings.widgets && settings.widgets[k]));
   });
   document.getElementById('hapticToggle').classList.toggle('on', !!settings.hapticEnabled);
+  document.getElementById('soundToggle').classList.toggle('on', settings.soundEnabled !== false);
   document.getElementById('dayGreetToggle').classList.toggle('on', settings.dayGreeting !== false);
   document.getElementById('setHomeColumns').value = settings.compactHomeGrid ? '3' : '2';
   document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
@@ -9738,447 +9783,1578 @@ function maybeShowBackupReminder(){
     }});
 })();
 
-/* ================= 🎯 ألعاب التحدي ضد الكمبيوتر: أربعة في صف + تحدي العيدان (30 مرحلة لكل لعبة) ================= */
+/* ================= 🎲 ألعاب الاختبارات: خمّن الصورة · اختبار التفكير · الحساب ضد الساعة · أكمل المثل السوداني ================= */
 (function(){
   'use strict';
-  const F = window.FUN;
-  const q = function(root, s){ return root.querySelector(s); };
-  const LEVELS = 30;
-  const STAGES = ['المبتدئ','الهاوي','الماهر','الخبير','الأستاذ','الأسطورة'];
-  const stageOf = function(lv){ return STAGES[Math.min(STAGES.length - 1, Math.floor((lv - 1) / 5))]; };
+  const F = window.FUN, esc = F.esc, shuf = F.shuffle;
+  const q = function(r, s){ return r.querySelector(s); };
+  const rnd = function(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); };
+  function best(k){ const b = settings.gameBest || {}; return b[k] || 0; }
+  function setBest(k, v){ const b = Object.assign({}, settings.gameBest || {}); if(b[k] === undefined || v > b[k]){ b[k] = v; saveMiscSetting('gameBest', b); return true; } return false; }
   function modalOpen(){ const b = document.getElementById('funToolBackdrop'); return !!(b && b.classList.contains('active')); }
-  function toTop(){ const m = document.querySelector('#funToolBackdrop .modal'); if(m) m.scrollTop = 0; }
   function stats(items){ return '<div class="gm-stats">' + items.map(function(s){ return '<span>' + s + '</span>'; }).join('') + '</div>'; }
-  function getProg(k){
-    const g = settings.gameProgress || {}, p = g[k] || {};
-    return { unlocked: Math.max(1, Math.min(LEVELS, p.unlocked || 1)), stars: p.stars || {} };
+  function numWrong(a, n){
+    a = Number(a);
+    const offs = [1, 2, 3, 4, 5, 6, 10, 20, Math.max(1, Math.round(Math.abs(a) * 0.1)), Math.max(1, Math.round(Math.abs(a) * 0.25)), Math.max(1, Math.round(Math.abs(a) * 0.5))];
+    const seen = {}, c = [];
+    offs.forEach(function(o){ [a + o, a - o].forEach(function(v){ if(v !== a && v >= 0 && !seen[v]){ seen[v] = 1; c.push(v); } }); });
+    c.sort(function(x, y){ return Math.abs(x - a) * (0.6 + Math.random()) - Math.abs(y - a) * (0.6 + Math.random()); });
+    const out = c.slice(0, n); let k = 1; while(out.length < n){ if(out.indexOf(a + 100 + k) < 0) out.push(a + 100 + k); k++; }
+    return out;
   }
-  function completeLevel(k, lv, stars){
-    const p = getProg(k), ns = Object.assign({}, p.stars);
-    if(stars > (ns[lv] || 0)) ns[lv] = stars;
-    const g = Object.assign({}, settings.gameProgress || {});
-    g[k] = { unlocked: Math.max(p.unlocked, Math.min(LEVELS, lv + 1)), stars: ns };
-    saveMiscSetting('gameProgress', g);
-  }
-  function totalStars(p){ let t = 0; for(const k in p.stars) t += p.stars[k]; return t; }
-  function starStr(n){ let s = ''; for(let i = 0; i < n; i++) s += '⭐'; return s; }
-  function rndInt(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
-  function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
-  /* شاشة اختيار المرحلة (مشتركة) */
-  function mapView(root, key, o, onPick){
-    const p = getProg(key);
-    let h = '<div class="fun-result" style="text-align:center"><p style="font-size:34px;margin:0">' + o.emoji + '</p>'
-      + '<p style="font-weight:700;margin:8px 0 4px">' + o.title + '</p>'
-      + '<p class="hint" style="margin:0">' + o.intro + '</p>'
-      + '<p class="hint" style="margin:8px 0 0">⭐ ' + totalStars(p) + ' / ' + (LEVELS * 3) + ' · مرحلتك الحالية: <b>' + p.unlocked + '</b> من ' + LEVELS + '</p></div>'
-      + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="gmCont">' + (p.unlocked > 1 ? '▶ تابع من المرحلة ' + p.unlocked : '▶ ابدأ المرحلة 1') + '</button></div>';
-    for(let t = 0; t < STAGES.length; t++){
-      h += '<p class="gm-stage">' + STAGES[t] + ' — المراحل ' + (t * 5 + 1) + ' إلى ' + (t * 5 + 5) + '</p><div class="gm-map">';
-      for(let i = 1; i <= 5; i++){
-        const lv = t * 5 + i, locked = lv > p.unlocked, st = p.stars[lv] || 0;
-        h += '<button type="button" class="gm-lv' + (lv === p.unlocked ? ' cur' : '') + (locked ? ' lock' : '') + '" data-lv="' + lv + '"' + (locked ? ' disabled' : '') + '>'
-          + (locked ? '🔒' : lv) + '<small>' + (locked ? '' : (st ? starStr(st) : o.mark(lv))) + '</small></button>';
-      }
-      h += '</div>';
+  /* ---------------- محرّك اختبارات مشترك ---------------- */
+  function quiz(root, o){
+    function home(){
+      let h = '<div class="fun-result" style="text-align:center"><p style="font-size:34px;margin:0">' + o.emoji + '</p>'
+        + '<p style="font-weight:700;margin:8px 0 4px">' + o.title + '</p>'
+        + '<p class="hint" style="margin:0">' + o.intro + '<br>🏅 أفضل نتيجة: <b>' + best(o.key) + '</b></p></div>';
+      o.selects.forEach(function(s){
+        h += '<div class="field" style="margin-top:12px"><label>' + s.label + '</label><select id="qz_' + s.id + '">'
+          + s.opts.map(function(x){ return '<option value="' + x[0] + '"' + (x[2] ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></div>';
+      });
+      h += '<div class="modal-actions"><button type="button" class="btn btn-primary" id="qzGo">ابدأ</button></div>';
+      root.innerHTML = h;
+      q(root, '#qzGo').addEventListener('click', function(){
+        const cfg = {}; o.selects.forEach(function(s){ cfg[s.id] = q(root, '#qz_' + s.id).value; }); run(cfg);
+      });
     }
-    root.innerHTML = h; toTop();
-    q(root, '#gmCont').addEventListener('click', function(){ onPick(p.unlocked); });
-    root.querySelectorAll('[data-lv]').forEach(function(b){ b.addEventListener('click', function(){ onPick(+b.dataset.lv); }); });
+    function run(cfg){
+      const tv = String(cfg.time || '0'), total = tv.charAt(0) === 'T' ? +tv.slice(1) : 0, per = total ? 0 : +tv;
+      const N = +cfg.n || 10;
+      const set = o.make(cfg, total ? 300 : N), lim = total ? set.length : Math.min(N, set.length);
+      let i = 0, ok = 0, pts = 0, streak = 0, bs = 0, hints = 3, tm = null, auto = null, t0 = 0, done = false, usedHint = false;
+      const endAt0 = Date.now() + total * 1000; let endAt = endAt0; const miss = [];
+      function stop(){ if(tm){ clearInterval(tm); tm = null; } if(auto){ clearTimeout(auto); auto = null; } }
+      function finish(){
+        stop();
+        const answered = i, pct = answered ? Math.round(ok / answered * 100) : 0, rec = setBest(o.key, pts);
+        const r = pct >= 90 ? 'عبقري 🧠' : pct >= 75 ? 'ممتاز 🌟' : pct >= 55 ? 'جيد جدًا 👍' : pct >= 35 ? 'جيد — تابع التدريب' : 'حاول مرة أخرى 💪';
+        root.innerHTML = '<div class="fun-result" style="text-align:center"><p style="font-size:26px;margin:0">' + r + '</p>'
+          + '<p style="font-size:34px;margin:8px 0 0;color:var(--gold)">' + pts + '</p><p class="hint" style="margin:2px 0 10px">نقطة' + (rec && pts > 0 ? ' — 🏅 رقم قياسي جديد!' : '') + '</p>'
+          + '<p class="hint" style="margin:0">صحيح ' + ok + ' من ' + answered + ' (' + pct + '٪) · أفضل تتابع ' + bs + '</p></div>'
+          + (miss.length ? '<div class="fun-result"><p style="font-weight:700;margin:0 0 6px">📌 راجع أخطاءك</p>' + miss.slice(0, 8).map(function(m){ return '<p class="hint" style="margin:4px 0;line-height:1.8">• ' + esc(m.rv) + '</p>'; }).join('') + '</div>' : '')
+          + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="qzHome">الرئيسية</button><button type="button" class="btn btn-primary" id="qzAgain">جولة جديدة</button></div>';
+        q(root, '#qzHome').addEventListener('click', home);
+        q(root, '#qzAgain').addEventListener('click', function(){ run(cfg); });
+      }
+      function next(){
+        stop();
+        if(i >= lim || (total && Date.now() >= endAt)) return finish();
+        const it = set[i]; done = false; usedHint = false;
+        let body = '';
+        if(it.type === 'num'){
+          body = '<div class="field"><input id="qzIn" type="number" inputmode="numeric" placeholder="اكتب الإجابة" autocomplete="off"></div><div class="modal-actions"><button type="button" class="btn btn-primary" id="qzOk">تأكيد</button></div>';
+        } else {
+          const grid = it.opts.every(function(x){ return x.length <= 14; });
+          body = '<div id="qzOpts" class="' + (grid ? 'gm-opts' : '') + '">' + it.opts.map(function(x, k){
+            return '<button type="button" class="gm-opt" data-k="' + k + '" style="' + (grid ? 'font-size:18px;' : 'display:block;width:100%;margin-bottom:8px;font-size:15px;line-height:1.7;') + '">' + esc(x) + '</button>';
+          }).join('') + '</div>';
+        }
+        const left0 = total ? Math.ceil((endAt - Date.now()) / 1000) : (per || '∞');
+        root.innerHTML = stats(['سؤال <b>' + (i + 1) + '</b>' + (total ? '' : ' / ' + lim), 'النقاط <b>' + pts + '</b>', '🔥 <b>' + streak + '</b>', '⏱ <b id="qzT">' + left0 + '</b>'])
+          + '<div class="gm-bar"><i id="qzBar" style="width:100%;transition:none"></i></div>'
+          + '<div id="qzBox">' + it.html + '</div>' + body + '<div id="qzNote"></div>'
+          + '<div class="modal-actions">' + (it.type === 'num' ? '' : '<button type="button" class="btn btn-ghost" id="qzHint"' + (hints > 0 ? '' : ' disabled') + '>💡 حذف خيارين (' + hints + ')</button>')
+          + '<button type="button" class="btn btn-ghost" id="qzStop">🏁 إنهاء</button></div>';
+        t0 = Date.now();
+        function resolve(choice){
+          if(done) return; done = true; stop();
+          const el = (Date.now() - t0) / 1000;
+          const good = it.type === 'num' ? (choice !== null && choice !== '' && Number(choice) === Number(it.ans)) : (choice !== null && it.opts[choice] === it.ans);
+          i++;
+          if(good){ ok++; streak++; if(streak > bs) bs = streak; pts += (usedHint ? 5 : 10) + (per ? Math.round(Math.max(0, (per - el) / per) * 10) : 0); }
+          else { streak = 0; miss.push(it); if(total) endAt -= 2000; }
+          if(it.type === 'num'){ const inp = q(root, '#qzIn'); if(inp){ inp.disabled = true; inp.style.background = good ? '#2f7d4f' : '#a3402f'; inp.style.color = '#fff'; } const ok2 = q(root, '#qzOk'); if(ok2) ok2.disabled = true; }
+          else root.querySelectorAll('.gm-opt').forEach(function(x){
+            x.disabled = true; const k = +x.dataset.k;
+            if(it.opts[k] === it.ans){ x.style.background = '#2f7d4f'; x.style.color = '#fff'; }
+            else if(k === choice){ x.style.background = '#a3402f'; x.style.color = '#fff'; }
+          });
+          const nt = q(root, '#qzNote');
+          if(!total){
+            nt.innerHTML = '<div class="fun-result" style="margin-top:10px"><p style="font-weight:700;margin:0">' + (good ? '✅ أحسنت!' : (choice === null ? '⏰ انتهى الوقت' : '❌ إجابة خاطئة')) + (good ? '' : ' — الصحيح: <b>' + esc(it.ans) + '</b>') + '</p>'
+              + (it.note ? '<p class="hint" style="margin:6px 0 0;line-height:1.9">' + it.note + '</p>' : '') + '</div>'
+              + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="qzNext">التالي ◀</button></div>';
+            q(root, '#qzNext').addEventListener('click', next);
+            if(good) auto = setTimeout(next, it.note ? 2600 : 900);
+          } else {
+            nt.innerHTML = '<p class="hint" style="text-align:center;margin:8px 0">' + (good ? '✅' : '❌ الصحيح ' + esc(it.ans) + ' (−2 ث)') + '</p>';
+            auto = setTimeout(next, good ? 350 : 1000);
+          }
+        }
+        root.querySelectorAll('.gm-opt').forEach(function(b){ b.addEventListener('click', function(){ resolve(+b.dataset.k); }); });
+        const okb = q(root, '#qzOk'), inp = q(root, '#qzIn');
+        if(okb){ okb.addEventListener('click', function(){ if(inp.value !== '') resolve(inp.value); }); inp.addEventListener('keydown', function(e){ if(e.key === 'Enter' && inp.value !== '') resolve(inp.value); }); setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 60); }
+        const hb = q(root, '#qzHint');
+        if(hb) hb.addEventListener('click', function(){
+          if(done || hints <= 0) return;
+          const wrong = []; root.querySelectorAll('.gm-opt').forEach(function(x){ if(it.opts[+x.dataset.k] !== it.ans && !x.disabled) wrong.push(x); });
+          shuf(wrong).slice(0, 2).forEach(function(x){ x.disabled = true; x.style.opacity = '.3'; });
+          hints--; usedHint = true; hb.disabled = true; hb.textContent = '💡 حذف خيارين (' + hints + ')';
+        });
+        q(root, '#qzStop').addEventListener('click', function(){ done = true; finish(); });
+        if(per || total){
+          tm = setInterval(function(){
+            const tEl = q(root, '#qzT');
+            if(!tEl || !modalOpen()){ clearInterval(tm); tm = null; return; }
+            const left = total ? (endAt - Date.now()) / 1000 : per - (Date.now() - t0) / 1000;
+            tEl.textContent = Math.max(0, Math.ceil(left));
+            const bar = q(root, '#qzBar'); if(bar) bar.style.width = Math.max(0, Math.min(100, left / (total || per) * 100)) + '%';
+            if(left <= 0){ if(total){ done = true; finish(); } else resolve(null); }
+          }, 100);
+        }
+      }
+      next();
+    }
+    home();
   }
+  function nSel(){ return { id:'n', label:'عدد الأسئلة', opts:[['10','10 أسئلة',true],['20','20 سؤالًا'],['30','30 سؤالًا'],['50','50 سؤالًا']] }; }
 
   /* ============================================================
-     🔴 أربعة في صف — ذكاء اصطناعي (Minimax + Alpha-Beta) بمراحل متدرجة
+     🖼️ خمّن الصورة
      ============================================================ */
-  const R = 6, C = 7, ORDER = [3, 2, 4, 1, 5, 0, 6];
-  const DR = [0, 1, 1, 1], DC = [1, 0, 1, -1];
-  const WINDOWS = (function(){
-    const w = [];
-    for(let r = 0; r < R; r++) for(let c = 0; c < C; c++) for(let d = 0; d < 4; d++){
-      const er = r + DR[d] * 3, ec = c + DC[d] * 3;
-      if(er < 0 || er >= R || ec < 0 || ec >= C) continue;
-      const a = []; for(let i = 0; i < 4; i++) a.push((r + DR[d] * i) * C + c + DC[d] * i);
-      w.push(a);
+  const PIC = {
+    an:['حيوانات','أي حيوان هذا؟',[
+      ['🦁','أسد'],['🐘','فيل'],['🦒','زرافة'],['🐪','جمل'],['🐎','حصان'],['🐄','بقرة'],['🐑','خروف'],['🐐','ماعز'],['🐔','دجاجة'],['🦆','بطة'],['🐇','أرنب'],['🐢','سلحفاة'],['🐍','ثعبان'],['🐊','تمساح'],['🦓','حمار وحشي'],['🦍','غوريلا'],['🐒','قرد'],['🐧','بطريق'],['🦅','نسر'],['🦉','بومة'],['🦇','خفاش'],['🐬','دلفين'],['🐋','حوت'],['🦈','قرش'],['🐙','أخطبوط'],['🦀','سلطعون'],['🐝','نحلة'],['🦋','فراشة'],['🕷️','عنكبوت'],['🦂','عقرب'],['🐜','نملة'],['🦏','وحيد القرن'],['🦛','فرس النهر'],['🐆','نمر'],['🐺','ذئب'],['🦊','ثعلب'],['🐻','دب'],['🐼','باندا'],['🦘','كنغر'],['🦜','ببغاء'],['🦚','طاووس'],['🦢','بجعة'],['🐕','كلب'],['🐈','قطة'],['🐁','فأر'],['🐓','ديك'],['🦎','سحلية']]],
+    fd:['أكل وشراب','ما هذا الطعام أو الشراب؟',[
+      ['🍎','تفاحة'],['🍌','موزة'],['🍇','عنب'],['🍉','بطيخ'],['🍓','فراولة'],['🍒','كرز'],['🍑','خوخ'],['🥭','مانجو'],['🍍','أناناس'],['🥝','كيوي'],['🍋','ليمون'],['🥕','جزر'],['🌽','ذرة'],['🍅','طماطم'],['🥔','بطاطس'],['🍆','باذنجان'],['🥒','خيار'],['🌶️','فلفل حار'],['🧅','بصل'],['🧄','ثوم'],['🥑','أفوكادو'],['🍞','خبز'],['🧀','جبن'],['🥚','بيضة'],['🍗','دجاج'],['🥩','لحم'],['🍕','بيتزا'],['🍔','برجر'],['🍟','بطاطس مقلية'],['🍦','آيس كريم'],['🎂','كيكة'],['🍫','شوكولاتة'],['☕','قهوة'],['🍵','شاي'],['🥛','حليب'],['🍯','عسل'],['🥥','جوز هند'],['🥜','فول سوداني'],['🍚','أرز'],['🍈','شمام'],['🍐','كمثرى'],['🍊','برتقال']]],
+    fl:['دول وأعلام','لأي دولة هذا العلم؟',[
+      ['🇸🇩','السودان'],['🇸🇦','السعودية'],['🇪🇬','مصر'],['🇦🇪','الإمارات'],['🇶🇦','قطر'],['🇰🇼','الكويت'],['🇴🇲','عُمان'],['🇧🇭','البحرين'],['🇯🇴','الأردن'],['🇱🇧','لبنان'],['🇸🇾','سوريا'],['🇮🇶','العراق'],['🇵🇸','فلسطين'],['🇾🇪','اليمن'],['🇱🇾','ليبيا'],['🇹🇳','تونس'],['🇩🇿','الجزائر'],['🇲🇦','المغرب'],['🇲🇷','موريتانيا'],['🇸🇴','الصومال'],['🇩🇯','جيبوتي'],['🇪🇹','إثيوبيا'],['🇪🇷','إريتريا'],['🇹🇷','تركيا'],['🇧🇷','البرازيل'],['🇯🇵','اليابان'],['🇨🇳','الصين'],['🇫🇷','فرنسا'],['🇩🇪','ألمانيا'],['🇮🇹','إيطاليا'],['🇪🇸','إسبانيا'],['🇬🇧','بريطانيا'],['🇺🇸','أمريكا'],['🇮🇳','الهند'],['🇷🇺','روسيا'],['🇰🇷','كوريا الجنوبية'],['🇦🇷','الأرجنتين'],['🇨🇦','كندا'],['🇿🇦','جنوب أفريقيا'],['🇳🇬','نيجيريا'],['🇰🇪','كينيا']]],
+    ob:['أشياء','ما هذا الشيء؟',[
+      ['⚽','كرة قدم'],['🚗','سيارة'],['✈️','طائرة'],['🚢','سفينة'],['🚲','دراجة'],['📱','هاتف'],['💻','حاسوب'],['📷','كاميرا'],['⏰','منبّه'],['🔑','مفتاح'],['🔒','قفل'],['💡','مصباح'],['📚','كتب'],['✏️','قلم رصاص'],['✂️','مقص'],['🔨','مطرقة'],['🧲','مغناطيس'],['🔭','تلسكوب'],['🎸','غيتار'],['🥁','طبل'],['🎧','سماعات'],['☂️','مظلة'],['👑','تاج'],['💍','خاتم'],['👓','نظارة'],['🧭','بوصلة'],['⌚','ساعة يد'],['🚁','مروحية'],['🚀','صاروخ'],['🚂','قطار'],['🕯️','شمعة'],['🧳','حقيبة سفر'],['🪑','كرسي'],['🛏️','سرير']]],
+    jb:['مهن','ما هذه المهنة؟',[
+      ['👨‍⚕️','طبيب'],['👨‍🏫','معلم'],['👮','شرطي'],['👨‍🍳','طبّاخ'],['👨‍🌾','مزارع'],['👨‍🚒','إطفائي'],['👨‍✈️','طيّار'],['👨‍🔧','ميكانيكي'],['👷','عامل بناء'],['🧑‍🎨','رسّام'],['👨‍🔬','عالِم'],['👨‍💻','مبرمج']]],
+    pl:['أماكن ومعالم','ما هذا المكان؟',[
+      ['🕌','مسجد'],['🕋','الكعبة'],['🏥','مستشفى'],['🏫','مدرسة'],['🏰','قلعة'],['🗽','تمثال الحرية'],['🌋','بركان'],['🏝️','جزيرة'],['⛰️','جبل'],['🏜️','صحراء'],['🌊','موجة'],['🌉','جسر'],['🏟️','ملعب'],['🏦','بنك'],['🏨','فندق'],['🎪','سيرك'],['⛺','خيمة'],['🏭','مصنع'],['🌅','شروق الشمس'],['🌴','نخلة'],['🌵','صبار']]],
+    ph:['عبارات ومواقف','ماذا تعبّر هذه الصور؟',[
+      ['🏆🌍⚽','كأس العالم'],['🌙🕌⭐','رمضان'],['🎂🎈🎁','عيد ميلاد'],['💍👰🤵','حفل زواج'],['🕋🚶‍♂️','الحج'],['🌙🍬🎉','عيد الفطر'],['🌙🐑🎉','عيد الأضحى'],['🎓📜🎩','حفل تخرج'],['✈️🧳🌍','سفر'],['🎥🍿','سينما'],['🌾👨‍🌾🚜','حصاد'],['🌊🐟🎣','صيد السمك'],['⏰💰','الوقت من ذهب'],['🌹🌵','لا وردة بلا شوك'],['🐢🐇🏁','السلحفاة والأرنب'],['🦊🍇','الثعلب والعنب'],['🏥💉🌡️','زيارة الطبيب'],['🚌🏫🎒','الذهاب للمدرسة'],['⚽🥅🧤','حارس مرمى'],['🔥🥩','شواء'],['🥁💃🎶','حفلة رقص'],['🐑🐐🌿','رعي'],['🌧️☔','مطر'],['🏖️☀️🌊','رحلة بحرية']]]
+  };
+  function picMake(cfg, n){
+    const keys = cfg.cat === 'all' ? Object.keys(PIC) : [cfg.cat];
+    let pool = []; keys.forEach(function(k){ PIC[k][2].forEach(function(x){ pool.push({ e:x[0], a:x[1], k:k }); }); });
+    return shuf(pool).slice(0, n).map(function(p){
+      const others = shuf(PIC[p.k][2].filter(function(x){ return x[1] !== p.a; })).slice(0, 3).map(function(x){ return x[1]; });
+      const big = p.e.length > 6;
+      return { html:'<div class="fun-result" style="text-align:center;margin-top:6px"><p style="font-size:' + (big ? 46 : 72) + 'px;margin:0;line-height:1.4">' + p.e + '</p><p class="hint" style="margin:6px 0 0">' + PIC[p.k][1] + '</p></div><div style="height:10px"></div>',
+        opts:shuf([p.a].concat(others)), ans:p.a, rv:p.e + ' ← ' + p.a, note:'' };
+    });
+  }
+  F.register({ id:'g_guesspic', cat:'game', name:'خمّن الصورة', desc:'صور وإيموجي: حيوانات، أعلام، أكل، مهن، أماكن وعبارات — بنك كبير', emoji:'🖼️', c1:'#e2658a', c2:'#a63a5f',
+    render:function(root){
+      quiz(root, { key:'guesspic', emoji:'🖼️', title:'خمّن الصورة', intro:'تظهر لك صورة (إيموجي) وعليك اختيار اسمها الصحيح. أكثر من 250 صورة في 7 أقسام.',
+        selects:[
+          { id:'cat', label:'القسم', opts:[['all','كل الأقسام',true]].concat(Object.keys(PIC).map(function(k){ return [k, PIC[k][0]]; })) },
+          { id:'time', label:'الوقت لكل سؤال', opts:[['0','بدون وقت'],['10','10 ثوانٍ'],['15','15 ثانية',true],['20','20 ثانية']] },
+          nSel()],
+        make:picMake });
+    }});
+
+  /* ============================================================
+     🧩 اختبار التفكير (أسئلة بوقت محدد)
+     ============================================================ */
+  const THINK = {
+    l:['ألغاز ومنطق',[
+      ['لديك 3 تفاحات وأخذت منها 2. كم تفاحة معك الآن؟','2',['1','3','5'],'أنت من أخذت التفاحتين فهما معك.'],
+      ['أب له 4 بنات، ولكل بنت منهن أخ واحد. كم عدد أبناء الأب في المجموع؟','5',['4','8','9'],'الأخ نفسه لكل البنات: 4 بنات + ولد واحد.'],
+      ['ما الشيء الذي كلما أخذت منه كبر؟','الحفرة',['الجبل','الظل','الدين'],''],
+      ['يطير بلا جناحين ويبكي بلا عينين، ما هو؟','السحاب',['الطائرة','الريح','القمر'],''],
+      ['يسمع بلا أذن ويتكلم بلا لسان، ما هو؟','الصدى',['الهاتف','الببغاء','الجرس'],''],
+      ['له أسنان ولا يعضّ، ما هو؟','المشط',['الفأر','الملعقة','الوسادة'],''],
+      ['ما الشيء الذي كلما جفّفت به ابتلّ؟','المنشفة',['الشمس','الورقة','الصابون'],''],
+      ['في سباق تجاوزت المتسابق الذي في المركز الثاني. في أي مركز أصبحت؟','الثاني',['الأول','الثالث','الرابع'],'أخذت مكانه فقط.'],
+      ['إذا كانت 5 آلات تصنع 5 قطع في 5 دقائق، فكم دقيقة تحتاج 100 آلة لصنع 100 قطعة؟','5',null,'كل آلة تصنع قطعة في 5 دقائق.'],
+      ['ما الذي يُكسر دون أن يُلمس؟','الوعد',['الزجاج','البيضة','القلم'],''],
+      ['أيهما أثقل: كيلو حديد أم كيلو قطن؟','متساويان',['الحديد','القطن','لا يمكن المعرفة'],'كلاهما كيلو واحد.'],
+      ['كم شهرًا في السنة فيه 28 يومًا؟','12',null,'كل الأشهر فيها 28 يومًا على الأقل.'],
+      ['إذا كان اليوم الاثنين فأي يوم يكون بعد 10 أيام؟','الخميس',['الأربعاء','الجمعة','الأحد'],'10 أيام = أسبوع + 3 أيام.'],
+      ['إذا كان أمس الخميس فأي يوم يكون بعد غدٍ؟','الأحد',['السبت','الاثنين','الجمعة'],'اليوم الجمعة، غدًا السبت، وبعد غد الأحد.'],
+      ['كم مرة يمكنك أن تطرح 5 من 25؟','مرة واحدة',['5 مرات','4 مرات','20 مرة'],'بعد المرة الأولى يصبح العدد 20 لا 25.'],
+      ['أعطاك الطبيب 3 حبات وقال: خذ حبة كل نصف ساعة. كم تستغرق حتى تنتهي منها؟','ساعة',['ساعة ونصف','نصف ساعة','ساعتان'],'الأولى الآن، الثانية بعد نصف ساعة، الثالثة بعد ساعة.'],
+      ['أحمد أطول من علي، وعلي أطول من سامي. من الأقصر؟','سامي',['أحمد','علي','لا يمكن المعرفة'],''],
+      ['ترتيبك الرابع من أول الصف والرابع من آخره. كم عدد الصف؟','7',null,'4 + 4 − 1 = 7'],
+      ['ما الشيء الذي إذا نطقت باسمه اختفى؟','الصمت',['الظل','الضوء','الصدى'],''],
+      ['عشرة عصافير على شجرة، أطلق صياد النار فأصاب واحدًا. كم عصفورًا بقي على الشجرة؟','لا شيء',['9','10','1'],'الباقية طارت من صوت الطلقة.'],
+      ['عمر الأب 3 أضعاف عمر ابنه، ومجموع عمريهما 48. كم عمر الابن؟','12',null,'4 أجزاء = 48 إذن الجزء = 12.'],
+      ['6 عمال يبنون جدارًا في 10 أيام. كم يومًا يحتاج 12 عاملًا؟','5',null,'مضاعفة العمال تنصّف الزمن.'],
+      ['ما الشيء الذي له مدينة بلا بيوت وأنهار بلا ماء؟','الخريطة',['الحلم','الكتاب','الصورة'],''],
+      ['أي عدد إذا ضربته في نفسه ثم أضفت إليه 6 صار 42؟','6',null,'6 × 6 = 36، و36 + 6 = 42.']]],
+    n:['أرقام وحساب',[
+      ['2, 4, 8, 16, ؟','32',null,'كل عدد ضعف السابق.'],
+      ['1, 4, 9, 16, ؟','25',null,'مربعات الأعداد.'],
+      ['3, 6, 12, 24, ؟','48',null,'الضعف في كل خطوة.'],
+      ['1, 1, 2, 3, 5, 8, ؟','13',null,'فيبوناتشي: كل عدد مجموع السابقين.'],
+      ['100, 90, 81, 73, ؟','66',null,'الفروق: −10, −9, −8, −7'],
+      ['2, 6, 12, 20, 30, ؟','42',null,'الفروق: 4، 6، 8، 10، 12'],
+      ['1, 3, 6, 10, 15, ؟','21',null,'الأعداد المثلثية: نضيف 2 ثم 3 ثم 4...'],
+      ['81, 27, 9, 3, ؟','1',null,'القسمة على 3 في كل خطوة.'],
+      ['1, 8, 27, 64, ؟','125',null,'مكعبات الأعداد.'],
+      ['2, 5, 10, 17, 26, ؟','37',null,'n² + 1'],
+      ['1, 2, 6, 24, 120, ؟','720',null,'المضروب: ×2 ثم ×3 ثم ×4 ...'],
+      ['3, 5, 9, 17, 33, ؟','65',null,'الضعف ناقص 1.'],
+      ['15, 12, 9, 6, ؟','3',null,'ناقص 3 في كل خطوة.'],
+      ['5, 7, 11, 17, 25, ؟','35',null,'الفروق: 2، 4، 6، 8، 10'],
+      ['4, 16, 36, 64, ؟','100',null,'مربعات الأعداد الزوجية.'],
+      ['0, 3, 8, 15, 24, ؟','35',null,'n² − 1'],
+      ['2, 3, 5, 7, 11, ؟','13',null,'الأعداد الأولية.'],
+      ['أي عدد لا ينتمي: 2, 3, 5, 9, 11','9',['2','5','11'],'كلها أولية عدا 9.'],
+      ['أي عدد لا ينتمي: 4, 9, 16, 20, 25','20',['4','9','25'],'الباقي مربعات كاملة.'],
+      ['ما ناتج 1 + 2 + 3 + ... + 10؟','55',null,'(10 × 11) ÷ 2'],
+      ['كم عدد الأصفار في المليون؟','6',null,''],
+      ['ما نصف ربع 80؟','10',null,'ربع 80 = 20 ونصفه 10.'],
+      ['ما ناتج 12 ÷ ½ + 3؟','27',null,'القسمة على النصف = الضرب في 2: 24 + 3.'],
+      ['عدد ثلاثة أرباعه تساوي 27، ما هو؟','36',null,'27 ÷ 3 × 4'],
+      ['ثمن قلمين 6 جنيهات، فكم ثمن 5 أقلام؟','15',null,''],
+      ['15 × 15 = ؟','225',null,''],
+      ['ما ناتج 25% من 200؟','50',null,'']]],
+    w:['لغة وكلمات',[
+      ['ما ضد كلمة «كريم»؟','بخيل',['شجاع','غني','ضعيف'],''],
+      ['ما ضد كلمة «شجاع»؟','جبان',['قوي','كريم','حكيم'],''],
+      ['ما مرادف «سرور»؟','فرح',['حزن','غضب','تعب'],''],
+      ['ما ضد «الظلام»؟','النور',['الليل','السواد','الخوف'],''],
+      ['ما ضد كلمة «قريب»؟','بعيد',['قصير','سريع','ضيق'],''],
+      ['أي كلمة لا تنتمي: تفاح، موز، جزر، برتقال','جزر',['تفاح','موز','برتقال'],'الجزر خضار والباقي فواكه.'],
+      ['أي كلمة لا تنتمي: أسد، نمر، فهد، حمار','حمار',['أسد','نمر','فهد'],'الباقي من السنوريات المفترسة.'],
+      ['أي كلمة لا تنتمي: القاهرة، الخرطوم، باريس، النيل','النيل',['القاهرة','الخرطوم','باريس'],'النيل نهر والباقي عواصم.'],
+      ['أي كلمة لا تنتمي: أحمر، أزرق، دائرة، أخضر','دائرة',['أحمر','أزرق','أخضر'],'الباقي ألوان.'],
+      ['أي كلمة لا تنتمي: كتب، قرأ، جلس، جميل','جميل',['كتب','قرأ','جلس'],'«جميل» صفة والباقي أفعال.'],
+      ['ما جمع كلمة «كتاب»؟','كتب',['كتّاب','كتابات','مكاتب'],''],
+      ['ما مثنى كلمة «مسلم»؟','مسلمان',['مسلمين','مسلمون','مسلمات'],''],
+      ['رتّب الحروف لتكوّن كلمة: ة - س - ر - د - م','مدرسة',['مسدرة','درمسة','سدرمة'],''],
+      ['رتّب الحروف لتكوّن كلمة: ب - ا - ت - ك','كتاب',['بكات','تبكا','كابت'],''],
+      ['ما الكلمة التي تُقرأ من اليمين ومن اليسار بالشكل نفسه؟','ليل',['قمر','نجم','سماء'],''],
+      ['العين : البصر :: الأذن : ؟','السمع',['الشم','الذوق','اللمس'],''],
+      ['الطبيب : المستشفى :: المعلم : ؟','المدرسة',['البيت','السوق','الملعب'],''],
+      ['القلم : الكتابة :: المقص : ؟','القص',['اللصق','الرسم','القراءة'],''],
+      ['الشتاء : البرد :: الصيف : ؟','الحر',['المطر','الثلج','الريح'],''],
+      ['الأسد : العرين :: الطائر : ؟','العش',['الجحر','الحظيرة','الكهف'],''],
+      ['النحلة : العسل :: البقرة : ؟','الحليب',['الصوف','البيض','الحرير'],'']]],
+    g:['ثقافة عامة',[
+      ['كم عدد أضلاع المسدس؟','6',null,''],
+      ['ما أكبر كوكب في المجموعة الشمسية؟','المشتري',['زحل','الأرض','المريخ'],''],
+      ['ما لون الناتج عند خلط الأزرق والأصفر؟','الأخضر',['البنفسجي','البرتقالي','الرمادي'],''],
+      ['كم يومًا في السنة الكبيسة؟','366',null,''],
+      ['ما عاصمة السودان؟','الخرطوم',['أم درمان','بورتسودان','مدني'],''],
+      ['عند أي مدينة يلتقي النيلان الأزرق والأبيض؟','الخرطوم',['عطبرة','دنقلا','كوستي'],''],
+      ['كم عدد القارات؟','7',null,''],
+      ['ما الحيوان الملقب بسفينة الصحراء؟','الجمل',['الحصان','الفيل','الحمار'],''],
+      ['كم عدد أركان الإسلام؟','5',null,''],
+      ['كم عدد ألوان قوس قزح؟','7',null,''],
+      ['ما رمز عنصر الأكسجين؟','O',['H','C','N'],''],
+      ['ما أكبر محيط في العالم؟','الهادئ',['الأطلسي','الهندي','المتجمد الشمالي'],''],
+      ['ما أسرع حيوان بري؟','الفهد',['الأسد','الحصان','النمر'],''],
+      ['كم عدد حروف اللغة العربية؟','28',null,''],
+      ['كم دقيقة في ساعتين؟','120',null,''],
+      ['ما الكوكب الأحمر؟','المريخ',['الزهرة','عطارد','زحل'],''],
+      ['عند كم درجة مئوية يغلي الماء عند مستوى سطح البحر؟','100',null,''],
+      ['أي عضو في الجسم يضخ الدم؟','القلب',['الكبد','الرئة','الكلية'],''],
+      ['ما الغاز الذي تمتصه النباتات لصنع غذائها؟','ثاني أكسيد الكربون',['الأكسجين','النيتروجين','الهيدروجين'],''],
+      ['كم عدد عظام جسم الإنسان البالغ تقريبًا؟','206',['150','300','412'],''],
+      ['ما أصغر كوكب في المجموعة الشمسية؟','عطارد',['المريخ','الزهرة','زحل'],''],
+      ['ما المعدن الذي يكون سائلًا في درجة حرارة الغرفة؟','الزئبق',['الحديد','النحاس','الألمنيوم'],'']]]
+  };
+  function thinkMake(cfg, n){
+    const keys = cfg.cat === 'all' ? Object.keys(THINK) : [cfg.cat];
+    let pool = []; keys.forEach(function(k){ THINK[k][1].forEach(function(x){ pool.push(x); }); });
+    return shuf(pool).slice(0, n).map(function(x){
+      const wr = x[2] ? x[2] : numWrong(x[1], 3).map(String);
+      const series = /^[\d\s,؟]+$/.test(x[0]);
+      return { html: series ? '<p class="gm-seq" style="font-size:30px">' + esc(x[0]) + '</p>' : '<p style="font-size:17px;font-weight:700;line-height:1.9;margin:12px 0">' + esc(x[0]) + '</p>',
+        opts:shuf([x[1]].concat(wr)), ans:x[1], rv:x[0] + ' ← ' + x[1], note:esc(x[3] || '') };
+    });
+  }
+  F.register({ id:'g_think', cat:'game', name:'اختبار التفكير (بوقت محدد)', desc:'ألغاز ومنطق وأرقام ولغة وثقافة عامة — بنك أسئلة ومؤقت لكل سؤال', emoji:'🧩', c1:'#5f6fd8', c2:'#3a459a',
+    render:function(root){
+      quiz(root, { key:'think', emoji:'🧩', title:'اختبار التفكير', intro:'أسئلة ذكاء متنوعة من بنك كبير، ولكل سؤال وقت محدد. الإجابة السريعة تمنحك نقاطًا إضافية.',
+        selects:[
+          { id:'cat', label:'القسم', opts:[['all','كل الأقسام',true]].concat(Object.keys(THINK).map(function(k){ return [k, THINK[k][0]]; })) },
+          { id:'time', label:'الوقت لكل سؤال', opts:[['10','10 ثوانٍ (صعب)'],['15','15 ثانية'],['20','20 ثانية',true],['30','30 ثانية'],['45','45 ثانية']] },
+          nSel()],
+        make:thinkMake });
+    }});
+
+  /* ============================================================
+     ⏱️ الحساب ضد الساعة
+     ============================================================ */
+  const WORDS = [
+    ['اشترى أحمد 3 كيلو سكر بسعر 1200 جنيه للكيلو. كم دفع؟',3600],['مع سعاد 45 جنيهًا أعطت أختها منها 18. كم بقي معها؟',27],['سيارة تقطع 80 كم في الساعة. كم تقطع في 3 ساعات؟',240],
+    ['في فصل 36 طالبًا قُسّموا إلى 6 مجموعات متساوية. كم طالبًا في المجموعة؟',6],['ثمن القلم 250 جنيهًا. كم ثمن 4 أقلام؟',1000],['في مزرعة 120 نخلة، ماتت 15 وزُرعت 30 جديدة. كم نخلة صار عددها؟',135],
+    ['يمشي سالم 5 كيلومترات كل يوم لمدة 7 أيام. كم كيلومترًا يقطع؟',35],['في العلبة 12 بيضة. كم بيضة في 9 علب؟',108],['كم دقيقة في 3 ساعات ونصف؟',210],
+    ['خصم 20% على سعر 500 جنيه. كم يصبح السعر بعد الخصم؟',400],['عمر أب 40 سنة وعمر ابنه ربع عمره. كم مجموع عمريهما؟',50],['قطار انطلق الساعة 8 ووصل الساعة 11 بعد أن قطع 270 كم. كم سرعته بالكيلومتر في الساعة؟',90],
+    ['تقاسم ثلاثة إخوة 900 جنيه بالتساوي. كم نصيب الواحد؟',300],['اشترى تاجر بضاعة بـ 700 وباعها بـ 900. كم ربحه؟',200],['مستطيل طوله 12 وعرضه 5. ما مساحته؟',60],
+    ['ما محيط مربع طول ضلعه 9؟',36],['ما محيط مستطيل طوله 10 وعرضه 4؟',28],['كم أسبوعًا في 91 يومًا؟',13],['صنبور يملأ 4 لترات كل دقيقة. كم لترًا في ربع ساعة؟',60],
+    ['اشترى محمد دستتين من الأقلام (الدستة 12) وأعطى صديقه 5. كم قلمًا بقي؟',19],['كم ساعة في أسبوع كامل؟',168],['راتب 30000 جنيه صُرف ثلثه على الإيجار. كم صُرف؟',10000],
+    ['عدد ضربناه في 7 ثم أضفنا 5 فصار 54. ما العدد؟',7],['ضعف عدد مضافًا إليه 10 يساوي 50. ما العدد؟',20],['مجموع عددين 50 وفرقهما 10. ما العدد الأكبر؟',30],
+    ['قطعت سيارة 150 كم بسرعة 50 كم/س. كم ساعة استغرقت؟',3],['ثمن 5 كراسات 100 جنيه. كم ثمن 8 كراسات؟',160],['في فصل 30 طالبًا، 60% منهم بنات. كم عدد البنات؟',18],
+    ['يمشي رجل 4 كم/س لمدة ساعتين ونصف. كم كيلومترًا يقطع؟',10],['كم كوبًا سعة الواحد نصف لتر يلزم لملء 3 لترات؟',6],['كم يومًا في 3 أسابيع ويومين؟',23],
+    ['8 عمال ينجزون عملًا في 6 أيام. كم يومًا يحتاج 12 عاملًا؟',4],['ضعف عدد مضافًا إليه نصفه يساوي 25. ما العدد؟',10],['اشترى 3 قمصان بسعر 8000 للواحد ودفع 30000. كم الباقي؟',6000],
+    ['بقرة تعطي 12 لترًا من الحليب يوميًا. كم لترًا تعطي في أسبوعين؟',168],['ربع 80 مضافًا إليه نصفها. كم الناتج؟',60],['سباق طوله 400 م. كم لفة لقطع 2 كم؟',5],
+    ['حافلة تسع 45 راكبًا. كم راكبًا تسع 6 حافلات؟',270],['اشترى عمر 4 كتب بـ 2500 جنيه للكتاب وأعطى 12000. كم الباقي؟',2000],['إذا كان 3 أقلام تكلف 900 جنيه، فكم يكلف قلم واحد؟',300],
+    ['ما عدد الأيام في شهرين متتاليين طول كل منهما 30 و31 يومًا؟',61],['يعمل موظف 8 ساعات يوميًا 5 أيام في الأسبوع. كم ساعة في 4 أسابيع؟',160]
+  ];
+  const AR = [[5,50],[20,150],[100,900],[1000,9999],[10000,99999]];
+  function R(a, b){ return rnd(a, b); }
+  function gAdd(d){ const r = AR[d - 1], a = R(r[0], r[1]), b = R(r[0], r[1]); return { t:a + ' + ' + b, a:a + b }; }
+  function gSub(d){ const r = AR[d - 1]; let a = R(r[0], r[1]), b = R(r[0], r[1]); if(a < b){ const t = a; a = b; b = t; } return { t:a + ' − ' + b, a:a - b }; }
+  function gMul(d){ const a = [[2,9],[2,12],[11,25],[12,35],[25,99]][d - 1], b = [[2,9],[6,12],[3,9],[11,30],[12,60]][d - 1], x = R(a[0], a[1]), y = R(b[0], b[1]); return { t:x + ' × ' + y, a:x * y }; }
+  function gDiv(d){ const b = R(2, [9,12,15,25,40][d - 1]), qq = R(2, [9,15,30,60,120][d - 1]); return { t:(b * qq) + ' ÷ ' + b, a:qq }; }
+  function gMix(d){
+    const s = [3,4,5,6,7][d - 1] * 2, a = R(2, s + 4), b = R(2, s + 4), c = R(2, 9), e = R(2, 9);
+    const forms = [
+      function(){ return { t:(a + 10) + ' + ' + b + ' − ' + c, a:a + 10 + b - c }; },
+      function(){ return { t:a + ' + ' + b + ' × ' + c, a:a + b * c }; },
+      function(){ return { t:'(' + a + ' + ' + b + ') × ' + c, a:(a + b) * c }; },
+      function(){ return { t:a + ' × ' + b + ' + ' + c + ' × ' + e, a:a * b + c * e }; },
+      function(){ return { t:'(' + (a + b + c) + ' − ' + c + ') × ' + e + ' − ' + a, a:(a + b) * e - a }; }
+    ];
+    return forms[d - 1]();
+  }
+  function gSq(d){
+    if(d === 1){ const n = R(2, 10); return { t:n + '²', a:n * n }; }
+    if(d === 2){ const n = R(11, 15); return { t:n + '²', a:n * n }; }
+    if(d === 3){ const n = R(3, 20); return { t:'√' + (n * n), a:n }; }
+    if(d === 4){ const n = R(16, 30); return { t:n + '²', a:n * n }; }
+    if(Math.random() < .5){ const n = R(3, 9); return { t:n + '³', a:n * n * n }; }
+    const n = R(15, 40); return { t:'√' + (n * n), a:n };
+  }
+  function gPct(d){
+    const ps = [[10,50],[10,20,25,50],[5,15,30,75],[12,35,45,65,85],[12,18,35,45,65,85,95]][d - 1], p = ps[R(0, ps.length - 1)], base = 100 * R(1, [5,10,20,30,40][d - 1]);
+    return { t:p + '% من ' + base, a:p * base / 100 };
+  }
+  function gMiss(d){
+    const r = AR[Math.min(4, d - 1)], a = R(r[0], r[1]), b = R(r[0], r[1]), m = R(2, [9,12,15,20,30][d - 1]), x = R(2, [9,12,15,20,30][d - 1]);
+    const forms = [
+      function(){ return { t:a + ' + ؟ = ' + (a + b), a:b }; },
+      function(){ return { t:'؟ − ' + a + ' = ' + b, a:a + b }; },
+      function(){ return { t:'؟ × ' + m + ' = ' + (m * x), a:x }; },
+      function(){ return { t:m + ' × ؟ = ' + (m * x), a:x }; },
+      function(){ return { t:'؟ ÷ ' + m + ' = ' + x, a:m * x }; },
+      function(){ return { t:(a + b) + ' − ؟ = ' + a, a:b }; }
+    ];
+    return forms[R(0, forms.length - 1)]();
+  }
+  let wordBag = [];
+  function gWord(){ if(!wordBag.length) wordBag = shuf(WORDS); const w = wordBag.pop(); return { t:w[0], a:w[1], word:true }; }
+  const GENS = { add:gAdd, sub:gSub, mul:gMul, div:gDiv, mix:gMix, sq:gSq, pct:gPct, miss:gMiss, word:gWord };
+  function mathMake(cfg, n){
+    const total = String(cfg.time).charAt(0) === 'T', out = [], keys = ['add','sub','mul','div','mix','sq','pct','miss','word','add','sub','mul','div','mix'];
+    wordBag = [];
+    for(let i = 0; i < n; i++){
+      const d = cfg.diff === 'mix' ? Math.min(5, 1 + Math.floor(i / (total ? 6 : Math.ceil(n / 5)))) : +cfg.diff;
+      const g = GENS[cfg.cat === 'all' ? keys[R(0, keys.length - 1)] : cfg.cat], r = g(d), ans = String(r.a);
+      const it = { ans:ans, rv:(r.word || r.t.indexOf('؟') >= 0) ? r.t + ' ← ' + r.a : r.t + ' = ' + r.a, note:'' };
+      it.html = r.word ? '<p style="font-size:17px;font-weight:700;line-height:1.9;margin:12px 0">' + esc(r.t) + '</p>'
+        : '<p class="gm-seq" style="font-size:30px">' + esc(r.t) + (r.t.indexOf('؟') < 0 ? ' = ؟' : '') + '</p>';
+      if(cfg.mode === 'type') it.type = 'num'; else it.opts = shuf([ans].concat(numWrong(r.a, 3).map(String)));
+      out.push(it);
     }
-    return w;
-  })();
-  function c4Drop(b, c, p){ for(let r = R - 1; r >= 0; r--){ if(!b[r * C + c]){ b[r * C + c] = p; return r; } } return -1; }
-  function c4Wins(b, r, c, p){
-    for(let d = 0; d < 4; d++){
-      let n = 1, rr = r + DR[d], cc = c + DC[d];
-      while(rr >= 0 && rr < R && cc >= 0 && cc < C && b[rr * C + cc] === p){ n++; rr += DR[d]; cc += DC[d]; }
-      rr = r - DR[d]; cc = c - DC[d];
-      while(rr >= 0 && rr < R && cc >= 0 && cc < C && b[rr * C + cc] === p){ n++; rr -= DR[d]; cc -= DC[d]; }
-      if(n >= 4) return true;
+    return out;
+  }
+  F.register({ id:'g_mathrace', cat:'game', name:'الحساب ضد الساعة', desc:'عمليات حسابية بأنواعها ومسائل كلامية — سباق مع الوقت وبنك كبير', emoji:'⏱️', c1:'#e0812f', c2:'#a35414',
+    render:function(root){
+      quiz(root, { key:'mathrace', emoji:'⏱️', title:'الحساب ضد الساعة', intro:'جمع وطرح وضرب وقسمة ومسائل مختلطة ومربعات ونسب ومسائل كلامية. اختر وقتًا لكل سؤال أو سباقًا بوقت كلي (الخطأ يخصم ثانيتين).',
+        selects:[
+          { id:'cat', label:'نوع العمليات', opts:[['all','كل الأنواع (منوّع)',true],['add','الجمع'],['sub','الطرح'],['mul','الضرب'],['div','القسمة'],['mix','عمليات مختلطة'],['sq','مربعات وجذور ومكعبات'],['pct','النسب المئوية'],['miss','الرقم الناقص'],['word','مسائل كلامية']] },
+          { id:'diff', label:'المستوى', opts:[['mix','متدرج (يصعب تدريجيًا)',true],['1','سهل جدًا'],['2','سهل'],['3','متوسط'],['4','صعب'],['5','خبير']] },
+          { id:'time', label:'الوقت', opts:[['5','5 ثوانٍ لكل سؤال'],['8','8 ثوانٍ لكل سؤال'],['12','12 ثانية لكل سؤال',true],['20','20 ثانية لكل سؤال'],['T60','سباق: 60 ثانية كلية'],['T90','سباق: 90 ثانية كلية'],['T120','سباق: دقيقتان كليتان']] },
+          { id:'mode', label:'طريقة الإجابة', opts:[['opts','اختيار من 4 (أسرع)',true],['type','كتابة الإجابة (أصعب)']] },
+          nSel()],
+        make:mathMake });
+    }});
+
+  /* ============================================================
+     📜 أكمل المثل (أمثال سودانية ومتداولة في السودان)
+     ============================================================ */
+  const PS = [
+    ['الما بعرف الصقر','بشويه','من يجهل قيمة الشيء يفرّط فيه ويسيء استعماله.'],
+    ['الجمل ما بشوف','عوجة رقبتو','الإنسان لا يرى عيوب نفسه.'],
+    ['دق القراف','خلي الجمل يخاف','يُضرب لمن يعاقب الصغير ليعتبر الكبير.'],
+    ['اسمع كلام الما بيبكيك','ولا تسمع كلام الما بضحكك','الناصح الصادق خير من المجامل.'],
+    ['الما بعرف يرقص','بقول الأرض عوجة','العاجز يلقي باللوم على الظروف.'],
+    ['العرجا','لي مراحها','كل شيء يرجع إلى أصله ومكانه.'],
+    ['الما عندو كبير','يشتري ليهو كبير','لا بد لكل جماعة من كبير يرجعون إليه.'],
+    ['الحلو','ما بكمل','لا شيء في الدنيا يكتمل على وجهه.'],
+    ['البيت بيت أبونا','والغرب يطردونا','يُضرب لمن يُظلم في عقر داره.'],
+    ['الإيد الواحدة','ما بتصفق','التعاون شرط النجاح.'],
+    ['الطبع','غلاب','طبع الإنسان يغلب تكلّفه.'],
+    ['الما بزرع','ما بحصد','من لم يعمل لم يجنِ شيئًا.'],
+    ['الغايب','حجتو معاهو','الغائب له عذره فلا تلمه قبل أن تسمعه.'],
+    ['اللسان ما فيهو عضم','بس بكسر العضم','الكلمة قد تجرح أكثر من الضرب.'],
+    ['الديك الفصيح','من البيضة بيصيح','النجابة تظهر منذ الصغر.'],
+    ['الغريق','ما بخاف من البلل','من وقع في الشدة لا يخشى ما دونها.'],
+    ['أدي العيش','لخبازو ولو أكل نصو','أعطِ العمل لصاحب الاختصاص حتى لو أخذ نصيبه.'],
+    ['المكتوب على الجبين','لازم تشوفو العين','ما قُدّر للإنسان لا بد أن يلقاه.'],
+    ['الجار','قبل الدار','اختر جارك قبل أن تشتري بيتك.'],
+    ['الرفيق','قبل الطريق','اختر رفيقك قبل أن تسافر.'],
+    ['العين ما بتعلا','فوق الحاجب','لا يتطاول أحد على من هو أعلى منه مقامًا.'],
+    ['جنّة بلا ناس','ما بتنداس','الدنيا الجميلة لا طعم لها بلا أحباب.']
+  ];
+  const PC = [
+    ['الصيف ضيّعتِ','اللبن','يُضرب لمن يندم بعد فوات الأوان.'],['الطيور على أشكالها','تقع','المتشابهون يتجمّعون.'],['القرد في عين أمه','غزال','الحب يجمّل العيوب.'],
+    ['كل إناء','بما فيه ينضح','كل إنسان يُظهر ما بداخله.'],['من جدّ','وجد','الاجتهاد يثمر.'],['ما حكّ جلدك','مثل ظفرك','اعتمد على نفسك.'],
+    ['الوقاية','خير من العلاج','منع المرض أفضل من علاجه.'],['خير الكلام','ما قلّ ودلّ','الإيجاز مع الوضوح أفضل.'],['القناعة','كنز لا يفنى','الرضا بما قسم الله غنى دائم.'],
+    ['الحاجة','أم الاختراع','الحاجة تدفع الإنسان للابتكار.'],['الحرب','خدعة','الذكاء في الحرب أهم من القوة.'],['الصاحب','ساحب','الصديق يؤثر في صاحبه.'],
+    ['زُر غِبًّا','تزدد حبًّا','قلّل الزيارة يزد الحب.'],['لا يُلدغ المؤمن','من جحر مرتين','المؤمن فطن لا يقع في الخطأ نفسه مرتين.'],['إذا كان الكلام من فضة','فالسكوت من ذهب','الصمت في موضعه أثمن من الكلام.'],
+    ['الجود','بالموجود','أعطِ بقدر ما تملك.'],['العلم في الصغر','كالنقش على الحجر','ما يُتعلّم صغيرًا يثبت.'],['من طلب العلا','سهر الليالي','المجد يحتاج تعبًا.'],
+    ['اطلبوا العلم','من المهد إلى اللحد','التعلّم طوال العمر.'],['الوقت','كالسيف إن لم تقطعه قطعك','أحسن استغلال وقتك وإلا أضاعك.'],['ما ضاع حق','وراءه مطالب','الحق لا يضيع ما دام له من يطلبه.'],
+    ['حبل الكذب','قصير','الكذب سرعان ما ينكشف.'],['الطمع','ضرّ ما نفع','الطمع يضر أكثر مما ينفع.'],['اضرب الحديد','وهو ساخن','اغتنم الفرصة في وقتها.'],
+    ['ضربني وبكى','سبقني واشتكى','يُضرب لمن يظلم ثم يدّعي المظلومية.'],['أنا وأخي على ابن عمي','وأنا وابن عمي على الغريب','الأقرب أولى بالنصرة.'],['ربّ أخٍ لك','لم تلده أمك','قد يكون الصديق أقرب من الأخ.'],
+    ['عند الامتحان','يُكرم المرء أو يُهان','الاختبار يكشف قيمة الإنسان.'],['من عاشر القوم','أربعين يومًا صار منهم','المعاشرة تنقل الطباع.'],['الحاضر','يعلّم الغايب','من شهد الأمر يخبر من غاب.'],
+    ['كل تأخيرة','فيها خيرة','قد يكون في التأخير خير خفي.'],['ربّ ضارة','نافعة','قد يأتي الخير من حيث يظن الإنسان الشر.'],['اتقِ شرّ','من أحسنت إليه','احذر من قابل إحسانك بالإساءة.'],
+    ['الصبر','مفتاح الفرج','بالصبر تنفرج الأزمات.'],['الصديق','وقت الضيق','الصديق الحقيقي يُعرف في الشدائد.'],['من زرع','حصد','كل إنسان يجني ما عمل.'],
+    ['يد الله','مع الجماعة','الاتحاد قوة وبركة.'],['لكل جواد','كبوة','كل إنسان معرّض للخطأ.'],['إن غاب القط','العب يا فار','عند غياب الرقيب يتجرأ الناس.'],
+    ['أُكلت يوم أُكل','الثور الأبيض','من سكت عن ضعف غيره ناله الضعف نفسه.'],['على نفسها','جنت براقش','يُضرب لمن يجلب الأذى لنفسه.'],['وافق شنٌّ','طبقة','يُضرب لتوافق شخصين متشابهين.'],
+    ['لا تؤجل عمل اليوم','إلى الغد','أنجز عملك في وقته.'],['من سار على الدرب','وصل','المثابرة توصل إلى الهدف.'],['لا يفلّ الحديد','إلا الحديد','القوة لا يواجهها إلا مثلها.'],
+    ['ما كل ما يتمنى المرء','يدركه','ليس كل ما نتمناه يتحقق.'],['كما تدين','تُدان','تُجازى بمثل ما فعلت.'],['الأعمال','بالخواتيم','العبرة بنهاية الأمر.'],
+    ['من يزرع الشوك','لا يحصد العنب','من يفعل الشر لا يجني الخير.'],['كل ممنوع','مرغوب','النفس تميل لما مُنعت منه.'],['درهم وقاية','خير من قنطار علاج','الاحتياط القليل يغني عن علاج كثير.'],
+    ['ليس كل ما يلمع','ذهبًا','لا تنخدع بالمظاهر.'],['النظافة','من الإيمان','الطهارة والنظافة من صفات المؤمن.'],['أهل مكة','أدرى بشعابها','صاحب الشأن أعلم بشأنه.'],
+    ['الحديث','ذو شجون','الكلام يجرّ بعضه بعضًا.'],['أول الغيث','قطرة','البدايات الكبيرة تبدأ صغيرة.'],['رحم الله','امرأً عرف قدر نفسه','من عرف قدره لم يتجاوزه.'],
+    ['الصمت','حكمة','السكوت عند الحاجة دليل عقل.'],['المؤمن','مرآة أخيه','الأخ الصادق يُريك عيوبك.'],['العقل السليم','في الجسم السليم','صحة البدن تعين على صفاء الفكر.'],
+    ['من شرب من ماء النيل','عاد إليه','من ذاق النيل حنّ إليه.'],['رُبّ كلمة','قالت لصاحبها دعني','كلمة عابرة قد تجرّ على قائلها المتاعب.'],['اللي في القلب','في القلب','ما في الصدور يظهر أثره.'],
+    ['العيش والملح','لا يُنسيان','العشرة والمعروف لا ينبغي أن يُنسيا.'],['البلاء','يقع بالكلام','قلّة الحذر في الكلام تجلب المشاكل.'],['الدال على الخير','كفاعله','من دلّ على خير كان له مثل أجره.']
+  ];
+  const PALL = PS.concat(PC);
+  function wc(s){ return s.split(/\s+/).length; }
+  function provMake(cfg, n){
+    const pool = cfg.cat === 's' ? PS : cfg.cat === 'c' ? PC : PALL;
+    return shuf(pool).slice(0, n).map(function(p){
+      let cand = PALL.filter(function(x){ return x[1] !== p[1] && Math.abs(wc(x[1]) - wc(p[1])) <= 1; });
+      if(cand.length < 3) cand = PALL.filter(function(x){ return x[1] !== p[1]; });
+      const seen = {}; seen[p[1]] = 1; const wr = [];
+      shuf(cand).forEach(function(x){ if(wr.length < 3 && !seen[x[1]]){ seen[x[1]] = 1; wr.push(x[1]); } });
+      return { html:'<p class="hint" style="text-align:center;margin:8px 0 0">أكمل المثل:</p><p style="font-size:20px;font-weight:800;line-height:2;text-align:center;margin:8px 0 14px">' + esc(p[0]) + ' <span style="color:var(--gold)">……</span></p>',
+        opts:shuf([p[1]].concat(wr)), ans:p[1], rv:p[0] + ' ' + p[1], note:'📜 المثل كاملًا: <b>' + esc(p[0] + ' ' + p[1]) + '</b><br>المعنى: ' + esc(p[2]) };
+    });
+  }
+  F.register({ id:'g_proverb', cat:'game', name:'أكمل المثل السوداني', desc:'أمثال سودانية ومتداولة — أكمل المثل واعرف معناه، بنك كبير', emoji:'📜', c1:'#3f9d6b', c2:'#226b45',
+    render:function(root){
+      quiz(root, { key:'proverb', emoji:'📜', title:'أكمل المثل', intro:'يظهر لك أول المثل وعليك اختيار تكملته الصحيحة، ثم يظهر معناه. أكثر من ' + PALL.length + ' مثلًا (سودانية بلهجتها ومتداولة في السودان).',
+        selects:[
+          { id:'cat', label:'نوع الأمثال', opts:[['all','الكل',true],['s','أمثال سودانية بلهجتها'],['c','أمثال متداولة (فصيحة وعامية)']] },
+          { id:'time', label:'الوقت لكل سؤال', opts:[['0','بدون وقت',true],['15','15 ثانية'],['20','20 ثانية'],['30','30 ثانية']] },
+          nSel()],
+        make:provMake });
+    }});
+})();
+
+/* ================= 🕵️ المحقق الذكي — تحليل أدلة القضايا (محلي بلا إنترنت + ذكاء اصطناعي عند توفر الاتصال) ================= */
+(function(){
+  'use strict';
+  const F = window.FUN, esc = F.esc;
+  const q = function(r, s){ return r.querySelector(s); };
+  const note = function(m){ try{ if(typeof toast === 'function') toast(m); }catch(e){} };
+
+  const TYPES = [['theft','سرقة'],['murder','قتل / وفاة مشبوهة'],['fraud','احتيال ونصب'],['missing','اختفاء شخص'],['arson','حريق متعمد'],['cyber','جريمة إلكترونية / اختراق'],['forgery','تزوير'],['assault','اعتداء'],['other','قضية أخرى']];
+  const typeName = function(k){ for(let i = 0; i < TYPES.length; i++) if(TYPES[i][0] === k) return TYPES[i][1]; return 'قضية'; };
+
+  /* ---------- تطبيع النص والمطابقة ---------- */
+  function norm(s){
+    return String(s == null ? '' : s).replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+      .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
+      .replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).toLowerCase();
+  }
+  const PRE = ['', 'ال', 'ب', 'و', 'ل', 'لل', 'وال', 'بال', 'فال', 'ك', 'ف'];
+  function prep(text){ const t = norm(text); return { t:t, toks:t.split(/[^\u0600-\u06FFa-z0-9]+/).filter(Boolean) }; }
+  function has(T, w){
+    if(w.indexOf(' ') >= 0) return T.t.indexOf(w) >= 0;
+    for(let i = 0; i < T.toks.length; i++){
+      const k = T.toks[i];
+      for(let j = 0; j < PRE.length; j++) if(k === PRE[j] + w) return true;
+      if(w.length >= 4 && (k.indexOf(w) === 0 || k.indexOf('ال' + w) === 0)) return true;
     }
     return false;
   }
-  function c4Line(b, r, c, p){
-    for(let d = 0; d < 4; d++){
-      const cells = [r * C + c];
-      let rr = r + DR[d], cc = c + DC[d];
-      while(rr >= 0 && rr < R && cc >= 0 && cc < C && b[rr * C + cc] === p){ cells.push(rr * C + cc); rr += DR[d]; cc += DC[d]; }
-      rr = r - DR[d]; cc = c - DC[d];
-      while(rr >= 0 && rr < R && cc >= 0 && cc < C && b[rr * C + cc] === p){ cells.push(rr * C + cc); rr -= DR[d]; cc -= DC[d]; }
-      if(cells.length >= 4) return cells;
-    }
-    return null;
-  }
-  function c4Eval(b, me){
-    const opp = 3 - me; let sc = 0;
-    for(let i = 0; i < WINDOWS.length; i++){
-      const w = WINDOWS[i]; let m = 0, o = 0;
-      for(let j = 0; j < 4; j++){ const v = b[w[j]]; if(v === me) m++; else if(v === opp) o++; }
-      if(m && o) continue;
-      if(m === 3) sc += 50; else if(m === 2) sc += 6;
-      if(o === 3) sc -= 56; else if(o === 2) sc -= 6;
-    }
-    for(let r = 0; r < R; r++){ const v = b[r * C + 3]; if(v === me) sc += 4; else if(v === opp) sc -= 4; }
-    return sc;
-  }
-  let c4Deadline = 0, c4Aborted = false, c4Nodes = 0;
-  function c4Nega(b, depth, alpha, beta, p, filled){
-    if(c4Aborted) return 0;
-    if((++c4Nodes & 1023) === 0 && Date.now() > c4Deadline){ c4Aborted = true; return 0; }
-    if(filled >= R * C) return 0;
-    if(depth === 0) return c4Eval(b, p);
-    let best = -Infinity;
-    for(let i = 0; i < C; i++){
-      const c = ORDER[i]; const r = c4Drop(b, c, p); if(r < 0) continue;
-      let v;
-      if(c4Wins(b, r, c, p)) v = 100000 + depth;
-      else v = -c4Nega(b, depth - 1, -beta, -alpha, 3 - p, filled + 1);
-      b[r * C + c] = 0;
-      if(v > best) best = v;
-      if(best > alpha) alpha = best;
-      if(alpha >= beta) break;
-    }
-    return best;
-  }
-  /* يُرجع {best, list:[{c,v}]} — البحث بالتعميق التدريجي ضمن حدّ زمني */
-  function c4Search(b0, p, maxDepth, ms){
-    const b = b0.slice(); let filled = 0; for(let i = 0; i < b.length; i++) if(b[i]) filled++;
-    const valid = ORDER.filter(function(c){ return !b[c]; });
-    c4Aborted = false; c4Nodes = 0; c4Deadline = Date.now() + ms;
-    let result = null;
-    for(let d = 1; d <= maxDepth; d++){
-      const scores = []; let bestv = -Infinity, ok = true;
-      for(let i = 0; i < valid.length; i++){
-        const c = valid[i], r = c4Drop(b, c, p); let v;
-        if(c4Wins(b, r, c, p)) v = 100000 + d;
-        else v = -c4Nega(b, d - 1, -Infinity, -(bestv - 1), 3 - p, filled + 1);
-        b[r * C + c] = 0;
-        if(c4Aborted){ ok = false; break; }
-        scores.push({ c: c, v: v }); if(v > bestv) bestv = v;
-      }
-      if(!ok) break;
-      result = { best: bestv, list: scores };
-      if(bestv >= 100000) break;
-    }
-    if(!result) result = { best: 0, list: valid.map(function(c){ return { c: c, v: 0 }; }) };
-    return result;
-  }
-  function c4Cfg(lv){
-    const depth = lv <= 2 ? 1 : lv <= 5 ? 2 : lv <= 8 ? 3 : lv <= 12 ? 4 : lv <= 16 ? 5 : lv <= 20 ? 6 : lv <= 25 ? 7 : 8;
-    return { depth: depth, blunder: lv >= 12 ? 0 : Math.max(0, 0.5 - 0.045 * (lv - 1)), ms: 300 + depth * 90 };
-  }
-  window.__c4 = { search: c4Search, drop: c4Drop, wins: c4Wins, cfg: c4Cfg };
+  function mk(list){ return list.map(function(o){ return { o:o, n:norm(o) }; }); }
+  function hits(T, L){ const out = []; L.forEach(function(x){ if(has(T, x.n)) out.push(x.o); }); return out; }
 
-  function c4Play(root, sess, lv, toMap){
-    const cfg = c4Cfg(lv);
-    const alive = function(){ return root._gmSess === sess && modalOpen(); };
-    let b = new Array(R * C).fill(0), moves = 0, over = false, thinking = false, last = -1, newCell = -1;
-    let winCells = [], result = null, stars = 0, assists = 0, undoLeft = 2, hintLeft = 2, hintCol = -1, hist = [], aiTimer = null;
-    const playerFirst = (lv % 2 === 1);
+  const LEX = {
+    motive:mk(['دين','ديون','مديون','خلاف','خلافات','نزاع','تهديد','هدد','غيرة','انتقام','ميراث','إرث','تأمين','طرد','فصل','راتب','رواتب','تأخر','حقد','كره','ابتزاز','طمع','منافس','إفلاس','خسارة','عداوة','مستفيد','وصية','قروض','أزمة مالية']),
+    opp:mk(['يعرف الرمز','يعرف رمز','يعرف كلمة','يملك مفتاح','مفتاح','صلاحية','وحده','لا حجة غياب','بلا حجة','بدون حجة','لا شاهد','بدون شاهد','بلا شهود','لا يوجد شاهد','كان في المكان','كان موجودا','شوهد','قريب من','تواجد','حضر','دخل']),
+    means:mk(['أداة','سلاح','سكين','مسدس','خبرة','يتقن','مهارة','يجيد','سيارة','رمز','كلمة السر','يملك','مختص','فني','مهندس','طبيب','سم','حبل','بندقية','معدات']),
+    behav:mk(['هرب','هروب','كذب','متناقض','تناقض','ارتبك','توتر','أخفى','مسح','حذف','أتلف','تغير','اختفى','سافر فجأة','غير أقواله','رفض','امتنع','تهرب','ينكر','مكالمة مجهولة','اتصال مجهول','دمر','حرق']),
+    alibiStrong:mk(['حجة غياب موثقة','حجة غياب مؤكدة','موثقة','موثق','مؤكدة','مؤكد بشهود','فيديو','شهود كثيرون','تذكرة سفر','سجل حضور','بصمة حضور','كان في المستشفى','ختم الدخول']),
+    alibiAny:mk(['حجة غياب','كان في','كان مع','كان نائما','نام','سافر']),
+    strong:mk(['اعتراف','اعترف','ضبط','حمض نووي','dna','وجهه واضح','ظهر وجهه','بحوزته','مطابق','تطابق','مطابقة','وجد بحوزته','رصاصة مطابقة']),
+    weak:mk(['يشاع','إشاعة','ربما','يعتقد','يقال','غير مؤكد','احتمال','يبدو','يظن','لم يتأكد']),
+    insider:mk(['لم تكسر','لم يكسر','دون كسر','بدون كسر','بالرمز','بمفتاح','لا آثار اقتحام','دون اقتحام','بدون اقتحام','لا أثر لاقتحام','بكلمة السر'])
+  };
+  const CAT = {
+    physical:mk(['بصمة','بصمات','دم','dna','حمض نووي','شعر','أثر','آثار','أقدام','سلاح','أداة','كسر','خلع','سكين','رصاص','مقذوف','ملابس','عرق','لعاب','أظافر','مختبر','جثة','سم','وقود','بنزين','غاز','قفل','مقبض']),
+    digital:mk(['كاميرا','مراقبة','رسالة','رسائل','واتساب','هاتف','جوال','مكالمة','اتصال','سجل','حساب','تحويل','ip','بريد','إيميل','اختراق','كلمة سر','كمبيوتر','لابتوب','فيديو','صورة','موقع','gps','تتبع','برج','تسجيل','تسجيلات']),
+    testimony:mk(['شاهد','شهادة','أفاد','أقوال','قال','أدلى','سمع','رأى','شوهد','اعتراف','أخبر','بلاغ','جار']),
+    financial:mk(['مبلغ','مال','فلوس','دين','تحويل','إيداع','سحب','تأمين','ميراث','عقد','فاتورة','شيك','راتب','رواتب','رصيد','أرباح','بنكي','جنيه','دولار','ألف','مليون']),
+    relation:mk(['خلاف','علاقة','تهديد','صديق','قريب','زوج','زوجة','شريك','منافس','عدو','حبيب','خطيب','غيرة','انتقام']),
+    alibi:mk(['حجة غياب','كان في','كان مع','نائم','نام','سافر']),
+    behavior:mk(['هرب','كذب','تناقض','ارتبك','توتر','أخفى','مسح','حذف','أتلف','ينكر','مكالمة مجهولة','اختفى','تهرب','رفض','امتنع'])
+  };
+  const CAT_INFO = {
+    physical:['🧪','دليل مادي','يثبت صلة مادية بالمكان أو الأداة، لكنه لا يثبت وقت اللمس ولا النية. اسأل: هل لصاحب الأثر سبب مشروع لوجوده هناك؟'],
+    digital:['📱','دليل رقمي','يثبت حدوث فعل أو اتصال في وقت محدد، لكن قد يستخدم الجهاز أو الحساب شخص آخر. تحقق من الملكية والتوقيت وعدم التلاعب.'],
+    testimony:['🗣️','شهادة / أقوال','يوجّه التحقيق لكنه عرضة للنسيان والانحياز. قارن الأقوال ببعضها وبالأدلة المادية والرقمية.'],
+    financial:['💰','دليل مالي','يقوّي الدافع ولا يثبت الفعل. ابحث عن تغيّر مفاجئ في الإنفاق أو الأرصدة بعد الواقعة.'],
+    relation:['🤝','علاقة / دافع','يوضح دافعًا محتملًا، وكثيرون لديهم خلافات دون جريمة. اسأل: من أيضًا لديه دافع مماثل؟'],
+    alibi:['🕐','حجة غياب','تكون قوية فقط إذا وُثّقت بمصدر مستقل (كاميرا، سجل رسمي، شهود محايدون).'],
+    behavior:['⚠️','سلوك مريب','الهروب أو الإخفاء أو التناقض يستدعي التعمق، لكنه ليس إثباتًا بذاته فقد يكون خوفًا أو ارتباكًا.'],
+    other:['📄','معلومة عامة','سجّلها ثم اربطها بغيرها؛ المعلومة المنفردة نادرًا ما تحسم القضية.']
+  };
+  const NEG = /(^|\s)(لا يوجد|لا توجد|لم يعثر|لم توجد|لم يوجد|عدم وجود|بدون|دون)(\s|$)/;
 
-    function status(){
-      if(over) return result === 'win' ? '🎉 فزت! أحسنت' : result === 'lose' ? '😔 فاز الكمبيوتر هذه المرة' : '🤝 تعادل — امتلأت اللوحة';
-      if(thinking) return '🤔 الكمبيوتر يفكر…';
-      return hintCol >= 0 ? '💡 التلميح: العمود المُلوَّن هو الأفضل الآن' : '🔴 دورك — المس أي عمود لإسقاط قطعتك';
-    }
-    function render(){
-      let cells = '';
-      for(let r = 0; r < R; r++) for(let c = 0; c < C; c++){
-        const k = r * C + c, v = b[k];
-        const cls = 'c4-cell' + (v === 1 ? ' p1' : v === 2 ? ' p2' : '') + (k === last ? ' last' : '') + (winCells.indexOf(k) >= 0 ? ' win' : '') + (k === newCell ? ' new' : '') + (hintCol === c ? ' hintcol' : '');
-        cells += '<button type="button" class="' + cls + '" data-c="' + c + '" style="--r:' + r + '" aria-label="عمود ' + (c + 1) + '"></button>';
-      }
-      let h = stats(['المرحلة <b>' + lv + '</b> / ' + LEVELS, 'الخصم: <b>' + stageOf(lv) + '</b>', 'أنت 🔴 · هو 🟡'])
-        + '<p class="hint" style="text-align:center;margin:0 0 8px;min-height:18px" id="c4St">' + status() + '</p>'
-        + '<div class="c4-board" id="c4B">' + cells + '</div>';
-      if(over){
-        h += '<div class="fun-result" style="text-align:center;margin-top:12px">'
-          + (result === 'win' ? '<p style="font-size:30px;margin:0">' + starStr(stars) + '</p><p style="font-weight:700;margin:6px 0 0">' + (lv >= LEVELS ? '🏆 أنهيت كل المراحل الثلاثين! أنت بطل حقيقي' : 'أنهيت المرحلة ' + lv + ' في ' + moves + ' حركة') + '</p>'
-            : '<p style="font-weight:700;margin:0">' + (result === 'lose' ? 'جرّب خطة مختلفة: سيطر على العمود الأوسط واحذر الفخاخ القطرية' : 'كنت قريبًا جدًا — أعد المحاولة') + '</p>') + '</div>'
-          + '<div class="modal-actions">' + (result === 'win' && lv < LEVELS ? '<button type="button" class="btn btn-primary" id="c4Next">المرحلة التالية ◀</button>' : '')
-          + '<button type="button" class="btn btn-ghost" id="c4Again">🔄 ' + (result === 'win' ? 'أعد المرحلة' : 'أعد المحاولة') + '</button>'
-          + '<button type="button" class="btn btn-ghost" id="c4Map">🗺️ المراحل</button></div>';
-      } else {
-        h += '<div class="modal-actions gm-row">'
-          + '<button type="button" class="btn btn-ghost" id="c4Undo"' + (undoLeft > 0 && hist.length && !thinking ? '' : ' disabled') + '>↩️ تراجع (' + undoLeft + ')</button>'
-          + '<button type="button" class="btn btn-ghost" id="c4Hint"' + (hintLeft > 0 && !thinking ? '' : ' disabled') + '>💡 تلميح (' + hintLeft + ')</button></div>'
-          + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="c4Again">🔄 إعادة</button><button type="button" class="btn btn-ghost" id="c4Map">🗺️ المراحل</button></div>';
-      }
-      root.innerHTML = h;
-      const board = q(root, '#c4B');
-      board.addEventListener('click', function(e){ const t = e.target.closest('[data-c]'); if(t) playerMove(+t.dataset.c); });
-      const on = function(id, fn){ const el = q(root, id); if(el) el.addEventListener('click', fn); };
-      on('#c4Map', function(){ clearTimeout(aiTimer); toMap(); });
-      on('#c4Again', function(){ clearTimeout(aiTimer); c4Play(root, sess, lv, toMap); });
-      on('#c4Next', function(){ clearTimeout(aiTimer); c4Play(root, sess, lv + 1, toMap); });
-      on('#c4Undo', undo); on('#c4Hint', hint);
-      newCell = -1;
-    }
-    function finish(kind, cells){
-      over = true; thinking = false; result = kind; winCells = cells || [];
-      if(kind === 'win'){
-        const base = moves <= 9 ? 3 : moves <= 14 ? 2 : 1;
-        stars = Math.max(1, assists > 0 ? base - 1 : base);
-        completeLevel('c4', lv, stars);
-      }
-      render();
-    }
-    function full(){ for(let c = 0; c < C; c++) if(!b[c]) return false; return true; }
-    function playerMove(c){
-      if(over || thinking || b[c]) return;
-      hist.push({ b: b.slice(), moves: moves });
-      const r = c4Drop(b, c, 1); if(r < 0){ hist.pop(); return; }
-      moves++; last = r * C + c; newCell = last; hintCol = -1;
-      if(c4Wins(b, r, c, 1)){ finish('win', c4Line(b, r, c, 1)); return; }
-      if(full()){ finish('draw'); return; }
-      thinking = true; render();
-      aiTimer = setTimeout(aiTurn, 420);
-    }
-    function aiTurn(){
-      if(!alive() || over) return;
-      const valid = ORDER.filter(function(c){ return !b[c]; });
-      const s = c4Search(b, 2, cfg.depth, cfg.ms);
-      let col;
-      if(s.best < 100000 && Math.random() < cfg.blunder) col = pick(valid);
-      else col = pick(s.list.filter(function(x){ return x.v === s.best; })).c;
-      const r = c4Drop(b, col, 2);
-      last = r * C + col; newCell = last; thinking = false;
-      if(c4Wins(b, r, col, 2)){ finish('lose', c4Line(b, r, col, 2)); return; }
-      if(full()){ finish('draw'); return; }
-      render();
-    }
-    function undo(){
-      if(over || thinking || !hist.length || undoLeft <= 0) return;
-      const h = hist.pop(); b = h.b; moves = h.moves; undoLeft--; assists++; hintCol = -1; last = -1;
-      render();
-    }
-    function hint(){
-      if(over || thinking || hintLeft <= 0) return;
-      const s = c4Search(b, 1, Math.max(5, Math.min(7, cfg.depth + 2)), 700);
-      hintCol = pick(s.list.filter(function(x){ return x.v === s.best; })).c;
-      hintLeft--; assists++;
-      render();
-    }
-    render();
-    if(!playerFirst){ thinking = true; render(); aiTimer = setTimeout(aiTurn, 600); }
+  const STEPS = {
+    theft:['فحص مداخل ومخارج المكان والأقفال وأي أثر اقتحام أو عبث.','جمع كل تسجيلات الكاميرات (ومحاولة استرجاع المحذوف منها) وسجلات الدخول.','حصر من يعرف الرموز أو يملك المفاتيح والصلاحيات وقت الواقعة.','جرد المفقودات بدقة (النوع، العدد، القيمة) وتتبعها في الأسواق والتحويلات.','مراجعة سجلات الاتصال قبل الحادثة وبعدها للمشتبه بهم.','ملاحظة أي تغيّر مفاجئ في إنفاق أو ديون أحد المشتبه بهم بعد الواقعة.'],
+    murder:['تقرير الطب الشرعي وتقدير وقت الوفاة وسببها.','تأمين مسرح الجريمة وتوثيقه بالكامل وحفظ سلسلة حيازة الأدلة.','تحديد آخر من رأى المجني عليه حيًا وخط سيره الأخير.','سجلات الهاتف والمواقع والرسائل للمجني عليه والمشتبه بهم.','مراجعة الوصية والتأمين والديون والخلافات القديمة.','فحص السلاح أو المادة المستخدمة ومصدرها.'],
+    fraud:['تتبع مسار الأموال من الحساب الأول إلى المستفيد النهائي.','فحص العقود والتواقيع والمراسلات والفواتير.','البحث عن ضحايا آخرين تعرضوا لنفس الأسلوب.','سجلات الهاتف وعناوين IP والحسابات المستخدمة.','الاستعانة بخبير محاسبة جنائية عند تعقّد الحسابات.'],
+    missing:['تحديد آخر ظهور مؤكد وآخر موقع للهاتف.','مراجعة الحسابات البنكية والمواصلات وأي تحركات مالية.','سؤال الأصدقاء والأقارب عن خلافات أو ضغوط أو نوايا سفر.','فحص كاميرات المنطقة ومسارات الطرق القريبة.','عدم تأخير البلاغ والبحث الميداني في الساعات الأولى.'],
+    arson:['تحديد نقطة الاشتعال ومسار الانتشار بمساعدة خبير حرائق.','البحث عن مواد مسرّعة للاشتعال (وقود، مذيبات).','معرفة المستفيد من التأمين أو من ضرره أقل بالحريق.','فحص أجهزة الإنذار والكاميرات: هل عُطّلت قبل الحادثة؟','حصر من كان في المكان أو حوله قبل الحريق بساعات.'],
+    cyber:['حفظ الأدلة الرقمية دون تعديل (نسخ جنائية للأجهزة والسجلات).','تحليل سجلات الدخول وعناوين IP والأجهزة وتوقيتاتها.','حصر أصحاب الصلاحيات ومن غيّر كلمات السر مؤخرًا.','فحص رسائل التصيّد والروابط والمرفقات المشبوهة.','تتبع المحافظ والتحويلات المرتبطة بالعملية.'],
+    forgery:['فحص الخط والختم والحبر والورق بخبير مختص.','مقارنة المستند بالأصل وبنماذج سابقة معتمدة.','تحديد من طلب المستند ومن وقّعه ومن استلمه ومن استفاد منه.','التحقق من الجهة المصدِرة رسميًا.'],
+    assault:['الفحص الطبي وتوثيق الإصابات فورًا.','أقوال شهود مستقلين وكاميرات المكان.','معرفة سبب الخلاف وتاريخه بين الطرفين.','تحديد الأداة المستخدمة وحفظها.'],
+    other:['رتّب الوقائع زمنيًا وحدّد ما هو مؤكد وما هو ادعاء.','ابحث عن مصدر مستقل يؤكد كل معلومة مهمة.','اسأل: من المستفيد؟ ومن كانت لديه الفرصة والوسيلة؟','وثّق كل شيء ولا تعتمد على الذاكرة.']
+  };
+  const PROFILES = {
+    theft:[['شخص من الداخل يعرف الرموز أو الأماكن',40],['عامل أو حارس أو فني صيانة له وصول للمكان',25],['شخص خارجي بمساعدة من الداخل',20]],
+    murder:[['قريب أو شريك صاحب مصلحة (ميراث/تأمين/دين)',35],['شخص لديه خلاف سابق أو تهديد',30],['شخص غريب (سرقة/مشاجرة)',15]],
+    fraud:[['شريك أو موظف يملك صلاحية مالية',35],['محتال محترف يستهدف ضحايا متعددين',35],['وسيط أو طرف ثالث مستفيد',15]],
+    missing:[['شخص قريب من المفقود وله مصلحة أو خلاف',25],['مغادرة طوعية (ضغوط أو هروب)',30],['حادث أو حالة صحية',20]],
+    arson:[['صاحب مصلحة (تأمين/تخلص من ممتلكات)',30],['شخص لديه عداء للمكان أو صاحبه',30],['ماس كهربائي أو إهمال (غير جنائي)',25]],
+    cyber:[['موظف داخلي بصلاحيات',35],['مخترق خارجي عبر تصيّد',35],['مقاول أو طرف ثالث مرتبط بالنظام',15]],
+    forgery:[['شخص يستفيد مباشرة من المستند',40],['موظف يملك الأختام أو النماذج',30],['طرف ثالث محترف',15]],
+    assault:[['طرف له خلاف سابق',45],['غريب في مشاجرة',20],['شخص من الدائرة المقربة',20]],
+    other:[['شخص له مصلحة مباشرة',35],['شخص من الدائرة القريبة',30],['طرف خارجي',20]]
+  };
+
+  /* ---------- تحليل الأدلة ---------- */
+  function cleanLine(s){ return String(s).replace(/^\s*(?:[-•*·]|\d+\s*[.\-)])\s*/, '').trim(); }
+  function analyzeLine(line){
+    const T = prep(line), cats = [];
+    Object.keys(CAT).forEach(function(k){ const c = hits(T, CAT[k]).length; if(c) cats.push([k, c]); });
+    cats.sort(function(a, b){ return b[1] - a[1]; });
+    const neg = NEG.test(T.t);
+    let strength = cats.length ? 2 : 1;
+    if(hits(T, LEX.strong).length) strength = 3;
+    if(hits(T, LEX.weak).length) strength = 1;
+    if(neg) strength = 1;
+    return { line:line, T:T, cats:cats.map(function(x){ return x[0]; }), main:cats.length ? cats[0][0] : 'other', strength:strength, neg:neg };
+  }
+  const STOP = ['المشتبه','المتهم','السيد','الاستاذ','الدكتور','الحاج','المدعو'];
+  function prepSuspect(s){
+    const segs = String(s.n).split(/[()\/،,\-–]+/).map(function(x){ return norm(x).trim(); }).filter(Boolean), al = [];
+    segs.forEach(function(sg){
+      if(sg.length >= 4 && al.indexOf(sg) < 0) al.push(sg);
+      sg.split(/\s+/).forEach(function(tk){ if(tk.length >= 4 && STOP.indexOf(tk) < 0 && al.indexOf(tk) < 0) al.push(tk); });
+    });
+    return { name:s.n.trim(), note:s.t || '', aliases:al };
+  }
+  function mentions(T, aliases){ return aliases.some(function(a){ return a.indexOf(' ') >= 0 ? T.t.indexOf(a) >= 0 : has(T, a); }); }
+  function strongAlibiIn(T){
+    if(!hits(T, LEX.alibiAny).length || !hits(T, LEX.alibiStrong).length) return false;
+    if(/(لا|بلا|بدون|ليس له|ليست له|عدم)\s*(وجود)?\s*حجه غياب/.test(T.t)) return false;
+    if(/غير مؤكد|غير موثق|لم يتم التاكد|لم تتاكد/.test(T.t)) return false;
+    return true;
+  }
+  function uniq(a){ const o = []; a.forEach(function(x){ if(o.indexOf(x) < 0) o.push(x); }); return o; }
+
+  function scoreSuspect(sp, evid, type){
+    const noteT = prep(sp.note), rel = evid.filter(function(e){ return mentions(e.T, sp.aliases); });
+    const all = prep(sp.note + ' \n ' + rel.map(function(e){ return e.line; }).join(' \n '));
+    const mot = uniq(hits(all, LEX.motive)), opp = uniq(hits(all, LEX.opp)), mea = uniq(hits(all, LEX.means)), beh = uniq(hits(all, LEX.behav));
+    let strongAlibi = strongAlibiIn(noteT); rel.forEach(function(e){ if(strongAlibiIn(e.T)) strongAlibi = true; });
+    const alibiClaim = hits(all, LEX.alibiAny).length > 0 && !/(لا|بلا|بدون|ليس له|عدم)\s*(وجود)?\s*حجه غياب/.test(all.t);
+    const noAlibi = /(لا|بلا|بدون|ليس له|عدم)\s*(وجود)?\s*حجه غياب/.test(all.t);
+    let links = 0, maxStr = 0;
+    rel.forEach(function(e){ if(e.neg) return; if(e.main === 'alibi' && strongAlibiIn(e.T)) return; links += e.strength; if(e.strength > maxStr) maxStr = e.strength; });
+    const m = Math.min(3, mot.length), o = Math.min(3, opp.length), mn = Math.min(3, mea.length), b = Math.min(3, beh.length);
+    let raw = 12 * m + 12 * o + 8 * mn + 10 * b + 6 * Math.min(5, links) + ((alibiClaim && !strongAlibi) ? 8 : 0) - (strongAlibi ? 40 : 0);
+    raw = Math.max(2, raw);
+    const why = [], weak = [], tests = [];
+    if(mot.length) why.push('دافع محتمل: ' + mot.slice(0, 3).join('، '));
+    if(opp.length) why.push('فرصة أو وصول: ' + opp.slice(0, 3).join('، '));
+    if(mea.length) why.push('وسيلة أو قدرة: ' + mea.slice(0, 3).join('، '));
+    if(beh.length) why.push('سلوك يثير الريبة: ' + beh.slice(0, 3).join('، '));
+    if(rel.length) why.push('ورد في ' + rel.length + ' دليل/أدلة');
+    if(noAlibi) why.push('لا توجد حجة غياب واضحة');
+    if(strongAlibi) weak.push('لديه حجة غياب موثقة، وهذا يضعف الفرضية بشدة إن ثبتت صحتها.');
+    if(!rel.length) weak.push('لا يوجد دليل مباشر يربطه بالواقعة حتى الآن.');
+    if(mot.length && rel.length <= 1 && !beh.length) weak.push('الدافع وحده لا يكفي؛ يلزم دليل يربطه بالفعل.');
+    if(maxStr < 3) weak.push('لا يوجد ضده دليل حاسم (اعتراف، تطابق مادي، تسجيل واضح) بعد.');
+    const has_phys = rel.some(function(e){ return e.cats.indexOf('physical') >= 0; });
+    if(has_phys) tests.push('اسأل عن سبب مشروع لوجود أثره (عمله اليومي مثلًا)، ثم قارن توقيت الأثر بتوقيت الواقعة.');
+    if(mot.length && /دين|مال|راتب|ميراث|تامين|قروض|افلاس|خساره/.test(all.t)) tests.push('افحص حساباته وإنفاقه ومشترياته قبل الواقعة وبعدها بحثًا عن تغيّر مفاجئ.');
+    if(noAlibi || (alibiClaim && !strongAlibi)) tests.push('تحقق من مكانه وقت الواقعة عبر سجلات الهاتف/البرج والكاميرات والشهود المحايدين.');
+    if(strongAlibi) tests.push('تأكد من صحة حجة غيابه (أصالة الفيديو، توقيتها، شهود مستقلون) قبل استبعاده.');
+    if(beh.length) tests.push('اطلب تفسيرًا لسلوكه المريب وقارن أقواله عبر أكثر من جلسة بحثًا عن تناقض.');
+    if(!tests.length) tests.push('قارن سجلاته وأقواله بالأدلة المتاحة واسأل عمّن يؤكد روايته.');
+    return { name:sp.name, aliases:sp.aliases, raw:raw, mot:mot, opp:opp, mea:mea, beh:beh, rel:rel, links:links, maxStr:maxStr, strongAlibi:strongAlibi, alibiClaim:alibiClaim, noAlibi:noAlibi, why:why, weak:weak, tests:tests };
   }
 
-  F.register({ id:'g_connect4', cat:'game', name:'أربعة في صف', desc:'تحدَّ الكمبيوتر عبر 30 مرحلة يزداد فيها ذكاؤه', emoji:'🔴', c1:'#3b6fd6', c2:'#23408f',
-    render:function(root){
-      const sess = {}; root._gmSess = sess;
-      function map(){
-        mapView(root, 'c4', {
-          emoji:'🔴🟡', title:'أربعة في صف — تحدّي الذكاء',
-          intro:'أوصل 4 قطع في صف (أفقي أو رأسي أو قطري) قبل الكمبيوتر. 30 مرحلة: يبدأ بخصم مبتدئ ويصل إلى خصم يفكّر 8 حركات للأمام!',
-          mark:function(lv){ return ''; }
-        }, function(lv){ c4Play(root, sess, lv, map); toTop(); });
-      }
-      map();
-    }});
-
-  /* ============================================================
-     🥢 تحدي العيدان (لعبة نيم) — الكمبيوتر يحسب اللعب المثالي، ويُخطئ عمدًا في المراحل الأولى
-     ============================================================ */
-  function mulberry(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  function nimCfg(lv){
-    const rng = mulberry(lv * 7919 + 13);
-    const cnt = lv <= 4 ? 2 : lv <= 10 ? 3 : lv <= 18 ? 4 : lv <= 26 ? 5 : 6;
-    const maxv = Math.min(12, 3 + Math.floor((lv + 1) / 3));
-    let piles, guard = 0;
-    do{
-      piles = []; for(let i = 0; i < cnt; i++) piles.push(1 + Math.floor(rng() * maxv));
-      guard++;
-    }while(guard < 200 && (piles.filter(function(v){ return v > 1; }).length < Math.min(2, cnt) || piles.reduce(function(a, b){ return a + b; }, 0) < cnt * 2));
-    piles.sort(function(a, b){ return b - a; });
-    return { piles: piles, misere: lv >= 6 && lv % 3 === 0, err: lv >= 26 ? 0 : Math.max(0, 0.7 - 0.028 * (lv - 1)) };
-  }
-  const nimMemo = new Map();
-  function canon(p){ return p.filter(function(v){ return v > 0; }).sort(function(a, b){ return b - a; }); }
-  /* هل اللاعب صاحب الدور قادر على الفوز بلعب مثالي؟ (بحث كامل مع تخزين) */
-  function nimWin(p, mis){
-    const k = (mis ? 'm' : 'n') + p.join(',');
-    if(nimMemo.has(k)) return nimMemo.get(k);
-    let res;
-    if(p.length === 0) res = mis; /* الخصم أخذ آخر عود: يفوز صاحب الدور إن كانت القاعدة "آخر عود يخسر" */
-    else{
-      res = false;
-      outer: for(let i = 0; i < p.length; i++){
-        if(i > 0 && p[i] === p[i - 1]) continue;
-        for(let t = 1; t <= p[i]; t++){
-          const qq = p.slice(); qq[i] -= t;
-          if(!nimWin(canon(qq), mis)){ res = true; break outer; }
-        }
-      }
-    }
-    nimMemo.set(k, res); return res;
-  }
-  function nimGood(piles, mis){
-    const out = [];
-    for(let i = 0; i < piles.length; i++) for(let t = 1; t <= piles[i]; t++){
-      const qq = piles.slice(); qq[i] -= t;
-      if(!nimWin(canon(qq), mis)) out.push({ p: i, t: t });
+  /* ---------- الخط الزمني ---------- */
+  function extractTimes(line){
+    const s = norm(line), out = [];
+    const re = /(?:الساعه\s*)?(\d{1,2})\s*:\s*(\d{2})\s*(صباحا|مساء|ليلا|فجرا|ظهرا|عصرا|(?:ص|م)(?![\u0600-\u06FF]))?|الساعه\s*(\d{1,2})(?![\d:])\s*(صباحا|مساء|ليلا|فجرا|ظهرا|عصرا|(?:ص|م)(?![\u0600-\u06FF]))?/g;
+    let m;
+    while((m = re.exec(s))){
+      let h = +(m[1] != null ? m[1] : m[4]), mi = m[2] != null ? +m[2] : 0; const p = m[3] || m[5] || '';
+      if(h > 24 || mi > 59) continue;
+      if(p === 'مساء' || p === 'عصرا' || p === 'م'){ if(h < 12) h += 12; }
+      else if(p === 'ليلا'){ if(h >= 6 && h < 12) h += 12; }
+      else if(p === 'ظهرا'){ if(h < 11) h += 12; }
+      else if(p === 'صباحا' || p === 'فجرا' || p === 'ص'){ if(h === 12) h = 0; }
+      out.push({ min:(h % 24) * 60 + mi, label:('0' + (h % 24)).slice(-2) + ':' + ('0' + mi).slice(-2) });
     }
     return out;
   }
-  function nimAll(piles){
-    const out = [];
-    for(let i = 0; i < piles.length; i++) for(let t = 1; t <= piles[i]; t++) out.push({ p: i, t: t });
-    return out;
+  function timeline(lines){
+    const rows = [];
+    lines.forEach(function(l){ extractTimes(l).forEach(function(t){ rows.push({ min:t.min, label:t.label, text:l }); }); });
+    const late = rows.some(function(r){ return r.min >= 1080; }), early = rows.some(function(r){ return r.min < 360; });
+    if(late && early) rows.forEach(function(r){ if(r.min < 360) r.min += 1440; });
+    rows.sort(function(a, b){ return a.min - b.min; });
+    return rows;
   }
-  window.__nim = { cfg: nimCfg, win: nimWin, good: nimGood, canon: canon };
 
-  function nimPlay(root, sess, lv, toMap){
-    const cfg = nimCfg(lv), mis = cfg.misere;
-    const alive = function(){ return root._gmSess === sess && modalOpen(); };
-    let piles = cfg.piles.slice(), sel = null, compSel = null, hintSel = null, over = false, thinking = false, result = null, stars = 0;
-    let assists = 0, undoLeft = 2, hintLeft = 3, hist = [], tip = false, msg = '', timer = null, taken = 0;
-    const startsPlayer = nimWin(canon(piles), mis);
-    const rule = mis ? '☠️ من يأخذ <b>آخر عود يخسر</b>!' : '🏆 من يأخذ <b>آخر عود يفوز</b>';
+  /* ---------- المحلل الرئيسي ---------- */
+  function analyze(S){
+    const lines = String(S.clues || '').split('\n').map(cleanLine).filter(Boolean);
+    const evid = lines.map(analyzeLine);
+    const descT = prep(S.desc || '');
+    const allT = prep((S.desc || '') + ' \n ' + lines.join(' \n '));
+    const insider = hits(allT, LEX.insider).length > 0;
+    const sus = (S.suspects || []).filter(function(s){ return String(s.n || '').trim(); }).map(prepSuspect).map(function(sp){ return scoreSuspect(sp, evid, S.type); });
 
-    function total(){ return piles.reduce(function(a, b){ return a + b; }, 0); }
-    function status(){
-      if(over) return result === 'win' ? '🎉 فزت على الكمبيوتر!' : '😔 فاز الكمبيوتر — حلّل حركاتك وحاول مجددًا';
-      if(thinking) return '🤔 الكمبيوتر يفكر…';
-      if(msg) return msg;
-      if(sel){ const n = piles[sel.p] - sel.from; return 'ستأخذ <b>' + n + '</b> من الكومة ' + (sel.p + 1) + ' — اضغط «خذ» للتأكيد'; }
-      return 'دورك: المس عودًا لتحدد <b>هذا العود وما بعده</b> في نفس الكومة';
-    }
-    function render(){
-      let rows = '';
-      for(let i = 0; i < piles.length; i++){
-        let sticks = '';
-        for(let j = 0; j < piles[i]; j++){
-          const s = sel && sel.p === i && j >= sel.from, c = compSel && compSel.p === i && j >= compSel.from, hh = hintSel && hintSel.p === i && j >= hintSel.from;
-          sticks += '<button type="button" class="nm-stick' + (s ? ' sel' : '') + (c ? ' comp' : '') + (hh && !s ? ' hint' : '') + '" data-p="' + i + '" data-j="' + j + '" aria-label="عود"></button>';
-        }
-        rows += '<div class="nm-row"><span class="nm-lbl">' + (i + 1) + '</span><div class="nm-sticks">' + (piles[i] ? sticks : '<em class="nm-empty">فارغة</em>') + '</div><span class="nm-cnt">' + piles[i] + '</span></div>';
+    /* الفرضيات */
+    const hyps = [];
+    sus.forEach(function(s){ hyps.push({ kind:'suspect', title:s.name, w:s.raw, why:s.why, weak:s.weak, tests:s.tests }); });
+    const tampered = evid.filter(function(e){ return /مسح|حذف|اتلف|تلاعب|عطل|عطلت|دمر|تخريب/.test(e.T.t) && !mentions(e.T, sus.reduce(function(a, s){ return a.concat(s.aliases); }, [])); });
+    if(sus.length){
+      hyps.push({ kind:'ext', title:'شخص آخر غير المذكورين', w:insider ? 8 : 20,
+        why:[insider ? 'المؤشرات ترجّح فاعلًا من الداخل، لكن لا يمكن استبعاد غيره قبل حصر كل من له وصول.' : 'لا توجد مؤشرات كافية تستبعد جهة خارجية.'],
+        weak:['لا اسم محدد له حتى الآن.'], tests:['راجع سجلات الدخول والكاميرات بحثًا عن أشخاص لم تشملهم القائمة، ووسّع دائرة من له وصول.'] });
+      if(S.type === 'murder' || S.type === 'arson' || S.type === 'missing'){
+        const t = S.type === 'missing' ? 'مغادرة طوعية أو ظرف شخصي' : (S.type === 'arson' ? 'سبب غير جنائي (ماس كهربائي/إهمال)' : 'وفاة غير جنائية (حادث أو سبب طبيعي)');
+        hyps.push({ kind:'acc', title:t, w:10, why:['لا يجوز استبعاد التفسير غير الجنائي قبل التقرير الفني/الطبي.'], weak:['وجود أدلة على العبث أو التهديد يضعفه.'], tests:['اطلب رأي الخبير الفني أو الطب الشرعي قبل الجزم بوجود فاعل.'] });
       }
-      let h = stats(['المرحلة <b>' + lv + '</b> / ' + LEVELS, 'الخصم: <b>' + stageOf(lv) + '</b>', '💡 <b>' + hintLeft + '</b>'])
-        + '<p class="hint" style="text-align:center;margin:0 0 6px">' + rule + '</p>'
-        + '<p class="hint" style="text-align:center;margin:0 0 8px;min-height:18px">' + status() + '</p>'
-        + '<div class="nm-board">' + rows + '</div>';
-      if(tip){
-        h += '<div class="fun-result" style="margin-top:10px"><p class="hint" style="margin:0;line-height:1.9">📘 <b>السر:</b> اكتب عدد عيدان كل كومة بالنظام الثنائي ثم اجمع كل خانة (1+1=0 دون حمل). '
-          + 'اجعل الناتج <b>صفرًا</b> بعد كل دور لك وسيبقى الخصم في وضع خاسر. '
-          + 'في مراحل ☠️ العب بالطريقة نفسها حتى تبقى كومة واحدة فقط أكبر من عود؛ عندها اترك عددًا <b>فرديًا</b> من الأكوام ذات العود الواحد.</p></div>';
-      }
-      if(over){
-        h += '<div class="fun-result" style="text-align:center;margin-top:12px">'
-          + (result === 'win' ? '<p style="font-size:30px;margin:0">' + starStr(stars) + '</p><p style="font-weight:700;margin:6px 0 0">' + (lv >= LEVELS ? '🏆 أنهيت كل المراحل الثلاثين! عقل استراتيجي فذّ' : 'أنهيت المرحلة ' + lv) + '</p>' : '<p style="font-weight:700;margin:0">تلميح: اضغط 📘 السر لتعرف طريقة الفوز المضمون</p>') + '</div>'
-          + '<div class="modal-actions">' + (result === 'win' && lv < LEVELS ? '<button type="button" class="btn btn-primary" id="nmNext">المرحلة التالية ◀</button>' : '')
-          + '<button type="button" class="btn btn-ghost" id="nmAgain">🔄 ' + (result === 'win' ? 'أعد المرحلة' : 'أعد المحاولة') + '</button>'
-          + '<button type="button" class="btn btn-ghost" id="nmMap">🗺️ المراحل</button></div>';
-      } else {
-        const ok = !thinking;
-        h += '<div class="modal-actions"><button type="button" class="btn btn-primary" id="nmTake"' + (sel && ok ? '' : ' disabled') + '>✅ خذ' + (sel ? ' (' + (piles[sel.p] - sel.from) + ')' : '') + '</button></div>'
-          + '<div class="modal-actions gm-row"><button type="button" class="btn btn-ghost" id="nmUndo"' + (ok && undoLeft > 0 && hist.length ? '' : ' disabled') + '>↩️ تراجع (' + undoLeft + ')</button>'
-          + '<button type="button" class="btn btn-ghost" id="nmHint"' + (ok && hintLeft > 0 ? '' : ' disabled') + '>💡 تلميح</button>'
-          + '<button type="button" class="btn btn-ghost" id="nmTip">📘 السر</button></div>'
-          + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="nmAgain">🔄 إعادة</button><button type="button" class="btn btn-ghost" id="nmMap">🗺️ المراحل</button></div>';
-      }
-      root.innerHTML = h;
-      root.querySelectorAll('.nm-stick').forEach(function(s){
-        s.addEventListener('click', function(){
-          if(over || thinking) return;
-          const p = +s.dataset.p, j = +s.dataset.j;
-          if(sel && sel.p === p && sel.from === j) sel = null; else sel = { p: p, from: j };
-          msg = ''; hintSel = null; render();
-        });
+    } else {
+      const pr = PROFILES[S.type] || PROFILES.other;
+      pr.forEach(function(p){ hyps.push({ kind:'profile', title:p[0], w:p[1] + (insider && /داخل|موظف|حارس|عامل|شريك/.test(p[0]) ? 15 : 0), why:['ملف مقترح (لم تُدخل مشتبهًا محددًا). أضف أسماء وملاحظات ليصبح الترجيح أدق.'], weak:['ترجيح عام مبني على نوع القضية فقط.'], tests:['حدّد من ينطبق عليه هذا الوصف وأدخله في قائمة المشتبه بهم.'] });
       });
-      const on = function(id, fn){ const el = q(root, id); if(el) el.addEventListener('click', fn); };
-      on('#nmTake', playerTake); on('#nmUndo', undo); on('#nmHint', hint);
-      on('#nmTip', function(){ tip = !tip; render(); });
-      on('#nmMap', function(){ clearTimeout(timer); toMap(); });
-      on('#nmAgain', function(){ clearTimeout(timer); nimPlay(root, sess, lv, toMap); });
-      on('#nmNext', function(){ clearTimeout(timer); nimPlay(root, sess, lv + 1, toMap); });
     }
-    function end(mover){
-      /* mover أخذ آخر عود */
-      const winner = mis ? (mover === 'p' ? 'c' : 'p') : mover;
-      over = true; thinking = false; sel = null; compSel = null; hintSel = null; result = winner === 'p' ? 'win' : 'lose';
-      if(result === 'win'){
-        stars = assists === 0 ? 3 : assists <= 2 ? 2 : 1;
-        completeLevel('nim', lv, stars);
-      }
-      render();
-    }
-    function playerTake(){
-      if(over || thinking || !sel) return;
-      hist.push({ piles: piles.slice() });
-      piles[sel.p] = sel.from; sel = null; hintSel = null; msg = ''; taken++;
-      if(total() === 0){ end('p'); return; }
-      thinking = true; render();
-      timer = setTimeout(compTurn, 700);
-    }
-    function compTurn(){
-      if(!alive() || over) return;
-      const good = nimGood(piles, mis); let mv;
-      if(good.length && Math.random() >= cfg.err) mv = pick(good);
-      else if(!good.length){
-        let bi = 0; for(let i = 1; i < piles.length; i++) if(piles[i] > piles[bi]) bi = i;
-        mv = { p: bi, t: 1 };
-      } else {
-        const all = nimAll(piles), bad = all.filter(function(m){ return !good.some(function(g){ return g.p === m.p && g.t === m.t; }); });
-        mv = pick(bad.length ? bad : all);
-      }
-      compSel = { p: mv.p, from: piles[mv.p] - mv.t };
-      render();
-      timer = setTimeout(function(){
-        if(!alive() || over) return;
-        piles[mv.p] -= mv.t; compSel = null; thinking = false;
-        if(total() === 0){ end('c'); return; }
-        render();
-      }, 850);
-    }
-    function undo(){
-      if(over || thinking || undoLeft <= 0 || !hist.length) return;
-      piles = hist.pop().piles; undoLeft--; assists++; sel = null; hintSel = null; msg = ''; render();
-    }
-    function hint(){
-      if(over || thinking || hintLeft <= 0) return;
-      const good = nimGood(piles, mis);
-      hintLeft--; assists++;
-      if(good.length){
-        const g = pick(good); hintSel = { p: g.p, from: piles[g.p] - g.t }; sel = { p: g.p, from: piles[g.p] - g.t };
-        msg = '💡 خذ <b>' + g.t + '</b> من الكومة ' + (g.p + 1) + ' (محدّدة لك)';
-      } else {
-        hintSel = null; sel = null;
-        msg = '💡 وضعك خاسر نظريًا الآن: خذ عودًا واحدًا وانتظر خطأ الخصم' + (cfg.err > 0 ? '' : ' (خصمك لا يُخطئ في هذه المرحلة — أعد المرحلة)');
-      }
-      render();
-    }
-    render();
-    if(!startsPlayer){ thinking = true; render(); timer = setTimeout(compTurn, 800); }
+    let sum = 0; hyps.forEach(function(h){ sum += h.w; });
+    hyps.forEach(function(h){ h.p = Math.round(h.w / sum * 100); });
+    hyps.sort(function(a, b){ return b.w - a.w; });
+    let tot = 0; hyps.forEach(function(h){ tot += h.p; }); if(hyps.length) hyps[0].p += (100 - tot);
+
+    /* التعارضات والثغرات */
+    const con = [];
+    sus.forEach(function(s){
+      const presence = s.rel.filter(function(e){ return (e.cats.indexOf('physical') >= 0 || e.cats.indexOf('digital') >= 0) && /شوهد|ظهر|سجلت|سجله|بصمات|بصمه|رصد|وجد|دخل/.test(e.T.t) && !e.neg; });
+      if(s.alibiClaim && presence.length) con.push('⚠️ ' + s.name + ': لديه حجة غياب/رواية مكان، وفي المقابل يوجد أثر أو تسجيل يدل على حضوره. أحدهما غير دقيق ويجب حسمه.');
+      if(/ينكر|ينفي/.test(prep(s.rel.map(function(e){ return e.line; }).join(' ') + ' ' + (S.suspects.filter(function(x){ return x.n.trim() === s.name; })[0] || {}).t).t) && (s.maxStr >= 2 && s.rel.some(function(e){ return e.cats.indexOf('physical') >= 0 || e.cats.indexOf('digital') >= 0; })))
+        con.push('⚠️ ' + s.name + ': ينكر، بينما توجد أدلة مادية/رقمية تتعلق به. قارن إنكاره بها بدقة.');
+    });
+    if(insider && sus.length && sus.every(function(s){ return s.strongAlibi; }))
+      con.push('⚠️ المؤشرات ترجّح فاعلًا من الداخل، لكن كل المشتبهين لهم حجج قوية: راجع صحة الحجج أو وسّع دائرة من له وصول.');
+    if(tampered.length) con.push('⚠️ يوجد عبث بالأدلة (مسح/حذف/تعطيل) لم يُنسب لأحد: يوحي بفاعل يعرف النظام أو يملك صلاحية عليه.');
+    if(insider) con.push('ℹ️ لا آثار اقتحام (قفل سليم/فتح بالرمز أو المفتاح): يرجّح أن الفاعل يعرف الرمز أو يملك مفتاحًا.');
+
+    /* نواقص القضية */
+    const gaps = []; const catSet = {}; evid.forEach(function(e){ e.cats.forEach(function(c){ catSet[c] = 1; }); });
+    if(!catSet.physical) gaps.push('لا توجد أدلة مادية: افحص مسرح الحدث والبصمات والآثار.');
+    if(!catSet.digital) gaps.push('لا توجد أدلة رقمية: الكاميرات وسجلات الهاتف والرسائل والحسابات.');
+    if(!catSet.testimony) gaps.push('لا توجد شهادات: استجوب الجيران والحراس والزملاء.');
+    if(!catSet.financial && (S.type === 'theft' || S.type === 'fraud' || S.type === 'murder')) gaps.push('لا معلومات مالية: افحص الديون والتحويلات والمصالح المالية.');
+    const tl = timeline([S.desc || ''].concat(lines));
+    if(!tl.length) gaps.push('لا يوجد توقيت واضح: حدّد وقت الواقعة ووقت كل حدث بدقة.');
+    sus.forEach(function(s){ if(!s.alibiClaim && !s.noAlibi) gaps.push('لم تُذكر حجة غياب ' + s.name + ': اسأله أين كان وقت الواقعة ومن يؤكد.'); });
+    if(lines.length < 3) gaps.push('عدد الأدلة قليل: أضف كل ما لديك حتى ولو بدا بسيطًا.');
+
+    /* أسئلة الاستجواب */
+    const ques = [];
+    sus.forEach(function(s){
+      const a = [];
+      if(s.noAlibi || (!s.alibiClaim)) a.push('أين كنت بالتحديد وقت الواقعة، ومن يستطيع تأكيد ذلك؟');
+      if(s.mot.length) a.push('ما طبيعة علاقتك بالموضوع (خلاف/دين/مصلحة)؟ وهل تأثرت به مؤخرًا؟');
+      if(s.rel.some(function(e){ return e.cats.indexOf('physical') >= 0; })) a.push('كيف تفسر وجود أثرك أو بصماتك في المكان؟ ومتى كانت آخر مرة لمسته؟');
+      if(s.rel.some(function(e){ return e.cats.indexOf('digital') >= 0; })) a.push('ما تفسيرك لما سُجّل عنك في الكاميرا/الهاتف/الحساب؟');
+      if(s.beh.length) a.push('لماذا تصرفت بهذه الطريقة (' + s.beh.slice(0, 2).join('، ') + ')؟');
+      a.push('من تعتقد أنه الأقرب لفعل ذلك ولماذا؟');
+      a.push('(سؤال فخّ) أعد عليّ تسلسل ما فعلته من ساعتين قبل الواقعة حتى ساعتين بعدها بالترتيب.');
+      ques.push({ name:s.name, list:a });
+    });
+    const steps = (STEPS[S.type] || STEPS.other).slice();
+    return { lines:lines, evid:evid, sus:sus, hyps:hyps, con:con, gaps:gaps, tl:tl, ques:ques, steps:steps, insider:insider };
   }
 
-  F.register({ id:'g_nim', cat:'game', name:'تحدي العيدان', desc:'لعبة استراتيجية ضد الكمبيوتر — 30 مرحلة من السهل إلى المستحيل', emoji:'🥢', c1:'#c27a2c', c2:'#7d4a12',
+  /* ---------- العرض ---------- */
+  function ul(items){ return '<ul style="margin:6px 0;padding-inline-start:20px;line-height:1.9;font-size:13px">' + items.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>'; }
+  function bar(p, color){ return '<div style="height:8px;border-radius:8px;background:var(--surface-2);overflow:hidden;margin:6px 0"><div style="height:100%;width:' + p + '%;background:' + (color || 'var(--gold)') + '"></div></div>'; }
+  function sec(title, body, open){ return '<details' + (open ? ' open' : '') + ' class="fun-result" style="margin-top:10px"><summary style="font-weight:800;cursor:pointer;font-size:14.5px">' + title + '</summary><div style="margin-top:10px">' + body + '</div></details>'; }
+  const STR = { 3:'قوي', 2:'ظرفي', 1:'ضعيف/غير مؤكد' };
+  function fmtAI(t){
+    return String(t).split('\n').map(function(l){
+      let s = esc(l).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+      const h = /^\s*#{1,4}\s*(.*)$/.exec(s);
+      if(h) return '<p style="font-weight:800;color:var(--gold);margin:14px 0 4px">' + h[1] + '</p>';
+      s = s.replace(/^\s*[-*•]\s+/, '• ');
+      return s.trim() ? '<p style="margin:3px 0;line-height:1.9;font-size:13.5px">' + s + '</p>' : '';
+    }).join('');
+  }
+  function reportText(S, R){
+    let t = '🕵️ تقرير التحقيق — ' + (S.title || typeName(S.type)) + '\nنوع القضية: ' + typeName(S.type) + '\n\nالوقائع: ' + (S.desc || '—') + '\n\nالأدلة:\n' + R.lines.map(function(l, i){ return (i + 1) + '. ' + l; }).join('\n');
+    t += '\n\nالفرضيات المرجّحة (تقدير آلي استرشادي):\n' + R.hyps.map(function(h, i){ return (i + 1) + '. ' + h.title + ' — ' + h.p + '٪'; }).join('\n');
+    if(R.con.length) t += '\n\nتعارضات وثغرات:\n' + R.con.map(function(x){ return '- ' + x; }).join('\n');
+    if(R.gaps.length) t += '\n\nما ينقص القضية:\n' + R.gaps.map(function(x){ return '- ' + x; }).join('\n');
+    t += '\n\nخطوات التحقيق:\n' + R.steps.map(function(x, i){ return (i + 1) + '. ' + x; }).join('\n');
+    if(S.ai) t += '\n\n===== تحليل الذكاء الاصطناعي =====\n' + S.ai;
+    return t + '\n\n(تحليل استرشادي وليس حكمًا قضائيًا)';
+  }
+  function aiPrompt(S, R){
+    let p = 'نوع القضية: ' + typeName(S.type) + '\nاسم القضية: ' + (S.title || '—') + '\n\nوصف الواقعة:\n' + (S.desc || 'غير مذكور') + '\n\nالأدلة والمعلومات:\n' + R.lines.map(function(l, i){ return (i + 1) + '. ' + l; }).join('\n');
+    const su = (S.suspects || []).filter(function(s){ return String(s.n || '').trim(); });
+    p += '\n\nالمشتبه بهم:\n' + (su.length ? su.map(function(s){ return '- ' + s.n + (s.t ? ': ' + s.t : ''); }).join('\n') : 'لم يُحدد مشتبه بهم؛ اقترح ملفات المشتبهين المحتملين.');
+    p += '\n\nتقدير أولي آلي للاسترشاد فقط (يمكنك مخالفته إن رأيت ذلك): ' + R.hyps.slice(0, 5).map(function(h){ return h.title + ' ' + h.p + '٪'; }).join('، ');
+    return p.slice(0, 7000);
+  }
+  const SYS = 'أنت محقق جنائي وخبير تحليل أدلة، تتحدث العربية الفصحى المبسطة. حلّل القضية بمنهجية دقيقة: لا تخترع وقائع غير مذكورة، وميّز بين الدليل والاستنتاج والافتراض، وبيّن مستوى اليقين. افترض براءة كل مشتبه حتى يثبت العكس. قدّم أكثر من فرضية مرتبة بنسب رجحان مجموعها 100٪. استخدم العناوين التالية بصيغة ## وبالترتيب: ## ملخص الوقائع ## تقييم الأدلة (لكل دليل: قوته، ما يثبته، ما لا يثبته) ## التناقضات والثغرات ## الفرضيات المرتبة (لكل فرضية: الفاعل المحتمل، النسبة، أدلة مؤيدة، أدلة نافية، أضعف نقطة، اختبار حاسم) ## احتمالات بديلة لم تُذكر ## الإجراءات التالية بالترتيب ## أسئلة الاستجواب لكل مشتبه ## الخلاصة (الأرجح، البدائل، وما الذي قد يغيّر الحكم). كن مختصرًا ومنظمًا بلا حشو.';
+
+  const SAMPLE = {
+    title:'سرقة خزنة الشركة', type:'theft',
+    desc:'اختفى مبلغ 850 ألف جنيه من خزنة المكتب ليلة الخميس. لم يظهر كسر في باب الخزنة ولا في باب المكتب.',
+    clues:['الخزنة فُتحت بالرمز السري ولم تُكسر','كاميرا المدخل سجلت دخول شخص بقبعة الساعة 10:40 مساءً وخروجه 11:05 ولم يظهر وجهه','بصمات المحاسب سامر على مقبض الخزنة','سجل الهاتف: مكالمة من رقم مجهول لحارس الأمن الساعة 10:30 مساءً','المدير أفاد أن الرمز يعرفه هو والمحاسب سامر فقط','حجة غياب المدير: كان في حفل زفاف وموثقة بفيديوهات','الحارس نام في غرفته حسب قوله ولا يوجد شاهد','المحاسب سامر عليه دين كبير وتأخرت رواتبه','تم مسح تسجيلات كاميرا الممر الداخلي بعد الحادثة'].join('\n'),
+    suspects:[{ n:'سامر (المحاسب)', t:'يعرف رمز الخزنة، عليه دين كبير، لا حجة غياب واضحة' },{ n:'كمال (حارس الأمن)', t:'تلقى مكالمة مجهولة، كان وحده في الليل، ينكر سماعه شيئًا' },{ n:'أبو بكر (المدير)', t:'يعرف رمز الخزنة، حجة غياب موثقة بفيديو في حفل زفاف' }]
+  };
+  const CHIPS = ['بصمات','كاميرا مراقبة','شاهد عيان','سجل مكالمات','رسائل','أثر أقدام','تحويل مالي','حجة غياب','سلاح أو أداة','عنوان IP','خلاف سابق','سلوك مريب'];
+
+  F.register({ id:'detective', cat:'ai', name:'المحقق الذكي', desc:'أدخل الأدلة واحصل على الفرضيات والمشتبه الأرجح وخيارات بديلة — يعمل بلا إنترنت ويتعمّق بالذكاء الاصطناعي عند توفره', emoji:'🕵️', c1:'#4b5b8c', c2:'#27304f',
     render:function(root){
-      const sess = {}; root._gmSess = sess;
-      function map(){
-        mapView(root, 'nim', {
-          emoji:'🥢🧠', title:'تحدي العيدان — معركة العقول',
-          intro:'كومات من العيدان: في دورك خذ أي عدد من كومة واحدة. اكتشف السر الرياضي لتهزم الكمبيوتر — مراحله الأخيرة لا يُخطئ فيها أبدًا!',
-          mark:function(lv){ return (lv >= 6 && lv % 3 === 0) ? '☠️' : ''; }
-        }, function(lv){ nimPlay(root, sess, lv, map); toTop(); });
+      let S = blank(), conv = [];
+      function blank(){ return { id:'', title:'', type:'theft', desc:'', clues:'', suspects:[{ n:'', t:'' }], ai:'' }; }
+      function cases(){ return (settings.detectiveCases || []).slice(); }
+      function saveCase(){
+        if(!S.desc.trim() && !S.clues.trim()){ note('أدخل وصفًا أو أدلة أولًا'); return; }
+        const list = cases(); if(!S.id) S.id = 'c' + Date.now();
+        const rec = { id:S.id, title:S.title || typeName(S.type), type:S.type, desc:S.desc, clues:S.clues, suspects:S.suspects, ai:S.ai || '', ts:Date.now() };
+        const i = list.findIndex(function(x){ return x.id === S.id; }); if(i >= 0) list[i] = rec; else list.unshift(rec);
+        saveMiscSetting('detectiveCases', list.slice(0, 40)); note('تم حفظ القضية');
       }
-      map();
+      function home(){
+        const list = cases();
+        root.innerHTML = '<div class="fun-result" style="text-align:center"><p style="font-size:38px;margin:0">🕵️</p><p style="font-weight:800;margin:8px 0 4px">المحقق الذكي</p>'
+          + '<p class="hint" style="margin:0;line-height:1.9">أدخل وقائع القضية وأدلتها والمشتبه بهم، فيحلّلها لك: تصنيف الأدلة وقوتها، التعارضات، الخط الزمني، الفرضيات المرتبة بنسب ترجيح، وخيارات بديلة للمتهم، وأسئلة الاستجواب. يعمل بلا إنترنت، وعند توفر الإنترنت يضيف تحليلًا معمّقًا بالذكاء الاصطناعي.</p></div>'
+          + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="dtNew">➕ قضية جديدة</button><button type="button" class="btn btn-ghost" id="dtSample">🎓 جرّب قضية جاهزة</button></div>'
+          + (list.length ? '<p class="gm-stage" style="margin:16px 2px 6px;font-weight:800;color:var(--gold)">قضاياي المحفوظة</p>' + list.map(function(c){
+              return '<div class="fun-result" style="margin-top:8px;display:flex;align-items:center;gap:8px"><div style="flex:1;min-width:0"><div style="font-weight:700">' + esc(c.title) + '</div><div class="hint" style="margin:2px 0 0">' + esc(typeName(c.type)) + ' · ' + new Date(c.ts).toLocaleDateString('ar') + '</div></div>'
+                + '<button type="button" class="btn btn-ghost" data-open="' + esc(c.id) + '">فتح</button><button type="button" class="btn btn-ghost" data-del="' + esc(c.id) + '">🗑</button></div>'; }).join('') : '');
+        q(root, '#dtNew').addEventListener('click', function(){ S = blank(); conv = []; form(); });
+        q(root, '#dtSample').addEventListener('click', function(){ S = JSON.parse(JSON.stringify(SAMPLE)); S.id = ''; S.ai = ''; conv = []; form(); });
+        root.querySelectorAll('[data-open]').forEach(function(b){ b.addEventListener('click', function(){ const c = cases().filter(function(x){ return x.id === b.dataset.open; })[0]; if(c){ S = JSON.parse(JSON.stringify(c)); conv = []; form(); } }); });
+        root.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click', function(){ saveMiscSetting('detectiveCases', cases().filter(function(x){ return x.id !== b.dataset.del; })); home(); }); });
+      }
+      function form(){
+        root.innerHTML = '<div class="field"><label>اسم القضية (اختياري)</label><input id="dtTitle" value="' + esc(S.title) + '" placeholder="مثال: سرقة المحل التجاري"></div>'
+          + '<div class="field"><label>نوع القضية</label><select id="dtType">' + TYPES.map(function(t){ return '<option value="' + t[0] + '"' + (S.type === t[0] ? ' selected' : '') + '>' + t[1] + '</option>'; }).join('') + '</select></div>'
+          + '<div class="field"><label>ماذا حدث؟ (الزمان والمكان والوقائع)</label><textarea id="dtDesc" placeholder="اكتب ملخص الواقعة...">' + esc(S.desc) + '</textarea></div>'
+          + '<div class="field"><label>الأدلة والمعلومات — اكتب كل دليل في سطر</label><textarea id="dtClues" style="min-height:170px" placeholder="مثال:&#10;بصمات فلان على مقبض الباب&#10;كاميرا المدخل سجلت دخول شخص الساعة 10:40 مساءً&#10;الشاهد أفاد أنه سمع صراخًا">' + esc(S.clues) + '</textarea>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">' + CHIPS.map(function(c){ return '<button type="button" class="btn btn-ghost" data-chip="' + esc(c) + '" style="padding:5px 10px;font-size:12px">+ ' + esc(c) + '</button>'; }).join('') + '</div></div>'
+          + '<div class="field"><label>المشتبه بهم (الاسم مع الدور، ثم ما تعرفه عنه: دافعه، حجته، علاقته بالأدلة)</label><div id="dtSus"></div><button type="button" class="btn btn-ghost" id="dtAdd">➕ إضافة مشتبه</button><span class="hint">اترك القائمة فارغة ليقترح لك المحقق ملفات مشتبهين محتملين.</span></div>'
+          + '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="dtUseAI" checked style="width:auto"> استخدم الذكاء الاصطناعي للتحليل المعمّق (يحتاج إنترنت)</label>'
+          + '<div class="modal-actions"><button type="button" class="btn btn-primary" id="dtGo">🔍 حلّل القضية</button><button type="button" class="btn btn-ghost" id="dtSave">💾 حفظ</button><button type="button" class="btn btn-ghost" id="dtHome">القائمة</button></div>';
+        paintSus();
+        const sync = function(){ S.title = q(root, '#dtTitle').value; S.type = q(root, '#dtType').value; S.desc = q(root, '#dtDesc').value; S.clues = q(root, '#dtClues').value; };
+        ['#dtTitle', '#dtType', '#dtDesc', '#dtClues'].forEach(function(id){ q(root, id).addEventListener('input', sync); q(root, id).addEventListener('change', sync); });
+        root.querySelectorAll('[data-chip]').forEach(function(b){ b.addEventListener('click', function(){ const ta = q(root, '#dtClues'); ta.value = (ta.value.trim() ? ta.value.replace(/\s+$/, '') + '\n' : '') + b.dataset.chip + ': '; ta.focus(); sync(); }); });
+        q(root, '#dtAdd').addEventListener('click', function(){ sync(); S.suspects.push({ n:'', t:'' }); paintSus(); });
+        q(root, '#dtSave').addEventListener('click', function(){ sync(); saveCase(); });
+        q(root, '#dtHome').addEventListener('click', function(){ sync(); home(); });
+        q(root, '#dtGo').addEventListener('click', function(){
+          sync();
+          if(!S.clues.trim() && !S.desc.trim()){ note('اكتب وصف الواقعة أو بعض الأدلة أولًا'); return; }
+          S.ai = ''; conv = []; result(q(root, '#dtUseAI').checked);
+        });
+      }
+      function paintSus(){
+        const box = q(root, '#dtSus');
+        box.innerHTML = S.suspects.map(function(s, i){
+          return '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:10px;margin-bottom:8px"><div style="display:flex;gap:6px;margin-bottom:6px"><input data-sn="' + i + '" value="' + esc(s.n) + '" placeholder="الاسم (الدور) مثال: سامر (المحاسب)"><button type="button" class="btn btn-ghost" data-sd="' + i + '" style="flex:0 0 auto">🗑</button></div>'
+            + '<textarea data-st="' + i + '" style="min-height:70px" placeholder="ما تعرفه عنه: دافع، فرصة، حجة غياب، علاقته بالأدلة...">' + esc(s.t) + '</textarea></div>';
+        }).join('');
+        box.querySelectorAll('[data-sn]').forEach(function(el){ el.addEventListener('input', function(){ S.suspects[+el.dataset.sn].n = el.value; }); });
+        box.querySelectorAll('[data-st]').forEach(function(el){ el.addEventListener('input', function(){ S.suspects[+el.dataset.st].t = el.value; }); });
+        box.querySelectorAll('[data-sd]').forEach(function(el){ el.addEventListener('click', function(){ S.suspects.splice(+el.dataset.sd, 1); if(!S.suspects.length) S.suspects.push({ n:'', t:'' }); paintSus(); }); });
+      }
+      function result(useAI){
+        const R = analyze(S), top = R.hyps[0];
+        let h = '<div class="fun-result" style="margin-top:0"><p style="font-weight:800;margin:0 0 4px;font-size:16px">🕵️ ' + esc(S.title || typeName(S.type)) + '</p><p class="hint" style="margin:0">' + esc(typeName(S.type)) + ' · ' + R.lines.length + ' دليل · ' + R.sus.length + ' مشتبه</p></div>';
+        if(top){
+          h += '<div class="fun-result" style="text-align:center"><p class="hint" style="margin:0">الاحتمال الأرجح حاليًا</p><p style="font-size:20px;font-weight:800;margin:6px 0;color:var(--gold)">' + esc(top.title) + '</p><p style="font-size:26px;font-weight:800;margin:0">' + top.p + '٪</p>'
+            + '<p class="hint" style="margin:6px 0 0;line-height:1.8">' + (top.p >= 50 ? 'ترجيح واضح لكنه ليس إدانة: يلزم إثبات قضائي.' : 'لا يوجد ترجيح حاسم بعد؛ اجمع مزيدًا من الأدلة.') + '</p></div>';
+        }
+        h += sec('🎯 الفرضيات والخيارات المرتبة', R.hyps.map(function(x, i){
+          return '<div style="border-bottom:1px solid var(--border);padding:8px 0"><div style="display:flex;justify-content:space-between;gap:8px"><b>' + (i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.') + ' ' + esc(x.title) + '</b><b style="color:var(--gold)">' + x.p + '٪</b></div>' + bar(x.p)
+            + (x.why.length ? '<div class="hint" style="margin:4px 0 0">ما يدعمها:</div>' + ul(x.why.map(esc)) : '')
+            + (x.weak.length ? '<div class="hint" style="margin:4px 0 0">ما يضعفها:</div>' + ul(x.weak.map(esc)) : '')
+            + '<div class="hint" style="margin:4px 0 0">اختبار حاسم:</div>' + ul(x.tests.map(esc)) + '</div>';
+        }).join('') + '<p class="hint" style="margin:8px 0 0">النسب تقدير آلي مبني على الكلمات التي كتبتها، وليست حكمًا. كلما كانت الأدلة والملاحظات أدق كان الترجيح أدق.</p>', true);
+        h += sec('🧾 تحليل الأدلة (' + R.evid.length + ')', R.evid.length ? R.evid.map(function(e){
+          const inf = CAT_INFO[e.main];
+          return '<div style="border-bottom:1px solid var(--border);padding:8px 0"><div style="font-size:13.5px;font-weight:700;line-height:1.8">' + esc(e.line) + '</div><div class="hint" style="margin:3px 0">' + inf[0] + ' ' + inf[1] + (e.neg ? ' · دليل سلبي (غياب شيء)' : '') + ' · القوة: ' + STR[e.strength] + '</div><div class="hint" style="margin:0;line-height:1.8">' + inf[2] + '</div></div>'; }).join('') : '<p class="hint">لا توجد أدلة مكتوبة.</p>', false);
+        h += sec('⚠️ التعارضات والثغرات', R.con.length ? ul(R.con.map(esc)) : '<p class="hint">لم تُرصد تعارضات واضحة بين المدخلات. أضف مزيدًا من التفاصيل لنتيجة أدق.</p>', R.con.length > 0);
+        h += sec('🕐 الخط الزمني', R.tl.length ? '<div>' + R.tl.map(function(r){ return '<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)"><b style="direction:ltr;color:var(--gold);flex:0 0 52px">' + r.label + '</b><span style="font-size:13px;line-height:1.8">' + esc(r.text) + '</span></div>'; }).join('') + '</div>' : '<p class="hint">لم أجد أوقاتًا في النص. اكتب الأوقات بصيغة مثل 10:40 مساءً أو الساعة 9 ليلًا لأرتبها لك.</p>', false);
+        h += sec('🔎 ما ينقص القضية وخطوات التحقيق', (R.gaps.length ? '<p style="font-weight:700;margin:0">نواقص:</p>' + ul(R.gaps.map(esc)) : '') + '<p style="font-weight:700;margin:8px 0 0">الخطوات المقترحة:</p>' + ul(R.steps.map(esc)), false);
+        h += sec('❓ أسئلة الاستجواب', R.ques.length ? R.ques.map(function(x){ return '<p style="font-weight:700;margin:8px 0 0">' + esc(x.name) + '</p>' + ul(x.list.map(esc)); }).join('') : '<p class="hint">أضف مشتبهًا لتظهر أسئلة مخصصة له. أسئلة عامة: من رأى ماذا؟ متى بالضبط؟ من كان يستطيع الوصول؟ من المستفيد؟</p>', false);
+        h += '<div class="fun-result" id="dtAIWrap"><p style="font-weight:800;margin:0 0 6px">🌐 تحليل الذكاء الاصطناعي</p><div id="dtAI"></div></div>';
+        h += '<div id="dtFollow"></div><div class="field" style="margin-top:12px"><label>أضف دليلًا جديدًا أو اسأل المحقق (يحتاج إنترنت)</label><textarea id="dtQ" style="min-height:70px" placeholder="مثال: تبيّن أن الحارس اشترى هاتفًا جديدًا بعد الحادثة، كيف يتغيّر ترجيحك؟"></textarea><div class="modal-actions"><button type="button" class="btn btn-primary" id="dtAsk">إرسال</button></div></div>';
+        h += '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="dtEdit">✏️ تعديل القضية</button><button type="button" class="btn btn-ghost" id="dtCopy">📋 نسخ التقرير</button><button type="button" class="btn btn-ghost" id="dtShare">📤 مشاركة</button><button type="button" class="btn btn-ghost" id="dtSv">💾 حفظ</button></div>'
+          + '<p class="hint" style="text-align:center;margin:10px 0 0;line-height:1.8">هذا تحليل استرشادي للتعلم والمساعدة، وليس حكمًا قضائيًا. الاتهام الحقيقي يحتاج جهات مختصة وأدلة مثبتة، والأصل براءة المشتبه به.</p>';
+        root.innerHTML = h; const m = root.closest('.modal'); if(m) m.scrollTop = 0;
+        q(root, '#dtEdit').addEventListener('click', form);
+        q(root, '#dtCopy').addEventListener('click', function(){ F.copy(reportText(S, R)); });
+        q(root, '#dtShare').addEventListener('click', function(){ F.share(reportText(S, R)); });
+        q(root, '#dtSv').addEventListener('click', saveCase);
+        function paintAI(){
+          const box = q(root, '#dtAI'); if(!box) return;
+          box.innerHTML = fmtAI(S.ai) + '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="dtRe">🔄 إعادة التحليل</button></div>';
+          q(root, '#dtRe').addEventListener('click', function(){ S.ai = ''; runAI(); });
+        }
+        function failMsg(off){
+          const box = q(root, '#dtAI'); if(!box) return;
+          box.innerHTML = '<p class="hint" style="line-height:1.9;margin:0">' + (off ? '📴 لا يوجد اتصال بالإنترنت الآن، والتحليل المحلي أعلاه يعمل بالكامل بدونه.' : '⚠️ تعذّر الوصول للذكاء الاصطناعي الآن. التحليل المحلي أعلاه يبقى متاحًا.') + '</p><div class="modal-actions"><button type="button" class="btn btn-ghost" id="dtRe">🔄 حاول مجددًا</button></div>';
+          q(root, '#dtRe').addEventListener('click', runAI);
+        }
+        async function runAI(){
+          const box = q(root, '#dtAI'); if(!box) return;
+          if(S.ai){ paintAI(); return; }
+          if(!F.ai.online()){ failMsg(true); return; }
+          box.innerHTML = '<p class="hint" style="margin:0">⏳ المحقق يدرس الأدلة ويقارن الفرضيات...</p>';
+          const user = { role:'user', content:aiPrompt(S, R) };
+          try{
+            const txt = await F.ai.ask([user], SYS);
+            S.ai = txt; conv = [user, { role:'assistant', content:txt }]; paintAI();
+          }catch(e){ failMsg(!F.ai.online()); }
+        }
+        q(root, '#dtAsk').addEventListener('click', async function(){
+          const inp = q(root, '#dtQ'), v = inp.value.trim(); if(!v) return;
+          if(!F.ai.online()){ note('المتابعة تحتاج اتصالًا بالإنترنت'); return; }
+          if(!conv.length) conv = [{ role:'user', content:aiPrompt(S, R) }, { role:'assistant', content:S.ai || 'تم التحليل الأولي محليًا.' }];
+          const fw = q(root, '#dtFollow'), id = 'f' + Date.now();
+          fw.insertAdjacentHTML('beforeend', '<div class="fun-result"><p style="font-weight:700;margin:0 0 6px">🗣️ ' + esc(v) + '</p><div id="' + id + '"><p class="hint" style="margin:0">⏳ ...</p></div></div>');
+          inp.value = ''; conv.push({ role:'user', content:v });
+          try{
+            const txt = await F.ai.ask(conv.slice(-8), SYS + ' أجب عن السؤال الأخير بإيجاز مع بيان أثر المعلومة الجديدة على الفرضيات ونسبها.');
+            conv.push({ role:'assistant', content:txt }); const el = q(root, '#' + id); if(el) el.innerHTML = fmtAI(txt);
+          }catch(e){ const el = q(root, '#' + id); if(el) el.innerHTML = '<p class="hint" style="margin:0">تعذّر الحصول على رد. حاول لاحقًا.</p>'; conv.pop(); }
+        });
+        if(useAI) runAI(); else { const box = q(root, '#dtAI'); box.innerHTML = '<p class="hint" style="margin:0">لم يُطلب التحليل بالذكاء الاصطناعي.</p><div class="modal-actions"><button type="button" class="btn btn-ghost" id="dtRe">🌐 تحليل بالذكاء الاصطناعي</button></div>'; q(root, '#dtRe').addEventListener('click', runAI); }
+      }
+      home();
     }});
 })();
+
+/* ================= مولّد الأقوال والعبارات القوية ================= */
+(function(){
+  'use strict';
+  const F = window.FUN, esc = F.esc, rnd = F.util.rnd;
+  const note = function(m){ try{ if(typeof toast === 'function') toast(m); }catch(e){} };
+
+  const CATS = [
+    ['kib','كبرياء','👑'], ['fakhr','فخر','🦅'], ['izza','عزّة نفس','🛡️'], ['quwwa','قوة وثبات','🦁'], ['haiba','هيبة وشموخ','🏔️'],
+    ['tahaddi','تحدٍّ','⚔️'], ['hasid','ردّ الحاسدين','🔥'], ['hikma','حكمة وصبر','⏳'], ['wafa','وفاء وأصالة','🤝'], ['tumuh','طموح ونجاح','🚀']
+  ];
+  const CN = {}; CATS.forEach(function(c){ CN[c[0]] = c[1]; });
+
+  /* ---------- بنك العبارات: جمل أصلية (c) + خواتيم قوية (p) لكل قسم ---------- */
+  const G = {
+    kib:{ c:[
+      'لا أنحني إلا لمن خلقني، ولا أنكسر أمام من خُلق مثلي',
+      'كبريائي ليس غرورًا، بل حدٌّ أضعه بيني وبين من لا يُحسن تقدير قدري',
+      'من لا يرى قيمتي من المرة الأولى، لن أتعب نفسي في إقناعه بها',
+      'أمنح الودّ لمن يستحقه، وأمنح الصمت لمن لا يستحقه',
+      'أرحل بهدوء، ولا أعود ولو ناداني الشوق ألف مرة',
+      'لا أُلاحق أحدًا؛ من أرادني عرف الطريق إليّ',
+      'أنسحب حين أُعامَل كخيارٍ ثانٍ، فأنا لا أقبل إلا أن أكون الأول',
+      'رأسي مرفوع لأن الله لم يخلقه ليُطأطأ لغيره',
+      'لي كرامةٌ لا تُشترى، وقلبٌ إذا أُغلق لم يفتحه اعتذار',
+      'أغفر بصدري، لكني لا أنسى بعقلي',
+      'لا أتوسّل الاهتمام؛ فمن يحبني يأتيني به دون طلب',
+      'صمتي ليس ضعفًا، إنه ترفّعٌ عن الحديث معك',
+      'لا أخسر حين يرحل أحدهم، أنا فقط أعرف من كان يستحق البقاء',
+      'كرامتي أغلى عليّ من كل من يظن أنه لا يُستغنى عنه',
+      'من جعل كرامتي ثمنًا لصحبته فقد خسر الصفقة قبل أن تبدأ',
+      'لا أُذلّ نفسي لأحتفظ بأحد، فكل شيء يهون إلا كرامتي'
+    ], p:[
+      'وهذا ما لا يفهمه إلا من عاش بكرامة',
+      'ومن لم يعجبه ذلك فالباب واسع',
+      'فلا تُتعب نفسك بالمحاولة',
+      'هكذا خُلقت، وهكذا سأبقى',
+      'والأيام كفيلة بأن تُعرّفك من أنا',
+      'تلك قاعدتي، ولا استثناء فيها',
+      'وما ضاع مني شيء، بل نجوت',
+      'فاحتفظ بأعذارك، فأنا لا أشتريها'
+    ]},
+    fakhr:{ c:[
+      'أفخر بانتمائي لأرضٍ أنجبت الرجال وربّت الأبطال',
+      'اسمي لا أحتاج أن أُعرّف به؛ سيرتي تسبقني إلى كل مجلس',
+      'ما بلغتُه لم يُهدَ إليّ، بل صنعتُه بعرق جبيني وسهر لياليّ',
+      'أفخر بجذوري التي لا تهزّها الرياح، وبفرعي الذي طال حتى لامس السماء',
+      'مجدي لم أرثه ولم أشتره، بنيتُ كل حجرٍ فيه بيدي',
+      'فخري ليس أنني وُلدتُ في بيت عزّ، بل أنني صنعتُ لنفسي العزّ',
+      'أحمل اسم أهلي على كتفي كوسام، ولا أسمح لأحد أن يُنقص منه حرفًا',
+      'أنا امتداد لأجدادٍ كتبوا التاريخ، ولن أكون السطر الذي يُمحى منه',
+      'أرفع رأسي حين أذكر أصلي، وأرفعه أكثر حين أذكر ما صنعت',
+      'نشأتُ على أن الشرف أغلى من الذهب، وما زلتُ عند وصيّتهم',
+      'تاريخنا لا يُروى بالكلام، بل تنطق به الأرض التي وقفنا عليها',
+      'لا أنسب نجاحي للحظ؛ أنسبه لتعبٍ لم يشهده أحد',
+      'كل ندبة في سيرتي وسامٌ لم يمنحه لي أحد، صنعتُه بصبري',
+      'أفخر بأني لم أكسب شيئًا على حساب كرامتي أو كرامة غيري',
+      'حيث أمشي أترك أثرًا لا تمحوه السنون',
+      'ما نحن إلا ثمرة أجدادٍ زرعوا فأحسنوا، فلا نخذلهم بالحصاد'
+    ], p:[
+      'ومن أراد الحقيقة فليسأل الميدان',
+      'والفخر لمن يصنع لا لمن يدّعي',
+      'وهذا يكفي ليعلم الجميع من نكون',
+      'شهد بذلك الزمان وأهله',
+      'ومن جهل ذلك فليقرأ التاريخ',
+      'هذه هويتي، ولن أعتذر عنها',
+      'وسنورّثه لأبنائنا كما ورثناه',
+      'فلينظر الناس ما بلغنا، ثم ليحكموا'
+    ]},
+    izza:{ c:[
+      'أفضّل أن أعيش قليلًا بكرامة على أن أعيش طويلًا بمذلّة',
+      'لا أقبل من الدنيا ما يأخذ من كرامتي أكثر مما يعطي',
+      'العزّة لا تُطلب من الناس، بل تُصنع من الداخل',
+      'لن أشتري راحتي بثمن وقاري',
+      'ما لا يُنال إلا بإراقة ماء الوجه فلا خير فيه',
+      'أجوع وأصبر، ولا أمدّ يدًا تُطأطئ رأسي',
+      'لا أقف على باب من لا يقف لي وقت الشدّة',
+      'أحفظ نفسي من كل موقفٍ ينقص من قدري، ولو كان فيه نفع',
+      'من رضي بالإهانة مرة، دُعي إليها كل مرة',
+      'لا أتنازل عن حقي، ولا أتسوّل ما ليس لي',
+      'الفقر لا يُذلّ، وإنما يُذلّ من باع نفسه للحاجة',
+      'كرامتي رأس مالي الوحيد، ولن أُفلس منه أبدًا',
+      'أُعطي بلا مِنّة، وآخذ بلا ذلّة',
+      'أُكرم من يُكرمني، وأتركه إن أهانني ولو كان أقرب الناس',
+      'خيرٌ لي أن أُحرم مما أريد من أن أُذلّ في سبيله',
+      'عزّة النفس أن تستغني عن كل شيء إلا عن مبادئك'
+    ], p:[
+      'فالكرامة لا تُساوَم',
+      'وهذا الحدّ الذي لا أتجاوزه',
+      'ومن ضحّى بعزّته لم يبقَ له ما يخسره',
+      'فليبقَ الجاه لأهله، وتبقَ العزّة لي',
+      'تلك وصيّة نفسي لي',
+      'والغنى الحقيقي غنى النفس',
+      'ولو خُيّرتُ لاخترتُ الكرامة',
+      'وما دون الكرامة لا يُسمّى حياة'
+    ]},
+    quwwa:{ c:[
+      'لم تكسرني العواصف، بل علّمتني كيف أثبت',
+      'أقوى ما فيّ هو ما حاولوا كسره',
+      'الجبال لا تحتاج أن تصرخ لتُثبت أنها جبال',
+      'سقطتُ مرارًا، وفي كل مرة نهضتُ أصلب مما كنت',
+      'الألم صقلني، فخرجتُ من النار أشدّ لمعانًا',
+      'لا أخاف الظلام؛ فقد عشتُ فيه طويلًا حتى صرتُ أرى بنوري',
+      'قوّتي ليست في ارتفاع صوتي، بل في هدوئي حين يهتزّ الجميع',
+      'من نجا مما نجوتُ منه لا يخشى شيئًا بعده',
+      'أثبت في الشدّة كما تثبت الجذور تحت العاصفة',
+      'كلما اشتدّ عليّ الضغط خرج مني ما لا يعرفه عني أحد',
+      'الشدائد لا تصنعني، إنما تكشف قوةً لم أعرف أني أملكها',
+      'أتألم بصمت، وأقف بشموخ',
+      'لا يُقاس الإنسان بما يملك، بل بما يتحمّل ويثبت عليه',
+      'الطريق وعر، لكن قدميّ تعوّدتا على الصخر',
+      'حين يظنون أنك انتهيت، تكون قد بدأت',
+      'لا شيء يوقفني إلا أمر الله، وما دون ذلك فأنا ماضٍ'
+    ], p:[
+      'والقادم أعظم',
+      'فمن أراد النيل مني فليجهّز لمعركة طويلة',
+      'ولن يرى مني إلا الثبات',
+      'هكذا تُصنع الجبال',
+      'والنهاية لمن صبر وثبت',
+      'وما زلتُ في الميدان',
+      'وهذا ما لا يعلمه الأعداء',
+      'فليجرّب من شاء'
+    ]},
+    haiba:{ c:[
+      'الهيبة لا تُفرض بالصراخ، بل بالحضور',
+      'حين أدخل مكانًا لا أحتاج أن أتكلم ليعرفوا أنني وصلت',
+      'ليست كل الهيبة في الصوت العالي، فأحيانًا تكفي نظرةٌ صامتة',
+      'أمشي كمن يعلم أن الأرض تعرف وقع خطاه',
+      'من عرف قدر نفسه احترمه الناس دون أن يطلب',
+      'أقلّ الكلام، وأثقل الوزن',
+      'الوقار تاجٌ لا يُشترى، ومن لبسه لم يحتج إلى غيره',
+      'أعلى من أن أردّ على الصغائر، وأكبر من أن أنشغل بالضجيج',
+      'الشموخ أن ترفع رأسك حين يُطأطئ الجميع',
+      'حضوري لا يحتاج إلى تعريف، وصمتي لا يحتاج إلى ترجمة',
+      'لا يعلو مقامي بالتفاخر، بل بهدوء من يعرف ما يملك',
+      'الأسد لا يلتفت إلى ما يُنبح خلفه',
+      'الحضور الحقيقي يُرى ولا يُقال',
+      'أنا لا أُقدّم نفسي؛ سيرتي تفعل ذلك قبلي',
+      'من هابه الناس لم يُخِفْهم، بل احترم نفسه فاحترموه',
+      'تعلّمتُ أن الصمت في موضعه أهيب من ألف خطبة'
+    ], p:[
+      'فالهيبة صناعة أخلاق لا صناعة صوت',
+      'وهذا كل ما في الأمر',
+      'هكذا تُبنى المهابة',
+      'ومن فهم ذلك فقد فهم كل شيء',
+      'ولا حاجة لمزيدٍ من الشرح',
+      'والعيون تعرف من تحترم',
+      'فالقمم لا تتحدث، بل تُرى من بعيد',
+      'ويبقى الأثر أبلغ من الكلام'
+    ]},
+    tahaddi:{ c:[
+      'قالوا: مستحيل؛ فقلتُ: انظروا إليّ',
+      'كل عقبةٍ في طريقي ليست حاجزًا، بل درجة أرتقيها',
+      'إن وقفتَ في طريقي فاعلم أنك اخترتَ أصعب مواجهةٍ في حياتك',
+      'ما يُعجز الناس هو ما أبدأ به',
+      'لا أخشى المعارك، أخشى فقط أن أخرج من الحياة دون أن أخوض واحدةً تستحق',
+      'كلما قيل لي «لا تستطيع» ازددتُ إصرارًا على فعلها',
+      'الطريق صعب؟ جيد؛ فالسهل لا يصنع أحدًا',
+      'لا أعرف طريقًا للتراجع، فقد أحرقتُ خلفي كل الجسور',
+      'إن كانت الأبواب مغلقة فسأصنع بابًا',
+      'ضَعْ في طريقي ما شئت، فسأعبره أو أهدمه',
+      'أنتم تخافون من الفشل، وأنا أخاف ألّا أحاول',
+      'لا أنتظر الفرصة، أصنعها ثم أتحدّى الزمن أن يمنعني',
+      'من يراهن على سقوطي يراهن ضد نفسه',
+      'لن تُثنيني الصعاب؛ فقد خُلقتُ لها',
+      'اجعل التحدّي أكبر، فأنا أكبر منه',
+      'لا شيء أجمل من أن أُثبت خطأ من قال إنني لن أصل'
+    ], p:[
+      'وسترون بأعينكم',
+      'فليبدأ من أراد',
+      'والميدان بيننا',
+      'والجولة القادمة أنا لها',
+      'فمن يجرؤ؟',
+      'ولن أتراجع خطوة',
+      'والنتيجة ستجيب عني',
+      'هذه ليست كلمات، هذا وعد'
+    ]},
+    hasid:{ c:[
+      'من يحسدني يعترف، دون أن يدري، بأني أملك ما يتمنّاه',
+      'لا يُرمى بالحجارة إلا الشجرة المثمرة',
+      'كلماتكم عني ترفعني أكثر مما تُنزلني',
+      'أعدائي أكبر معجبيّ؛ فلا أحد يتعب في مراقبة من لا يستحق',
+      'تكلّموا عني كما شئتم، فسيرتي أبلغ منكم',
+      'لا أردّ على من لا يعرفني، فالحقيقة تتكفّل بالردّ',
+      'النجاح أعلى صوتٍ يردّ به المرء على من تربّصوا به',
+      'من ظنّ أن سقوطي يسعده فليعلم أنني سأنهض ليشقى بنهوضي',
+      'سلاحي في وجه الحاسدين: أن أزداد نجاحًا',
+      'أتجاهل الصغائر لأني مشغول بصنع ما لا تستطيعون صنعه',
+      'الغيرة من مقامي لا تُنقص منه شيئًا، بل تُثبته',
+      'لا يلزمني أن أُثبت لكم شيئًا؛ فالأيام ستفعل ذلك عني',
+      'تُخفون الحقد بابتسامة، وأنا أقرأ العيون قبل الألسنة',
+      'لا تُحرقني نار الحقد، فقد نشأتُ في وسط اللهب',
+      'حسبوا أن التراب قبري، فإذا هو الأرض التي أزهرتُ فيها',
+      'لن أنزل إلى مستواكم لأردّ؛ فمن كان في الأسفل لا يرى من هو في الأعلى'
+    ], p:[
+      'وعلى قدر نجاحك يكون حاسدوك',
+      'فكونوا كما شئتم، وسأبقى كما أنا',
+      'ومن كان مثلي لا يشغله النباح',
+      'والأيام بيني وبينكم',
+      'فاستمرّوا، فأنتم وقودي',
+      'وهذا حسبي',
+      'والحرب الحقيقية مع نفسي لا معكم',
+      'ومن أراد النيل من الشمس لن يصيب إلا عينيه'
+    ]},
+    hikma:{ c:[
+      'الصبر ليس ضعفًا، إنه قوّةٌ تنتظر وقتها',
+      'من لم يتعلّم من ألمه فألمه لم ينتهِ بعد',
+      'لا تُحاسب الناس على ما كنت تنتظره منهم، بل على ما قدّموه لك فعلًا',
+      'الأيام معلّمٌ قاسٍ، لكنّ دروسها لا تُنسى',
+      'أتعلّم من الصمت ما لا تعلّمني إياه الكلمات',
+      'الصبر على الطريق أقصر من الندم على تركه',
+      'لا أستعجل الأمور؛ فما كُتب لي سيأتيني ولو بعد حين',
+      'الحكيم لا يردّ على كل شيء، فبعض الأمور جوابها الصمت',
+      'حين تضيق بك الأرض تذكّر أن الفرج يولد من رحم الضيق',
+      'أتعلّم من كل أحدٍ شيئًا، حتى من الذين آذوني',
+      'الأيام كفيلة بأن تُري الناس معادنهم',
+      'لا تقلق مما لا تملك تغييره، وأتقن ما تملك',
+      'حُسن الظنّ بالله أن تنتظر الخير وأنت تعمل',
+      'الغضب يُنسي الحكمة، والهدوء يُعيدها',
+      'لا تُقدّم للناس أكثر مما يستحقون، ولا تنتظر منهم أكثر مما يقدرون',
+      'ما ضاع من صبر، وما خاب من ثبت'
+    ], p:[
+      'وتلك حكمة لا يبلغها إلا من ذاق',
+      'فتمهّل، فالأمور تنضج في أوقاتها',
+      'والأيام خير معلّم',
+      'ومن يتأنَّ يبلغ ما يريد',
+      'وهذا ما علّمتني إياه الحياة',
+      'فاصبر، فإن بعد الليل فجرًا',
+      'والحكيم من اتعظ بغيره',
+      'وما بعد الصبر إلا الفرج'
+    ]},
+    wafa:{ c:[
+      'الوفاء عملةٌ نادرة، ومن يملكها غنيٌّ بين الفقراء',
+      'أصلي لا يتغيّر بتغيّر الظروف',
+      'من وقف معي في ضيقي لن أنساه في سعتي',
+      'الأصيل لا يبيع من صحبه ولو عرضوا عليه الدنيا',
+      'الأوفياء قلّة، لكنّ الواحد منهم يعدل الدنيا',
+      'الوفاء لا يُقاس بطول العِشرة، بل بصدق الموقف',
+      'لا أنسى المعروف، ولا أنسى من نسيني حين احتجته',
+      'أنا كالنخلة: جذري في الأرض، وثمري لمن أحبّ',
+      'أحفظ الودّ ولو غاب أهله',
+      'إن أحببتُ وفيت، وإن وعدتُ أنجزت، وإن ائتُمنتُ حفظت',
+      'لا يتلوّن أصلي بألوان المصالح',
+      'عهدي ثابت وإن تغيّر الزمان',
+      'ما بُني على الصدق لا يهدمه الغياب',
+      'من خان مرة فقد ضيّع كل ما بناه',
+      'المعادن لا تُعرف بالكلام، بل بالمواقف',
+      'أُوفي لمن وفّى لي، ولا أردّ الغدر بمثله بل بالبُعد'
+    ], p:[
+      'فالوفاء من شيم الكرام',
+      'وهكذا تُعرف الأصول',
+      'وذلك عهدي',
+      'وما أندر هذا في زماننا',
+      'والأصيل يبقى أصيلًا',
+      'ومن خان فقد سقط من عيني',
+      'وهذا ما ورثته عن أهلي',
+      'والمعروف لا يضيع عند من يعرف'
+    ]},
+    tumuh:{ c:[
+      'أحلامي أكبر من الأماكن التي وُلدتُ فيها',
+      'لا أطلب القمة لأرى الناس من فوق، بل لأرى أبعد',
+      'كل يوم أتقدّم خطوة، ولو صغيرة، ولو وحدي',
+      'أعمل في الظلّ حتى يتكلّم النجاح عني',
+      'لا حدود لمن كسر حدود عقله',
+      'الطموح لا يعرف كلمة «كفى»',
+      'أضع هدفي نصب عيني وأمضي كأن لا شيء غيره في الدنيا',
+      'الناجحون لا ينتظرون الفرصة، يصنعونها',
+      'لن أرضى بأقلّ مما أستحق، ولن أستحق أقلّ مما أسعى إليه',
+      'أبني مجدي بالليل حين ينام الآخرون',
+      'كل فشلٍ أراه درجةً في سُلّم النجاح',
+      'لستُ في سباق مع أحد، أنا في سباق مع نفسي بالأمس',
+      'أحلامي لا تنام، وعزيمتي لا تكلّ',
+      'الوصول للقمة رحلة، وأنا ماضٍ فيها',
+      'سأصل ولو تأخّرت، فالطريق لا يخذل من لا يتوقف',
+      'لا أجعل الظروف عذرًا، بل أجعلها دافعًا'
+    ], p:[
+      'والقمة تنتظرني',
+      'ومن ثبت وصل',
+      'وغدًا سترون الثمرة',
+      'وقلبي لا يعرف اليأس',
+      'ومن جدّ وجد',
+      'فليكن ما يكون، وأنا سائر',
+      'والنجاح موعدنا القريب',
+      'هذا وعدي لنفسي'
+    ]}
+  };
+
+  /* ---------- أشعار كلاسيكية (تراث عام): [الصدر، العجز، الشاعر، الأقسام] ---------- */
+  const P = [
+    ['على قدرِ أهلِ العزمِ تأتي العزائمُ','وتأتي على قدرِ الكرامِ المكارمُ','المتنبي','tumuh,quwwa'],
+    ['إذا غامرتَ في شرفٍ مرومٍ','فلا تقنعْ بما دونَ النجومِ','المتنبي','tumuh,tahaddi'],
+    ['وإذا كانتِ النفوسُ كبارًا','تعبتْ في مرادِها الأجسامُ','المتنبي','tumuh,kib'],
+    ['أنا الذي نظرَ الأعمى إلى أدبي','وأسمعتْ كلماتي مَن بهِ صَمَمُ','المتنبي','fakhr,kib'],
+    ['الخيلُ والليلُ والبيداءُ تعرفُني','والسيفُ والرمحُ والقرطاسُ والقلمُ','المتنبي','fakhr,haiba'],
+    ['إذا أنتَ أكرمتَ الكريمَ ملكتَه','وإنْ أنتَ أكرمتَ اللئيمَ تمرّدا','المتنبي','hikma,izza'],
+    ['ولم أرَ في عيوبِ الناسِ شيئًا','كنقصِ القادرينَ على التمامِ','المتنبي','hikma'],
+    ['إذا رأيتَ نيوبَ الليثِ بارزةً','فلا تظنّنَّ أنّ الليثَ يبتسمُ','المتنبي','haiba,quwwa'],
+    ['وتعظُمُ في عينِ الصغيرِ صغارُها','وتصغُرُ في عينِ العظيمِ العظائمُ','المتنبي','haiba,quwwa'],
+    ['إذا ترحّلتَ عن قومٍ وقد قدروا','ألّا تفارقَهم فالراحلونَ همُ','المتنبي','kib,izza'],
+    ['عِشْ عزيزًا أو مُتْ وأنتَ كريمٌ','بينَ طعنِ القنا وخفقِ البنودِ','المتنبي','izza,tahaddi'],
+    ['ومَن يَهُنْ يسهُلِ الهوانُ عليهِ','ما لجرحٍ بميّتٍ إيلامُ','المتنبي','izza,quwwa'],
+    ['وإذا أتتكَ مذمّتي من ناقصٍ','فهيَ الشهادةُ لي بأنّي كاملُ','المتنبي','hasid'],
+    ['أنامُ ملءَ جفوني عن شواردِها','ويسهرُ الخلقُ جرّاها ويختصمُ','المتنبي','kib,hasid,fakhr'],
+    ['وكم من عائبٍ قولًا صحيحًا','وآفتُه من الفهمِ السقيمِ','المتنبي','hasid,hikma'],
+    ['ما كلُّ ما يتمنّى المرءُ يدركُه','تجري الرياحُ بما لا تشتهي السفنُ','المتنبي','hikma'],
+    ['الرأيُ قبلَ شجاعةِ الشجعانِ','هو أوّلٌ وهيَ المحلُّ الثاني','المتنبي','hikma'],
+    ['لولا المشقّةُ سادَ الناسُ كلُّهمُ','الجودُ يُفقِرُ والإقدامُ قتّالُ','المتنبي','tumuh,hikma'],
+    ['لا تسقِني ماءَ الحياةِ بذلّةٍ','بل فاسقِني بالعزِّ كأسَ الحنظلِ','عنترة بن شداد','izza,kib'],
+    ['أثني عليَّ بما علمتِ فإنّني','سمحٌ مخالقتي إذا لم أُظلَمِ','عنترة بن شداد','fakhr,izza'],
+    ['فإذا ظُلمتُ فإنّ ظلمي باسلٌ','مُرٌّ مذاقتُه كطعمِ العلقمِ','عنترة بن شداد','hasid,quwwa'],
+    ['إنْ يلحقوا أكرُرْ وإنْ يستلحموا','أشدُدْ وإنْ يلفوا بضنكٍ أنزلِ','عنترة بن شداد','tahaddi,quwwa'],
+    ['وأغضُّ طرفي ما بدَتْ لي جارتي','حتى يواريَ جارتي مأواها','عنترة بن شداد','wafa,izza'],
+    ['ألا لا يجهلَنْ أحدٌ علينا','فنجهلَ فوقَ جهلِ الجاهلينا','عمرو بن كلثوم','tahaddi,haiba,hasid'],
+    ['إذا بلغَ الفطامَ لنا صبيٌّ','تخرُّ له الجبابرُ ساجدينا','عمرو بن كلثوم','fakhr'],
+    ['ونشربُ إنْ وردنا الماءَ صفوًا','ويشربُ غيرُنا كدِرًا وطينا','عمرو بن كلثوم','fakhr'],
+    ['إذا القومُ قالوا مَن فتًى خِلتُ أنّني','عُنيتُ فلم أكسلْ ولم أتبلّدِ','طرفة بن العبد','fakhr,tahaddi'],
+    ['ستُبدي لكَ الأيّامُ ما كنتَ جاهلًا','ويأتيكَ بالأخبارِ مَن لم تزوِّدِ','طرفة بن العبد','hikma'],
+    ['تسيلُ على حدِّ الظُّبا نفوسُنا','وليستْ على غيرِ الظُّبا تسيلُ','السموأل','fakhr,izza'],
+    ['سيذكرُني قومي إذا جدَّ جدُّهمْ','وفي الليلةِ الظلماءِ يُفتقدُ البدرُ','أبو فراس الحمداني','fakhr,wafa'],
+    ['ونحنُ أناسٌ لا توسّطَ بيننا','لنا الصدرُ دونَ العالمينَ أو القبرُ','أبو فراس الحمداني','kib,tahaddi'],
+    ['أراكَ عصيَّ الدمعِ شيمتُكَ الصبرُ','أما للهوى نهيٌ عليكَ ولا أمرُ','أبو فراس الحمداني','quwwa,kib'],
+    ['السيفُ أصدقُ أنباءً من الكتبِ','في حدِّه الحدُّ بينَ الجدِّ واللعبِ','أبو تمام','quwwa,tahaddi'],
+    ['أولئكَ آبائي فجئني بمثلِهمْ','إذا جمعتْنا يا جريرُ المجامعُ','الفرزدق','fakhr'],
+    ['ومَن لم يصانعْ في أمورٍ كثيرةٍ','يُضرَّسْ بأنيابٍ ويُوطأْ بمَنسِمِ','زهير بن أبي سلمى','hikma'],
+    ['ومَن يُوفِ لا يُذمَمْ ومَن يهدِ قلبَه','إلى مطمئنِّ البِرِّ لا يتجمجمِ','زهير بن أبي سلمى','wafa'],
+    ['وما نيلُ المطالبِ بالتمنّي','ولكنْ تؤخذُ الدنيا غِلابا','أحمد شوقي','tumuh,tahaddi'],
+    ['وللأوطانِ في دمِ كلِّ حرٍّ','يدٌ سلفتْ ودَينٌ مستحَقُّ','أحمد شوقي','wafa,fakhr'],
+    ['وطني لو شُغلتُ بالخُلدِ عنهُ','نازعتني إليهِ في الخُلدِ نفسي','أحمد شوقي','wafa,fakhr'],
+    ['أنا البحرُ في أحشائهِ الدُّرُّ كامنٌ','فهل ساءلوا الغوّاصَ عن صدفاتي','حافظ إبراهيم','fakhr,hasid'],
+    ['إذا الشعبُ يومًا أرادَ الحياةَ','فلا بدَّ أن يستجيبَ القدرُ','أبو القاسم الشابي','tumuh,quwwa,tahaddi'],
+    ['ومَن يتهيّبْ صعودَ الجبالِ','يَعِشْ أبدَ الدهرِ بينَ الحُفَرِ','أبو القاسم الشابي','tumuh,tahaddi'],
+    ['دعِ الأيّامَ تفعلُ ما تشاءُ','وطِبْ نفسًا إذا حكمَ القضاءُ','منسوب للإمام الشافعي','hikma'],
+    ['نعيبُ زماننا والعيبُ فينا','وما لزماننا عيبٌ سوانا','منسوب للإمام الشافعي','hikma']
+  ];
+
+  /* ---------- أقوال العظماء: [النص، القائل، الأقسام] ---------- */
+  const W = [
+    ['متى استعبدتم الناس وقد ولدتهم أمهاتهم أحرارًا؟','عمر بن الخطاب (منسوب)','izza,kib'],
+    ['نحن قومٌ أعزّنا الله بالإسلام، فمهما نطلب العزّة بغيره يُذلّنا الله','عمر بن الخطاب (منسوب)','izza'],
+    ['حاسبوا أنفسكم قبل أن تُحاسَبوا','عمر بن الخطاب (منسوب)','hikma'],
+    ['انظروا إلى من إذا حدّث صدق، وإذا ائتُمن أدّى','عمر بن الخطاب (منسوب)','wafa'],
+    ['قيمةُ كلِّ امرئٍ ما يُحسنه','علي بن أبي طالب','tumuh,hikma,fakhr'],
+    ['لا تكن عبدَ غيرك وقد جعلك الله حرًّا','علي بن أبي طالب (منسوب)','izza,kib'],
+    ['إذا قدرتَ على عدوّك فاجعل العفو عنه شكرًا للقدرة عليه','علي بن أبي طالب (منسوب)','hikma,haiba'],
+    ['الصبر صبران: صبرٌ على ما تكره، وصبرٌ عمّا تحب','علي بن أبي طالب (منسوب)','hikma'],
+    ['تكلّموا تُعرفوا، فإن المرء مخبوءٌ تحت لسانه','علي بن أبي طالب (منسوب)','haiba,hikma'],
+    ['لا غنى كالعقل، ولا فقر كالجهل','علي بن أبي طالب (منسوب)','hikma'],
+    ['أعجز الناس من عجز عن اكتساب الإخوان، وأعجز منه من ضيّع من ظفر به منهم','علي بن أبي طالب (منسوب)','wafa'],
+    ['هيهات منّا الذلّة','الحسين بن علي','izza,kib,tahaddi'],
+    ['لا والله لا أعطيكم بيدي إعطاء الذليل، ولا أفرّ فرار العبيد','الحسين بن علي (منسوب)','izza,kib'],
+    ['نحن لا نستسلم؛ ننتصر أو نموت','عمر المختار (منسوب)','tahaddi,izza,quwwa'],
+    ['أيها الناس، أين المفرّ؟ البحر من ورائكم والعدوّ أمامكم','طارق بن زياد (منسوب)','tahaddi,quwwa'],
+    ['المغلوب مولَعٌ أبدًا بالاقتداء بالغالب','ابن خلدون','hikma'],
+    ['المستحيل كلمة لا توجد إلا في قاموس الحمقى','نابليون بونابرت (منسوب)','tahaddi,tumuh'],
+    ['الشجاعة ليست غياب الخوف، بل الانتصار عليه','نيلسون مانديلا','quwwa'],
+    ['ما لا يقتلني يجعلني أقوى','فريدريك نيتشه','quwwa,hasid'],
+    ['من كان لديه «لماذا» يعيش من أجلها، احتمل أي «كيف»','فريدريك نيتشه','quwwa,hikma'],
+    ['لا تستسلم أبدًا، أبدًا، أبدًا','ونستون تشرشل','quwwa,tahaddi'],
+    ['الشيء الوحيد الذي علينا أن نخشاه هو الخوف نفسه','فرانكلين روزفلت','quwwa'],
+    ['الفضل ليس للناقد، بل للرجل الذي يقف فعلًا في الحلبة','ثيودور روزفلت','hasid,tahaddi'],
+    ['الخيال أهمّ من المعرفة','ألبرت أينشتاين','tumuh,hikma'],
+    ['ما يعترض الطريق يصبح هو الطريق','ماركوس أوريليوس','quwwa,hikma,tahaddi'],
+    ['أول الانتصارات وأفضلها أن تنتصر على نفسك','أفلاطون','quwwa,hikma'],
+    ['الظلم في أي مكان تهديدٌ للعدالة في كل مكان','مارتن لوثر كينغ','izza,hikma'],
+    ['ليس لأن الأشياء صعبة لا نجرؤ، بل لأننا لا نجرؤ فهي صعبة','سينيكا','tumuh,tahaddi'],
+    ['ليس ما يحدث لنا هو ما يُزعجنا، بل نظرتنا إلى ما يحدث','إبكتيتوس','hikma'],
+    ['من عرف الآخرين فهو حكيم، ومن عرف نفسه فهو مستنير','لاو تسو','hikma,haiba'],
+    ['الضعيف لا يستطيع أن يسامح؛ التسامح صفة الأقوياء','المهاتما غاندي','hikma,haiba,quwwa'],
+    ['لا يُقاوَم جيشٌ غازٍ، لكن لا تُقاوَم فكرةٌ حان وقتها','فيكتور هوغو (منسوب)','tumuh']
+  ];
+
+  /* ---------- أدوات مساعدة ---------- */
+  const decks = {};
+  function deck(key, list){ return decks[key] || (decks[key] = F.util.makeDeck(list)); }
+  function pickMany(list, key, n){
+    if(!list.length) return [];
+    const nx = deck(key, list), out = [], seen = new Set(), max = Math.min(n, list.length);
+    let guard = 0;
+    while(out.length < max && guard++ < 300){ const x = nx(); if(!seen.has(x)){ seen.add(x); out.push(x); } }
+    return out;
+  }
+  function endp(s){ return /[.؟!]$/.test(s) ? s : s + '.'; }
+  function genOne(cat, style){
+    const k = cat === 'all' ? CATS[rnd(0, CATS.length - 1)][0] : cat, g = G[k];
+    const c1 = deck('c:' + k, g.c)();
+    if(style === 'short') return endp(c1);
+    if(style === 'mid') return endp(c1) + '\n' + endp(deck('p:' + k, g.p)());
+    let c2 = deck('c:' + k, g.c)(), guard = 0;
+    while(c2 === c1 && guard++ < 6) c2 = deck('c:' + k, g.c)();
+    return endp(c1) + '\n' + endp(c2) + '\n' + endp(deck('p:' + k, g.p)());
+  }
+  function frame(t, f){
+    if(f === 'q') return '❝ ' + t + ' ❞';
+    if(f === 's') return '✦ ' + t + ' ✦';
+    if(f === 'c') return '👑 ' + t;
+    return t;
+  }
+  function inCat(cats, cat){ return cat === 'all' || cats.split(',').indexOf(cat) >= 0; }
+
+  /* ---------- الإنترنت: ويكي اقتباس + الذكاء الاصطناعي ---------- */
+  async function jget(url, ms){
+    const ctl = new AbortController(), tm = setTimeout(function(){ ctl.abort(); }, ms || 15000);
+    try{
+      const r = await fetch(url, { signal: ctl.signal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return await r.json();
+    } finally { clearTimeout(tm); }
+  }
+  function cleanWiki(s){
+    s = String(s);
+    for(let i = 0; i < 3; i++) s = s.replace(/\{\{[^{}]*\}\}/g, '');
+    return s.replace(/<ref[^>]*>[\s\S]*?<\/ref>/g, '').replace(/<ref[^>]*\/>/g, '')
+      .replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1')
+      .replace(/\[https?:\/\/\S+\s+([^\]]*)\]/g, '$1').replace(/\[https?:\/\/\S+\]/g, '')
+      .replace(/'{2,}/g, '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function parseWq(txt, title){
+    const res = []; let skip = false;
+    String(txt).split('\n').forEach(function(line){
+      const h = /^={2,}\s*(.*?)\s*=+\s*$/.exec(line);
+      if(h){ skip = /(وصلات|مصادر|انظر|مراجع|ملاحظ|روابط|هوامش|ويكي|تصنيف)/.test(h[1]); return; }
+      if(skip) return;
+      const m = /^\*(?!\*)\s*(.+)$/.exec(line); if(!m) return;
+      const s = cleanWiki(m[1]);
+      if(s.length < 14 || s.length > 260 || /^(انظر|راجع|ويكي|تصنيف)/.test(s)) return;
+      res.push({ t:s, a:title, s:'المصدر: ويكي اقتباس (CC BY-SA)' });
+    });
+    return res;
+  }
+  async function wikiquote(q){
+    const base = 'https://ar.wikiquote.org/w/api.php?format=json&origin=*&';
+    const s = await jget(base + 'action=query&list=search&srlimit=5&srsearch=' + encodeURIComponent(q));
+    const hits = (s && s.query && s.query.search) || [], out = [];
+    for(let i = 0; i < hits.length && i < 3 && out.length < 16; i++){
+      try{
+        const p = await jget(base + 'action=parse&prop=wikitext&redirects=1&page=' + encodeURIComponent(hits[i].title));
+        const wt = p && p.parse && p.parse.wikitext;
+        parseWq(wt && (wt['*'] || wt), hits[i].title).forEach(function(x){ out.push(x); });
+      }catch(e){}
+    }
+    const seen = new Set();
+    return out.filter(function(x){ if(seen.has(x.t)) return false; seen.add(x.t); return true; }).slice(0, 16);
+  }
+  const SYS_AI = 'أنت كاتب وشاعر عربي بليغ متخصص في العبارات القوية المؤثرة: الكبرياء، الفخر، عزّة النفس، الهيبة، التحدّي، الحكمة. تكتب بالفصحى الراقية الموجزة، وتلتزم بالصيغة المطلوبة تمامًا بلا مقدمات ولا شروحات ولا خاتمة.';
+  function aiPrompt(kind, cat, topic, person){
+    const cn = cat === 'all' ? 'الكبرياء والفخر والقوة وعزة النفس' : CN[cat];
+    const tp = topic ? ' وتدور حول: ' + topic : '';
+    if(kind === 'poem') return 'اكتب 6 أبيات شعرية عمودية أصلية بالفصحى في موضوع «' + cn + '»' + tp + '. كل بيت في سطر واحد، يفصل بين الشطرين الرمز | وبأسلوب فخم كأسلوب المتنبي دون نقل أي بيت موجود. لا شرح ولا ترقيم.';
+    if(kind === 'person') return 'اذكر 8 أقوال مشهورة موثّقة النسبة إلى «' + person + '»' + (topic ? ' تتعلق بـ: ' + topic : '') + '. اكتب كل قول في سطر بصيغة: القول | القائل. لا تخترع أقوالًا أبدًا؛ اكتب فقط ما تتأكد من نسبته، وإن لم تعرف فاكتب: لا أعلم.';
+    return 'اكتب 8 عبارات أصلية قوية عن «' + cn + '»' + tp + '. كل عبارة في سطر مستقل مرقّم، من سطر إلى ثلاثة أسطر، محكمة الصياغة، بلا تكرار للأفكار، ولا تنسبها لأحد.';
+  }
+  function parseAI(txt, kind, person){
+    const out = [];
+    String(txt).split('\n').forEach(function(l){
+      let s = l.replace(/^\s*(?:\d+\s*[.\-)\u066B]|[-*•])\s*/, '').replace(/^["«“]+|["»”]+$/g, '').replace(/\*\*/g, '').trim();
+      if(s.length < 8 || /^لا أعلم/.test(s)) return;
+      if(kind === 'poem'){
+        const pr = s.split('|').map(function(x){ return x.trim(); }).filter(Boolean);
+        out.push({ t: pr.length > 1 ? pr[0] + '\n' + pr[1] : s, a:'', s:'مُولَّد بالذكاء الاصطناعي' });
+      } else if(kind === 'person'){
+        const pr = s.split('|').map(function(x){ return x.trim(); });
+        out.push({ t: pr[0], a: pr[1] || person, s:'⚠️ الذكاء الاصطناعي قد يخطئ في النسبة — تحقّق من المصدر قبل الاستشهاد' });
+      } else out.push({ t:s, a:'', s:'مُولَّد بالذكاء الاصطناعي' });
+    });
+    return out.slice(0, 10);
+  }
+
+  /* ---------- بطاقة الصورة ---------- */
+  const THEMES = [
+    { a:'#0b0d12', b:'#1c2233', t:'#f6d77c', k:'#c9a24b' },
+    { a:'#0b1437', b:'#24408f', t:'#ffffff', k:'#f5c518' },
+    { a:'#04241b', b:'#0f6b50', t:'#fff8e1', k:'#e8d28a' },
+    { a:'#26080f', b:'#7b1e30', t:'#ffffff', k:'#f0c674' },
+    { a:'#0d0d0d', b:'#3a3a3a', t:'#ffffff', k:'#d9d9d9' },
+    { a:'#f7efd9', b:'#e2cf9d', t:'#33240c', k:'#8a5a1a' }
+  ];
+  const THEME_NAMES = ['ذهبي ملكي','أزرق ليلي','زمردي','عنابي','فحمي','ورقي'];
+  function rr(g, x, y, w, h, r){
+    g.beginPath(); g.moveTo(x + r, y); g.lineTo(x + w - r, y); g.quadraticCurveTo(x + w, y, x + w, y + r);
+    g.lineTo(x + w, y + h - r); g.quadraticCurveTo(x + w, y + h, x + w - r, y + h); g.lineTo(x + r, y + h);
+    g.quadraticCurveTo(x, y + h, x, y + h - r); g.lineTo(x, y + r); g.quadraticCurveTo(x, y, x + r, y); g.closePath();
+  }
+  function wrap(g, text, maxW){
+    const lines = [];
+    text.split('\n').forEach(function(par){
+      const words = par.split(/\s+/).filter(Boolean); let cur = '';
+      words.forEach(function(w){
+        const t = cur ? cur + ' ' + w : w;
+        if(g.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t;
+      });
+      if(cur) lines.push(cur);
+    });
+    return lines;
+  }
+  function drawCard(cv, it, th){
+    const W = 1080, H = 1350; cv.width = W; cv.height = H;
+    const g = cv.getContext('2d');
+    const gr = g.createLinearGradient(0, 0, W, H); gr.addColorStop(0, th.a); gr.addColorStop(1, th.b);
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    g.strokeStyle = th.k; g.globalAlpha = .85; g.lineWidth = 4; rr(g, 40, 40, W - 80, H - 80, 36); g.stroke();
+    g.globalAlpha = .4; g.lineWidth = 1.5; rr(g, 62, 62, W - 124, H - 124, 28); g.stroke(); g.globalAlpha = 1;
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.fillStyle = th.k; g.globalAlpha = .3; g.font = 'bold 260px Georgia, serif'; g.fillText('\u201C', W / 2, 330); g.globalAlpha = 1;
+    g.direction = 'rtl';
+    const fam = '"Noto Naskh Arabic","Noto Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif';
+    const maxW = W - 240, top = 380, maxH = H - 380 - (it.a ? 260 : 190);
+    let size = 76, lines = [], lh = 0;
+    for(; size >= 32; size -= 2){
+      g.font = '800 ' + size + 'px ' + fam; lines = wrap(g, it.t, maxW); lh = size * 1.75;
+      if(lines.length * lh <= maxH) break;
+    }
+    const total = lines.length * lh, y0 = top + Math.max(0, (maxH - total) / 2) + lh * .75;
+    g.fillStyle = th.t;
+    lines.forEach(function(l, i){ g.fillText(l, W / 2, y0 + i * lh); });
+    const yb = H - (it.a ? 210 : 150);
+    g.fillStyle = th.k; g.font = '700 46px ' + fam; g.fillText('✦', W / 2, yb);
+    if(it.a){ g.font = '700 44px ' + fam; g.fillText('— ' + it.a, W / 2, yb + 74); }
+  }
+
+  /* ---------- الأداة ---------- */
+  F.register({ id:'quotes', cat:'fun', name:'مولّد الأقوال والفخر', desc:'كبرياء وفخر وهيبة وتحدٍّ: عبارات وأشعار وأقوال عظماء — وبحث بالإنترنت وبطاقات صور', emoji:'👑', c1:'#b8892b', c2:'#5e3d0a',
+    render:function(root){
+      const old = document.querySelector('#funToolBackdrop .q-ov'); if(old) old.remove();
+      const box = document.createElement('div'); root.appendChild(box);
+      const S = { cat:'all', tab:'gen', style:'mid', frm:'q', aiKind:'phrase' };
+      let cur = [], net = [];
+      const favs = function(){ return (settings.quoteFavs || []).slice(); };
+      const key = function(it){ return it.t + '|' + (it.a || ''); };
+      const isFav = function(it){ return favs().some(function(x){ return key(x) === key(it); }); };
+      const fmt = function(it){ return it.g ? frame(it.t, S.frm) : it.t; };
+      const full = function(it){ return fmt(it) + (it.a ? '\n— ' + it.a : ''); };
+      const q = function(s){ return box.querySelector(s); };
+
+      function chip(label, on, attr){
+        return '<button type="button" ' + attr + ' style="flex-shrink:0;padding:7px 12px;border-radius:20px;font-size:12.5px;font-weight:700;white-space:nowrap;border:1px solid ' + (on ? 'var(--gold)' : 'var(--border)') + ';background:' + (on ? 'var(--gold)' : 'var(--surface-2)') + ';color:' + (on ? 'var(--on-gold)' : 'var(--text)') + '">' + label + '</button>';
+      }
+      function head(){
+        const tabs = [['gen','✨','عبارات'],['poem','📜','أشعار'],['wise','👑','العظماء'],['net','🌐','الإنترنت'],['fav','⭐','المفضلة (' + favs().length + ')']];
+        return '<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px">' + [['all','الكل','✨']].concat(CATS).map(function(c){ return chip(c[2] + ' ' + c[1], S.cat === c[0], 'data-cat="' + c[0] + '"'); }).join('') + '</div>'
+          + '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px">' + tabs.map(function(t){
+            const on = S.tab === t[0];
+            return '<button type="button" data-tab="' + t[0] + '" style="padding:8px 2px;border-radius:12px;font-size:11px;font-weight:700;line-height:1.4;border:1px solid ' + (on ? 'var(--gold)' : 'var(--border)') + ';background:' + (on ? 'var(--surface)' : 'var(--surface-2)') + ';color:' + (on ? 'var(--gold)' : 'var(--text-dim)') + '"><span style="font-size:17px;display:block">' + t[1] + '</span>' + t[2] + '</button>';
+          }).join('') + '</div>';
+      }
+      function cardHTML(it, i, src){
+        const bs = 'class="fun-copy" type="button"';
+        return '<div class="fun-item" data-i="' + i + '" data-src="' + src + '" style="flex-direction:column;align-items:stretch">'
+          + '<div style="white-space:pre-wrap;line-height:2.05;font-size:15.5px;font-weight:700">' + esc(fmt(it)) + '</div>'
+          + (it.a ? '<div style="margin-top:4px;color:var(--gold);font-weight:700;font-size:13px">— ' + esc(it.a) + '</div>' : '')
+          + (it.s ? '<div class="hint" style="margin:4px 0 0;line-height:1.7">' + esc(it.s) + '</div>' : '')
+          + '<div style="display:flex;gap:8px;margin-top:10px"><button ' + bs + ' data-act="copy" title="نسخ">' + svg('copy') + '</button><button ' + bs + ' data-act="fav" title="مفضلة" style="font-size:15px">' + (isFav(it) ? '⭐' : '☆') + '</button><button ' + bs + ' data-act="img" title="بطاقة صورة" style="font-size:15px">🖼️</button><button ' + bs + ' data-act="share" title="مشاركة" style="font-size:15px">📤</button></div></div>';
+      }
+      function listHTML(list, src){
+        return list.length ? '<div class="fun-list" style="margin-top:6px">' + list.map(function(it, i){ return cardHTML(it, i, src); }).join('') + '</div>' : '';
+      }
+      const styleRow = function(){
+        return '<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px"><span class="hint" style="margin:8px 0 0;flex-shrink:0">الطول:</span>'
+          + [['short','قصير'],['mid','متوسط'],['long','طويل']].map(function(x){ return chip(x[1], S.style === x[0], 'data-style="' + x[0] + '"'); }).join('')
+          + '<span class="hint" style="margin:8px 0 0 0;flex-shrink:0">الزخرفة:</span>'
+          + [['n','بلا'],['q','❝ ❞'],['s','✦'],['c','👑']].map(function(x){ return chip(x[1], S.frm === x[0], 'data-frm="' + x[0] + '"'); }).join('') + '</div>';
+      };
+
+      function makeGen(n){ const o = []; for(let i = 0; i < n; i++) o.push({ t:genOne(S.cat, S.style), a:'', g:true }); return o; }
+      function makePoems(n){
+        const l = P.filter(function(p){ return inCat(p[3], S.cat); });
+        return pickMany(l, 'P:' + S.cat, n).map(function(p){ return { t:p[0] + '\n' + p[1], a:p[2] }; });
+      }
+      function makeWise(n){
+        const l = W.filter(function(w){ return inCat(w[2], S.cat); });
+        return pickMany(l, 'W:' + S.cat, n).map(function(w){ return { t:w[0], a:w[1], s: /منسوب/.test(w[1]) ? 'يُروى عنه وتتفاوت الروايات في توثيقه' : '' }; });
+      }
+
+      function body(){
+        const b = q('#qBody');
+        if(S.tab === 'gen'){
+          b.innerHTML = styleRow() + '<div class="modal-actions" style="margin:0 0 6px"><button type="button" class="btn btn-primary" data-go="gen">✨ ولّد عبارات جديدة</button><button type="button" class="btn btn-ghost" data-go="more">➕ المزيد</button></div><div id="qList">' + listHTML(cur, 'l') + '</div>';
+        } else if(S.tab === 'poem' || S.tab === 'wise'){
+          b.innerHTML = '<div class="modal-actions" style="margin:0 0 6px"><button type="button" class="btn btn-primary" data-go="' + S.tab + '">' + (S.tab === 'poem' ? '📜 أبيات أخرى' : '👑 أقوال أخرى') + '</button></div>'
+            + (S.tab === 'wise' ? '<p class="hint" style="margin:6px 2px;line-height:1.8">الأقوال المنسوبة تُنقل كما اشتهرت؛ تحقّق منها قبل الاستشهاد الرسمي.</p>' : '')
+            + '<div id="qList">' + (cur.length ? listHTML(cur, 'l') : '<p class="hint" style="text-align:center;margin:18px 0">لا توجد نتائج لهذا القسم هنا. جرّب «الكل» أو تبويب العبارات أو الإنترنت.</p>') + '</div>';
+        } else if(S.tab === 'net'){
+          b.innerHTML = '<div class="fun-result" style="margin-top:4px"><p style="font-weight:800;margin:0 0 8px">🔎 ابحث في ويكي اقتباس</p><input id="qWq" placeholder="شخص أو موضوع: المتنبي، عمر المختار، الصبر…"><div class="modal-actions"><button type="button" class="btn btn-primary" data-go="wq">بحث</button></div></div>'
+            + '<div class="fun-result"><p style="font-weight:800;margin:0 0 8px">🤖 توليد بالذكاء الاصطناعي</p><div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px">'
+            + [['phrase','عبارات أصلية'],['poem','أبيات أصلية'],['person','أقوال شخص']].map(function(x){ return chip(x[1], S.aiKind === x[0], 'data-ak="' + x[0] + '"'); }).join('') + '</div>'
+            + (S.aiKind === 'person' ? '<div class="field"><input id="qPerson" placeholder="اسم الشخص: عنترة، أينشتاين، علي بن أبي طالب…"></div>' : '')
+            + '<div class="field"><input id="qTopic" placeholder="' + (S.aiKind === 'person' ? 'موضوع محدد (اختياري)' : 'فكرة أو موضوع (اختياري) مثل: الغربة، الأب، الصداقة') + '"></div>'
+            + '<div class="modal-actions"><button type="button" class="btn btn-primary" data-go="ai">✨ ولّد</button></div>'
+            + '<p class="hint" style="margin:8px 0 0;line-height:1.8">يحتاج اتصالًا بالإنترنت. القسم المختار أعلاه يحدد أسلوب التوليد.</p></div><div id="qNet">' + listHTML(net, 'n') + '</div>';
+        } else {
+          const f = favs();
+          b.innerHTML = f.length ? listHTML(f, 'f') : '<p class="hint" style="text-align:center;margin:24px 0;line-height:1.9">لا توجد عبارات محفوظة بعد.<br>اضغط ☆ على أي عبارة لحفظها هنا.</p>';
+        }
+      }
+      function paint(){ q('#qHead').innerHTML = head(); body(); }
+      function regen(n){
+        if(S.tab === 'gen') cur = makeGen(n || 5);
+        else if(S.tab === 'poem') cur = makePoems(n || 4);
+        else if(S.tab === 'wise') cur = makeWise(n || 4);
+      }
+      const srcList = function(s){ return s === 'n' ? net : s === 'f' ? favs() : cur; };
+
+      function toggleFav(it){
+        let l = favs();
+        if(isFav(it)) l = l.filter(function(x){ return key(x) !== key(it); });
+        else { l.unshift({ t:it.t, a:it.a || '', g:!!it.g, ts:Date.now() }); note('تمت الإضافة للمفضلة'); }
+        saveMiscSetting('quoteFavs', l.slice(0, 200));
+      }
+
+      /* بطاقة الصورة */
+      function openCard(it){
+        let th = 0;
+        const bd = document.getElementById('funToolBackdrop');
+        const ov = document.createElement('div'); ov.className = 'q-ov';
+        ov.style.cssText = 'position:absolute;inset:0;z-index:5;background:var(--bg-elev);overflow:auto;padding:calc(var(--status-h) + 14px) 16px calc(90px + env(safe-area-inset-bottom))';
+        ov.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font-size:16px">🖼️ بطاقة الصورة</b><button type="button" class="icon-btn" data-x style="font-size:20px">✕</button></div>'
+          + '<img alt="بطاقة" style="width:100%;border-radius:16px;display:block;box-shadow:var(--shadow)"><p class="hint" style="text-align:center;margin:8px 0">اضغط مطوّلًا على الصورة لحفظها في المعرض</p>'
+          + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;justify-content:center">' + THEME_NAMES.map(function(n, i){ return chip(n, i === 0, 'data-th="' + i + '"'); }).join('') + '</div>'
+          + '<div class="modal-actions"><button type="button" class="btn btn-primary" data-do="dl">⬇️ تنزيل</button><button type="button" class="btn btn-ghost" data-do="sh">📤 مشاركة</button></div>';
+        bd.appendChild(ov);
+        const cv = document.createElement('canvas'), img = ov.querySelector('img');
+        function redraw(){
+          try{ drawCard(cv, it, THEMES[th]); img.src = cv.toDataURL('image/png'); }catch(e){ console.error(e); note('تعذّر إنشاء الصورة'); }
+          ov.querySelectorAll('[data-th]').forEach(function(b){
+            const on = +b.dataset.th === th;
+            b.style.background = on ? 'var(--gold)' : 'var(--surface-2)'; b.style.color = on ? 'var(--on-gold)' : 'var(--text)'; b.style.borderColor = on ? 'var(--gold)' : 'var(--border)';
+          });
+        }
+        redraw();
+        ov.addEventListener('click', function(e){
+          if(e.target.closest('[data-x]')){ ov.remove(); return; }
+          const t = e.target.closest('[data-th]'); if(t){ th = +t.dataset.th; redraw(); return; }
+          const d = e.target.closest('[data-do]'); if(!d) return;
+          cv.toBlob(function(blob){
+            if(!blob){ note('تعذّر إنشاء الصورة'); return; }
+            if(d.dataset.do === 'dl'){
+              const u = URL.createObjectURL(blob), a = document.createElement('a');
+              a.href = u; a.download = 'quote.png'; document.body.appendChild(a); a.click(); a.remove();
+              setTimeout(function(){ URL.revokeObjectURL(u); }, 4000); note('تم تجهيز الصورة');
+            } else {
+              const file = new File([blob], 'quote.png', { type:'image/png' });
+              if(navigator.canShare && navigator.canShare({ files:[file] })){
+                navigator.share({ files:[file], text:full(it) }).catch(function(err){ if(!err || err.name !== 'AbortError') F.share(full(it)); });
+              } else F.share(full(it));
+            }
+          }, 'image/png');
+        });
+      }
+
+      async function runNet(kind){
+        const nb = q('#qNet');
+        if(!F.ai.online()){ nb.innerHTML = '<p class="hint" style="text-align:center;margin:14px 0;line-height:1.9">📴 لا يوجد اتصال بالإنترنت الآن. العبارات والأشعار والأقوال المحلية تعمل بدونه.</p>'; return; }
+        nb.innerHTML = '<p class="hint" style="text-align:center;margin:14px 0">⏳ جارٍ الجلب…</p>';
+        try{
+          if(kind === 'wq'){
+            const v = q('#qWq').value.trim(); if(!v){ nb.innerHTML = ''; note('اكتب اسمًا أو موضوعًا للبحث'); return; }
+            net = await wikiquote(v);
+            if(!net.length){ nb.innerHTML = '<p class="hint" style="text-align:center;margin:14px 0;line-height:1.9">لم أجد أقوالًا لهذا البحث في ويكي اقتباس. جرّب اسمًا آخر أو استخدم التوليد بالذكاء الاصطناعي.</p>'; return; }
+          } else {
+            const person = S.aiKind === 'person' ? (q('#qPerson').value.trim()) : '';
+            if(S.aiKind === 'person' && !person){ nb.innerHTML = ''; note('اكتب اسم الشخص'); return; }
+            const topic = q('#qTopic').value.trim();
+            const txt = await F.ai.ask([{ role:'user', content:aiPrompt(S.aiKind, S.cat, topic, person) }], SYS_AI);
+            net = parseAI(txt, S.aiKind, person);
+            if(!net.length){ nb.innerHTML = '<p class="hint" style="text-align:center;margin:14px 0">لم تصل نتائج مفهومة. حاول مرة أخرى.</p>'; return; }
+          }
+          nb.innerHTML = listHTML(net, 'n');
+        }catch(e){
+          console.warn(e);
+          nb.innerHTML = '<p class="hint" style="text-align:center;margin:14px 0;line-height:1.9">⚠️ تعذّر الوصول للخدمة الآن. تأكد من الاتصال وحاول لاحقًا.</p>';
+        }
+      }
+
+      box.innerHTML = '<div id="qHead"></div><div id="qBody"></div>';
+      regen(5); paint();
+
+      box.addEventListener('click', function(e){
+        const c = e.target.closest('[data-cat]');
+        if(c){ S.cat = c.dataset.cat; if(S.tab === 'gen' || S.tab === 'poem' || S.tab === 'wise') regen(); paint(); return; }
+        const t = e.target.closest('[data-tab]');
+        if(t){ S.tab = t.dataset.tab; if(S.tab === 'gen' || S.tab === 'poem' || S.tab === 'wise') regen(); paint(); return; }
+        const st = e.target.closest('[data-style]'); if(st){ S.style = st.dataset.style; regen(); paint(); return; }
+        const fr = e.target.closest('[data-frm]'); if(fr){ S.frm = fr.dataset.frm; paint(); return; }
+        const ak = e.target.closest('[data-ak]'); if(ak){ S.aiKind = ak.dataset.ak; const keep = q('#qNet') ? q('#qNet').innerHTML : ''; body(); q('#qNet').innerHTML = keep; return; }
+        const go = e.target.closest('[data-go]');
+        if(go){
+          const k = go.dataset.go;
+          if(k === 'gen'){ cur = makeGen(5); body(); }
+          else if(k === 'more'){ cur = cur.concat(makeGen(5)).slice(-60); body(); }
+          else if(k === 'poem'){ cur = makePoems(4); body(); }
+          else if(k === 'wise'){ cur = makeWise(4); body(); }
+          else runNet(k);
+          return;
+        }
+        const a = e.target.closest('[data-act]');
+        if(a){
+          const card = a.closest('[data-i]'), it = srcList(card.dataset.src)[+card.dataset.i]; if(!it) return;
+          if(a.dataset.act === 'copy') F.copy(full(it));
+          else if(a.dataset.act === 'share') F.share(full(it));
+          else if(a.dataset.act === 'img') openCard(it);
+          else if(a.dataset.act === 'fav'){
+            toggleFav(it);
+            if(card.dataset.src === 'f') paint(); else { a.textContent = isFav(it) ? '⭐' : '☆'; q('#qHead').innerHTML = head(); }
+          }
+        }
+      });
+    }});
+})();
+
 
 async function boot(){
   await loadAppData();
