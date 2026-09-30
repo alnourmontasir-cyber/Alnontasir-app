@@ -281,6 +281,23 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .select-bar{display:none;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .select-bar::-webkit-scrollbar{display:none;}
 .select-bar.show{display:flex;}
+/* شريط التحديد: يلتف على أكثر من سطر بدل القصّ خارج الشاشة */
+.add-tool-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 8px;padding:9px 12px;border-radius:var(--radius-md);border:1.5px dashed var(--gold);background:transparent;color:var(--gold);font-size:calc(13px * var(--font-scale));font-weight:800;}
+.add-tool-btn:active{transform:scale(.98);}
+.add-tool-btn b{font-size:18px;line-height:1;font-weight:700;}
+.ct-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.ct-chips button{min-width:40px;padding:7px 10px;border-radius:12px;background:var(--surface-2);border:1.5px solid transparent;font-size:18px;line-height:1.2;}
+.ct-chips button.on{border-color:var(--gold);background:var(--surface);}
+.ct-chips.kinds button{font-size:13px;font-weight:700;flex:1 1 0;}
+.ct-chips.colors button{width:34px;height:34px;min-width:0;padding:0;border-radius:50%;border:2.5px solid transparent;}
+.ct-chips.colors button.on{border-color:var(--text);}
+.ct-text{white-space:pre-wrap;word-break:break-word;line-height:1.9;font-size:calc(15px * var(--font-scale));margin:0 0 14px;padding:14px;border-radius:var(--radius-md);background:var(--surface-2);max-height:55vh;overflow:auto;}
+.select-bar:not(.compact){flex-wrap:wrap;overflow-x:visible;row-gap:6px;}
+#toolSelectBarHome,#toolSelectBarScreen{padding:8px;}
+#toolSelectBarHome.show,#toolSelectBarScreen.show{flex-direction:column;align-items:stretch;gap:8px;}
+.select-bar .sb-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.select-bar .sb-row{display:flex;gap:6px;}
+.select-bar .sb-row button{flex:1 1 0;min-width:0;font-size:12px;padding:9px 4px;text-align:center;}
 .select-bar .sb-count{flex-shrink:0;font-size:12.5px;color:var(--text-dim);white-space:nowrap;padding-inline-end:2px;}
 .select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
 .select-bar button.danger{background:var(--danger);color:#fff;}
@@ -563,6 +580,16 @@ body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y
 /* ================= المظهر: الوضع الفاتح الاحترافي + زر التبديل ================= */
 ::placeholder{color:var(--text-dim);opacity:.7;}
 .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1 1 100%;min-width:0;}
+.top-header{padding-bottom:6px;}
+.widgets-section:not(:has(> :not(.hidden))){margin-bottom:0;}
+#homeToolsSection .tools-head{margin-top:0;}
+.tools-head{gap:6px;}
+.tools-head .tools-head-label{flex:1 1 auto;text-align:center;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.day-hello{flex:0 1 auto;display:flex;align-items:center;gap:5px;margin:0;font-size:calc(16px * var(--font-scale));font-weight:900;line-height:1.3;color:var(--gold);}
+.day-hello svg{width:20px;height:20px;flex:0 0 auto;}
+.day-hello span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tools-head .tools-head-label{min-width:max-content;}
+@media (max-width:345px){.day-hello{font-size:calc(14px * var(--font-scale));}.day-hello svg{width:17px;height:17px;}.tools-head .mini-btn{padding:5px 8px;font-size:11px;}}
 .top-header{padding-inline-start:max(2px,env(safe-area-inset-left));padding-inline-end:max(2px,env(safe-area-inset-right));}
 .theme-toggle{position:relative;width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:0 1px 3px rgba(16,24,40,.12);transition:transform .12s ease,background .2s ease;margin-inline-start:auto;}
 .theme-toggle:active{transform:scale(.92);}
@@ -591,6 +618,47 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
 /* ================= ألعاب الاختبارات ================= */
 .gm-stats + .hint{margin-top:0;}
 .modal-actions .btn:disabled{opacity:.45;}
+/* ===== مركز الإضافة الاحترافي ===== */
+.hub-modal{max-height:92vh;}
+.hub-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.hub-head .hh-ic{width:48px;height:48px;border-radius:16px;background:linear-gradient(155deg,var(--gold),var(--gold-dim));color:var(--on-gold);display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;box-shadow:var(--shadow);}
+.hub-head .hh-t{flex:1;min-width:0;}
+.hub-head h3{margin:0;font-size:18px;font-weight:900;}
+.hub-head p{margin:3px 0 0;font-size:12px;color:var(--text-dim);}
+.hub-net{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:5px 10px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);white-space:nowrap;flex-shrink:0;}
+.hub-net::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+.hub-net.on{color:#2f9d5e;border-color:rgba(47,157,94,.4);}
+.hub-net.off{color:var(--danger);border-color:rgba(198,90,77,.4);}
+.hub-hero{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.hub-hero button{display:flex;align-items:center;gap:10px;padding:13px 12px;border-radius:var(--radius-md);color:#fff;text-align:right;font-weight:900;font-size:13.5px;background:linear-gradient(155deg,var(--h1),var(--h2));box-shadow:0 6px 16px rgba(16,24,40,.18);}
+.hub-hero button:active{transform:scale(.97);}
+.hub-hero button i{font-style:normal;font-size:26px;line-height:1;flex-shrink:0;}
+.hub-hero button small{display:block;font-weight:600;font-size:10.5px;opacity:.88;margin-top:3px;}
+.hub-search{margin-bottom:10px;}
+.hub-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;margin-bottom:4px;scrollbar-width:none;}
+.hub-tabs::-webkit-scrollbar{display:none;}
+.hub-tabs button{flex-shrink:0;padding:8px 14px;border-radius:30px;background:var(--surface-2);border:1.5px solid transparent;font-size:12.5px;font-weight:800;color:var(--text-dim);white-space:nowrap;}
+.hub-tabs button.on{background:var(--surface);border-color:var(--gold);color:var(--text);}
+.hub-sec{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;font-size:12.5px;font-weight:900;color:var(--text-dim);}
+.hub-sec b{font-weight:800;font-size:11px;padding:2px 9px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);}
+.hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.hub-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:12px;min-height:118px;border-radius:var(--radius-md);border:1px solid var(--border);background:linear-gradient(160deg,var(--surface),var(--surface-2));text-align:right;}
+.hub-tile::after{content:"";position:absolute;width:74px;height:74px;top:-28px;inset-inline-end:-28px;border-radius:50%;background:var(--fc);opacity:.14;pointer-events:none;}
+.hub-tile:active{transform:scale(.97);}
+.hub-ti{position:relative;z-index:1;width:40px;height:40px;border-radius:13px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;font-size:20px;font-style:normal;}
+.hub-tile h4{position:relative;z-index:1;margin:0;font-size:13.5px;font-weight:800;}
+.hub-tile p{position:relative;z-index:1;margin:0;font-size:11px;line-height:1.55;color:var(--text-dim);flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.hub-act{position:relative;z-index:1;font-size:11px;font-weight:800;padding:4px 11px;border-radius:20px;background:var(--gold);color:var(--on-gold);}
+.hub-act.open{background:var(--surface-2);color:var(--text);border:1px solid var(--border);}
+.hub-act.done{background:var(--surface-2);color:#2f9d5e;border:1px solid rgba(47,157,94,.4);}
+.hub-empty{text-align:center;padding:34px 10px;color:var(--text-dim);font-size:13px;line-height:1.8;}
+.hub-note{margin:14px 2px 2px;font-size:11px;color:var(--text-dim);line-height:1.7;text-align:center;}
+.ctl-add{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.ctl-row{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-bottom:8px;}
+.ctl-row .ctl-b{flex:1;min-width:0;cursor:pointer;}
+.ctl-row h5{margin:0 0 3px;font-size:13.5px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ctl-row p{margin:0;font-size:11.5px;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;max-height:44px;overflow:hidden;}
+.ctl-row button.ctl-x{width:32px;height:32px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--danger);font-size:15px;}
 </style>
 </head>
 <body>
@@ -689,12 +757,14 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
   </div>
 
   <div id="homeToolsSection" style="margin-bottom:4px">
-    <div class="section-head">
-      <p class="section-label">مركز الأدوات</p>
+    <div class="section-head tools-head">
+      <div class="day-hello" id="dayHello"><span class="dh-ic" id="dayHelloIc" aria-hidden="true" style="display:flex"></span><span id="dayHelloTxt"></span></div>
+      <p class="section-label tools-head-label">مركز الأدوات</p>
       <button type="button" class="mini-btn" onclick="restoreAllTools()">إظهار كل الأدوات</button>
       <button type="button" class="mini-btn hidden" id="toolsManageBtnHome" onclick="openToolsManager()"></button>
     </div>
     <div class="select-bar" id="toolSelectBarHome"></div>
+    <button type="button" class="add-tool-btn" onclick="openAddHub('game')"><b>＋</b> إضافة لعبة أو أداة</button>
     <span class="mini-hint" style="margin:-2px 0 8px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
     <div class="grid compact-grid" id="homeToolsRow"></div>
   </div>
@@ -869,6 +939,7 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
     <button type="button" class="mini-btn hidden" id="toolsManageBtnScreen" onclick="openToolsManager()"></button>
   </div>
   <div class="select-bar" id="toolSelectBarScreen"></div>
+  <button type="button" class="add-tool-btn" onclick="openAddHub('game')"><b>＋</b> إضافة لعبة أو أداة</button>
   <span class="mini-hint" style="margin:-4px 0 10px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
   <div class="grid" id="toolsGrid"></div>
 </div>
@@ -1099,8 +1170,16 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
   <div class="settings-group">
     <h4>تحكمات إضافية</h4>
     <div class="switch-row">
-      <span class="sr-label">رسالة الصباح والمساء<small>تظهر عند فتح التطبيق</small></span>
+      <span class="sr-label">رسالة الصباح والمساء<small>تظهر عند فتح التطبيق: صباحًا حتى العاشرة، ومساءً بعد السادسة</small></span>
       <button class="switch" id="dayGreetToggle" onclick="toggleDayGreeting()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تحديث بنوك الأسئلة تلقائيًا<small id="bankUpdInfo">يضيف أسئلة جديدة للألعاب تلقائيًا عند توفر الإنترنت</small></span>
+      <button class="switch" id="bankUpdToggle" onclick="toggleBankAutoUpdate()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تحديث الأسئلة الآن<small>يجلب أسئلة جديدة فورًا (يحتاج إنترنت)</small></span>
+      <button type="button" class="mini-btn" id="bankUpdNow" onclick="updateBanksNow()">حدّث الآن</button>
     </div>
     <div class="switch-row">
       <span class="sr-label">صوت لمس خفيف<small>نقرة هادئة عند الضغط على أي زر</small></span>
@@ -1532,6 +1611,76 @@ html[data-mode="light"] #lockScreen{color:var(--text);}
     <div id="sharePreviewBox" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px"></div>
     <p class="mini-hint" style="margin:0 0 8px">اختر الحافظة التي تريد الحفظ فيها</p>
     <div class="folder-pick-list" id="sharePickList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="addToolBackdrop" role="dialog" aria-modal="true" aria-labelledby="addToolTitle" onclick="if(event.target===this)closeAddToolModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="addToolTitle">إضافة أداة جديدة</h3>
+    <div class="field"><label>نوع الأداة</label>
+      <div class="ct-chips kinds" id="ctKinds">
+        <button type="button" data-k="link" class="on">🌐 رابط موقع</button>
+        <button type="button" data-k="text">📝 نص / ملاحظة</button>
+        <button type="button" data-k="list">🗂️ قائمة (حتى ٥٠)</button>
+      </div>
+    </div>
+    <div class="field"><label>اسم الأداة</label><input id="ctName" dir="rtl" maxlength="24" placeholder="مثال: موقعي المفضل"></div>
+    <div class="field" id="ctLinkField"><label>رابط الموقع</label><input id="ctLink" dir="ltr" inputmode="url" placeholder="example.com"></div>
+    <div class="field hidden" id="ctTextField"><label>النص الذي يظهر عند فتح الأداة</label><textarea id="ctText" dir="rtl" placeholder="اكتب هنا..."></textarea></div>
+    <div class="field"><label>الأيقونة</label><div class="ct-chips" id="ctEmojis"></div></div>
+    <div class="field"><label>اللون</label><div class="ct-chips colors" id="ctColors"></div></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeAddToolModal()">إلغاء</button>
+      <button type="button" class="btn btn-primary" onclick="saveCustomTool()">إضافة</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="addHubBackdrop" role="dialog" aria-modal="true" aria-labelledby="addHubTitle" onclick="if(event.target===this)closeAddHub()">
+  <div class="modal hub-modal">
+    <div class="modal-handle"></div>
+    <div class="hub-head">
+      <div class="hh-ic" aria-hidden="true">✨</div>
+      <div class="hh-t"><h3 id="addHubTitle">إضافة جديدة</h3><p>حافظات وألعاب وأدوات — كل شيء من مكان واحد</p></div>
+      <span class="hub-net on" id="hubNet">متصل</span>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddHub()" title="إغلاق" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="hub-hero">
+      <button type="button" style="--h1:#c9a24b;--h2:#8a5a1a" onclick="hubNewFolder()"><i>📁</i><span>حافظة جديدة<small>اختر النوع واللون والأيقونة</small></span></button>
+      <button type="button" style="--h1:#5b8def;--h2:#2f5bb8" onclick="hubNewTool()"><i>🧩</i><span>أداة مخصّصة<small>رابط أو نص أو قائمة حتى ٥٠</small></span></button>
+    </div>
+    <input class="hub-search" id="hubSearch" type="search" dir="rtl" placeholder="ابحث عن لعبة أو أداة أو نوع حافظة..." autocomplete="off">
+    <div class="hub-tabs" id="hubTabs"></div>
+    <div id="hubBody"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="ctListBackdrop" role="dialog" aria-modal="true" aria-labelledby="ctListTitle" onclick="if(event.target===this)closeCtList()">
+  <div class="modal hub-modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row"><h3 id="ctListTitle"></h3><span class="hub-net on" id="ctListCount"></span></div>
+    <div class="ctl-add">
+      <input id="ctlName" dir="rtl" maxlength="40" placeholder="الاسم (مثال: لعبتي المفضلة)">
+      <input id="ctlValue" dir="auto" maxlength="2000" placeholder="رابط موقع أو نص">
+      <button type="button" class="btn btn-primary" onclick="ctListAddEntry()">＋ إضافة للقائمة</button>
+    </div>
+    <div id="ctListBody"></div>
+    <div class="modal-actions"><button type="button" class="btn btn-ghost" onclick="closeCtList()">إغلاق</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="ctViewBackdrop" role="dialog" aria-modal="true" aria-labelledby="ctViewTitle" onclick="if(event.target===this)closeCustomText()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="ctViewTitle"></h3>
+    <p class="ct-text" id="ctViewText"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeCustomText()">إغلاق</button>
+      <button type="button" class="btn btn-primary" onclick="copyCustomText()">نسخ</button>
+    </div>
   </div>
 </div>
 
@@ -2937,7 +3086,7 @@ function tickClock(){
   document.getElementById('wcTime').textContent = now.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
   document.getElementById('wcDate').textContent = now.toLocaleDateString('ar', {weekday:'long', day:'numeric', month:'long'});
   const h = now.getHours();
-  const greet = h<5 ? 'سهرة هنيّة' : h<12 ? 'صباح الخير' : h<17 ? 'نهارك سعيد' : h<21 ? 'مساء الخير' : 'ليلة سعيدة';
+  const greet = dayPeriodInfo(h).greet;
   document.getElementById('wcGreet').textContent = greet;
 }
 
@@ -3118,8 +3267,8 @@ function renderHome(){
     addCard.style.setProperty("--fc2", "#8a733a");
     addCard.innerHTML = `
       <div class="folder-icon">${svg('plus')}</div>
-      <div><h3>حافظة جديدة</h3><span>إضافة</span></div>`;
-    addCard.onclick = () => openFolderModal();
+      <div><h3>إضافة جديدة</h3><span>حافظة • لعبة • أداة</span></div>`;
+    addCard.onclick = () => openAddHub('all');
     grid.appendChild(addCard);
   }
 }
@@ -5378,6 +5527,7 @@ function loadSettingsForm(){
   document.getElementById('hapticToggle').classList.toggle('on', !!settings.hapticEnabled);
   document.getElementById('soundToggle').classList.toggle('on', settings.soundEnabled !== false);
   document.getElementById('dayGreetToggle').classList.toggle('on', settings.dayGreeting !== false);
+  try{ refreshBankUpdateUI(); }catch(e){}
   document.getElementById('setHomeColumns').value = settings.compactHomeGrid ? '3' : '2';
   document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
   document.getElementById('hideLockedToggle').classList.toggle('on', !!settings.hideLockedFromHome);
@@ -6101,6 +6251,91 @@ const TOOLS_LIST = [
   {id:'compass', name:'البوصلة', desc:'اتجاه وموقعك الحالي', icon:'compass', c1:'#3a9188', c2:'#215a54', open:'openCompassTool'},
   {id:'calculator', name:'الحاسبة', desc:'حاسبة عادية وعلمية', icon:'calculatoricon', c1:'#4a5568', c2:'#2d3748', open:'openCalculator'}
 ];
+
+/* ================= أدوات مخصّصة يضيفها المستخدم (رابط موقع / نص) ================= */
+const CT_COLORS = [['#3a9188','#215a54'],['#5b8def','#2f5bb8'],['#e0723a','#a8481d'],['#d1568a','#8f2f5c'],['#7b61d1','#4a3a94'],['#c9a24b','#8a5a1a'],['#3f9d6b','#226b45'],['#e05a6d','#a3283b']];
+const CT_EMOJIS = ['🔗','🌐','📝','📌','⭐','📚','🎧','🎬','🛒','💼','🏠','❤️'];
+let ctKind = 'link', ctEmoji = '🔗', ctColor = 0, ctViewing = null;
+function customToolsList(){ return Array.isArray(settings.customTools) ? settings.customTools : (settings.customTools = []); }
+function ctClean(s, max){ return String(s||'').replace(/[<>&"'`\\]/g,'').replace(/\s+/g,' ').trim().slice(0, max); }
+function registerCustomTool(ct){
+  const fn = 'openCustomTool_' + ct.id;
+  window[fn] = function(){ runCustomTool(ct.id); };
+  const desc = ct.kind === 'list' ? ('قائمة ' + (Array.isArray(ct.items) ? ct.items.length : 0) + '/50') : (ct.kind === 'link' ? String(ct.value||'').replace(/^https?:\/\/(www\.)?/i,'').replace(/\/$/,'').slice(0, 34) : 'نص / ملاحظة');
+  const def = {id:ct.id, name:ct.name, desc:desc, emoji:ct.emoji || '🔗', c1:ct.c1, c2:ct.c2, open:fn, custom:true, cat:ct.cat || 'mine'};
+  const i = TOOLS_LIST.findIndex(x=>x.id===ct.id);
+  if(i >= 0) TOOLS_LIST[i] = def; else TOOLS_LIST.push(def);
+}
+function loadCustomTools(){ try{ customToolsList().forEach(registerCustomTool); }catch(e){ console.warn('custom tools', e); } }
+function runCustomTool(id){
+  const ct = customToolsList().find(x=>x.id===id); if(!ct) return;
+  if(ct.kind === 'list'){ openCtList(id); return; }
+  if(ct.kind === 'link'){
+    const url = normalizeUrl(ct.value); if(!url){ toast('رابط غير صالح'); return; }
+    if(navigator.onLine === false){ toast('هذه الأداة تحتاج اتصالًا بالإنترنت'); return; }
+    if(hostBlocksIframe(url)){ toast('سيُفتح الموقع في المتصفح الخارجي'); window.open(url, '_blank'); return; }
+    openBrowser(); quickBrowse(url);
+  } else {
+    ctViewing = ct;
+    document.getElementById('ctViewTitle').textContent = ct.name;
+    document.getElementById('ctViewText').textContent = ct.value;
+    document.getElementById('ctViewBackdrop').classList.add('active');
+  }
+}
+function closeCustomText(){ document.getElementById('ctViewBackdrop').classList.remove('active'); }
+function copyCustomText(){
+  if(!ctViewing) return;
+  try{ if(window.FUN && FUN.copy){ FUN.copy(ctViewing.value); return; } }catch(e){}
+  try{ navigator.clipboard.writeText(ctViewing.value); toast('تم النسخ'); }catch(e){ toast('تعذّر النسخ'); }
+}
+function ctDrawPickers(){
+  const em = document.getElementById('ctEmojis');
+  em.innerHTML = CT_EMOJIS.map(e=>`<button type="button" data-e="${e}" class="${e===ctEmoji?'on':''}">${e}</button>`).join('');
+  em.querySelectorAll('button').forEach(b=>b.addEventListener('click', ()=>{ ctEmoji = b.dataset.e; ctDrawPickers(); }));
+  const co = document.getElementById('ctColors');
+  co.innerHTML = CT_COLORS.map((c,i)=>`<button type="button" data-c="${i}" class="${i===ctColor?'on':''}" style="background:linear-gradient(160deg,${c[0]},${c[1]})" aria-label="لون ${i+1}"></button>`).join('');
+  co.querySelectorAll('button').forEach(b=>b.addEventListener('click', ()=>{ ctColor = +b.dataset.c; ctDrawPickers(); }));
+  document.querySelectorAll('#ctKinds button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.k === ctKind);
+    b.onclick = ()=>{ ctKind = b.dataset.k; ctDrawPickers(); };
+  });
+  document.getElementById('ctLinkField').classList.toggle('hidden', ctKind !== 'link');
+  document.getElementById('ctTextField').classList.toggle('hidden', ctKind !== 'text');
+}
+function openAddToolModal(){
+  ctKind = 'link'; ctEmoji = '🔗'; ctColor = customToolsList().length % CT_COLORS.length;
+  ['ctName','ctLink','ctText'].forEach(id=>{ document.getElementById(id).value = ''; });
+  ctDrawPickers();
+  document.getElementById('addToolBackdrop').classList.add('active');
+}
+function closeAddToolModal(){ document.getElementById('addToolBackdrop').classList.remove('active'); }
+function saveCustomTool(){
+  const name = ctClean(document.getElementById('ctName').value, 24);
+  if(!name){ toast('اكتب اسم الأداة'); return; }
+  let value = '';
+  if(ctKind === 'link'){
+    value = document.getElementById('ctLink').value.trim();
+    const url = normalizeUrl(value);
+    if(!value || !url || !/^https?:\/\/[^\s]+\.[^\s]+/i.test(url) || url.indexOf('duckduckgo.com/html/?q=') >= 0){ toast('اكتب رابط موقع صحيح مثل example.com'); return; }
+    value = url;
+  } else if(ctKind === 'list'){
+    value = '';
+  } else {
+    value = document.getElementById('ctText').value.trim().slice(0, 5000);
+    if(!value){ toast('اكتب النص الذي يظهر في الأداة'); return; }
+  }
+  if(customToolsList().filter(x=>(x.cat||'mine')==='mine').length >= 50){ toast('وصلت للحد الأقصى (٥٠) من الأدوات المخصّصة'); return; }
+  const col = CT_COLORS[ctColor] || CT_COLORS[0];
+  const ct = {id:'custom_' + Date.now().toString(36), name:name, kind:ctKind, value:value, emoji:ctClean(ctEmoji, 4) || '🔗', c1:col[0], c2:col[1], cat:'mine'};
+  if(ctKind === 'list') ct.items = [];
+  customToolsList().push(ct);
+  saveSettingsData();
+  registerCustomTool(ct);
+  closeAddToolModal();
+  renderAllTools();
+  toast('تمت إضافة الأداة «' + name + '»');
+}
+
 /* ---- تفضيلات الأدوات: ترتيب / إخفاء / قفل / حذف (تُحفظ في الإعدادات) ---- */
 function toolPrefs(){
   const p = settings.toolPrefs || (settings.toolPrefs = {});
@@ -6131,7 +6366,7 @@ function toolCardHTML(t){
       ${toolSelectMode ? `<span class="select-check ${checked?'checked':''}">${svg('check')}</span>` : ''}
       ${p.locked.includes(t.id) ? `<span class="lock-flag">${svg('lock')}</span>` : ''}
       <div class="folder-icon">${toolIconHTML(t)}</div>
-      <div><h3>${t.name}</h3><span>${t.desc}</span></div>
+      <div><h3>${escapeHTML(t.name)}</h3><span>${escapeHTML(t.desc||'')}</span></div>
     </button>`;
 }
 function fillToolsGrid(grid){
@@ -6156,13 +6391,17 @@ function renderToolSelectBars(){
   const allSel = vis.length>0 && vis.every(t=>selectedToolIds.has(t.id));
   const allLocked = n>0 && Array.from(selectedToolIds).every(id=>p.locked.includes(id));
   const html = `
-    <button onclick="toggleSelectAllTools()">${allSel?'إلغاء تحديد الكل':'تحديد الكل'}</button>
-    <span class="sb-count">${n} محدد</span>
-    <button onclick="openOrderModal('tools')">ترتيب</button>
-    <button onclick="hideSelectedTools()">إخفاء</button>
-    <button class="danger" onclick="deleteSelectedTools()">حذف</button>
-    <button class="accent" onclick="lockSelectedTools()">${allLocked?'إلغاء القفل':'قفل'}</button>
-    <button onclick="exitToolSelectMode()">إلغاء</button>`;
+    <div class="sb-top">
+      <button onclick="toggleSelectAllTools()">${allSel?'إلغاء تحديد الكل':'تحديد الكل'}</button>
+      <span class="sb-count">${n} محدد</span>
+    </div>
+    <div class="sb-row">
+      <button onclick="openOrderModal('tools')">ترتيب</button>
+      <button onclick="hideSelectedTools()">إخفاء</button>
+      <button class="danger" onclick="deleteSelectedTools()">حذف</button>
+      <button class="accent" onclick="lockSelectedTools()">${allLocked?'إلغاء القفل':'قفل'}</button>
+      <button onclick="exitToolSelectMode()">إلغاء</button>
+    </div>`;
   ['toolSelectBarHome','toolSelectBarScreen'].forEach(id=>{
     const bar = document.getElementById(id);
     if(!bar) return;
@@ -6911,15 +7150,35 @@ function toggleDayGreeting(){
   saveSettingsData();
   document.getElementById('dayGreetToggle').classList.toggle('on', settings.dayGreeting !== false);
 }
+/* الفترات: صباح من ٤ حتى قبل ١٠ — نهار من ١٠ حتى قبل ٦ مساءً (الظهر والعصر) — مساء من ٦ مساءً فصاعدًا */
+function dayPeriodInfo(h){
+  if(h >= 4 && h < 10)  return {period:'morning', greet:'صباح الخير', modal:true};
+  if(h >= 10 && h < 18) return {period:'day',     greet:'نهارك سعيد', modal:false};
+  return {period:'evening', greet:'مساءك سعيد', modal:true};
+}
+/* تحية أعلى الشاشة الرئيسية (تظهر دائمًا وتتحدّث تلقائيًا) */
+function updateDayHello(){
+  const el = document.getElementById('dayHello');
+  if(!el) return;
+  const info = dayPeriodInfo(new Date().getHours());
+  const ic = document.getElementById('dayHelloIc');
+  const wantIc = info.period === 'evening' ? GREET_MOON : GREET_SUN;
+  if(ic.dataset.p !== info.period){ ic.innerHTML = wantIc; ic.dataset.p = info.period; }
+  const tx = document.getElementById('dayHelloTxt');
+  if(tx.textContent !== info.greet) tx.textContent = info.greet;
+}
 function showDayGreeting(force){
-  const h = new Date().getHours();
-  const morning = h >= 4 && h < 12;
+  const info = dayPeriodInfo(new Date().getHours());
+  if(!info.modal && !force) return; // وقت النهار (الظهر والعصر): لا تظهر رسالة
+  const morning = info.period === 'morning';
   const box = document.getElementById('dayGreetBox');
-  box.classList.toggle('morning', morning);
-  box.classList.toggle('evening', !morning);
-  document.getElementById('dayGreetIcon').innerHTML = morning ? GREET_SUN : GREET_MOON;
-  document.getElementById('dayGreetTitle').textContent = morning ? 'صباح الخير' : 'مساء الخير';
-  document.getElementById('dayGreetText').textContent = 'نقدّم لكم كل ما يلزمكم لتنظيم محتواكم وحفظه بأمان وسهولة، في مكان واحد.';
+  box.classList.toggle('morning', info.period !== 'evening');
+  box.classList.toggle('evening', info.period === 'evening');
+  document.getElementById('dayGreetIcon').innerHTML = info.period === 'evening' ? GREET_MOON : GREET_SUN;
+  document.getElementById('dayGreetTitle').textContent = info.greet;
+  document.getElementById('dayGreetText').textContent = morning
+    ? 'خزانتك الخاصة: تطبيق متكامل لتنظيم ملفاتك وصورك وملاحظاتك ومهامك في مكان واحد، بحماية برمز الدخول أو البصمة، ونسخ احتياطي يحفظ بياناتك، وتصميم أنيق سلس يعمل بسهولة على هاتفك. من تصميم وتطوير منتصر النور حسين.'
+    : 'خزانتك الخاصة: مساحة آمنة ومنظّمة تجمع ملفاتك وصورك وملاحظاتك ومهامك، محمية بالرمز أو البصمة ومدعومة بنسخ احتياطي، بتصميم أنيق مريح للعين. من تصميم وتطوير منتصر النور حسين.';
   document.getElementById('dayGreetWish').textContent = morning
     ? 'نتمنى لكم صباحًا مشرقًا ويومًا مليئًا بالإنجاز والتوفيق.'
     : 'نتمنى لكم مساءً هادئًا وأوقاتًا مليئة بالراحة والسكينة.';
@@ -6938,12 +7197,12 @@ function closeDayGreeting(){
 /* مفتاح يمثّل يوم اليوم + الفترة الحالية (صباح/مساء)، لعرض الرسالة مرة واحدة فقط لكل فترة كل يوم */
 function currentGreetPeriodKey(){
   const now = new Date();
-  const h = now.getHours();
-  const morning = h >= 4 && h < 12;
+  const info = dayPeriodInfo(now.getHours());
+  if(!info.modal) return null; // لا رسالة وقت الظهر والعصر
   const y = now.getFullYear();
   const m = String(now.getMonth()+1).padStart(2,'0');
   const d = String(now.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+d+'-'+(morning ? 'morning' : 'evening');
+  return y+'-'+m+'-'+d+'-'+info.period;
 }
 function maybeShowDayGreeting(){
   if(settings.dayGreeting === false) return;
@@ -6951,6 +7210,7 @@ function maybeShowDayGreeting(){
   try{ onboarded = !!localStorage.getItem('montasir_onboarded'); }catch(e){}
   if(!onboarded) return; // المستخدم الجديد يرى دليل الاستخدام أولًا
   const key = currentGreetPeriodKey();
+  if(!key) return; // خارج وقت الرسالة
   if(settings.lastDayGreetKey === key) return; // سبق عرض رسالة هذه الفترة اليوم
   settings.lastDayGreetKey = key;
   saveSettingsData();
@@ -6958,6 +7218,7 @@ function maybeShowDayGreeting(){
 }
 
 function init(){
+  loadCustomTools();
   /* إصلاح ظهور الأدوات: إعادة إظهار الأدوات الإبداعية مرة واحدة إن كانت مخفية/محذوفة من إعدادات قديمة */
   try{
     const _p = toolPrefs();
@@ -6984,6 +7245,9 @@ function init(){
   maybeShowBackupReminder();
   setupA11yObserver();
   setupFolderSelectOutsideTap();
+  updateDayHello();
+  setInterval(updateDayHello, 60000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) updateDayHello(); });
   maybeShowOnboarding();
   maybeShowDayGreeting();
 }
@@ -7082,6 +7346,124 @@ function maybeShowBackupReminder(){
     const txt = box.querySelector('.fun-text').textContent;
     if(cp) FUN.copy(txt); else FUN.share(txt);
   });
+})();
+
+/* ================= سجل بنوك الأسئلة القابلة للتحديث أونلاين ================= */
+(function(){
+  'use strict';
+  const KEY = 'montasir_bank_ext', MAX_EXT = 400;
+  const banks = {};
+  let store = null;
+  function load(){
+    if(store) return store;
+    try{ store = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }catch(e){ store = {}; }
+    if(!store.items) store.items = {};
+    if(!store.meta) store.meta = {};
+    return store;
+  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} }
+  function norm(s){
+    return String(s || '').replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')
+      .replace(/[^\u0600-\u06FFa-z0-9]/gi,'').toLowerCase();
+  }
+  function str(x){ return String(x == null ? '' : x).replace(/\s+/g,' ').trim(); }
+  const BAD = /https?:|www\.|حاليًا|حاليا|الآن|الحالي|الأحدث|الاحدث|آخر تحديث|202[3-9]|\bAI\b/;
+  function cleanMcq(o){
+    if(!o || typeof o !== 'object') return null;
+    const q = str(o.q), a = str(o.a), e = str(o.e);
+    const w = Array.isArray(o.w) ? o.w.map(str) : [];
+    if(q.length < 8 || q.length > 220 || !a || a.length > 90) return null;
+    if(!/[\u0600-\u06FF]/.test(q)) return null;
+    if(BAD.test(q + ' ' + a + ' ' + e)) return null;
+    const ws = [];
+    w.forEach(function(x){
+      if(x && x.length <= 90 && norm(x) !== norm(a) && !ws.some(function(y){ return norm(y) === norm(x); })) ws.push(x);
+    });
+    if(ws.length < 3) return null;
+    return [q, a, ws.slice(0, 3), e.slice(0, 200)];
+  }
+  function parse(text){
+    const s = String(text).replace(/```json|```/gi, '');
+    const i = s.indexOf('['), j = s.lastIndexOf(']');
+    if(i < 0 || j <= i) throw new Error('no-json');
+    return JSON.parse(s.slice(i, j + 1));
+  }
+  function keysOf(spec){
+    const set = {};
+    spec.list().forEach(function(it){ set[norm(it[0])] = 1; });
+    return set;
+  }
+  function buildPrompt(spec){
+    const sample = F_shuffle(spec.list()).slice(0, 8).map(function(it){ return it[0]; });
+    return 'أنشئ 12 سؤالًا جديدًا ومتنوعًا في مجال «' + spec.topic + '» بمستوى متوسط.\n'
+      + 'الشروط: لكل سؤال إجابة صحيحة واحدة مؤكدة وثلاثة خيارات خاطئة معقولة؛ حقائق ثابتة لا تتغير مع الزمن '
+      + '(تجنّب: الآن، حاليًا، الأحدث، الأرقام القياسية المتجددة، المناصب الحالية)؛ لا تكرر أي سؤال من هذه الأسئلة: '
+      + sample.join(' | ') + '\n'
+      + 'الصيغة: [{"q":"السؤال","a":"الإجابة الصحيحة","w":["خطأ1","خطأ2","خطأ3"],"e":"شرح قصير في جملة واحدة"}]';
+  }
+  function F_shuffle(a){
+    const r = a.slice();
+    for(let i = r.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = r[i]; r[i] = r[j]; r[j] = t; }
+    return r;
+  }
+  const SYS = 'أنت مولّد أسئلة اختيار من متعدد باللغة العربية الفصحى لتطبيق ألعاب ثقافية. أجب بمصفوفة JSON صالحة فقط، دون أي نص قبلها أو بعدها ودون علامات ```.';
+
+  window.FUN.bank = {
+    register: function(spec){
+      if(!spec || !spec.id || banks[spec.id]) return;
+      banks[spec.id] = spec;
+      const d = load();
+      const have = keysOf(spec);
+      (d.items[spec.id] || []).forEach(function(it){
+        if(!Array.isArray(it) || it.length < 3 || !Array.isArray(it[2])) return;
+        const k = norm(it[0]);
+        if(have[k]) return;
+        have[k] = 1; spec.add(it);
+      });
+    },
+    ids: function(){ return Object.keys(banks); },
+    totalAdded: function(){
+      const d = load(); let n = 0;
+      Object.keys(d.items).forEach(function(k){ if(banks[k]) n += (d.items[k] || []).length; });
+      return n;
+    },
+    lastUpdate: function(){
+      const d = load(); let m = 0;
+      Object.keys(d.meta).forEach(function(k){ if(banks[k] && d.meta[k].last > m) m = d.meta[k].last; });
+      return m;
+    },
+    /* البنوك المستحقة للتحديث: الأقدم تحديثًا أولًا */
+    due: function(gapMs, force){
+      const d = load(), now = Date.now();
+      return Object.keys(banks).filter(function(id){
+        const m = d.meta[id] || {};
+        if(force) return true;
+        return now - (m.last || 0) > gapMs && now - (m.tried || 0) > 3600000;
+      }).sort(function(a, b){ return ((d.meta[a] || {}).last || 0) - ((d.meta[b] || {}).last || 0); });
+    },
+    /* يحدّث بنكًا واحدًا ويعيد عدد الأسئلة المضافة (يرمي خطأ عند الفشل) */
+    updateOne: async function(id){
+      const spec = banks[id]; if(!spec) return 0;
+      const d = load();
+      d.meta[id] = d.meta[id] || {}; d.meta[id].tried = Date.now(); save();
+      const AI = window.FUN.ai; if(!AI) throw new Error('no-ai');
+      const text = await AI.ask([{role:'user', content: buildPrompt(spec)}], SYS);
+      const arr = parse(text);
+      const have = keysOf(spec), fresh = [];
+      arr.forEach(function(o){
+        const it = cleanMcq(o); if(!it) return;
+        const k = norm(it[0]); if(have[k]) return;
+        have[k] = 1; fresh.push(it);
+      });
+      if(fresh.length){
+        fresh.forEach(function(it){ spec.add(it); });
+        d.items[id] = (d.items[id] || []).concat(fresh).slice(-MAX_EXT);
+      }
+      d.meta[id].last = Date.now();
+      save();
+      return fresh.length;
+    }
+  };
 })();
 
 /* ================= أدوات مساعدة مشتركة: محتوى بلا حدود (أسئلة، حساب، أنماط) ================= */
@@ -8110,6 +8492,11 @@ function maybeShowBackupReminder(){
     q(root,'#qaReset').addEventListener('click', function(){ resetSeen(); back(); });
   }
 
+  /* بنوك قابلة للتحديث أونلاين (تُستخدم في «أسئلة وأجوبة» و«منو الأذكى؟») */
+  if(F.bank) Object.keys(QA).forEach(function(k){
+    if(k === 'math' || !QA[k] || !Array.isArray(QA[k].list) || !QA[k].list.length) return;
+    F.bank.register({id:'qa_' + k, topic:QA[k].label, list:function(){ return QA[k].list; }, add:function(it){ QA[k].list.push(it); }});
+  });
   F.register({id:'qa', cat:'ai', name:'أسئلة وأجوبة ذكية', desc:'أسئلة لا تنتهي في كل المجالات', emoji:'🧠', c1:'#7b61d1', c2:'#4a3a94',
     render:function(root){
       function menu(){
@@ -10063,6 +10450,14 @@ function maybeShowBackupReminder(){
         opts:shuf([x[1]].concat(wr)), ans:x[1], rv:x[0] + ' ← ' + x[1], note:esc(x[3] || '') };
     });
   }
+  /* بنوك اختبار التفكير القابلة للتحديث أونلاين (التي تحتوي خيارات نصية) */
+  if(F.bank){
+    const TH_TOPIC = {l:'ألغاز ومنطق وذكاء (أسئلة تفكير بإجابات نصية قصيرة)', w:'لغة وكلمات (أضداد ومرادفات ومعاني مفردات)', g:'ثقافة عامة'};
+    Object.keys(TH_TOPIC).forEach(function(k){
+      if(!THINK[k]) return;
+      F.bank.register({id:'think_' + k, topic:TH_TOPIC[k], list:function(){ return THINK[k][1]; }, add:function(it){ THINK[k][1].push(it); }});
+    });
+  }
   F.register({ id:'g_think', cat:'game', name:'اختبار التفكير (بوقت محدد)', desc:'ألغاز ومنطق وأرقام ولغة وثقافة عامة — بنك أسئلة ومؤقت لكل سؤال', emoji:'🧩', c1:'#5f6fd8', c2:'#3a459a',
     render:function(root){
       quiz(root, { key:'think', emoji:'🧩', title:'اختبار التفكير', intro:'أسئلة ذكاء متنوعة من بنك كبير، ولكل سؤال وقت محدد. الإجابة السريعة تمنحك نقاطًا إضافية.',
@@ -11353,6 +11748,360 @@ function maybeShowBackupReminder(){
         }
       });
     }});
+})();
+
+/* ================= مشغّل التحديث التلقائي لبنوك الأسئلة ================= */
+(function(){
+  'use strict';
+  const B = window.FUN && window.FUN.bank; if(!B) return;
+  const GAP = 12 * 3600 * 1000, PER_RUN = 3, MIN_RUN_GAP = 20 * 60 * 1000;
+  let running = false, lastRun = 0;
+  function enabled(){ return !(typeof settings !== 'undefined' && settings && settings.bankAutoUpdate === false); }
+  function online(){ return navigator.onLine !== false; }
+  function saver(){ try{ return !!(navigator.connection && navigator.connection.saveData); }catch(e){ return false; } }
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function fmtDate(ts){
+    if(!ts) return '';
+    try{ return new Date(ts).toLocaleDateString('ar', {day:'numeric', month:'long'}); }catch(e){ return ''; }
+  }
+  function refreshInfo(){
+    const el = document.getElementById('bankUpdInfo'); if(!el) return;
+    const n = B.totalAdded(), last = B.lastUpdate();
+    el.textContent = n
+      ? 'أُضيف ' + n.toLocaleString('ar') + ' سؤالًا جديدًا' + (last ? ' — آخر تحديث ' + fmtDate(last) : '')
+      : 'يضيف أسئلة جديدة للألعاب تلقائيًا عند توفر الإنترنت';
+  }
+  async function run(force){
+    if(running) return 0;
+    if(!force){
+      if(!enabled() || !online() || saver() || document.hidden) return 0;
+      if(Date.now() - lastRun < MIN_RUN_GAP) return 0;
+    }
+    running = true; lastRun = Date.now();
+    let added = 0, ok = 0;
+    try{
+      const ids = B.due(GAP, force).slice(0, force ? 4 : PER_RUN);
+      for(let i = 0; i < ids.length; i++){
+        if(!online()) break;
+        try{ added += await B.updateOne(ids[i]); ok++; }catch(e){ console.warn('bank update failed', ids[i], e); }
+        if(i < ids.length - 1) await sleep(force ? 800 : 15000);
+      }
+    }finally{ running = false; refreshInfo(); }
+    return force ? {added:added, ok:ok} : added;
+  }
+  window.toggleBankAutoUpdate = function(){
+    settings.bankAutoUpdate = !(settings.bankAutoUpdate !== false);
+    saveSettingsData();
+    document.getElementById('bankUpdToggle').classList.toggle('on', settings.bankAutoUpdate !== false);
+    if(settings.bankAutoUpdate !== false) setTimeout(function(){ run(false); }, 500);
+  };
+  window.updateBanksNow = async function(){
+    const btn = document.getElementById('bankUpdNow');
+    if(!online()){ toast('لا يوجد اتصال بالإنترنت'); return; }
+    if(running){ toast('التحديث جارٍ بالفعل...'); return; }
+    if(btn){ btn.disabled = true; btn.textContent = 'جارٍ التحديث...'; }
+    toast('جارٍ جلب أسئلة جديدة...');
+    try{
+      const r = await run(true);
+      if(r && r.added) toast('أُضيف ' + r.added.toLocaleString('ar') + ' سؤالًا جديدًا للألعاب');
+      else if(r && r.ok) toast('البنوك محدّثة — لا أسئلة جديدة الآن');
+      else toast('تعذّر التحديث الآن، حاول لاحقًا');
+    }finally{ if(btn){ btn.disabled = false; btn.textContent = 'حدّث الآن'; } refreshInfo(); }
+  };
+  window.refreshBankUpdateUI = function(){
+    const tg = document.getElementById('bankUpdToggle');
+    if(tg) tg.classList.toggle('on', !(typeof settings !== 'undefined' && settings && settings.bankAutoUpdate === false));
+    refreshInfo();
+  };
+  /* التشغيل التلقائي: بعد فتح التطبيق بقليل، وعند عودة الاتصال، وعند العودة للتطبيق */
+  window.addEventListener('load', function(){ setTimeout(function(){ run(false); }, 8000); });
+  window.addEventListener('online', function(){ setTimeout(function(){ run(false); }, 2500); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) setTimeout(function(){ run(false); }, 3000); });
+})();
+
+
+/* ================= مركز الإضافة الاحترافي: حافظات + ألعاب + أدوات (أونلاين) ================= */
+(function(){
+  'use strict';
+  const CAP = 50; /* الحد الأقصى لكل قسم، ولكل قائمة مخصّصة */
+  const $ = function(id){ return document.getElementById(id); };
+  const esc = function(s){ return escapeHTML(String(s == null ? '' : s)); };
+
+  /* أنواع الحافظات: [النوع، إيموجي، الاسم، الوصف، لون1، لون2] */
+  const FK = [
+    ['note','📝','ملاحظات نصية','اكتب وارتّب ملاحظاتك','#5eb1a1','#2f7d6c'],
+    ['text','🗒️','نصوص','نصوص طويلة تنسخها وتلصقها','#5b8def','#2f5bb8'],
+    ['article','📰','مقالات','مقالات ومواضيع مطوّلة','#7b61d1','#4a3a94'],
+    ['poem','🪶','أشعار','أبيات وقصائد','#d1568a','#8f2f5c'],
+    ['quote','💬','اقتباسات وأقوال','عبارات وحكم تحبها','#c9a24b','#8a5a1a'],
+    ['code','💻','أكواد','أكواد طويلة بخط برمجي','#3a9188','#215a54'],
+    ['media','🖼️','صور وفيديو وصوت','وسائطك في مكان واحد','#e0723a','#a8481d'],
+    ['file','📎','ملفات عامة','أي ملف تريد حفظه','#4a5568','#2d3748'],
+    ['document','📄','مستندات','PDF وWord وغيرها','#5b8def','#2f5bb8'],
+    ['task','✅','قوائم مهام','مهامك وما أنجزت منها','#3f9d6b','#226b45'],
+    ['link','🔗','روابط ومواقع','مواقعك المفضلة','#3aa0d8','#1f6a96'],
+    ['contact','👤','جهات اتصال','أرقام وأسماء مهمة','#e05a6d','#a3283b'],
+    ['event','⏰','مواعيد وتذكيرات','لا تفوّت موعدًا','#e0a83a','#a5731a'],
+    ['recipe','🍲','وصفات طبخ','مقادير وطريقة التحضير','#e0723a','#a8481d'],
+    ['password','🔐','حسابات وكلمات مرور','بيانات الدخول في مكان واحد','#4b5b8c','#27304f'],
+    ['diary','📔','يوميات ومذكرات','ما يدور في يومك','#7b61d1','#4a3a94'],
+    ['idea','💡','أفكار وخواطر','أفكارك قبل أن تضيع','#e0a83a','#a5731a'],
+    ['goal','🎯','أهداف وعادات','تابع تقدّمك','#2fa38a','#176b5a'],
+    ['expense','💰','مصروفات ونفقات','سجّل ما تنفقه','#3f9d6b','#226b45']
+  ];
+
+  /* كتالوج أونلاين: [المفتاح، القسم، إيموجي، الاسم، الوصف، الرابط] — يحتاج إنترنت */
+  const CATALOG = [
+    ['g_chess','game','♟️','شطرنج ليتشس','شطرنج مجاني ضد لاعبين من العالم','https://lichess.org'],
+    ['g_chesscom','game','♜','شطرنج دوت كوم','مباريات وتحديات يومية','https://www.chess.com/play'],
+    ['g_2048','game','🔢','لعبة 2048','اجمع الأرقام حتى 2048','https://play2048.co'],
+    ['g_sudoku','game','🧮','سودوكو','ألغاز سودوكو بعدة مستويات','https://sudoku.com'],
+    ['g_wordle','game','🔤','ووردل','خمّن الكلمة في ست محاولات','https://www.nytimes.com/games/wordle/index.html'],
+    ['g_tetris','game','🧱','تتريس','اللعبة الكلاسيكية الشهيرة','https://tetris.com/play-tetris'],
+    ['g_slither','game','🐍','سلذر','ثعبان أونلاين مع لاعبين','https://slither.io'],
+    ['g_agar','game','🟣','أجار','ابتلع الخلايا الأصغر منك','https://agar.io'],
+    ['g_skribbl','game','🎨','سكريبل','ارسم وخمّن مع أصدقائك','https://skribbl.io'],
+    ['g_solitaire','game','🃏','سوليتير','ورق كلاسيكي','https://solitaired.com'],
+    ['g_mines','game','💣','كاسحة الألغام','لعبة المنطق القديمة','https://minesweeper.online'],
+    ['g_geo','game','🌍','جيوجيسر','خمّن مكانك على الخريطة','https://www.geoguessr.com'],
+    ['g_alchemy','game','⚗️','الكيمياء الصغيرة','اجمع العناصر واكتشف الجديد','https://littlealchemy2.com'],
+    ['g_cookie','game','🍪','كوكي كليكر','لعبة النقر التراكمية','https://orteil.dashnet.org/cookieclicker/'],
+    ['g_typing','game','⌨️','اختبار سرعة الكتابة','قِس سرعة كتابتك','https://monkeytype.com'],
+    ['g_poki','game','🎮','بوكي','مئات الألعاب المجانية','https://poki.com'],
+    ['g_crazy','game','🕹️','كريزي جيمز','ألعاب متنوعة للجميع','https://www.crazygames.com'],
+    ['g_y8','game','👾','Y8','ألعاب HTML5 متنوعة','https://www.y8.com'],
+    ['g_miniclip','game','🏓','ميني كليب','ألعاب أونلاين شهيرة','https://www.miniclip.com'],
+
+    ['t_translate','tool','🌐','ترجمة جوجل','ترجمة فورية بين اللغات','https://translate.google.com'],
+    ['t_wiki','tool','📖','ويكيبيديا','الموسوعة الحرة بالعربية','https://ar.wikipedia.org'],
+    ['t_maps','tool','🗺️','خرائط جوجل','خرائط واتجاهات','https://www.google.com/maps'],
+    ['t_wolfram','tool','🧠','وولفرام ألفا','حلول رياضية وعلمية فورية','https://www.wolframalpha.com'],
+    ['t_desmos','tool','📈','رسم المعادلات','آلة حاسبة بيانية تفاعلية','https://www.desmos.com/calculator'],
+    ['t_geogebra','tool','📐','جيوجبرا','رياضيات وهندسة تفاعلية','https://www.geogebra.org'],
+    ['t_canva','tool','🎨','كانفا','تصميم صور وشعارات وعروض','https://www.canva.com'],
+    ['t_removebg','tool','✂️','إزالة الخلفية','احذف خلفية أي صورة','https://www.remove.bg'],
+    ['t_photopea','tool','🖌️','فوتوبيا','محرر صور متقدم بالمتصفح','https://www.photopea.com'],
+    ['t_tinypng','tool','🗜️','ضغط الصور','صغّر حجم الصور بلا فقدان ملحوظ','https://tinypng.com'],
+    ['t_ilovepdf','tool','📄','أدوات PDF','دمج وتقسيم وتحويل ملفات PDF','https://www.ilovepdf.com'],
+    ['t_speed','tool','🚀','اختبار سرعة الإنترنت','قِس سرعة تحميلك ورفعك','https://www.speedtest.net'],
+    ['t_windy','tool','🌦️','الطقس والرياح','خريطة الطقس المباشرة','https://www.windy.com'],
+    ['t_xe','tool','💱','أسعار العملات','تحويل العملات لحظيًا','https://www.xe.com'],
+    ['t_time','tool','🕐','التوقيت العالمي','الوقت الآن في أي مدينة','https://time.is'],
+    ['t_excali','tool','✏️','لوحة رسم','ارسم مخططات بخط اليد','https://excalidraw.com'],
+    ['t_qr','tool','🔳','صانع QR','أنشئ رمز QR لأي رابط','https://www.qrcode-monkey.com'],
+
+    ['a_chatgpt','ai','💬','شات جي بي تي','محادثة ذكية وكتابة وحلول','https://chatgpt.com'],
+    ['a_claude','ai','✨','كلود','مساعد ذكي للكتابة والتحليل','https://claude.ai'],
+    ['a_gemini','ai','♊','جيميناي','مساعد جوجل الذكي','https://gemini.google.com'],
+    ['a_perplex','ai','🔎','بربليكسيتي','بحث ذكي بإجابات موثّقة','https://www.perplexity.ai'],
+    ['a_copilot','ai','🤖','كوبايلوت','مساعد مايكروسوفت الذكي','https://copilot.microsoft.com'],
+    ['a_deepl','ai','🈯','ديب إل','ترجمة دقيقة بالذكاء الاصطناعي','https://www.deepl.com'],
+
+    ['l_khan','learn','🎓','أكاديمية خان','دروس مجانية في العلوم والرياضيات','https://www.khanacademy.org'],
+    ['l_duo','learn','🦉','دولينجو','تعلّم اللغات باللعب','https://www.duolingo.com'],
+    ['l_coursera','learn','🏫','كورسيرا','دورات جامعية عن بُعد','https://www.coursera.org'],
+    ['l_edx','learn','📘','إيدكس','مقررات من أفضل الجامعات','https://www.edx.org'],
+    ['l_w3','learn','🧑‍💻','W3Schools','تعلّم الويب والبرمجة','https://www.w3schools.com'],
+    ['l_mdn','learn','📚','MDN','المرجع الرسمي لتطوير الويب','https://developer.mozilla.org'],
+    ['l_fcc','learn','🔥','فري كود كامب','تعلّم البرمجة مجانًا','https://www.freecodecamp.org'],
+    ['l_ted','learn','🎤','تيد','محاضرات ملهمة','https://www.ted.com'],
+    ['l_scholar','learn','🔬','جوجل سكولار','أبحاث ودراسات أكاديمية','https://scholar.google.com'],
+
+    ['f_youtube','fun','▶️','يوتيوب','فيديوهات لا تنتهي','https://www.youtube.com'],
+    ['f_aljazeera','fun','📰','الجزيرة','أخبار عاجلة وتقارير','https://www.aljazeera.net'],
+    ['f_bbc','fun','🌐','بي بي سي عربي','أخبار وتحليلات','https://www.bbc.com/arabic'],
+    ['f_anghami','fun','🎵','أنغامي','موسيقى عربية وعالمية','https://www.anghami.com'],
+    ['f_imdb','fun','🎬','آي إم دي بي','أفلام ومسلسلات وتقييمات','https://www.imdb.com'],
+    ['f_twitch','fun','📺','تويتش','بث مباشر للألعاب','https://www.twitch.tv'],
+    ['f_pinterest','fun','📌','بنترست','أفكار وصور ملهمة','https://www.pinterest.com']
+  ];
+
+  const TABS = [['all','الكل'],['folder','📁 حافظات'],['game','🎮 ألعاب'],['tool','🛠️ أدوات'],['ai','🤖 ذكاء'],['learn','📚 تعلّم'],['fun','🎉 ترفيه'],['mine','🧩 أدواتي']];
+  const SEC = {game:'ألعاب أونلاين', tool:'أدوات مفيدة', ai:'ذكاء اصطناعي', learn:'تعلّم ومعرفة', fun:'ترفيه وأخبار'};
+  let tab = 'all', qs = '', listId = null;
+
+  function isGone(id){ const p = toolPrefs(); return p.hidden.indexOf(id) >= 0 || p.deleted.indexOf(id) >= 0; }
+  function restore(id){
+    const p = toolPrefs();
+    p.hidden = p.hidden.filter(function(x){ return x !== id; });
+    p.deleted = p.deleted.filter(function(x){ return x !== id; });
+    if(p.deletedAt) delete p.deletedAt[id];
+  }
+  function findCustom(id){ return customToolsList().find(function(c){ return c.id === id; }); }
+  function count(cat){ return customToolsList().filter(function(c){ return (c.cat || 'mine') === cat && !isGone(c.id) || false; }).length; }
+  function hit(){ if(!qs) return true; return Array.prototype.slice.call(arguments).join(' ').toLowerCase().indexOf(qs) >= 0; }
+
+  function tile(key, emoji, name, desc, c1, c2, act, cls){
+    return '<button type="button" class="hub-tile" data-k="' + esc(key) + '" style="--fc:' + c1 + ';--fc2:' + c2 + '">'
+      + '<i class="hub-ti" aria-hidden="true">' + emoji + '</i><h4>' + esc(name) + '</h4><p>' + esc(desc) + '</p>'
+      + '<span class="hub-act ' + cls + '">' + act + '</span></button>';
+  }
+  function section(title, badge, tiles){
+    if(!tiles.length) return '';
+    return '<div class="hub-sec"><span>' + title + '</span>' + (badge ? '<b>' + badge + '</b>' : '') + '</div><div class="hub-grid">' + tiles.join('') + '</div>';
+  }
+  function drawTabs(){
+    $('hubTabs').innerHTML = TABS.map(function(t){ return '<button type="button" data-t="' + t[0] + '" class="' + (t[0] === tab ? 'on' : '') + '">' + t[1] + '</button>'; }).join('');
+  }
+  function drawNet(){
+    const el = $('hubNet'); if(!el) return;
+    const on = navigator.onLine !== false;
+    el.textContent = on ? 'متصل' : 'بلا إنترنت';
+    el.className = 'hub-net ' + (on ? 'on' : 'off');
+  }
+  function drawBody(){
+    let html = '';
+    const show = function(c){ return tab === 'all' || tab === c; };
+    if(show('folder')){
+      const t = FK.filter(function(f){ return hit(f[2], f[3]); }).map(function(f){ return tile('f:' + f[0], f[1], f[2], f[3], f[4], f[5], 'إنشاء', ''); });
+      html += section('أنواع الحافظات', t.length + ' نوعًا', t);
+    }
+    ['game','tool','ai','learn','fun'].forEach(function(cat){
+      if(!show(cat)) return;
+      const tiles = [];
+      TOOLS_LIST.forEach(function(t){
+        if(t.custom || (t.cat || 'tool') !== cat || !hit(t.name, t.desc)) return;
+        const gone = isGone(t.id);
+        tiles.push(tile('b:' + t.id, t.emoji || '🧰', t.name, t.desc || '', t.c1, t.c2, gone ? 'إعادة للرئيسية' : 'فتح', gone ? '' : 'open'));
+      });
+      CATALOG.forEach(function(c, i){
+        if(c[1] !== cat || !hit(c[3], c[4])) return;
+        const id = 'cat_' + c[0], ex = findCustom(id), gone = ex && isGone(id), col = CT_COLORS[i % CT_COLORS.length];
+        tiles.push(tile('c:' + c[0], c[2], c[3], c[4], col[0], col[1], ex ? (gone ? 'إعادة إضافة' : 'مضافة ✓') : 'إضافة', ex && !gone ? 'done' : ''));
+      });
+      html += section(SEC[cat], count(cat) + '/' + CAP + ' مضافة', tiles);
+    });
+    if(show('mine')){
+      const tiles = [];
+      customToolsList().forEach(function(ct){
+        if((ct.cat || 'mine') !== 'mine' || !hit(ct.name, ct.value)) return;
+        const gone = isGone(ct.id), col = [ct.c1 || '#3a9188', ct.c2 || '#215a54'];
+        const d = ct.kind === 'list' ? 'قائمة ' + (ct.items ? ct.items.length : 0) + '/' + CAP : (ct.kind === 'link' ? String(ct.value || '').replace(/^https?:\/\/(www\.)?/i, '').slice(0, 30) : 'نص / ملاحظة');
+        tiles.push(tile('u:' + ct.id, ct.emoji || '🔗', ct.name, d, col[0], col[1], gone ? 'إعادة للرئيسية' : 'فتح', gone ? '' : 'open'));
+      });
+      html += section('أدواتي المخصّصة', count('mine') + '/' + CAP, tiles);
+      if(tab === 'mine' && !tiles.length) html += '<div class="hub-empty">لم تنشئ أدوات مخصّصة بعد.<br>اضغط «أداة مخصّصة» بالأعلى لإضافة رابط أو نص أو قائمة تتسع لـ٥٠ عنصرًا.</div>';
+    }
+    if(!html) html = '<div class="hub-empty">لا نتائج لـ«' + esc(qs) + '»<br>جرّب كلمة أخرى، أو أنشئ أداة مخصّصة.</div>';
+    else html += '<p class="hub-note">الألعاب والأدوات الأونلاين تحتاج اتصالًا بالإنترنت، وبعض المواقع تُفتح في المتصفح الخارجي. الحد الأقصى ' + CAP + ' عنصرًا لكل قسم.</p>';
+    $('hubBody').innerHTML = html;
+  }
+  function refreshAll(){ drawBody(); try{ renderAllTools(); }catch(e){} }
+
+  function openFolderKind(kind){
+    const f = FK.find(function(x){ return x[0] === kind; });
+    openFolderModal();
+    if(!f) return;
+    $('newFolderKind').value = kind;
+    $('newFolderName').value = f[2];
+    $('newFolderColor').value = f[4];
+    $('newFolderColor2').value = f[5];
+    selectFolderEmoji(f[1]);
+    switchFolderIconTab('emoji');
+    setTimeout(function(){ const n = $('newFolderName'); if(n){ n.focus(); n.select(); } }, 250);
+  }
+
+  function onTap(key){
+    const kind = key.charAt(0), id = key.slice(2);
+    if(kind === 'f'){ closeAddHub(); openFolderKind(id); return; }
+    if(kind === 'b'){
+      if(isGone(id)){ restore(id); saveSettingsData(); refreshAll(); toast('أُعيدت إلى الرئيسية'); return; }
+      closeAddHub(); onToolTap(id); return;
+    }
+    if(kind === 'u'){
+      if(isGone(id)){ restore(id); saveSettingsData(); refreshAll(); toast('أُعيدت إلى الرئيسية'); return; }
+      closeAddHub(); runCustomTool(id); return;
+    }
+    if(kind === 'c'){
+      const cid = 'cat_' + id, ex = findCustom(cid);
+      if(ex){
+        if(isGone(cid)){ restore(cid); saveSettingsData(); refreshAll(); toast('أُعيدت إضافة «' + ex.name + '»'); return; }
+        closeAddHub(); runCustomTool(cid); return;
+      }
+      const c = CATALOG.find(function(x){ return x[0] === id; }); if(!c) return;
+      if(count(c[1]) >= CAP){ toast('وصلت للحد الأقصى (' + CAP + ') في هذا القسم'); return; }
+      const col = CT_COLORS[CATALOG.indexOf(c) % CT_COLORS.length];
+      const ct = {id:cid, name:c[3], kind:'link', value:c[5], emoji:c[2], c1:col[0], c2:col[1], cat:c[1]};
+      customToolsList().push(ct); saveSettingsData(); registerCustomTool(ct); refreshAll();
+      toast('تمت إضافة «' + c[3] + '» إلى مركز الأدوات');
+    }
+  }
+
+  window.openAddHub = function(t){
+    tab = t || 'all'; qs = ''; $('hubSearch').value = '';
+    drawTabs(); drawBody(); drawNet();
+    const bd = $('addHubBackdrop'); bd.classList.add('active');
+    const m = bd.querySelector('.modal'); if(m) m.scrollTop = 0;
+  };
+  window.closeAddHub = function(){ $('addHubBackdrop').classList.remove('active'); };
+  window.hubNewFolder = function(){ closeAddHub(); openFolderModal(); };
+  window.hubNewTool = function(){ closeAddHub(); openAddToolModal(); };
+
+  $('hubTabs').addEventListener('click', function(e){
+    const b = e.target.closest('[data-t]'); if(!b) return;
+    tab = b.dataset.t; drawTabs(); drawBody();
+  });
+  $('hubBody').addEventListener('click', function(e){
+    const t = e.target.closest('[data-k]'); if(t) onTap(t.dataset.k);
+  });
+  $('hubSearch').addEventListener('input', function(){ qs = this.value.trim().toLowerCase(); drawBody(); });
+  window.addEventListener('online', drawNet);
+  window.addEventListener('offline', drawNet);
+
+  /* ---------- قائمة مخصّصة تتسع لـ 50 عنصرًا (روابط أو نصوص) ---------- */
+  function isUrl(v){ v = String(v || '').trim(); return /^https?:\/\/\S+$/i.test(v) || /^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(v); }
+  function drawList(){
+    const ct = findCustom(listId); if(!ct) return;
+    $('ctListCount').textContent = ct.items.length + '/' + CAP;
+    $('ctListBody').innerHTML = ct.items.length
+      ? ct.items.map(function(it, i){
+          return '<div class="ctl-row"><div class="ctl-b" data-open="' + i + '"><h5>' + esc(it.n) + '</h5><p dir="auto">' + esc(it.v) + '</p></div>'
+            + '<button type="button" class="ctl-x" data-del="' + i + '" aria-label="حذف">🗑</button></div>';
+        }).join('')
+      : '<div class="hub-empty">القائمة فارغة — أضف أول عنصر (رابط لعبة أو أداة أو نص) من الأعلى.</div>';
+  }
+  window.openCtList = function(id){
+    const ct = findCustom(id); if(!ct) return;
+    if(!Array.isArray(ct.items)) ct.items = [];
+    listId = id;
+    $('ctListTitle').textContent = (ct.emoji || '🗂️') + ' ' + ct.name;
+    $('ctlName').value = ''; $('ctlValue').value = '';
+    drawList();
+    $('ctListBackdrop').classList.add('active');
+  };
+  window.closeCtList = function(){ $('ctListBackdrop').classList.remove('active'); };
+  window.ctListAddEntry = function(){
+    const ct = findCustom(listId); if(!ct) return;
+    if(ct.items.length >= CAP){ toast('وصلت للحد الأقصى: ' + CAP + ' عنصرًا'); return; }
+    let n = ctClean($('ctlName').value, 40), v = $('ctlValue').value.trim().slice(0, 2000);
+    if(!v){ toast('اكتب الرابط أو النص'); return; }
+    if(isUrl(v)){ const u = normalizeUrl(v); if(u) v = u; }
+    if(!n) n = isUrl(v) ? v.replace(/^https?:\/\/(www\.)?/i, '').split('/')[0] : v.slice(0, 24);
+    ct.items.push({n:n, v:v});
+    saveSettingsData(); registerCustomTool(ct); renderAllTools(); drawList();
+    $('ctlName').value = ''; $('ctlValue').value = '';
+    toast('تمت الإضافة (' + ct.items.length + '/' + CAP + ')');
+  };
+  $('ctListBody').addEventListener('click', function(e){
+    const ct = findCustom(listId); if(!ct) return;
+    const d = e.target.closest('[data-del]');
+    if(d){
+      const i = +d.dataset.del, it = ct.items[i]; if(!it) return;
+      showConfirm('حذف العنصر', 'سيتم حذف «' + it.n + '» من القائمة نهائيًا.', function(){
+        ct.items.splice(i, 1);
+        saveSettingsData(); registerCustomTool(ct); renderAllTools(); drawList(); toast('تم الحذف');
+      });
+      return;
+    }
+    const o = e.target.closest('[data-open]'); if(!o) return;
+    const it = ct.items[+o.dataset.open]; if(!it) return;
+    if(!isUrl(it.v)){ FUN.copy(it.v); return; }
+    if(navigator.onLine === false){ toast('هذا الرابط يحتاج اتصالًا بالإنترنت'); return; }
+    const url = normalizeUrl(it.v); if(!url) return;
+    closeCtList();
+    if(hostBlocksIframe(url)){ toast('سيُفتح الموقع في المتصفح الخارجي'); window.open(url, '_blank'); }
+    else { openBrowser(); quickBrowse(url); }
+  });
 })();
 
 
