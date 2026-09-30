@@ -118,13 +118,6 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .fab{display:none;position:fixed;bottom:25px;inset-inline-end:22px;width:59px;height:59px;border-radius:50%;background:linear-gradient(155deg,var(--gold),var(--gold-dim));box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:100;}
 .fab.show{display:flex;}
 .fab svg{width:25px;height:25px;color:var(--on-gold);}
-.fab-nav{position:fixed;inset:0;display:none;z-index:998;direction:ltr;pointer-events:none;}
-.fab-back{position:absolute;right:14px;bottom:14px;}
-.fab-nav.show{display:flex;}
-.fab-back{transition:opacity .25s, transform .3s ease;width:48px;height:48px;border-radius:50%;background:#f5c518;border:1px solid #d4a800;box-shadow:0 4px 14px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#1a1500;opacity:.92;pointer-events:auto;transition:opacity .2s, transform .15s;-webkit-tap-highlight-color:transparent;}
-.fab-back:active{opacity:.95;transform:scale(.92);}
-.fab-back svg{width:38%;height:38%;}
-.fab-back.hide{display:none;}
 .color-dot-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;align-items:center;}
 .color-dot{width:32px;height:32px;border-radius:50%;border:2px solid transparent;flex-shrink:0;position:relative;padding:0;}
 .color-dot.selected{border-color:var(--text);}
@@ -293,10 +286,14 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
 .ct-chips.colors button.on{border-color:var(--text);}
 .ct-text{white-space:pre-wrap;word-break:break-word;line-height:1.9;font-size:calc(15px * var(--font-scale));margin:0 0 14px;padding:14px;border-radius:var(--radius-md);background:var(--surface-2);max-height:55vh;overflow:auto;}
 .select-bar:not(.compact){flex-wrap:wrap;overflow-x:visible;row-gap:6px;}
-#toolSelectBarHome,#toolSelectBarScreen{padding:8px;}
-#toolSelectBarHome.show,#toolSelectBarScreen.show{flex-direction:column;align-items:stretch;gap:8px;}
+#toolSelectBarHome,#toolSelectBarScreen,#folderSelectBar{padding:8px;}
+#toolSelectBarHome.show,#toolSelectBarScreen.show,#folderSelectBar.show{flex-direction:column;align-items:stretch;gap:8px;}
 .select-bar .sb-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.select-bar .sb-lead{display:flex;align-items:center;gap:6px;min-width:0;}
 .select-bar .sb-row{display:flex;gap:6px;}
+.sb-catcher{display:none;position:fixed;top:0;bottom:0;width:22px;z-index:5;}
+.sb-catcher.l{left:28px;}.sb-catcher.r{right:28px;}
+#browserIframe:not(.hidden)~.sb-catcher{display:block;}
 .select-bar .sb-row button{flex:1 1 0;min-width:0;font-size:12px;padding:9px 4px;text-align:center;}
 .select-bar .sb-count{flex-shrink:0;font-size:12.5px;color:var(--text-dim);white-space:nowrap;padding-inline-end:2px;}
 .select-bar button{font-size:12px;padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
@@ -608,8 +605,6 @@ html[data-mode="light"] .modal-handle{background:#b8c0cf;}
 html[data-mode="light"] input,html[data-mode="light"] textarea,html[data-mode="light"] select{background:#ffffff;border-color:#b9c1cf;color:var(--text);}
 html[data-mode="light"] .modal input,html[data-mode="light"] .modal textarea,html[data-mode="light"] .modal select{background:var(--surface-2);}
 html[data-mode="light"] .btn-ghost{background:#e4e8f0;color:var(--text);border:1px solid var(--border);}
-html[data-mode="light"] .fab-back{background:#f5c518;border-color:#d4a800;color:#1a1500;box-shadow:0 4px 14px rgba(16,24,40,.28);}
-html[data-mode="dark"] .fab-back{background:#f5c518;border-color:#d4a800;color:#1a1500;}
 html[data-mode="light"] .toast{color:var(--text);box-shadow:0 8px 24px rgba(16,24,40,.2);}
 html[data-mode="light"] .folder-card::after{opacity:.10;}
 html[data-mode="light"] .greet-box{box-shadow:0 24px 60px rgba(16,24,40,.25);}
@@ -803,7 +798,6 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
       <div class="day-hello" id="dayHello"><span class="dh-ic" id="dayHelloIc" aria-hidden="true" style="display:flex"></span><span id="dayHelloTxt"></span></div>
       <p class="section-label tools-head-label">مركز الأدوات</p>
       <button type="button" class="mini-btn" onclick="restoreAllTools()">إظهار كل الأدوات</button>
-      <button type="button" class="mini-btn hidden" id="toolsManageBtnHome" onclick="openToolsManager()"></button>
     </div>
     <div class="select-bar" id="toolSelectBarHome"></div>
     <button type="button" class="add-tool-btn" onclick="openAddHub('game')"><b>＋</b> إضافة لعبة أو أداة</button>
@@ -845,14 +839,21 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
   </div>
 
   <div class="select-bar" id="folderSelectBar">
-    <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
-    <span class="sb-count" id="folderSelCount">0 محدد</span>
-    <button onclick="openOrderModal('folders')">ترتيب</button>
-    <button id="folderEditSelBtn" onclick="editSelectedFolder()">تعديل</button>
-    <button onclick="hideSelectedFolders()">إخفاء</button>
-    <button class="danger" onclick="deleteSelectedFolders()">حذف</button>
-    <button class="accent" onclick="lockSelectedFolders()"><span id="folderLockLabel">قفل</span></button>
-    <button onclick="exitFolderSelectMode()">إلغاء</button>
+    <div class="sb-top">
+      <div class="sb-lead">
+        <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
+        <button onclick="openHiddenFolders()">المخفية (<span id="folderHiddenCount">0</span>)</button>
+      </div>
+      <span class="sb-count" id="folderSelCount">0 محدد</span>
+    </div>
+    <div class="sb-row">
+      <button onclick="openOrderModal('folders')">ترتيب</button>
+      <button id="folderEditSelBtn" onclick="editSelectedFolder()">تعديل</button>
+      <button onclick="hideSelectedFolders()">إخفاء</button>
+      <button class="danger" onclick="deleteSelectedFolders()">حذف</button>
+      <button class="accent" onclick="lockSelectedFolders()"><span id="folderLockLabel">قفل</span></button>
+      <button onclick="exitFolderSelectMode()">إلغاء</button>
+    </div>
   </div>
 
   <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة لتحديدها مباشرة، أو استمر بالسحب لتغيير ترتيبها</span>
@@ -978,7 +979,6 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
     </button>
     <h2>مركز الأدوات</h2>
     <button type="button" class="mini-btn" style="margin-inline-start:auto" onclick="restoreAllTools()">إظهار كل الأدوات</button>
-    <button type="button" class="mini-btn hidden" id="toolsManageBtnScreen" onclick="openToolsManager()"></button>
   </div>
   <div class="select-bar" id="toolSelectBarScreen"></div>
   <button type="button" class="add-tool-btn" onclick="openAddHub('game')"><b>＋</b> إضافة لعبة أو أداة</button>
@@ -1023,6 +1023,7 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
       <span class="hint">ملاحظة: بعض المواقع تمنع عرضها داخل التطبيقات — استخدم زر الفتح الخارجي أعلى الشاشة إن لم تظهر الصفحة.</span>
     </div>
     <iframe id="browserIframe" class="hidden"></iframe>
+    <div class="sb-catcher l"></div><div class="sb-catcher r"></div>
   </div>
 </div>
 
@@ -1080,12 +1081,6 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
 <button class="fab" id="fabBtn" onclick="openAddModal()" title="إضافة جديد" aria-label="إضافة عنصر جديد">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
 </button>
-
-<div class="fab-nav" id="fabNav">
-  <button class="fab-back" id="fabBackBtn" type="button" title="رجوع" aria-label="رجوع">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M17 4L7 12l10 8z"/></svg>
-  </button>
-</div>
 
 <div class="gv-overlay" id="gvOverlay" role="dialog" aria-modal="true" aria-label="عارض الصور">
   <div class="gv-stage" id="gvStage"><img class="gv-img" id="gvImg" alt="" draggable="false"></div>
@@ -1297,33 +1292,6 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       دليل الاستخدام السريع
     </button>
-  </div>
-
-  <div class="settings-group">
-    <h4>زر الرجوع العائم</h4>
-    <span class="hint" style="display:block;margin-bottom:8px">زر رجوع باهت ثابت أسفل يمين الشاشة، ويغلق الأداة المفتوحة إن وُجدت.</span>
-    <div class="switch-row">
-      <span class="sr-label">تفعيل الزر العائم</span>
-      <button class="switch" id="fabBackToggle" onclick="toggleFabBack()"></button>
-    </div>
-    <div class="field">
-      <label>حجم الزر <span id="fabBackSizeVal">48</span></label>
-      <input type="range" id="fabBackSizeRange" min="36" max="72" step="2" oninput="setFabBackSize(this.value)">
-    </div>
-    <div class="field">
-      <label>درجة الوضوح <span id="fabBackOpacityVal">55%</span></label>
-      <input type="range" id="fabBackOpacityRange" min="25" max="100" step="5" oninput="setFabBackOpacity(this.value)">
-    </div>
-    <div class="field">
-      <label>لون الزر</label>
-      <div class="color-dot-row" id="fabBackColorGrid"></div>
-    </div>
-    <div class="mini-save-row">
-      <button type="button" class="mini-save-btn" onclick="saveFabBackNow()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
-        حفظ
-      </button>
-    </div>
   </div>
 
   <div class="settings-group">
@@ -1855,6 +1823,19 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
   </div>
 </div>
 
+<div class="modal-backdrop" id="hiddenFoldersBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">الحافظات المخفية</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeHiddenFolders()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="hiddenFoldersBody"></div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="extraMenuBackdrop" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -2225,11 +2206,6 @@ if(typeof settings.widgets.recent !== 'boolean') settings.widgets.recent = true;
 if(typeof settings.hapticEnabled !== 'boolean') settings.hapticEnabled = false;
 if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = true;
 if(typeof settings.hideFolderCounts !== 'boolean') settings.hideFolderCounts = false;
-if(typeof settings.fabBackEnabled !== 'boolean') settings.fabBackEnabled = true;
-if(typeof settings.fabBackSize !== 'number' || settings.fabBackSize<40 || settings.fabBackSize>72 || settings.fabBackSize===56 || settings.fabBackSize===46) settings.fabBackSize = 48;
-if(typeof settings.fabBackOpacity !== 'number' || settings.fabBackOpacity<25 || settings.fabBackOpacity>100) settings.fabBackOpacity = 92;
-if(!settings.fabYellowV1){ settings.fabYellowV1 = true; settings.fabBackOpacity = 92; }
-if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
 if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
 if(!settings.toolPrefs) settings.toolPrefs = {order:[],hidden:[],locked:[],deleted:[]};
 if(!settings.a11y) settings.a11y = {};
@@ -2443,101 +2419,123 @@ function toggleHideLockedFromHome(){
   renderHome();
 }
 
-/* ---------- Floating draggable back button ---------- */
-const FAB_BACK_PALETTE = ['#c9a24b','#ef4444','#3b82f6','#22c55e','#a855f7','#ec4899','#06b6d4','#f97316','#ffffff','#12151b'];
-function toggleFabBack(){
-  settings.fabBackEnabled = !settings.fabBackEnabled;
-  document.getElementById('fabBackToggle').classList.toggle('on', settings.fabBackEnabled);
-  saveSettingsData();
-  updateFabBackVisibility();
-  if(settings.fabBackEnabled) toast('تم تفعيل زر الرجوع العائم — اسحبه لأي مكان يناسبك');
-}
-function setFabBackSize(v){
-  settings.fabBackSize = Number(v);
-  document.getElementById('fabBackSizeVal').textContent = v;
-  applyFabBackStyle();
-  saveSettingsData();
-}
-function setFabBackOpacity(v){
-  settings.fabBackOpacity = Number(v);
-  document.getElementById('fabBackOpacityVal').textContent = v+'%';
-  applyFabBackStyle();
-  saveSettingsData();
-}
-function contrastColorFor(hex){
-  try{
-    let h = hex.replace('#','');
-    if(h.length===3) h = h.split('').map(c=>c+c).join('');
-    const r=parseInt(h.substr(0,2),16), g=parseInt(h.substr(2,2),16), b=parseInt(h.substr(4,2),16);
-    const yiq = (r*299+g*587+b*114)/1000;
-    return yiq>=140 ? '#12151b' : '#ffffff';
-  }catch(e){ return 'var(--text)'; }
-}
-function setFabBackColor(color){
-  settings.fabBackColor = color;
-  applyFabBackStyle();
-  saveSettingsData();
-  renderFabBackColorPicker();
-}
-function renderFabBackColorPicker(){
-  const box = document.getElementById('fabBackColorGrid');
-  if(!box) return;
-  const current = settings.fabBackColor;
-  let html = `<button type="button" class="color-dot-reset" onclick="setFabBackColor(null)" title="افتراضي">افتراضي</button>`;
-  html += FAB_BACK_PALETTE.map(c=>`<button type="button" class="color-dot ${current===c?'selected':''}" style="background:${c}" onclick="setFabBackColor('${c}')"></button>`).join('');
-  html += `<label class="color-dot-custom" title="لون مخصص"><input type="color" value="${current&&current[0]==='#'&&current.length===7?current:'#c9a24b'}" oninput="setFabBackColor(this.value)"></label>`;
-  box.innerHTML = html;
-}
-function applyFabBackStyle(){
-  const nav = document.getElementById('fabNav');
-  if(!nav) return;
-  const size = settings.fabBackSize || 48;
-  const op = (settings.fabBackOpacity||92)/100;
-  ['fabBackBtn'].forEach(id=>{
-    const btn = document.getElementById(id); if(!btn) return;
-    btn.style.width = size+'px'; btn.style.height = size+'px';
-    btn.style.opacity = op;
-    if(settings.fabBackColor){
-      btn.style.background = settings.fabBackColor;
-      btn.style.color = contrastColorFor(settings.fabBackColor);
-      btn.style.borderColor = settings.fabBackColor;
-    } else { btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
-  });
-}
-function updateFabBackVisibility(){
-  const nav = document.getElementById('fabNav');
-  if(!nav) return;
-  const activeEl = document.querySelector('.screen.active');
-  const activeId = activeEl ? activeEl.id : '';
-  const onHome = activeId === 'screen-home';
-  const show = settings.fabBackEnabled && !!activeId;
-  nav.classList.toggle('show', !!show);
-  const toolOpen = !!document.querySelector('#funToolBackdrop.active, #toolCompassBackdrop.active');
-  document.getElementById('fabBackBtn').classList.toggle('hide', onHome && !toolOpen);
-}
-function floatingBackAction(){
-  const openBd = Array.from(document.querySelectorAll('.modal-backdrop.active')).pop();
-  if(openBd){
-    if(openBd.id === 'funToolBackdrop' && window.FUN){ FUN.close(); return; }
-    if(openBd.id === 'toolCompassBackdrop' && typeof closeCompassTool === 'function'){ closeCompassTool(); return; }
+/* ---------- السحب يمينًا أو يسارًا للرجوع ---------- */
+(function initSwipeBack(){
+  const MIN_DX = 60, MAX_DY_RATIO = 0.6, MAX_TIME = 800, EDGE_MIN = 28, EDGE = 96; /* منطقة السحب: من 28px إلى 96px من الحافة، لتجنب إيماءة الرجوع الخاصة بالنظام */
+  let sx = 0, sy = 0, t0 = 0, tracking = false;
+  /* لا شيء يمنع السحب للرجوع إلا ما وُسم صراحة بـ data-no-swipe أو لوحة رسم النمط.
+     أما العناصر التي تتحرك أفقيًا (منزلقات، شرائط قابلة للتمرير، فيديو/صوت) فنأخذ لقطة لحالتها
+     عند اللمس؛ إن تحرّكت أثناء السحب فالسحب كان لها، وإن لم تتحرك فهو رجوع. */
+  function blocked(el){
+    if(!el || !el.closest) return true;
+    return !!el.closest('[data-no-swipe], .pattern-wrap');
   }
-  const activeScreen = document.querySelector('.screen.active');
-  if(!activeScreen) return;
-  if(activeScreen.id === 'screen-home') return;
-  const backBtn = activeScreen.querySelector('.detail-header .icon-btn, .top-header .icon-btn');
-  if(backBtn) backBtn.click();
-}
-(function watchToolModals(){
-  let raf = 0;
-  new MutationObserver(function(muts){
-    if(!muts.some(function(m){ return m.target.classList && m.target.classList.contains('modal-backdrop'); })) return;
-    cancelAnimationFrame(raf); raf = requestAnimationFrame(updateFabBackVisibility);
-  }).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
-})();
-(function initFabNav(){
-  const b = document.getElementById('fabBackBtn');
-  if(!b) return;
-  b.addEventListener('click', floatingBackAction);
+  function snapshot(el){
+    const snap = [];
+    for(let n = el; n && n !== document.documentElement; n = n.parentElement){
+      if(n.scrollWidth > n.clientWidth + 2){
+        const ox = getComputedStyle(n).overflowX;
+        if(ox === 'auto' || ox === 'scroll') snap.push([n, 'scrollLeft', n.scrollLeft]);
+      }
+      if(n.tagName === 'INPUT' && n.type === 'range') snap.push([n, 'value', n.value]);
+      if(n.tagName === 'VIDEO' || n.tagName === 'AUDIO') snap.push([n, 'currentTime', n.currentTime]);
+    }
+    return snap;
+  }
+  function changed(snap){ return snap.some(function(r){ return r[0][r[1]] !== r[2]; }); }
+  function closeTopModal(bd){
+    if(bd.id === 'confirmModalBackdrop'){ closeConfirmModal(); return; }
+    const btns = bd.querySelectorAll('[onclick]');
+    for(const b of btns){
+      if(/^\s*(?:FUN\.)?(?:close\w*|flQCancel)\(\)\s*$/.test(b.getAttribute('onclick'))){ b.click(); return; }
+    }
+    bd.classList.remove('active');
+  }
+  function swipeBack(){
+    const gv = document.getElementById('gvOverlay');
+    if(gv && gv.classList.contains('show')){ closeGalleryViewer(); return; }
+    const lock = document.getElementById('lockScreen');
+    if(lock && getComputedStyle(lock).display !== 'none'){
+      const cb = document.getElementById('lockCancelBtn');
+      if(cb && !cb.classList.contains('hidden')) cb.click();
+      return;
+    }
+    const open = Array.from(document.querySelectorAll('.modal-backdrop.active'));
+    if(open.length){
+      open.sort((a, b) => (parseInt(getComputedStyle(a).zIndex) || 0) - (parseInt(getComputedStyle(b).zIndex) || 0));
+      closeTopModal(open[open.length - 1]);
+      return;
+    }
+    if(itemSelectMode){ exitItemSelectMode(); return; }
+    if(folderSelectMode){ exitFolderSelectMode(); return; }
+    if(toolSelectMode){ exitToolSelectMode(); return; }
+    const scr = document.querySelector('.screen.active');
+    if(!scr || scr.id === 'screen-home') return;
+    const back = scr.querySelector('.detail-header .icon-btn, .top-header .icon-btn');
+    if(back) back.click(); else goHome();
+  }
+  let snap = [];
+  window.__sbActive = false; /* يعرفه عارض الصور حتى لا يبدّل الصورة أثناء سحب الرجوع */
+  /* capture: ليعمل قبل أي معالج لمس آخر (عارض الصور مثلًا) */
+  document.addEventListener('touchstart', function(e){
+    tracking = false; window.__sbActive = false;
+    if(e.touches.length !== 1) return;
+    const x = e.touches[0].clientX, w = window.innerWidth;
+    if(x > EDGE && x < w - EDGE) return; /* يبدأ السحب من قرب اليمين أو اليسار فقط */
+    if(x < EDGE_MIN || x > w - EDGE_MIN) return; /* أقصى الحافة محجوز لإيماءة النظام */
+    if(blocked(e.target)) return;
+    if(typeof gvS !== 'undefined' && gvS > 1 && document.getElementById('gvOverlay').classList.contains('show')) return; /* صورة مكبّرة: السحب لتحريكها */
+    snap = snapshot(e.target);
+    sx = x; sy = e.touches[0].clientY; t0 = Date.now();
+    tracking = true; window.__sbActive = true;
+  }, {passive:true, capture:true});
+  document.addEventListener('touchend', function(e){
+    window.__sbActive = false;
+    if(!tracking) return;
+    tracking = false;
+    const t = e.changedTouches[0]; if(!t) return;
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if(Math.abs(dx) < MIN_DX) return;
+    if(sx <= EDGE ? dx <= 0 : dx >= 0) return; /* الاتجاه من الحافة نحو داخل الشاشة */
+    if(Math.abs(dy) > Math.abs(dx) * MAX_DY_RATIO) return;
+    if(Date.now() - t0 > MAX_TIME) return;
+    if(changed(snap)) return; /* العنصر المُلامَس تحرّك بنفسه: السحب له لا للرجوع */
+    if(document.querySelector('.dragging')) return;
+    const sel = window.getSelection && String(window.getSelection());
+    if(sel) return;
+    swipeBack();
+  }, {passive:true});
+  document.addEventListener('touchcancel', function(){ tracking = false; window.__sbActive = false; }, {passive:true});
+
+  /* ---------- إيماءة/زر الرجوع الخاص بالنظام ---------- */
+  function handleSystemBack(){
+    const gv = document.getElementById('gvOverlay');
+    if(gv && gv.classList.contains('show')){ closeGalleryViewer(); return true; }
+    const lock = document.getElementById('lockScreen');
+    if(lock && getComputedStyle(lock).display !== 'none') return true; /* الشاشة مقفلة: لا شيء */
+    const hasModal = document.querySelector('.modal-backdrop.active');
+    const scr = document.querySelector('.screen.active');
+    const atHome = !scr || scr.id === 'screen-home';
+    if(hasModal || itemSelectMode || folderSelectMode || toolSelectMode || !atHome){
+      swipeBack();
+      return true;
+    }
+    return false; /* في الرئيسية ولا يوجد شيء مفتوح */
+  }
+  try{
+    let exitArmed = false, exitTimer = null;
+    const pushGuard = function(){ try{ history.pushState({appGuard:1}, ''); }catch(e){} };
+    history.replaceState({appBase:1}, '');
+    pushGuard();
+    window.addEventListener('popstate', function(){
+      if(handleSystemBack()){ pushGuard(); return; }
+      if(exitArmed){ clearTimeout(exitTimer); history.back(); return; }
+      exitArmed = true;
+      toast('ارجع مرة أخرى للخروج');
+      pushGuard();
+      exitTimer = setTimeout(function(){ exitArmed = false; }, 2000);
+    });
+  }catch(e){ console.warn('history back hook failed', e); }
 })();
 
 function toast(msg){
@@ -2585,7 +2583,6 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el = document.getElementById(id);
   el.classList.add('active');
-  updateFabBackVisibility();
   const heading = el.querySelector('h1,h2,h3');
   if(heading){ heading.setAttribute('tabindex','-1'); heading.focus({preventScroll:true}); }
 }
@@ -2739,6 +2736,8 @@ function updateFolderSelCount(){
   const all = sortedVisibleFolders().map(f=>f.id);
   const lb = document.getElementById('folderLockLabel');
   if(lb){ const ids=[...selectedFolderIds]; lb.textContent = (ids.length && ids.every(id=>{const f=getFolder(id);return f&&f.locked;})) ? 'إلغاء القفل' : 'قفل'; }
+  const hc = document.getElementById('folderHiddenCount');
+  if(hc) hc.textContent = getFolders().filter(f=>f.hidden).length;
   document.getElementById('selAllFoldersLabel').textContent = (all.length>0 && all.every(id=>selectedFolderIds.has(id))) ? 'إلغاء تحديد الكل' : 'تحديد الكل';
   const editBtn = document.getElementById('folderEditSelBtn');
   if(editBtn) editBtn.classList.toggle('hidden', selectedFolderIds.size !== 1);
@@ -2778,7 +2777,7 @@ function hideSelectedFolders(){
   const n = selectedFolderIds.size;
   selectedFolderIds.forEach(id=>updateFolderMeta(id,{hidden:true}));
   exitFolderSelectMode();
-  toast('تم إخفاء '+n+' — تجدها في «المزيد ← الحافظات المخفية»');
+  toast('تم إخفاء '+n+' — تجدها في «المخفية» بجانب تحديد الكل');
 }
 function lockSelectedFolders(){
   if(selectedFolderIds.size===0){ toast('لم تختر أي حافظة'); return; }
@@ -2815,6 +2814,50 @@ function flUnlockChain(list){
   } else {
     promptUnlock('لإلغاء قفل "'+f.name+'"', ()=>{ flClearFolderLock(id); flUnlockChain(list.slice(1)); });
   }
+}
+/* ---- صندوق الحافظات المخفية (بجانب تحديد الكل) ---- */
+let hiddenBoxChanged = false;
+function openHiddenFolders(){
+  hiddenBoxChanged = false;
+  renderHiddenFolders();
+  document.getElementById('hiddenFoldersBackdrop').classList.add('active');
+}
+function closeHiddenFolders(){
+  document.getElementById('hiddenFoldersBackdrop').classList.remove('active');
+  if(hiddenBoxChanged && folderSelectMode) exitFolderSelectMode(); /* إلغاء التحديد بعد الإجراء */
+  hiddenBoxChanged = false;
+}
+function renderHiddenFolders(){
+  const hid = getFolders().filter(f=>f.hidden);
+  const body = document.getElementById('hiddenFoldersBody');
+  if(!hid.length){
+    body.innerHTML = '<p class="hint" style="text-align:center;margin:18px 0">لا توجد حافظات مخفية — حدّد حافظات ثم اضغط «إخفاء» لتظهر هنا</p>';
+    return;
+  }
+  body.innerHTML = hid.map(f=>`<div class="mgr-row">
+      <div class="folder-icon" style="--fc:${f.color};--fc2:${f.color2}">${folderIconInner(f)}</div>
+      <span class="mgr-name">${escapeHTML(f.name)}</span>
+      <button type="button" onclick="openHiddenFolder('${f.id}')">فتح</button>
+      <button type="button" onclick="unhideFromBox('${f.id}')">إظهار</button>
+    </div>`).join('') + '<button type="button" class="btn btn-ghost" style="width:100%;margin-top:6px" onclick="unhideAllFromBox()">إظهار الكل</button>';
+}
+function unhideFromBox(id){
+  updateFolderMeta(id,{hidden:false});
+  hiddenBoxChanged = true;
+  renderHome(); renderHiddenFolders(); updateFolderSelCount();
+  toast('أُظهرت الحافظة في الرئيسية');
+}
+function unhideAllFromBox(){
+  getFolders().filter(f=>f.hidden).forEach(f=>updateFolderMeta(f.id,{hidden:false}));
+  hiddenBoxChanged = true;
+  closeHiddenFolders();
+  renderHome();
+  toast('أُظهرت كل الحافظات المخفية');
+}
+function openHiddenFolder(id){
+  hiddenBoxChanged = true;
+  closeHiddenFolders();
+  openFolder(id);
 }
 function unhideFolder(id){
   updateFolderMeta(id,{hidden:false});
@@ -2866,9 +2909,15 @@ function openOrderModal(kind){
   renderOrderModal();
   document.getElementById('orderBackdrop').classList.add('active');
 }
+let orderApplied = false;
 function closeOrderModal(){
   document.getElementById('orderBackdrop').classList.remove('active');
   orderKind = null;
+  if(orderApplied){ /* إلغاء التحديد بعد تطبيق الترتيب */
+    orderApplied = false;
+    if(folderSelectMode) exitFolderSelectMode();
+    if(toolSelectMode) exitToolSelectMode();
+  }
 }
 function renderOrderModal(){
   const items = orderItems();
@@ -2904,6 +2953,7 @@ function moveSelectedInOrder(toTop){
   applyOrder(toTop ? sel.concat(rest) : rest.concat(sel));
 }
 function applyOrder(ids){
+  orderApplied = true;
   if(orderKind==='tools'){
     const p = toolPrefs();
     const full = orderedTools().map(t=>t.id);
@@ -5209,7 +5259,6 @@ document.getElementById('backupImportInput').addEventListener('change', e=>{
           if(typeof settings.widgets.recent !== 'boolean') settings.widgets.recent = true;
           if(typeof settings.compactHomeGrid !== 'boolean') settings.compactHomeGrid = true;
           if(!Array.isArray(settings.folderOrder)) settings.folderOrder = [];
-          if(typeof settings.fabBackColor === 'undefined') settings.fabBackColor = null;
         }
         if(parsed.widgetsData){
           widgetsData = parsed.widgetsData;
@@ -5589,7 +5638,6 @@ function updateThemeFromForm(){
   document.getElementById(id).addEventListener('input', updateThemeFromForm);
 });
 function saveThemeNow(){ try{ updateThemeFromForm(); }catch(e){} toast('تم حفظ المظهر'); }
-function saveFabBackNow(){ saveSettingsData(); applyFabBackStyle(); updateFabBackVisibility(); toast('تم حفظ إعدادات الزر'); }
 function resetTheme(){
   settings.theme = Object.assign({}, DEFAULT_THEME);
   saveSettingsData();
@@ -5623,12 +5671,6 @@ function loadSettingsForm(){
   document.getElementById('setHomeColumns').value = settings.compactHomeGrid ? '3' : '2';
   document.getElementById('hideCountsToggle').classList.toggle('on', !!settings.hideFolderCounts);
   document.getElementById('hideLockedToggle').classList.toggle('on', !!settings.hideLockedFromHome);
-  document.getElementById('fabBackToggle').classList.toggle('on', !!settings.fabBackEnabled);
-  document.getElementById('fabBackSizeRange').value = settings.fabBackSize;
-  document.getElementById('fabBackSizeVal').textContent = settings.fabBackSize;
-  document.getElementById('fabBackOpacityRange').value = settings.fabBackOpacity;
-  document.getElementById('fabBackOpacityVal').textContent = settings.fabBackOpacity+'%';
-  renderFabBackColorPicker();
   loadThemeForm();
   loadA11yForm();
   refreshStorageInfo();
@@ -6482,9 +6524,13 @@ function renderToolSelectBars(){
   const n = selectedToolIds.size;
   const allSel = vis.length>0 && vis.every(t=>selectedToolIds.has(t.id));
   const allLocked = n>0 && Array.from(selectedToolIds).every(id=>p.locked.includes(id));
+  const hidN = TOOLS_LIST.filter(t=>p.hidden.includes(t.id) && !p.deleted.includes(t.id)).length;
   const html = `
     <div class="sb-top">
-      <button onclick="toggleSelectAllTools()">${allSel?'إلغاء تحديد الكل':'تحديد الكل'}</button>
+      <div class="sb-lead">
+        <button onclick="toggleSelectAllTools()">${allSel?'إلغاء تحديد الكل':'تحديد الكل'}</button>
+        ${hidN>0?`<button onclick="openToolsManager()">المخفية (${hidN})</button>`:''}
+      </div>
       <span class="sb-count">${n} محدد</span>
     </div>
     <div class="sb-row">
@@ -6502,14 +6548,7 @@ function renderToolSelectBars(){
   });
 }
 function updateToolsManageButtons(){
-  const p = toolPrefs();
-  const n = TOOLS_LIST.filter(t=>p.hidden.includes(t.id) && !p.deleted.includes(t.id)).length;
-  ['toolsManageBtnHome','toolsManageBtnScreen'].forEach(id=>{
-    const b = document.getElementById(id);
-    if(!b) return;
-    b.textContent = 'إدارة ('+n+')';
-    b.classList.toggle('hidden', n===0);
-  });
+  if(toolSelectMode) renderToolSelectBars();
 }
 function restoreAllTools(){
   const p = toolPrefs();
@@ -7331,8 +7370,6 @@ function init(){
     showLockScreen();
   }
   renderHome();
-  applyFabBackStyle();
-  updateFabBackVisibility();
   maybeShowBackupReminder();
   setupA11yObserver();
   setupFolderSelectOutsideTap();
@@ -12309,6 +12346,7 @@ function gvInfo(){
   let mode = null, sx = 0, sy = 0, bx = 0, by = 0, d0 = 0, s0 = 1, dx = 0, moved = false, lastTap = 0, tapT = null;
   const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
   st.addEventListener('touchstart', e=>{
+    if(window.__sbActive){ mode = null; return; }
     if(e.touches.length === 2){ mode = 'pinch'; d0 = dist(e.touches); s0 = gvS; moved = true; }
     else if(e.touches.length === 1){
       mode = gvS > 1 ? 'pan' : 'swipe';
@@ -12334,6 +12372,7 @@ function gvInfo(){
   }, {passive:false});
   st.addEventListener('touchend', e=>{
     if(e.touches.length > 0) return;
+    if(window.__sbActive){ mode = null; return; }
     if(mode === 'swipe'){
       if(Math.abs(dx) > 70){
         /* واجهة عربية (من اليمين لليسار): السحب نحو اليمين = التالية */
