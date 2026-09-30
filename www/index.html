@@ -28,15 +28,16 @@
   color-scheme:light;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;min-height:100%;}
+html,body{margin:0;min-height:100%;overscroll-behavior-x:none;}
 body{
   background:var(--bg);color:var(--text);
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
   font-size:calc(15px * var(--font-scale));
+  font-weight:500; /* خط أثخن قليلًا */
   padding-top:calc(var(--status-h) + 2px);
   padding-bottom:env(safe-area-inset-bottom);
 }
-button,input,textarea{font-family:inherit;}
+button,input,textarea,select{font-family:inherit;font-weight:inherit;}
 button{border:0;background:none;color:inherit;cursor:pointer;}
 input,textarea,select{
   width:100%;background:var(--surface-2);color:var(--text);
@@ -766,11 +767,6 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
     </div>
   </div>
 
-  <div id="recentSection">
-    <p class="section-label">أحدث الإضافات</p>
-    <div class="recent-scroller" id="recentScroller"></div>
-  </div>
-
   <div class="widgets-section" id="widgetsSection">
     <div class="widget-block hidden" id="widgetNotesBlock">
       <div class="widget-head">
@@ -858,6 +854,10 @@ textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
 
   <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة لتحديدها مباشرة، أو استمر بالسحب لتغيير ترتيبها</span>
   <div class="stats-bar" id="homeStatsBar" style="margin-bottom:10px"></div>
+  <div id="recentSection">
+    <p class="section-label">أحدث الإضافات</p>
+    <div class="recent-scroller" id="recentScroller"></div>
+  </div>
   <div class="grid" id="foldersGrid"></div>
 </div>
 
@@ -2421,7 +2421,7 @@ function toggleHideLockedFromHome(){
 
 /* ---------- السحب يمينًا أو يسارًا للرجوع ---------- */
 (function initSwipeBack(){
-  const MIN_DX = 60, MAX_DY_RATIO = 0.6, MAX_TIME = 800, EDGE_MIN = 28, EDGE = 96; /* منطقة السحب: من 28px إلى 96px من الحافة، لتجنب إيماءة الرجوع الخاصة بالنظام */
+  const MIN_DX = 60, MAX_DY_RATIO = 0.6, MAX_TIME = 800, EDGE = 28; /* منطقة السحب: من أقصى الحافة اليمنى أو اليسرى (0–28px) */
   let sx = 0, sy = 0, t0 = 0, tracking = false;
   /* لا شيء يمنع السحب للرجوع إلا ما وُسم صراحة بـ data-no-swipe أو لوحة رسم النمط.
      أما العناصر التي تتحرك أفقيًا (منزلقات، شرائط قابلة للتمرير، فيديو/صوت) فنأخذ لقطة لحالتها
@@ -2482,13 +2482,22 @@ function toggleHideLockedFromHome(){
     if(e.touches.length !== 1) return;
     const x = e.touches[0].clientX, w = window.innerWidth;
     if(x > EDGE && x < w - EDGE) return; /* يبدأ السحب من قرب اليمين أو اليسار فقط */
-    if(x < EDGE_MIN || x > w - EDGE_MIN) return; /* أقصى الحافة محجوز لإيماءة النظام */
     if(blocked(e.target)) return;
     if(typeof gvS !== 'undefined' && gvS > 1 && document.getElementById('gvOverlay').classList.contains('show')) return; /* صورة مكبّرة: السحب لتحريكها */
     snap = snapshot(e.target);
     sx = x; sy = e.touches[0].clientY; t0 = Date.now();
     tracking = true; window.__sbActive = true;
-  }, {passive:true, capture:true});
+  }, {passive:false, capture:true});
+  /* التقاط اللمسة أولًا: أثناء سحب أفقي من الحافة نمنع المتصفح من تنفيذ إيماءته (رجوع/تنقّل)، والتطبيق ينفّذ الرجوع بنفسه */
+  document.addEventListener('touchmove', function(e){
+    if(!tracking || !e.touches || e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    const inward = sx <= EDGE ? dx > 0 : dx < 0;
+    if(inward && Math.abs(dx) > 6 && Math.abs(dy) <= Math.abs(dx) * MAX_DY_RATIO && !changed(snap)){
+      if(e.cancelable) e.preventDefault();
+    }
+  }, {passive:false, capture:true});
   document.addEventListener('touchend', function(e){
     window.__sbActive = false;
     if(!tracking) return;
@@ -3157,7 +3166,7 @@ function renderRecentItems(){
   const scroller = document.getElementById('recentScroller');
   const section = document.getElementById('recentSection');
   if(settings.widgets && settings.widgets.recent===false){ section.classList.add('hidden'); return; }
-  const items = allItemsFlat(false, true).sort((a,b)=>b.createdAt-a.createdAt).slice(0,10);
+  const items = allItemsFlat(false, true).filter(it=>{ const f = getFolder(it.folderId); return f && !f.locked && !f.hidden; }).sort((a,b)=>b.createdAt-a.createdAt).slice(0,10);
   if(items.length===0){ section.classList.add('hidden'); return; }
   section.classList.remove('hidden');
   scroller.innerHTML = items.map(item=>{
