@@ -2,7 +2,7 @@ name: Build Android APK
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -21,19 +23,29 @@ jobs:
       - name: Install ImageMagick
         run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Prepare icon from photo
+      - name: Prepare icon
         run: |
           mkdir -p assets
           convert www/icon.png -resize 1024x1024 assets/icon.png
 
-      - run: npm install
+      - name: Install dependencies
+        run: |
+          npm install
+          V=$(node -p "require('./node_modules/@capacitor/core/package.json').version.split('.')[0]")
+          npm install @capacitor/geolocation@$V
+
       - run: npx cap add android
       - run: npx capacitor-assets generate
       - run: npx cap sync android
 
-      - name: Add microphone permission
+      - name: Add app permissions
         run: |
-          sed -i '/<manifest/a\    <uses-permission android:name="android.permission.RECORD_AUDIO" />' android/app/src/main/AndroidManifest.xml
+          F=android/app/src/main/AndroidManifest.xml
+          for P in ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION RECORD_AUDIO MODIFY_AUDIO_SETTINGS; do
+            if ! grep -q "android.permission.$P" $F; then
+              sed -i "s#</manifest>#    <uses-permission android:name=\"android.permission.$P\" />\n</manifest>#" $F
+            fi
+          done
 
       - name: Build debug APK
         run: |
