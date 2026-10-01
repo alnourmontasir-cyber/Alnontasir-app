@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f2f4f8">
+<title>منتصر النور</title>
+<style>
+:root{
+  --bg:#f2f4f8;
+  --bg-elev:#ffffff;
+  --surface:#ffffff;
+  --surface-2:#eef1f6;
+  --border:#d3d9e3;
+  --text:#141a26;
+  --text-dim:#4d576a;
+  --gold:#946600;
+  --gold-dim:#6b4700;
+  --on-gold:#ffffff;
+  --danger:#c65a4d;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --radius-sm:10px;
+  --shadow:0 6px 20px rgba(16,24,40,.14);
+  --icon-size:47px;
+  --font-scale:1.18;
+  --status-h:env(safe-area-inset-top,0px);
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;min-height:100%;overscroll-behavior-x:none;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+  font-size:calc(15px * var(--font-scale));
+  font-weight:500; /* خط أثخن قليلًا */
+  padding-top:calc(var(--status-h) + 2px);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+button,input,textarea,select{font-family:inherit;font-weight:inherit;}
+button{border:0;background:none;color:inherit;cursor:pointer;}
+input,textarea,select{
+  width:100%;background:var(--surface-2);color:var(--text);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:12px 14px;font-size:calc(15px * var(--font-scale));
+}
+select{-webkit-appearance:none;appearance:none;}
+input[type="color"]{padding:4px;height:44px;cursor:pointer;}
+input[type="range"]{padding:0;background:transparent;}
+textarea{min-height:110px;resize:vertical;}
+textarea.mono{font-family:ui-monospace,Menlo,Consolas,monospace;}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);}
+.hidden{display:none!important;}
+.screen{display:none;min-height:100vh;padding:4px 16px 110px;}
+#statusStrip{position:fixed;top:0;left:0;right:0;height:var(--status-h);background:var(--bg);z-index:2000;pointer-events:none;}
+.screen.active{display:block;}
+.top-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;padding:0 2px 12px;gap:8px;}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;}
+.avatar,.avatar-fallback{width:52px;height:52px;border-radius:16px;flex-shrink:0;}
+.avatar{object-fit:cover;border:1px solid var(--border);}
+.avatar-fallback{background:linear-gradient(155deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:calc(21px * var(--font-scale));font-weight:900;color:var(--on-gold);}
+.brand h1{margin:0;font-size:calc(20px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand p{margin:3px 0 0;color:var(--text-dim);font-size:calc(12px * var(--font-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-actions{display:flex;gap:7px;flex-shrink:0;flex-wrap:nowrap;}
+.icon-btn{position:relative;width:41px;height:41px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.icon-btn:active{transform:scale(.94);}
+.icon-btn svg{width:19px;height:19px;}
+.icon-btn .badge-dot{position:absolute;top:-2px;inset-inline-end:-2px;min-width:16px;height:16px;padding:0 3px;border-radius:8px;background:var(--gold);color:var(--on-gold);font-size:calc(9.5px * var(--font-scale));font-weight:800;display:flex;align-items:center;justify-content:center;}
+.browser-quick-btn{display:flex;align-items:center;justify-content:center;gap:5px;height:41px;padding:0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--border);flex-shrink:0;}
+.browser-quick-btn:active{transform:scale(.94);}
+.browser-quick-btn svg{width:17px;height:17px;flex-shrink:0;}
+.browser-quick-btn span{display:inline;font-size:calc(11.5px * var(--font-scale));font-weight:700;white-space:nowrap;}
+.home-search{margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.folder-card{position:relative;overflow:hidden;min-height:135px;padding:16px;text-align:right;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(160deg,var(--surface),var(--surface-2));display:flex;flex-direction:column;justify-content:space-between;transition:.12s;}
+.folder-card:active{transform:scale(.96);}
+.folder-card::after{content:"";position:absolute;width:100px;height:100px;top:-35px;inset-inline-end:-35px;border-radius:50%;background:var(--fc);opacity:.13;}
+.folder-card .pin-flag{position:absolute;top:10px;inset-inline-start:10px;width:22px;height:22px;color:var(--gold);opacity:.85;}
+.folder-card .pin-flag svg{width:100%;height:100%;}
+.folder-icon{width:var(--icon-size);height:var(--icon-size);border-radius:14px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.folder-icon svg{width:48%;height:48%;color:#fff;}
+.folder-icon img{width:100%;height:100%;object-fit:cover;}
+.folder-card h3{margin:0 0 4px;font-size:calc(14px * var(--font-scale));}
+.folder-card span{font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);}
+.detail-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.detail-header h2{margin:0;flex:1;min-width:0;font-size:calc(19px * var(--font-scale));font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.detail-header .icon-btn,.detail-header #folderCountBadge{flex-shrink:0;}
+.search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 12px;}
+.search-box svg{width:18px;height:18px;color:var(--text-dim);flex-shrink:0;}
+.search-box input{border:0;background:transparent;padding:11px 0;}
+.search-box input:focus{outline:0;}
+.stats-bar{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+.stats-chip{flex-shrink:0;padding:9px 14px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:calc(12px * var(--font-scale));color:var(--text-dim);white-space:nowrap;}
+.stats-chip b{color:var(--text);font-weight:800;}
+.item-list{display:flex;flex-direction:column;gap:10px;}
+.item-list.grid-view{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.item-list.grid-view .item-card{flex-direction:column;align-items:stretch;text-align:center;padding:10px;}
+.item-list.grid-view .item-thumb{width:100%;height:84px;border-radius:12px;}
+.item-list.grid-view .item-thumb svg{width:26px;height:26px;}
+.item-list.grid-view .item-body p{display:none;}
+.item-list.grid-view .item-actions{flex-direction:row;justify-content:center;margin-top:8px;}
+.item-card{position:relative;display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);}
+.item-thumb{position:relative;width:calc(var(--icon-size) * 1.02);height:calc(var(--icon-size) * 1.02);flex-shrink:0;border-radius:11px;background:var(--surface-2);object-fit:cover;display:flex;align-items:center;justify-content:center;color:var(--gold);}
+.item-thumb svg{width:46%;height:46%;}
+.item-thumb img{width:100%;height:100%;object-fit:cover;border-radius:11px;}
+.fav-star{position:absolute;top:-5px;inset-inline-start:-5px;width:16px;height:16px;color:var(--gold);filter:drop-shadow(0 0 2px rgba(0,0,0,.7));}
+.fav-star svg{width:100%;height:100%;}
+.item-body{flex:1;min-width:0;cursor:pointer;}
+.item-body h4{margin:0 0 4px;font-size:calc(14.5px * var(--font-scale));}
+.item-body p{margin:0;color:var(--text-dim);font-size:calc(12.5px * var(--font-scale));white-space:pre-wrap;word-break:break-word;max-height:48px;overflow:hidden;}
+.item-meta{margin-top:5px;font-size:calc(10.5px * var(--font-scale));color:var(--text-dim);}
+.item-actions{display:flex;flex-direction:column;gap:6px;}
+.item-actions button{width:29px;height:29px;border-radius:9px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;}
+.item-actions button.starred{color:var(--gold);}
+.item-actions svg{width:14px;height:14px;}
+.empty-state{text-align:center;padding:70px 20px;color:var(--text-dim);}
+.empty-state svg{width:50px;height:50px;margin-bottom:12px;opacity:.5;}
+.empty-state p{margin:0;font-size:calc(14px * var(--font-scale));}
+.fab{display:none;position:fixed;bottom:25px;inset-inline-end:22px;width:59px;height:59px;border-radius:50%;background:linear-gradient(155deg,var(--gold),var(--gold-dim));box-shadow:var(--shadow);align-items:center;justify-content:center;z-index:100;}
+.fab.show{display:flex;}
+.fab svg{width:25px;height:25px;color:var(--on-gold);}
+
+/* ===== زر الرجوع العائم (أسفل اليمين) ===== */
+:root{--bf-top:#ffd84a;--bf-bot:#f2ac00;--bf-ink:#1f1500;--bf-ring:rgba(120,78,0,.30);--bf-glow:rgba(242,172,0,.38);}
+html[data-mode="dark"]{--bf-top:#ffdf5c;--bf-bot:#ffbf14;--bf-ink:#1a1200;--bf-ring:rgba(255,255,255,.22);--bf-glow:rgba(255,200,40,.32);}
+body.a11y-high-contrast{--bf-top:#ffd23f;--bf-bot:#ffb800;--bf-ink:#000;--bf-ring:#fff;}
+.back-fab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:350;
+  width:50px;height:34px;padding:0;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  color:var(--bf-ink);background:linear-gradient(160deg,var(--bf-top) 0%,var(--bf-bot) 100%);
+  border:1px solid var(--bf-ring);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 12px rgba(16,24,40,.20);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(10px) scale(.9);
+  transition:opacity .22s ease,transform .22s cubic-bezier(.2,.9,.3,1.2),visibility 0s linear .22s,bottom .2s ease,box-shadow .15s ease;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;}
+.back-fab.show{opacity:.62;visibility:visible;pointer-events:auto;transform:none;transition-delay:0s;}
+.back-fab.show:hover,.back-fab.show:focus-visible{opacity:.9;}
+.back-fab.above-bar{bottom:calc(88px + env(safe-area-inset-bottom,0px));}
+.back-fab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;}
+.back-fab.show:active{opacity:1;transform:scale(.92);box-shadow:inset 0 2px 4px rgba(150,90,0,.3),0 2px 6px rgba(16,24,40,.2);}
+.back-fab:focus-visible{outline:2px solid var(--text);outline-offset:3px;}
+@media (prefers-reduced-motion:reduce){.back-fab{transition:none;}}
+
+.color-dot-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;align-items:center;}
+.color-dot{width:32px;height:32px;border-radius:50%;border:2px solid transparent;flex-shrink:0;position:relative;padding:0;}
+.color-dot.selected{border-color:var(--text);}
+.color-dot.selected::after{content:'';position:absolute;inset:0;margin:auto;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);}
+.color-dot-reset{width:32px;height:32px;border-radius:50%;border:2px dashed var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:calc(9px * var(--font-scale));color:var(--text-dim);background:transparent;}
+.color-dot-custom{width:32px;height:32px;border-radius:50%;flex-shrink:0;padding:0;border:2px solid var(--border);overflow:hidden;}
+.color-dot-custom input[type=color]{width:150%;height:150%;transform:translate(-15%,-15%);border:0;padding:0;cursor:pointer;}
+.icon-btn.active{background:var(--gold);color:var(--on-gold);border-color:var(--gold);}
+.folder-card{touch-action:pan-y;}
+.folder-card.dragging{opacity:.55;transform:scale(1.05);box-shadow:var(--shadow);z-index:5;transition:none;}
+.project-progress-track{height:7px;border-radius:5px;background:var(--surface-2);overflow:hidden;margin-top:10px;}
+.project-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dim));}
+.modal-backdrop{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);}
+.modal-backdrop.active{display:flex;}
+.modal-backdrop#funToolBackdrop,.modal-backdrop#toolCompassBackdrop{align-items:stretch;background:var(--bg-elev);}
+#funToolBackdrop .modal,#toolCompassBackdrop .modal{max-width:none;max-height:none;height:100%;border-radius:0;border-top:0;padding:calc(var(--status-h) + 14px) 16px calc(90px + env(safe-area-inset-bottom));}
+#funToolBackdrop .modal-handle,#toolCompassBackdrop .modal-handle{display:none;}
+.modal{width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:var(--bg-elev);border-top:1px solid var(--border);}
+.modal-handle{width:40px;height:4px;margin:0 auto 15px;border-radius:3px;background:var(--border);}
+.modal-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;}
+.modal-head-row h3{margin:0;font-size:calc(17px * var(--font-scale));}
+.modal h3{margin:0 0 16px;font-size:calc(17px * var(--font-scale));}
+.field{margin-bottom:13px;}
+.field label{display:block;margin-bottom:6px;color:var(--text-dim);font-size:calc(12.5px * var(--font-scale));}
+.field .hint{display:block;margin-top:5px;color:var(--text-dim);font-size:calc(11px * var(--font-scale));}
+.modal-actions{display:flex;gap:10px;margin-top:8px;}
+.btn{flex:1;padding:13px;border-radius:var(--radius-sm);font-size:calc(14px * var(--font-scale));font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn svg{width:17px;height:17px;flex-shrink:0;}
+.btn-primary{background:var(--gold);color:var(--on-gold);}
+.btn-ghost{background:var(--surface-2);color:var(--text);}
+.btn-danger{background:var(--danger);color:#fff;}
+/* ---- زر حفظ مدمج وصغير لعمليات الإضافة/التعديل ---- */
+.btn-compact{flex:0 0 auto!important;padding:11px 26px;border-radius:30px;min-width:108px;box-shadow:0 4px 14px rgba(201,162,75,.25);}
+.modal-actions.actions-compact{justify-content:center;gap:12px;}
+.modal-actions.actions-compact .btn-ghost{flex:0 0 auto;padding:11px 22px;border-radius:30px;}
+.mini-save-row{display:flex;justify-content:flex-end;margin-top:8px;}
+.mini-save-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:30px;background:var(--gold);color:var(--on-gold);font-size:calc(12.5px * var(--font-scale));font-weight:800;box-shadow:0 3px 10px rgba(201,162,75,.3);}
+.mini-save-btn svg{width:13px;height:13px;}
+.mini-save-btn:active{transform:scale(.95);}
+/* ---- صندوق تأكيد يظهر في منتصف الشاشة بشكل بيضاوي احترافي ---- */
+.modal-backdrop.center-modal{align-items:center;padding:24px;}
+.confirm-box{width:100%;max-width:360px;padding:28px 24px 22px;border-radius:32px;background:linear-gradient(165deg,var(--bg-elev),var(--surface));border:1px solid var(--border);box-shadow:0 25px 60px rgba(0,0,0,.55);text-align:center;max-height:none;}
+.confirm-icon{width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(155deg,var(--danger),#8a3226);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(198,90,77,.35);}
+.confirm-icon svg{width:26px;height:26px;color:#fff;}
+.confirm-box h3{margin:0 0 10px;font-size:calc(17px * var(--font-scale));text-align:center;}
+.confirm-box p{color:var(--text-dim);font-size:calc(13.5px * var(--font-scale));margin:0 0 20px;line-height:1.7;text-align:center;}
+.confirm-box .modal-actions{gap:10px;}
+.confirm-box .btn{border-radius:30px;padding:13px 10px;}
+.settings-group{margin-bottom:14px;padding:15px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--surface);}
+.settings-group h4{margin:0 0 12px;color:var(--text-dim);font-size:calc(12.5px * var(--font-scale));display:flex;align-items:center;gap:7px;}
+.settings-group h4 svg{width:14px;height:14px;}
+.settings-group.danger-zone{border-color:rgba(198,90,77,.4);background:linear-gradient(160deg,var(--surface),rgba(198,90,77,.06));}
+.settings-group.danger-zone h4{color:var(--danger);}
+.avatar-row{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.avatar-big{width:74px;height:74px;border-radius:20px;object-fit:cover;}
+.switch-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:10px;}
+.switch-row .sr-label{flex:1;min-width:0;}
+.switch-row .sr-label small{display:block;color:var(--text-dim);font-size:calc(11px * var(--font-scale));margin-top:2px;}
+.switch{position:relative;width:48px;height:28px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);flex-shrink:0;}
+.switch::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;background:var(--text-dim);transition:.2s;}
+.switch.on{background:var(--gold);}
+.switch.on::after{inset-inline-start:23px;background:var(--on-gold);}
+.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.icon-pick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:6px;}
+.icon-pick{aspect-ratio:1;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.icon-pick svg{width:18px;height:18px;}
+.icon-pick.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;}
+.icon-tab-row{display:flex;gap:8px;margin-top:8px;}
+.icon-tab-btn{flex:1;padding:9px 6px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:calc(12.5px * var(--font-scale));font-weight:700;color:var(--text-dim);}
+.icon-tab-btn.active{background:var(--gold);color:var(--on-gold);border-color:var(--gold);}
+.emoji-pick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px;}
+.emoji-pick{aspect-ratio:1;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:calc(20px * var(--font-scale));line-height:1;}
+.emoji-pick.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;}
+.folder-emoji{font-size:calc(var(--icon-size) * 0.52);line-height:1;}
+.mode-row{display:flex;gap:10px;}
+.mode-btn{flex:1;padding:14px 10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:calc(12.5px * var(--font-scale));}
+.mode-btn svg{width:20px;height:20px;}
+.mode-btn.active{border-color:var(--gold);background:var(--gold-dim);color:#fff;}
+.range-row{display:flex;align-items:center;gap:10px;}
+.range-row span{font-size:calc(12px * var(--font-scale));color:var(--text-dim);min-width:38px;text-align:center;}
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);z-index:600;padding:11px 20px;border-radius:30px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);font-size:calc(13px * var(--font-scale));opacity:0;pointer-events:none;transition:.2s;max-width:88vw;text-align:center;}
+.toast.show{opacity:1;}
+#lockScreen{display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:17px;padding:25px;}
+#lockScreen.active{display:flex;}
+.lock-emblem{width:76px;height:76px;border-radius:50%;background:linear-gradient(155deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;}
+.lock-emblem svg{width:36px;height:36px;color:var(--on-gold);}
+.pin-dots{display:flex;gap:13px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--gold-dim);}
+.pin-dot.filled{background:var(--gold);}
+.pin-pad{display:grid;grid-template-columns:repeat(3,68px);gap:13px;}
+.pin-key{width:68px;height:68px;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:calc(22px * var(--font-scale));font-weight:700;display:flex;align-items:center;justify-content:center;}
+.pin-key:active{background:var(--surface-2);}
+.lock-method-row{display:flex;gap:10px;}
+.pattern-wrap{touch-action:none;user-select:none;}
+.pattern-dot{fill:var(--surface);stroke:var(--gold-dim);stroke-width:2;}
+.pattern-dot.active{fill:var(--gold);stroke:var(--gold);}
+.pattern-line{stroke:var(--gold);stroke-width:5;stroke-linecap:round;opacity:.85;}
+.calc-screen{display:flex;flex-direction:column;height:calc(100vh - 90px);}
+.calc-display{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;padding:14px 18px 20px;gap:6px;min-height:110px;}
+.calc-expr{color:var(--text-dim);font-size:calc(15px * var(--font-scale));min-height:18px;word-break:break-all;text-align:end;direction:ltr;}
+.calc-result{font-size:calc(42px * var(--font-scale));font-weight:800;word-break:break-all;text-align:end;direction:ltr;}
+.calc-pad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:6px 10px calc(14px + env(safe-area-inset-bottom));}
+.calc-key{aspect-ratio:1;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:calc(20px * var(--font-scale));font-weight:700;display:flex;align-items:center;justify-content:center;}
+.calc-key:active{background:var(--surface-2);}
+.calc-key.op{background:var(--surface-2);color:var(--gold);}
+.calc-key.eq{background:var(--gold);color:var(--on-gold);}
+.calc-key.fn{background:var(--surface);color:var(--text-dim);font-size:calc(15px * var(--font-scale));}
+#lockError{min-height:18px;color:var(--danger);font-size:calc(13px * var(--font-scale));}
+.lock-bio-btn{display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:calc(13px * var(--font-scale));color:var(--gold);}
+.lock-bio-btn svg{width:17px;height:17px;}
+.preview{width:100%;max-height:300px;object-fit:contain;border-radius:12px;margin-top:10px;background:#000;}
+.capture-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.capture-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 8px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);font-size:calc(12.5px * var(--font-scale));}
+.capture-btn svg{width:24px;height:24px;color:var(--gold);}
+.btn.recording{background:var(--danger);color:#fff;}
+.capture-btn.recording{background:var(--danger);color:#fff;}
+.capture-btn.recording svg{color:#fff;}
+.media-preview-box{margin-top:6px;padding:10px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);display:none;}
+.media-preview-box.show{display:block;}
+.media-preview-box .mp-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:calc(12px * var(--font-scale));color:var(--text-dim);}
+.media-preview-box .mp-row:last-child{border-bottom:0;}
+.contact-link{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);text-decoration:none;color:var(--text);font-size:calc(13.5px * var(--font-scale));margin-bottom:8px;}
+.contact-link:last-child{margin-bottom:0;}
+.contact-link svg{width:19px;height:19px;color:var(--gold);flex-shrink:0;}
+
+#screen-view{padding-bottom:110px;}
+.view-topbar-actions{display:flex;gap:8px;flex-shrink:0;}
+.view-media-full{width:100%;max-height:62vh;border-radius:16px;background:#000;object-fit:contain;display:block;}
+.view-audio-box{width:100%;padding:40px 20px;border-radius:16px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.view-audio-box svg{width:46px;height:46px;color:var(--gold);}
+.view-content-inner{display:flex;flex-direction:column;gap:14px;width:100%;}
+.view-copy-row{display:flex;justify-content:flex-end;}
+.view-copy-row button{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:30px;background:var(--surface-2);border:1px solid var(--border);font-size:calc(12px * var(--font-scale));color:var(--gold);}
+.view-copy-row button svg{width:14px;height:14px;}
+.view-actionbar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:var(--bg-elev);border-top:1px solid var(--border);z-index:150;}
+
+.folder-menu-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.folder-menu-head .folder-icon{width:44px;height:44px;flex-shrink:0;}
+.folder-menu-head h4{margin:0;font-size:calc(15.5px * var(--font-scale));}
+.menu-section-label{padding:6px 10px 6px;color:var(--text-dim);font-size:calc(11.5px * var(--font-scale));}
+.menu-list{display:flex;flex-direction:column;gap:4px;margin-bottom:6px;}
+.menu-item{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:var(--radius-sm);text-align:right;width:100%;font-size:calc(14px * var(--font-scale));}
+.menu-item:active{background:var(--surface-2);}
+.menu-item svg{width:19px;height:19px;color:var(--gold);flex-shrink:0;}
+.menu-item.active{background:var(--surface-2);color:var(--gold);font-weight:700;}
+.menu-item.danger{color:var(--danger);}
+.menu-item.danger svg{color:var(--danger);}
+.menu-divider{height:1px;background:var(--border);margin:8px 2px;}
+.folder-pick-list{display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow-y:auto;}
+.folder-pick-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);text-align:right;width:100%;}
+.folder-pick-item .folder-icon{width:36px;height:36px;flex-shrink:0;}
+.folder-pick-item span{font-size:calc(13.5px * var(--font-scale));}
+
+.select-bar{display:none;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.select-bar::-webkit-scrollbar{display:none;}
+.select-bar.show{display:flex;}
+/* شريط التحديد: يلتف على أكثر من سطر بدل القصّ خارج الشاشة */
+.add-tool-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 8px;padding:9px 12px;border-radius:var(--radius-md);border:1.5px dashed var(--gold);background:transparent;color:var(--gold);font-size:calc(13px * var(--font-scale));font-weight:800;}
+.add-tool-btn:active{transform:scale(.98);}
+.add-tool-btn b{font-size:calc(18px * var(--font-scale));line-height:1;font-weight:700;}
+.ct-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.ct-chips button{min-width:40px;padding:7px 10px;border-radius:12px;background:var(--surface-2);border:1.5px solid transparent;font-size:calc(18px * var(--font-scale));line-height:1.2;}
+.ct-chips button.on{border-color:var(--gold);background:var(--surface);}
+.ct-chips.kinds button{font-size:calc(13px * var(--font-scale));font-weight:700;flex:1 1 0;}
+.ct-chips.colors button{width:34px;height:34px;min-width:0;padding:0;border-radius:50%;border:2.5px solid transparent;}
+.ct-chips.colors button.on{border-color:var(--text);}
+.ct-text{white-space:pre-wrap;word-break:break-word;line-height:1.9;font-size:calc(15px * var(--font-scale));margin:0 0 14px;padding:14px;border-radius:var(--radius-md);background:var(--surface-2);max-height:55vh;overflow:auto;}
+.select-bar:not(.compact){flex-wrap:wrap;overflow-x:visible;row-gap:6px;}
+#toolSelectBarHome,#toolSelectBarScreen,#folderSelectBar{padding:8px;}
+#toolSelectBarHome.show,#toolSelectBarScreen.show,#folderSelectBar.show{flex-direction:column;align-items:stretch;gap:8px;}
+.select-bar .sb-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.select-bar .sb-lead{display:flex;align-items:center;gap:6px;min-width:0;}
+.select-bar .sb-row{display:flex;gap:6px;}
+.sb-catcher{display:none;position:fixed;top:0;bottom:0;width:22px;z-index:5;}
+.sb-catcher.l{left:28px;}.sb-catcher.r{right:28px;}
+#browserIframe:not(.hidden)~.sb-catcher{display:block;}
+.select-bar .sb-row button{flex:1 1 0;min-width:0;font-size:calc(12px * var(--font-scale));padding:9px 4px;text-align:center;}
+.select-bar .sb-count{flex-shrink:0;font-size:calc(12.5px * var(--font-scale));color:var(--text-dim);white-space:nowrap;padding-inline-end:2px;}
+.select-bar button{font-size:calc(12px * var(--font-scale));padding:8px 11px;border-radius:var(--radius-sm);background:var(--surface-2);white-space:nowrap;flex-shrink:0;}
+.select-bar button.danger{background:var(--danger);color:#fff;}
+
+/* ---- رسالة الصباح / المساء ---- */
+#dayGreetBackdrop{z-index:900;align-items:center;padding:22px;background:rgba(6,8,12,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.greet-box{width:100%;max-width:380px;border-radius:28px;overflow:hidden;background:var(--surface);border:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;animation:greetIn .55s cubic-bezier(.2,.9,.3,1) both;}
+.greet-hero{position:relative;padding:34px 20px 54px;overflow:hidden;color:#fff;}
+.greet-box.morning .greet-hero{background:linear-gradient(160deg,#f6c453 0%,#e9913a 55%,#c9603a 100%);}
+.greet-box.evening .greet-hero{background:linear-gradient(160deg,#2b3a72 0%,#1d2550 55%,#111634 100%);}
+.greet-hero::before,.greet-hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none;}
+.greet-hero::before{width:190px;height:190px;top:-70px;inset-inline-start:-60px;}
+.greet-hero::after{width:130px;height:130px;bottom:-50px;inset-inline-end:-30px;}
+.greet-box.evening .greet-hero .gh-star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.8;animation:greetTwinkle 3s ease-in-out infinite;}
+.greet-icon{position:relative;z-index:1;width:84px;height:84px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);box-shadow:0 0 0 10px rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.25);}
+.greet-icon svg{width:44px;height:44px;color:#fff;}
+.greet-box.morning .greet-icon svg{animation:greetSpin 24s linear infinite;}
+.greet-title{position:relative;z-index:1;margin:0;font-size:calc(28px * var(--font-scale));font-weight:900;letter-spacing:.3px;}
+.greet-curve{position:absolute;bottom:-1px;left:0;right:0;height:26px;z-index:2;}
+.greet-curve path{fill:var(--surface);}
+.greet-body{padding:6px 24px 24px;}
+.greet-eyebrow{font-size:calc(12px * var(--font-scale));color:var(--text-dim);margin:0 0 6px;}
+.greet-brand{margin:0 0 14px;font-size:calc(17px * var(--font-scale));font-weight:900;color:var(--gold);}
+.greet-sep{width:54px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 14px;}
+.greet-text{margin:0 0 6px;font-size:calc(14px * var(--font-scale));line-height:1.9;color:var(--text);}
+.greet-wish{margin:0 0 18px;font-size:calc(13px * var(--font-scale));line-height:1.8;color:var(--text-dim);}
+.greet-date{display:inline-block;margin:0 0 16px;padding:5px 14px;border-radius:30px;background:var(--surface-2);border:1px solid var(--border);font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);}
+.greet-btn{width:100%;padding:14px;border-radius:30px;background:var(--gold);color:var(--on-gold);font-size:calc(15px * var(--font-scale));font-weight:800;box-shadow:0 6px 18px rgba(201,162,75,.28);}
+.greet-btn:active{transform:scale(.98);}
+@keyframes greetIn{from{opacity:0;transform:translateY(18px) scale(.94);}to{opacity:1;transform:none;}}
+@keyframes greetSpin{to{transform:rotate(360deg);}}
+@keyframes greetTwinkle{0%,100%{opacity:.25;}50%{opacity:1;}}
+.select-bar.compact{gap:6px;padding:6px 8px;margin-bottom:10px;overflow-x:visible;justify-content:flex-start;}
+.select-bar.compact .sb-count{font-size:calc(12px * var(--font-scale));padding-inline:4px;margin-inline-end:auto;}
+.select-bar button.sb-ico{width:34px;height:34px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;}
+.select-bar button.sb-ico svg{width:16px;height:16px;}
+.selectable .item-card{position:relative;}
+.select-check{position:absolute;top:8px;inset-inline-start:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.5);border:2px solid #fff;display:flex;align-items:center;justify-content:center;z-index:3;flex-shrink:0;}
+.select-check svg{width:13px;height:13px;color:#fff;opacity:0;}
+.select-check.checked{background:var(--gold);border-color:var(--gold);}
+.select-check.checked svg{opacity:1;}
+.item-list.selectable .item-card{padding-inline-start:38px;}
+.item-list.selectable.grid-view .item-card{padding-inline-start:10px;}
+
+.home-tools{display:flex;gap:8px;margin-bottom:12px;}
+.home-tools .search-box{margin-bottom:0;}
+.sort-select{width:auto;flex-shrink:0;padding:0 10px;font-size:calc(12.5px * var(--font-scale));background:var(--surface);border-radius:var(--radius-sm);}
+.chip-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+.filter-chip{flex-shrink:0;padding:8px 14px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:calc(12px * var(--font-scale));color:var(--text-dim);white-space:nowrap;display:flex;align-items:center;gap:6px;}
+.filter-chip svg{width:13px;height:13px;}
+.filter-chip.active{background:var(--gold-dim);border-color:var(--gold);color:#fff;}
+.recent-scroller{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;}
+.tool-shortcut{flex-shrink:0;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+.tool-shortcut .t-icon{width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,var(--fc),var(--fc2));box-shadow:0 4px 10px rgba(0,0,0,.25);}
+.tool-shortcut .t-icon svg{width:46%;height:46%;color:#fff;}
+.tool-shortcut span{font-size:calc(10.5px * var(--font-scale));color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70px;}
+.tool-shortcut:active .t-icon{transform:scale(.92);}
+.browser-topbar{display:flex;align-items:center;gap:6px;padding:6px 2px 12px;}
+.browser-urlbar{flex:1;display:flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:30px;padding:0 12px;}
+.browser-urlbar svg{width:15px;height:15px;color:var(--text-dim);flex-shrink:0;}
+.browser-urlbar input{border:0;background:transparent;padding:9px 0;font-size:calc(13px * var(--font-scale));direction:ltr;text-align:right;}
+.browser-urlbar input:focus{outline:0;}
+.browser-frame-wrap{position:relative;width:100%;height:calc(100vh - 150px);border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--border);}
+.browser-frame-wrap iframe{width:100%;height:100%;border:0;}
+.browser-home{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;height:100%;color:var(--text-dim);padding:20px;text-align:center;}
+.browser-home svg{width:44px;height:44px;opacity:.5;}
+.browser-shortcuts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px;}
+.browser-shortcuts button{padding:9px 16px;border-radius:30px;background:var(--surface);border:1px solid var(--border);font-size:calc(12.5px * var(--font-scale));}
+.recent-card{flex-shrink:0;width:104px;padding:9px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);text-align:right;}
+.recent-card .item-thumb{width:100%;height:60px;border-radius:9px;margin-bottom:6px;}
+.recent-card h5{margin:0;font-size:calc(11px * var(--font-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.recent-card small{color:var(--text-dim);font-size:calc(9.5px * var(--font-scale));}
+.section-label{margin:0 2px 8px;color:var(--text-dim);font-size:calc(12px * var(--font-scale));font-weight:700;}
+.folder-card .lock-flag{position:absolute;top:10px;inset-inline-end:10px;width:18px;height:18px;color:var(--text-dim);opacity:.9;}
+.folder-card .lock-flag svg{width:100%;height:100%;}
+.tag-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.tag-chip{padding:3px 10px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);font-size:calc(10.5px * var(--font-scale));color:var(--gold);}
+.analytics-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:calc(12.5px * var(--font-scale));}
+.analytics-row:last-child{border-bottom:0;}
+.analytics-row b{color:var(--text);}
+.analytics-bar-track{flex:1;height:6px;border-radius:4px;background:var(--surface-2);margin:0 10px;overflow:hidden;}
+.analytics-bar-fill{height:100%;background:var(--gold);border-radius:4px;}
+.mini-hint{font-size:calc(11px * var(--font-scale));color:var(--text-dim);margin-top:4px;display:block;}
+
+/* ---- compact & timeline views ---- */
+.item-list.compact-view{gap:2px;}
+.item-list.compact-view .item-card{padding:8px 10px;gap:9px;border-radius:12px;}
+.item-list.compact-view .item-thumb{width:32px;height:32px;border-radius:8px;}
+.item-list.compact-view .item-thumb svg{width:44%;height:44%;}
+.item-list.compact-view .item-body p{display:none;}
+.item-list.compact-view .item-body h4{margin:0;font-size:calc(13px * var(--font-scale));font-weight:600;}
+.item-list.compact-view .item-meta{display:none;}
+.item-list.compact-view .item-actions{flex-direction:row;gap:4px;}
+.item-list.compact-view .item-actions button{width:25px;height:25px;}
+.timeline-date-label{margin:16px 2px 8px;color:var(--gold);font-size:calc(12px * var(--font-scale));font-weight:800;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.timeline-date-label:first-child{margin-top:0;}
+
+/* ---- checklist items (task folders) ---- */
+.checklist-box{display:flex;flex-direction:column;gap:2px;width:100%;}
+.checklist-row{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--border);cursor:pointer;}
+.checklist-row:last-child{border-bottom:0;}
+.checklist-check{width:24px;height:24px;border-radius:8px;border:2px solid var(--gold-dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--on-gold);}
+.checklist-check.checked{background:var(--gold);border-color:var(--gold);}
+.checklist-check svg{width:14px;height:14px;}
+.checklist-done{text-decoration:line-through;color:var(--text-dim);}
+.quote-block{position:relative;padding:20px 22px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);font-size:calc(16px * var(--font-scale));line-height:1.7;font-weight:600;}
+.quote-block::before{content:"\201D";position:absolute;top:-6px;inset-inline-start:14px;font-size:calc(46px * var(--font-scale));color:var(--gold-dim);font-weight:900;}
+
+/* ---- home grid density ---- */
+.grid.compact-grid{grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.grid.compact-grid .folder-card{min-height:100px;padding:10px;}
+.grid.compact-grid .folder-card h3{font-size:calc(12px * var(--font-scale));}
+.grid.compact-grid .folder-card span{font-size:calc(10px * var(--font-scale));}
+.grid.compact-grid .folder-icon{width:32px;height:32px;}
+
+/* ---- pure-image / video tiles: no text, details only on tap ---- */
+.item-list.photo-wall{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.item-list.photo-wall .item-card{grid-column:1/-1;}
+.visual-card{position:relative;padding:0;border:1px solid var(--border);background:var(--surface-2);border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:1;display:block;width:100%;}
+.visual-card:active{transform:scale(.97);}
+.visual-card img,.visual-card video{width:100%;height:100%;object-fit:cover;display:block;}
+.visual-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;color:#fff;pointer-events:none;}
+.visual-play svg{width:16px;height:16px;}
+
+/* ---- home screen widgets ---- */
+.widgets-section{display:flex;flex-direction:column;gap:14px;margin-bottom:18px;}
+.widget-clock{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--border);}
+.widget-clock .wc-time{font-size:calc(26px * var(--font-scale));font-weight:900;letter-spacing:.5px;}
+.widget-clock .wc-date{font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);margin-top:2px;}
+.widget-clock .wc-greet{font-size:calc(12.5px * var(--font-scale));color:var(--gold);font-weight:800;}
+.widget-block{padding:14px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);}
+.widget-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.widget-add-btn{width:30px;height:30px;border-radius:9px;background:var(--surface-2);color:var(--gold);font-size:calc(19px * var(--font-scale));font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1;}
+.notes-scroller{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;}
+.notes-empty{color:var(--text-dim);font-size:calc(12px * var(--font-scale));padding:6px 2px;}
+.note-card{flex-shrink:0;width:150px;min-height:86px;padding:11px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);text-align:right;}
+.note-card p{margin:0;white-space:pre-wrap;word-break:break-word;font-size:calc(12.5px * var(--font-scale));color:var(--text);max-height:60px;overflow:hidden;}
+.note-card .nc-row{display:flex;justify-content:flex-end;margin-top:6px;}
+.note-card .nc-del{width:22px;height:22px;border-radius:7px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--danger);}
+.note-card .nc-del svg{width:12px;height:12px;}
+.todo-input-row{display:flex;gap:8px;margin-bottom:10px;}
+.todo-list{display:flex;flex-direction:column;gap:7px;}
+.todo-empty{color:var(--text-dim);font-size:calc(12px * var(--font-scale));padding:2px;}
+.todo-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.todo-row.done{opacity:.55;}
+.todo-row.done span{text-decoration:line-through;}
+.todo-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--gold-dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:transparent;}
+.todo-row.done .todo-check{background:var(--gold);border-color:var(--gold);}
+.todo-check svg{width:12px;height:12px;color:var(--on-gold);opacity:0;}
+.todo-row.done .todo-check svg{opacity:1;}
+.todo-row span{flex:1;font-size:calc(13px * var(--font-scale));text-align:right;}
+.todo-del{width:26px;height:26px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--text-dim);flex-shrink:0;}
+.todo-del svg{width:13px;height:13px;}
+.quick-capture-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:var(--on-gold);font-weight:800;font-size:calc(13.5px * var(--font-scale));}
+.quick-capture-btn svg{width:19px;height:19px;}
+
+input[type="text"], input:not([type]), textarea{
+  unicode-bidi: plaintext;
+}
+
+/* ================= إمكانية الوصول وسهولة الاستخدام ================= */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.skip-link{position:fixed;top:-60px;inset-inline-start:10px;z-index:2000;background:var(--gold);color:var(--on-gold);padding:10px 18px;border-radius:10px;font-weight:800;font-size:calc(13px * var(--font-scale));transition:top .15s ease;}
+.skip-link:focus{top:10px;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+button:focus-visible,.icon-btn:focus-visible,.folder-card:focus-visible,.item-card:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+/* تقليل الحركة */
+body.a11y-reduce-motion *{
+  transition-duration:.001ms!important;
+  animation-duration:.001ms!important;
+  animation-iteration-count:1!important;
+  scroll-behavior:auto!important;
+}
+@media (prefers-reduced-motion: reduce){
+  *{ transition-duration:.001ms!important; animation-duration:.001ms!important; }
+}
+
+/* تباين عالٍ */
+body.a11y-high-contrast{
+  --bg:#000000;--bg-elev:#000000;--surface:#0d0d0d;--surface-2:#1a1a1a;
+  --border:#ffffff;--text:#ffffff;--text-dim:#e8e8e8;--gold:#ffd23f;--gold-dim:#ffb800;--on-gold:#000000;--danger:#ff6b5c;
+}
+body.a11y-high-contrast .item-card,body.a11y-high-contrast .folder-card,body.a11y-high-contrast .settings-group,body.a11y-high-contrast .widget-block{border-width:2px;}
+body.a11y-high-contrast .icon-btn,body.a11y-high-contrast .btn{border-width:2px;}
+
+/* أهداف لمس أكبر */
+body.a11y-large-targets .icon-btn{width:52px;height:52px;}
+body.a11y-large-targets .icon-btn svg{width:23px;height:23px;}
+body.a11y-large-targets .browser-quick-btn{height:50px;}
+body.a11y-large-targets .item-actions button{width:38px;height:38px;}
+body.a11y-large-targets .item-actions svg{width:18px;height:18px;}
+body.a11y-large-targets .switch{width:56px;height:33px;}
+body.a11y-large-targets .switch::after{width:24px;height:24px;}
+body.a11y-large-targets .switch.on::after{inset-inline-start:26px;}
+body.a11y-large-targets .btn{padding:16px;}
+body.a11y-large-targets .checklist-check,body.a11y-large-targets .todo-check{width:30px;height:30px;}
+body.a11y-large-targets input,body.a11y-large-targets textarea,body.a11y-large-targets select{padding:15px 14px;}
+
+/* نص عريض */
+body.a11y-bold-text{font-weight:600;}
+body.a11y-bold-text h1,body.a11y-bold-text h2,body.a11y-bold-text h3,body.a11y-bold-text h4{font-weight:900;}
+body.a11y-bold-text .item-body p,body.a11y-bold-text .folder-card span,body.a11y-bold-text .text-dim,body.a11y-bold-text .hint{font-weight:500;}
+
+/* دليل الاستخدام */
+.help-list{display:flex;flex-direction:column;gap:12px;}
+.help-row{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:var(--radius-md);background:var(--surface-2);border:1px solid var(--border);}
+.help-row .help-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--on-gold);}
+.help-row .help-icon svg{width:18px;height:18px;}
+.help-row h5{margin:0 0 3px;font-size:calc(13.5px * var(--font-scale));}
+.help-row p{margin:0;font-size:calc(12px * var(--font-scale));color:var(--text-dim);line-height:1.6;}
+
+/* ---- مركز الأدوات: تحديد / ترتيب / إخفاء / قفل ---- */
+.tool-card{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 8px;}
+.section-head .section-label{margin:0;}
+.mini-btn{font-size:calc(11.5px * var(--font-scale));padding:5px 11px;border-radius:999px;background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border);white-space:nowrap;flex-shrink:0;}
+.mini-btn:active{transform:scale(.95);}
+.mgr-title{margin:14px 2px 8px;font-size:calc(12px * var(--font-scale));font-weight:700;color:var(--text-dim);}
+.mgr-row{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:8px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.mgr-row .folder-icon{width:36px;height:36px;flex-shrink:0;border-radius:11px;}
+.mgr-row span.mgr-name{flex:1;font-size:calc(13.5px * var(--font-scale));text-align:right;}
+.mgr-row button{font-size:calc(12px * var(--font-scale));padding:7px 12px;border-radius:var(--radius-sm);background:var(--gold);color:var(--on-gold);font-weight:700;flex-shrink:0;}
+
+.select-bar button.accent{background:var(--gold);color:var(--on-gold);font-weight:700;}
+.ord-row{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:8px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.ord-row.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;}
+.ord-row .folder-icon{width:34px;height:34px;flex-shrink:0;border-radius:10px;}
+.ord-row .ord-name{flex:1;font-size:calc(13.5px * var(--font-scale));text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ord-row .ord-btn{width:38px;height:38px;border-radius:10px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text);}
+.ord-row .ord-btn svg{width:18px;height:18px;}
+.ord-row .ord-btn:disabled{opacity:.3;}
+.ord-row .ord-btn:active:not(:disabled){transform:scale(.92);}
+.ord-quick{display:flex;gap:8px;margin-bottom:12px;}
+.ord-quick button{flex:1;padding:10px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:calc(12.5px * var(--font-scale));}
+.ord-quick button:disabled{opacity:.4;}
+
+/* ---- ركن الإبداع والمرح ---- */
+.fun-emoji{font-style:normal;font-size:calc(var(--icon-size)*.5);line-height:1;}
+.grid.compact-grid .folder-icon .fun-emoji{font-size:calc(16px * var(--font-scale));}
+.mgr-row .folder-icon .fun-emoji,.ord-row .folder-icon .fun-emoji{font-size:calc(18px * var(--font-scale));}
+.item-thumb .fun-emoji{font-size:calc(22px * var(--font-scale));}
+.fun-list{display:flex;flex-direction:column;gap:9px;margin-top:14px;}
+.fun-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.fun-item p{margin:0;flex:1;line-height:1.7;font-size:calc(14px * var(--font-scale));}
+.fun-copy{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);}
+.fun-copy svg{width:16px;height:16px;}
+.fun-copy:active{transform:scale(.92);}
+.fun-result{margin-top:14px;padding:14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);}
+.fun-pre{white-space:pre-wrap;line-height:1.9;font-size:calc(14px * var(--font-scale));}
+.fun-result .modal-actions{margin-top:12px;}
+/* ---- الطبيب الذكي والشات والألعاب ---- */
+.ai-note{margin:0 0 10px;padding:10px 12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-size:calc(12px * var(--font-scale));line-height:1.7;color:var(--text-dim);}
+.ai-thread{display:flex;flex-direction:column;gap:9px;margin:10px 0;min-height:60px;}
+.ai-msg{max-width:92%;padding:10px 13px;border-radius:16px;font-size:calc(14px * var(--font-scale));line-height:1.85;white-space:pre-wrap;word-break:break-word;}
+.ai-msg.user{align-self:flex-start;background:var(--gold);color:var(--on-gold);border-top-right-radius:4px;}
+.ai-msg.bot{align-self:flex-end;background:var(--surface-2);border:1px solid var(--border);border-top-left-radius:4px;}
+.ai-typing{opacity:.7;}
+.ai-act{display:flex;gap:6px;margin-top:8px;}
+.ai-act button{width:36px;height:30px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-size:calc(14px * var(--font-scale));}
+.ai-input textarea{min-height:64px;}
+.ai-bar{display:flex;gap:8px;margin-top:8px;}
+.ai-bar .btn{padding:11px;}
+.ai-set{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);}
+.ai-set summary{cursor:pointer;font-size:calc(13px * var(--font-scale));font-weight:700;}
+.gm-stats{display:flex;justify-content:space-between;gap:8px;margin-bottom:12px;padding:9px 12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-size:calc(12.5px * var(--font-scale));color:var(--text-dim);}
+.gm-stats b{color:var(--text);}
+.gm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.gm-card{aspect-ratio:1;border-radius:14px;background:linear-gradient(155deg,var(--surface),var(--surface-2));border:1px solid var(--border);font-size:calc(26px * var(--font-scale));display:flex;align-items:center;justify-content:center;}
+.gm-card:active{transform:scale(.94);}
+.gm-card.up{background:var(--bg-elev);border-color:var(--gold);}
+.gm-card.done{background:#2f7d4f;border-color:#2f7d4f;opacity:.8;}
+.gm-seq{direction:ltr;text-align:center;font-size:calc(24px * var(--font-scale));font-weight:800;letter-spacing:.5px;margin:14px 0;color:var(--gold);}
+.gm-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.gm-opt{padding:16px 10px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:calc(20px * var(--font-scale));font-weight:800;}
+.gm-opt:active:not(:disabled){transform:scale(.96);}
+.gm-bar{height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden;margin-bottom:6px;}
+.gm-bar i{display:block;height:100%;width:100%;background:var(--gold);transition:width .25s linear;}
+
+/* ================= المظهر: الوضع الفاتح الاحترافي + زر التبديل ================= */
+::placeholder{color:var(--text-dim);opacity:.7;}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1 1 100%;min-width:0;}
+.top-header{padding-bottom:6px;}
+.widgets-section:not(:has(> :not(.hidden))){margin-bottom:0;}
+#homeToolsSection .tools-head{margin-top:0;}
+.tools-head{gap:6px;}
+.tools-head .tools-head-label{flex:1 1 auto;text-align:center;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.day-hello{flex:0 1 auto;display:flex;align-items:center;gap:5px;margin:0;font-size:calc(16px * var(--font-scale));font-weight:900;line-height:1.3;color:var(--gold);}
+.day-hello svg{width:20px;height:20px;flex:0 0 auto;}
+.day-hello span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tools-head .tools-head-label{min-width:max-content;}
+@media (max-width:345px){.day-hello{font-size:calc(14px * var(--font-scale));}.day-hello svg{width:17px;height:17px;}.tools-head .mini-btn{padding:5px 8px;font-size:calc(11px * var(--font-scale));}}
+.top-header{padding-inline-start:max(2px,env(safe-area-inset-left));padding-inline-end:max(2px,env(safe-area-inset-right));}
+.theme-toggle{position:relative;width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:0 1px 3px rgba(16,24,40,.12);transition:transform .12s ease,background .2s ease;margin-inline-start:auto;}
+.theme-toggle:active{transform:scale(.92);}
+.theme-toggle svg{width:20px;height:20px;}
+.theme-toggle .ti-sun{display:none;color:var(--gold);}
+html[data-mode="dark"] .theme-toggle .ti-moon{display:none;}
+html[data-mode="dark"] .theme-toggle .ti-sun{display:block;}
+html[data-mode="light"] .folder-card,html[data-mode="light"] .item-card,html[data-mode="light"] .widget-block,
+html[data-mode="light"] .widget-clock,html[data-mode="light"] .settings-group,html[data-mode="light"] .stats-chip,
+html[data-mode="light"] .recent-card,html[data-mode="light"] .note-card,html[data-mode="light"] .icon-btn,
+html[data-mode="light"] .browser-quick-btn,html[data-mode="light"] .search-box,html[data-mode="light"] .select-bar{
+  box-shadow:0 1px 2px rgba(16,24,40,.06),0 2px 8px rgba(16,24,40,.06);}
+html[data-mode="light"] .modal{box-shadow:0 -10px 40px rgba(16,24,40,.22);border-top-color:var(--border);}
+html[data-mode="light"] .modal-backdrop{background:rgba(16,24,40,.45);}
+html[data-mode="light"] .modal-handle{background:#b8c0cf;}
+html[data-mode="light"] input,html[data-mode="light"] textarea,html[data-mode="light"] select{background:#ffffff;border-color:#b9c1cf;color:var(--text);}
+html[data-mode="light"] .modal input,html[data-mode="light"] .modal textarea,html[data-mode="light"] .modal select{background:var(--surface-2);}
+html[data-mode="light"] .btn-ghost{background:#e4e8f0;color:var(--text);border:1px solid var(--border);}
+html[data-mode="light"] .toast{color:var(--text);box-shadow:0 8px 24px rgba(16,24,40,.2);}
+html[data-mode="light"] .folder-card::after{opacity:.10;}
+html[data-mode="light"] .greet-box{box-shadow:0 24px 60px rgba(16,24,40,.25);}
+html[data-mode="light"] .confirm-box{box-shadow:0 25px 60px rgba(16,24,40,.25);}
+html[data-mode="light"] #lockScreen{color:var(--text);}
+/* ================= ألعاب الاختبارات ================= */
+.gm-stats + .hint{margin-top:0;}
+.modal-actions .btn:disabled{opacity:.45;}
+/* ===== مركز الإضافة الاحترافي ===== */
+.hub-modal{max-height:92vh;}
+.hub-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.hub-head .hh-ic{width:48px;height:48px;border-radius:16px;background:linear-gradient(155deg,var(--gold),var(--gold-dim));color:var(--on-gold);display:flex;align-items:center;justify-content:center;font-size:calc(23px * var(--font-scale));flex-shrink:0;box-shadow:var(--shadow);}
+.hub-head .hh-t{flex:1;min-width:0;}
+.hub-head h3{margin:0;font-size:calc(18px * var(--font-scale));font-weight:900;}
+.hub-head p{margin:3px 0 0;font-size:calc(12px * var(--font-scale));color:var(--text-dim);}
+.hub-net{display:inline-flex;align-items:center;gap:5px;font-size:calc(10.5px * var(--font-scale));font-weight:800;padding:5px 10px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);white-space:nowrap;flex-shrink:0;}
+.hub-net::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+.hub-net.on{color:#2f9d5e;border-color:rgba(47,157,94,.4);}
+.hub-net.off{color:var(--danger);border-color:rgba(198,90,77,.4);}
+.hub-hero{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.hub-hero button{display:flex;align-items:center;gap:10px;padding:13px 12px;border-radius:var(--radius-md);color:#fff;text-align:right;font-weight:900;font-size:calc(13.5px * var(--font-scale));background:linear-gradient(155deg,var(--h1),var(--h2));box-shadow:0 6px 16px rgba(16,24,40,.18);}
+.hub-hero button:active{transform:scale(.97);}
+.hub-hero button i{font-style:normal;font-size:calc(26px * var(--font-scale));line-height:1;flex-shrink:0;}
+.hub-hero button small{display:block;font-weight:600;font-size:calc(10.5px * var(--font-scale));opacity:.88;margin-top:3px;}
+.hub-search{margin-bottom:10px;}
+.hub-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;margin-bottom:4px;scrollbar-width:none;}
+.hub-tabs::-webkit-scrollbar{display:none;}
+.hub-tabs button{flex-shrink:0;padding:8px 14px;border-radius:30px;background:var(--surface-2);border:1.5px solid transparent;font-size:calc(12.5px * var(--font-scale));font-weight:800;color:var(--text-dim);white-space:nowrap;}
+.hub-tabs button.on{background:var(--surface);border-color:var(--gold);color:var(--text);}
+.hub-sec{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;font-size:calc(12.5px * var(--font-scale));font-weight:900;color:var(--text-dim);}
+.hub-sec b{font-weight:800;font-size:calc(11px * var(--font-scale));padding:2px 9px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);}
+.hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.hub-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:12px;min-height:118px;border-radius:var(--radius-md);border:1px solid var(--border);background:linear-gradient(160deg,var(--surface),var(--surface-2));text-align:right;}
+.hub-tile::after{content:"";position:absolute;width:74px;height:74px;top:-28px;inset-inline-end:-28px;border-radius:50%;background:var(--fc);opacity:.14;pointer-events:none;}
+.hub-tile:active{transform:scale(.97);}
+.hub-ti{position:relative;z-index:1;width:40px;height:40px;border-radius:13px;background:linear-gradient(155deg,var(--fc),var(--fc2));display:flex;align-items:center;justify-content:center;font-size:calc(20px * var(--font-scale));font-style:normal;}
+.hub-tile h4{position:relative;z-index:1;margin:0;font-size:calc(13.5px * var(--font-scale));font-weight:800;}
+.hub-tile p{position:relative;z-index:1;margin:0;font-size:calc(11px * var(--font-scale));line-height:1.55;color:var(--text-dim);flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.hub-act{position:relative;z-index:1;font-size:calc(11px * var(--font-scale));font-weight:800;padding:4px 11px;border-radius:20px;background:var(--gold);color:var(--on-gold);}
+.hub-act.open{background:var(--surface-2);color:var(--text);border:1px solid var(--border);}
+.hub-act.done{background:var(--surface-2);color:#2f9d5e;border:1px solid rgba(47,157,94,.4);}
+.hub-empty{text-align:center;padding:34px 10px;color:var(--text-dim);font-size:calc(13px * var(--font-scale));line-height:1.8;}
+.hub-note{margin:14px 2px 2px;font-size:calc(11px * var(--font-scale));color:var(--text-dim);line-height:1.7;text-align:center;}
+.ctl-add{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.ctl-row{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-bottom:8px;}
+.ctl-row .ctl-b{flex:1;min-width:0;cursor:pointer;}
+.ctl-row h5{margin:0 0 3px;font-size:calc(13.5px * var(--font-scale));font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ctl-row p{margin:0;font-size:calc(11.5px * var(--font-scale));color:var(--text-dim);white-space:pre-wrap;word-break:break-word;max-height:44px;overflow:hidden;}
+.ctl-row button.ctl-x{width:32px;height:32px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--danger);font-size:calc(15px * var(--font-scale));}
+
+/* ===== عارض صور حافظة "إضافة صور" (شاشة كاملة) ===== */
+.gv-overlay{position:fixed;inset:0;z-index:1200;background:#000;display:none;color:#fff;touch-action:none;-webkit-user-select:none;user-select:none;}
+.gv-overlay.show{display:block;}
+.gv-stage{position:absolute;inset:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.gv-img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;will-change:transform;-webkit-user-drag:none;}
+.gv-top,.gv-bottom{position:absolute;left:0;right:0;z-index:2;display:flex;align-items:center;transition:opacity .2s,transform .2s;}
+.gv-top{top:0;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 14px 28px;background:linear-gradient(rgba(0,0,0,.72),transparent);}
+.gv-bottom{bottom:0;justify-content:space-around;padding:28px 6px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.78));}
+.gv-overlay.hide-chrome .gv-top{opacity:0;pointer-events:none;transform:translateY(-12px);}
+.gv-overlay.hide-chrome .gv-bottom{opacity:0;pointer-events:none;transform:translateY(12px);}
+.gv-overlay.hide-chrome .gv-nav{opacity:0;pointer-events:none;}
+.gv-close{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.gv-title{flex:1;min-width:0;text-align:center;font-size:calc(14px * var(--font-scale));font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gv-count{font-size:calc(12.5px * var(--font-scale));opacity:.85;min-width:52px;text-align:center;}
+.gv-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px;font-size:calc(11.5px * var(--font-scale));color:#fff;background:none;}
+.gv-btn svg{width:24px;height:24px;}
+.gv-btn.on{color:var(--gold,#e6b94c);}
+.gv-btn.on svg{fill:currentColor;}
+.gv-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center;z-index:2;transition:opacity .2s;}
+#confirmModalBackdrop.active{z-index:1300;}
+.toast{z-index:1400 !important;}
+.greet-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:12px 0 14px;}
+.greet-chips span{padding:5px 11px;border-radius:30px;background:var(--surface-2);border:1px solid var(--border);font-size:calc(11.5px * var(--font-scale));font-weight:700;color:var(--text);}
+.greet-dev{margin:0 0 12px;padding-top:12px;border-top:1px dashed var(--border);font-size:calc(13px * var(--font-scale));font-weight:900;color:var(--gold);letter-spacing:.2px;}
+
+/* ===== اسم التطبيق في الشاشة الرئيسية: خط ذهبي متدرّج + لمعة + تاج ===== */
+.brand h1.brand-name{display:flex;align-items:center;gap:7px;font-size:calc(23px * var(--font-scale));letter-spacing:.3px;line-height:1.25;overflow:visible;}
+.brand h1.brand-name #homeAppName{display:inline-block;font-style:italic;transform:skewX(-9deg);transform-origin:right center;font-weight:900;padding-inline-end:4px;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding:0 1px;
+  background:linear-gradient(100deg,var(--gold-dim) 0%,var(--gold) 30%,#f2c94c 50%,var(--gold) 70%,var(--gold-dim) 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.12));animation:brandShine 5s ease-in-out infinite;}
+.brand-crown{width:19px;height:19px;flex-shrink:0;color:var(--gold);filter:drop-shadow(0 1px 3px rgba(201,162,75,.45));animation:crownFloat 3.2s ease-in-out infinite;}
+.avatar-fallback,.avatar{box-shadow:0 0 0 2px var(--bg,transparent),0 0 0 3.5px var(--gold),0 6px 16px rgba(201,162,75,.30);}
+@keyframes brandShine{0%,100%{background-position:100% 0;}50%{background-position:0 0;}}
+@keyframes crownFloat{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-2px) rotate(6deg);}}
+@media (prefers-reduced-motion:reduce){.brand h1.brand-name #homeAppName,.brand-crown{animation:none;}}
+
+/* ===== خطوط مائلة في كل التطبيق ===== */
+html body{font-style:italic;}
+button,input,textarea,select,option{font-style:inherit;}
+textarea.mono,.mono,code,pre,kbd,samp{font-style:normal;}
+
+/* ===== نافذة التحية: مصغّرة ومتناسبة مع الشاشة ===== */
+#dayGreetBackdrop{padding:16px;--font-scale:1;}
+#dayGreetBackdrop .greet-box{max-width:310px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;border-radius:24px;}
+#dayGreetBackdrop .greet-hero{padding:18px 16px 34px;}
+#dayGreetBackdrop .greet-icon{width:54px;height:54px;margin:0 auto 8px;box-shadow:0 0 0 6px rgba(255,255,255,.08);}
+#dayGreetBackdrop .greet-icon svg{width:28px;height:28px;}
+#dayGreetBackdrop .greet-title{font-size:calc(21px * var(--font-scale));}
+#dayGreetBackdrop .greet-body{padding:2px 18px 16px;}
+#dayGreetBackdrop .greet-eyebrow{font-size:calc(11px * var(--font-scale));margin:0 0 3px;}
+#dayGreetBackdrop .greet-brand{font-size:calc(15px * var(--font-scale));margin:0 0 8px;}
+#dayGreetBackdrop .greet-sep{margin:0 auto 8px;height:2px;}
+#dayGreetBackdrop .greet-text{font-size:calc(12.5px * var(--font-scale));line-height:1.6;margin:0 0 4px;font-style:normal;}
+#dayGreetBackdrop .greet-chips{gap:4px;margin:8px 0 10px;}
+#dayGreetBackdrop .greet-chips span{padding:3px 8px;font-size:calc(10.5px * var(--font-scale));}
+#dayGreetBackdrop .greet-dev{font-size:calc(11.5px * var(--font-scale));margin:0 0 8px;padding-top:8px;}
+#dayGreetBackdrop .greet-wish{font-size:calc(11.5px * var(--font-scale));line-height:1.55;margin:0 0 10px;font-style:normal;}
+#dayGreetBackdrop .greet-date{font-size:calc(10.5px * var(--font-scale));padding:3px 10px;margin:0 0 10px;}
+#dayGreetBackdrop .greet-btn{padding:10px;font-size:calc(13.5px * var(--font-scale));}
+/* ===== تقصير صناديق الأدوات ===== */
+.grid .folder-card.tool-card{min-height:0;padding:12px;gap:8px;justify-content:flex-start;}
+.grid .folder-card.tool-card .folder-icon{width:40px;height:40px;border-radius:12px;}
+.grid .folder-card.tool-card .folder-icon .fun-emoji{font-size:calc(20px * var(--font-scale));}
+.grid .folder-card.tool-card h3{margin:0 0 2px;font-size:calc(13px * var(--font-scale));line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.grid .folder-card.tool-card span{font-size:calc(10.5px * var(--font-scale));line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+#homeToolsRow .tool-card h3{font-family:'Maya','Amiri','Noto Naskh Arabic','Noto Kufi Arabic','Traditional Arabic',serif;font-weight:800;font-size:calc(14px * var(--font-scale));letter-spacing:0;}
+#homeToolsRow .tool-card h3 .gbs-card{display:inline-block;font-family:'Maya','Cinzel','Trajan Pro','Playfair Display',Georgia,'Times New Roman',serif;font-weight:900;font-size:calc(18px * var(--font-scale));letter-spacing:.14em;direction:ltr;line-height:1.3;background:linear-gradient(180deg,#fff6bf 0%,#ffe066 28%,#f2b705 50%,#a87400 62%,#ffd84d 82%,#fff0a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 0 rgba(70,45,0,.75)) drop-shadow(0 2px 8px rgba(242,183,5,.4));}
+</style>
+</head>
+<body>
+<div id="statusStrip" aria-hidden="true"></div>
+<a href="#" class="skip-link" onclick="event.preventDefault();skipToMainContent();">تخطَّ إلى المحتوى الرئيسي</a>
+<div id="a11yAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="lockScreen">
+  <div class="lock-emblem">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 2l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V5l7-3z"/>
+    </svg>
+  </div>
+  <div style="text-align:center">
+    <h2 id="lockTitle" style="margin:0 0 4px">أدخل رمز الدخول</h2>
+    <p id="lockSub" style="margin:0;color:var(--text-dim);font-size:calc(13px * var(--font-scale))">رمز مكوّن من 4 أرقام</p>
+  </div>
+  <div class="pin-dots" id="pinDots"></div>
+  <div id="lockError"></div>
+  <div class="pin-pad" id="pinPad"></div>
+  <div class="pattern-wrap hidden" id="patternWrap">
+    <svg id="patternSvg" viewBox="0 0 240 240" width="240" height="240">
+      <g id="patternLines"></g>
+      <g id="patternDots"></g>
+    </svg>
+  </div>
+  <button class="lock-bio-btn hidden" id="lockBioBtn" onclick="manualBiometricUnlock()"></button>
+  <button class="lock-bio-btn hidden" id="lockForgotBtn" onclick="startForgotFolderCode()">نسيت الرمز؟</button>
+  <button class="lock-bio-btn hidden" id="lockCancelBtn" onclick="cancelFolderUnlock()">إلغاء والعودة</button>
+</div>
+
+<div class="screen active" id="screen-home" tabindex="-1">
+  <div class="top-header">
+    <div class="header-top">
+      <div class="brand">
+        <img id="homeAvatarImg" class="avatar hidden">
+        <div id="homeAvatarFallback" class="avatar-fallback">م</div>
+        <div style="min-width:0">
+          <h1 class="brand-name"><span id="homeAppName">المنتصر</span><svg class="brand-crown" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8z"/><rect x="5" y="20" width="14" height="1.8" rx=".9"/></svg></h1>
+          <p id="homeTagline">أدواتك وحافظاتك وصورك في مكان واحد</p>
+        </div>
+      </div>
+      <button type="button" class="theme-toggle" id="themeQuickToggle" onclick="toggleThemeQuick()" title="تبديل الوضع (فاتح / داكن)" aria-label="تبديل الوضع بين الفاتح والداكن">
+        <svg class="ti-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+    <div class="header-actions">
+      <button class="browser-quick-btn" onclick="openBrowser()" title="المتصفح">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg>
+        <span>المتصفح</span>
+      </button>
+      <button class="icon-btn" onclick="openFavorites()" title="المفضلة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openTrash()" title="سلة المحذوفات">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span class="badge-dot hidden" id="trashBadge">0</span>
+      </button>
+      <button class="icon-btn" onclick="openExtraMenu()" title="المزيد">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openSettings()" title="الإعدادات">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="widgets-section" id="widgetsSection">
+    <div class="widget-block hidden" id="widgetNotesBlock">
+      <div class="widget-head">
+        <p class="section-label" style="margin:0">ملاحظات سريعة</p>
+        <button type="button" class="widget-add-btn" onclick="openQuickNoteModal()">+</button>
+      </div>
+      <div class="notes-scroller" id="notesScroller"></div>
+    </div>
+
+    <div class="widget-block hidden" id="widgetTodoBlock">
+      <div class="widget-head">
+        <p class="section-label" style="margin:0">مهامي</p>
+      </div>
+      <div class="todo-input-row">
+        <input id="todoInput" dir="rtl" placeholder="أضف مهمة جديدة..." onkeydown="if(event.key==='Enter')addTodo()">
+        <button type="button" class="btn btn-primary" style="flex:0 0 auto;padding:0 18px" onclick="addTodo()">إضافة</button>
+      </div>
+      <div class="todo-list" id="todoList"></div>
+    </div>
+
+  </div>
+
+  <div id="homeToolsSection" style="margin-bottom:4px">
+    <div class="section-head tools-head">
+      <div class="day-hello" id="dayHello"><span class="dh-ic" id="dayHelloIc" aria-hidden="true" style="display:flex"></span><span id="dayHelloTxt"></span></div>
+      <p class="section-label tools-head-label">مركز الأدوات</p>
+      <button type="button" class="mini-btn" onclick="restoreAllTools()">إظهار كل الأدوات</button>
+    </div>
+    <div class="select-bar" id="toolSelectBarHome"></div>
+    <button type="button" class="add-tool-btn" onclick="openAddHub('game')"><b>＋</b> إضافة لعبة أو أداة</button>
+    <span class="mini-hint" style="margin:-2px 0 8px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
+    <div class="grid compact-grid" id="homeToolsRow"></div>
+  </div>
+
+  <div class="widgets-section" id="widgetsAfterTools">
+    <div class="widget-clock hidden" id="widgetClockBlock">
+      <div>
+        <div class="wc-time" id="wcTime"></div>
+        <div class="wc-date" id="wcDate"></div>
+      </div>
+      <div class="wc-greet" id="wcGreet"></div>
+    </div>
+
+    <button type="button" class="quick-capture-btn hidden" id="quickCaptureBtn" onclick="quickCapturePhoto()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span>التقاط سريع وحفظ في الصور</span>
+    </button>
+  </div>
+
+  <div class="search-box home-search" onclick="openSearch()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input placeholder="ابحث في كل محتوياتك..." readonly style="pointer-events:none">
+  </div>
+
+  <div class="home-tools">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="folderFilterInput" placeholder="تصفية الحافظات بالاسم..." oninput="filterHomeFolders(this.value)">
+    </div>
+    <select class="sort-select" id="homeSortSelect" onchange="setHomeSort(this.value)">
+      <option value="custom">الترتيب الافتراضي</option>
+      <option value="name">بالاسم (أ-ي)</option>
+      <option value="count">الأكثر عناصر</option>
+      <option value="newest">الأحدث إنشاءً</option>
+    </select>
+  </div>
+
+  <div class="select-bar" id="folderSelectBar">
+    <div class="sb-top">
+      <div class="sb-lead">
+        <button onclick="toggleSelectAllFolders()"><span id="selAllFoldersLabel">تحديد الكل</span></button>
+        <button onclick="openHiddenFolders()">المخفية (<span id="folderHiddenCount">0</span>)</button>
+      </div>
+      <span class="sb-count" id="folderSelCount">0 محدد</span>
+    </div>
+    <div class="sb-row">
+      <button onclick="openOrderModal('folders')">ترتيب</button>
+      <button id="folderEditSelBtn" onclick="editSelectedFolder()">تعديل</button>
+      <button onclick="hideSelectedFolders()">إخفاء</button>
+      <button class="danger" onclick="deleteSelectedFolders()">حذف</button>
+      <button class="accent" onclick="lockSelectedFolders()"><span id="folderLockLabel">قفل</span></button>
+      <button onclick="exitFolderSelectMode()">إلغاء</button>
+    </div>
+  </div>
+
+  <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي حافظة لتحديدها مباشرة، أو استمر بالسحب لتغيير ترتيبها</span>
+  <div class="stats-bar" id="homeStatsBar" style="margin-bottom:10px"></div>
+  <div id="recentSection">
+    <p class="section-label">أحدث الإضافات</p>
+    <div class="recent-scroller" id="recentScroller"></div>
+  </div>
+  <div class="grid" id="foldersGrid"></div>
+</div>
+
+<div class="screen" id="screen-search" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" placeholder="ابحث في كل محتوياتك..." oninput="renderSearchResults(this.value)" onkeyup="renderSearchResults(this.value)" oncompositionend="renderSearchResults(this.value)" enterkeyhint="search" autocomplete="off">
+    </div>
+  </div>
+  <div class="home-tools">
+    <select class="sort-select" style="flex:1" id="searchFolderFilter" onchange="renderSearchResults(document.getElementById('searchInput').value)">
+      <option value="">كل الحافظات</option>
+    </select>
+    <button type="button" class="filter-chip" id="searchFavChip" onclick="toggleSearchFavOnly()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>المفضلة فقط</span>
+    </button>
+  </div>
+  <div class="item-list" id="searchResults"></div>
+</div>
+
+<div class="screen" id="screen-folder" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2 id="folderTitle"></h2>
+    <span id="folderCountBadge" style="font-size:calc(12px * var(--font-scale));color:var(--text-dim)"></span>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="enterItemSelectMode()" title="تحديد العناصر">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
+    </button>
+    <button class="icon-btn" id="folderMenuBtn" onclick="openFolderMenu()" title="خيارات الحافظة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="chip-row" id="folderFilterChips">
+    <button type="button" class="filter-chip" id="folderFavFilterChip" onclick="toggleFolderFavFilter()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>المفضلة فقط</span>
+    </button>
+  </div>
+  <div class="select-bar compact" id="itemSelectBar">
+    <button class="sb-ico" id="selAllItemsBtn" title="تحديد الكل" aria-label="تحديد الكل" onclick="toggleSelectAllItems()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span id="selAllItemsLabel" style="display:none">تحديد الكل</span></button>
+    <span class="sb-count" id="itemSelCount">0 محدد</span>
+    <button class="sb-ico" title="نقل المحدد" aria-label="نقل المحدد" onclick="openMoveModalForSelected()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></button>
+    <button class="sb-ico" title="تمييز المحدد" aria-label="تمييز المحدد" onclick="favoriteSelectedItems()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+    <button class="sb-ico danger" title="نقل للمحذوفات" aria-label="نقل للمحذوفات" onclick="deleteSelectedItems()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+    <button class="sb-ico" title="إلغاء" aria-label="إلغاء" onclick="exitItemSelectMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <span class="mini-hint" style="margin:-6px 0 10px">اضغط مطوّلًا على أي عنصر لتحديده مباشرة</span>
+  <div class="item-list" id="itemList"></div>
+</div>
+
+<div class="screen" id="screen-favorites" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>المفضلة</h2>
+  </div>
+  <div class="stats-bar" id="favStatsBar"></div>
+  <div class="item-list" id="favList"></div>
+</div>
+
+<div class="screen" id="screen-trash" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>سلة المحذوفات</h2>
+    <button class="icon-btn" onclick="requestEmptyTrash()" title="إفراغ السلة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    </button>
+  </div>
+  <div class="stats-bar" id="trashStatsBar"></div>
+  <div class="item-list" id="trashList"></div>
+</div>
+
+<div class="screen" id="screen-calculator" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>الحاسبة</h2>
+    <button class="icon-btn" onclick="toggleCalcMode()" id="calcModeBtn" title="حاسبة علمية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </button>
+  </div>
+  <div class="calc-screen">
+    <div class="calc-display">
+      <div class="calc-expr" id="calcExpr">&nbsp;</div>
+      <div class="calc-result" id="calcResult">0</div>
+    </div>
+    <div class="calc-pad" id="calcPad"></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-projects" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>مشاريعي</h2>
+    <button class="icon-btn" onclick="openProjectModal()" title="مشروع جديد">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </div>
+  <div class="grid" id="projectsGrid"></div>
+</div>
+
+<div class="screen" id="screen-tools" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>مركز الأدوات</h2>
+    <button type="button" class="mini-btn" style="margin-inline-start:auto" onclick="restoreAllTools()">إظهار كل الأدوات</button>
+  </div>
+  <div class="select-bar" id="toolSelectBarScreen"></div>
+  <button type="button" class="add-tool-btn" onclick="openAddHub('game')"><b>＋</b> إضافة لعبة أو أداة</button>
+  <span class="mini-hint" style="margin:-4px 0 10px">اضغط مطوّلًا على أي أداة لتحديدها، أو استمر بالسحب لتغيير ترتيبها</span>
+  <div class="grid" id="toolsGrid"></div>
+</div>
+
+<div class="screen" id="screen-browser" tabindex="-1">
+  <div class="detail-header" style="margin-bottom:0">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>المتصفح</h2>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="openBrowserExternal()" title="فتح خارجيًا">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </button>
+  </div>
+  <div class="browser-topbar">
+    <button class="icon-btn" style="width:37px;height:37px" onclick="browserGoHome()" title="الصفحة الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </button>
+    <div class="browser-urlbar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="browserUrlInput" placeholder="ابحث أو اكتب رابطًا..." onkeydown="if(event.key==='Enter')navigateBrowser()">
+    </div>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="navigateBrowser()" title="فتح">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="reloadBrowser()" title="تحديث">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </button>
+  </div>
+  <div class="browser-frame-wrap">
+    <div class="browser-home" id="browserHomeView">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg>
+      <p>اكتب رابطًا أو كلمة بحث في الأعلى للبدء بالتصفح</p>
+      <div class="browser-shortcuts">
+        <button type="button" onclick="quickBrowse('wikipedia.org')">Wikipedia</button>
+        <button type="button" onclick="quickBrowse('duckduckgo.com/html/')">DuckDuckGo</button>
+        <button type="button" onclick="quickBrowse('archive.org')">Internet Archive</button>
+      </div>
+      <span class="hint">ملاحظة: بعض المواقع تمنع عرضها داخل التطبيقات — استخدم زر الفتح الخارجي أعلى الشاشة إن لم تظهر الصفحة.</span>
+    </div>
+    <iframe id="browserIframe" class="hidden"></iframe>
+    <div class="sb-catcher l"></div><div class="sb-catcher r"></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-project-view" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="closeProjectView()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2 id="projectViewTitle" style="font-size:calc(16px * var(--font-scale))"></h2>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="editCurrentProject()" title="تعديل">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </button>
+    <button class="icon-btn" style="width:37px;height:37px" onclick="deleteCurrentProject()" title="حذف">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    </button>
+  </div>
+  <div id="projectViewContent"></div>
+</div>
+
+<div class="modal-backdrop" id="projectModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 id="projectModalTitle" style="margin:0">مشروع جديد</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeProjectModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><label>اسم المشروع</label><input id="projName" dir="rtl" placeholder="مثال: مشروع الطائرة"></div>
+    <div class="color-grid">
+      <div class="field"><label>تاريخ البداية</label><input type="date" id="projStartDate"></div>
+      <div class="field"><label>التكلفة (اختياري)</label><input type="number" id="projCost" inputmode="decimal" placeholder="0"></div>
+    </div>
+    <div class="field">
+      <label>نسبة الإنجاز: <span id="projProgressVal">0%</span></label>
+      <input type="range" id="projProgress" min="0" max="100" step="5" oninput="document.getElementById('projProgressVal').textContent=this.value+'%'">
+    </div>
+    <div class="field"><label>ملاحظات</label><textarea id="projNotes" dir="rtl" placeholder="تفاصيل، خطوات، أفكار..."></textarea></div>
+    <div class="field">
+      <label>الملفات والصور المرفقة</label>
+      <button type="button" class="btn btn-ghost" style="width:100%" onclick="document.getElementById('projFilesInput').click()">إضافة ملفات أو صور</button>
+      <input type="file" id="projFilesInput" accept="image/*,.pdf,.doc,.docx" multiple class="hidden">
+      <div id="projFilesPreview" style="margin-top:8px"></div>
+    </div>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeProjectModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" onclick="submitProjectForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fabBtn" onclick="openAddModal()" title="إضافة جديد" aria-label="إضافة عنصر جديد">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<button type="button" class="back-fab" id="backFab" onclick="window.__appBack&&window.__appBack()" title="رجوع" aria-label="رجوع">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+</button>
+
+<div class="gv-overlay" id="gvOverlay" role="dialog" aria-modal="true" aria-label="عارض الصور">
+  <div class="gv-stage" id="gvStage"><img class="gv-img" id="gvImg" alt="" draggable="false"></div>
+  <div class="gv-top">
+    <button type="button" class="gv-close" onclick="closeGalleryViewer()" aria-label="رجوع"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    <div class="gv-title" id="gvTitle"></div>
+    <div class="gv-count" id="gvCount"></div>
+  </div>
+  <button type="button" class="gv-nav" id="gvPrev" style="right:10px" onclick="gvGo(-1)" aria-label="السابقة"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+  <button type="button" class="gv-nav" id="gvNext" style="left:10px" onclick="gvGo(1)" aria-label="التالية"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="gv-bottom">
+    <button type="button" class="gv-btn" onclick="shareItem()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg><span>مشاركة</span></button>
+    <button type="button" class="gv-btn" onclick="saveToGallery()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>حفظ</span></button>
+    <button type="button" class="gv-btn" id="gvFavBtn" onclick="gvFav()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>مفضلة</span></button>
+    <button type="button" class="gv-btn" onclick="gvInfo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>معلومات</span></button>
+    <button type="button" class="gv-btn" onclick="gvDelete()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>حذف</span></button>
+  </div>
+</div>
+
+<div class="screen" id="screen-view" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="closeFullView()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2 id="viewTitle" style="font-size:calc(16px * var(--font-scale))"></h2>
+    <div class="view-topbar-actions">
+      <button class="icon-btn" id="viewFavBtn" style="width:37px;height:37px" onclick="toggleFavoriteCurrent()" title="مفضلة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </button>
+      <button class="icon-btn" style="width:37px;height:37px" onclick="openEditItemModal()" title="تعديل">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+      <button class="icon-btn" style="width:37px;height:37px" onclick="openMoveModalForCurrent()" title="نقل">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+      </button>
+      <button class="icon-btn" style="width:37px;height:37px" onclick="requestDeleteCurrentItem()" title="نقل للمحذوفات">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="view-content-inner" id="viewContent"></div>
+
+  <div class="view-actionbar">
+    <button class="btn btn-ghost" id="viewSaveBtn" onclick="saveToGallery()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      حفظ في المعرض
+    </button>
+    <button class="btn btn-primary" onclick="shareItem()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+      مشاركة
+    </button>
+  </div>
+</div>
+
+<div class="screen" id="screen-settings" tabindex="-1">
+  <div class="detail-header">
+    <button class="icon-btn" onclick="goHome()" title="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h2>الإعدادات</h2>
+  </div>
+
+  <div class="settings-group">
+    <h4>هوية التطبيق (داخل التطبيق)</h4>
+    <div class="avatar-row">
+      <img id="settingsAvatarImg" class="avatar-big hidden">
+      <div id="settingsAvatarFallback" class="avatar-fallback" style="width:74px;height:74px;border-radius:20px;font-size:calc(26px * var(--font-scale))">م</div>
+      <label class="btn btn-ghost" style="display:block;flex:1;cursor:pointer">
+        تغيير الشعار
+        <input type="file" id="avatarInput" accept="image/*" style="display:none">
+      </label>
+    </div>
+    <span class="hint">هذا الشعار يظهر داخل التطبيق فقط. لتغيير أيقونة التطبيق على شاشة جهازك يلزم تحديث ملف الأيقونة وإعادة بناء التطبيق من GitHub.</span>
+    <div class="field" style="margin-top:12px"><label>اسم التطبيق</label><input id="setAppName" dir="rtl" placeholder="المنتصر"></div>
+    <div class="field"><label>الشعار الفرعي</label><input id="setTagline" dir="rtl" placeholder="أدواتك وحافظاتك وصورك في مكان واحد"></div>
+    <div class="mini-save-row">
+      <button type="button" class="mini-save-btn" onclick="saveSettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>المظهر والألوان والأشكال</h4>
+    <div class="color-grid">
+      <div class="field"><label>لون الخلفية</label><input type="color" id="themeBg"></div>
+      <div class="field"><label>لون البطاقات</label><input type="color" id="themeSurface"></div>
+      <div class="field"><label>اللون المميز</label><input type="color" id="themeAccent"></div>
+      <div class="field"><label>لون النص</label><input type="color" id="themeText"></div>
+    </div>
+    <div class="field">
+      <label>استدارة الأشكال (حاد ← دائري)</label>
+      <input type="range" id="themeRadius" min="0" max="30" step="1">
+    </div>
+    <div class="field">
+      <label>حجم أيقونات الحافظات والعناصر</label>
+      <div class="range-row">
+        <input type="range" id="themeIconSize" min="32" max="80" step="1" style="flex:1">
+        <span id="themeIconSizeVal">47</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>حجم الخط العام</label>
+      <div class="range-row">
+        <input type="range" id="themeFontScale" min="90" max="170" step="5" style="flex:1">
+        <span id="themeFontScaleVal">100%</span>
+      </div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%" onclick="resetTheme()">استعادة المظهر الافتراضي</button>
+    <div class="mini-save-row">
+      <button type="button" class="mini-save-btn" onclick="saveThemeNow()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>طريقة عرض العناصر الافتراضية</h4>
+    <div class="field">
+      <label>ترتيب العناصر الجديدة داخل أي حافظة</label>
+      <select id="setDefaultSort" onchange="saveMiscSetting('defaultSort', this.value)">
+        <option value="newest">الأحدث أولًا</option>
+        <option value="oldest">الأقدم أولًا</option>
+        <option value="alpha">أبجديًا (أ-ي)</option>
+        <option value="favorite">المفضّلة أولًا</option>
+        <option value="random">ترتيب عشوائي</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>شكل العرض الافتراضي</label>
+      <select id="setDefaultView" onchange="saveMiscSetting('defaultView', this.value)">
+        <option value="list">قائمة</option>
+        <option value="grid">شبكة</option>
+        <option value="compact">مضغوط (كثيف)</option>
+        <option value="timeline">زمني (حسب التاريخ)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>تحكمات إضافية</h4>
+    <div class="switch-row">
+      <span class="sr-label">رسالة الصباح والمساء<small>تظهر عند فتح التطبيق: صباحًا حتى العاشرة، ومساءً بعد السادسة</small></span>
+      <button class="switch" id="dayGreetToggle" onclick="toggleDayGreeting()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تحديث بنوك الأسئلة تلقائيًا<small id="bankUpdInfo">يضيف أسئلة جديدة للألعاب تلقائيًا عند توفر الإنترنت</small></span>
+      <button class="switch" id="bankUpdToggle" onclick="toggleBankAutoUpdate()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تحديث الأسئلة الآن<small>يجلب أسئلة جديدة فورًا (يحتاج إنترنت)</small></span>
+      <button type="button" class="mini-btn" id="bankUpdNow" onclick="updateBanksNow()">حدّث الآن</button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">صوت لمس خفيف<small>نقرة هادئة عند الضغط على أي زر</small></span>
+      <button class="switch" id="soundToggle" onclick="toggleTapSound()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">اهتزاز خفيف عند الإجراءات<small>عند الحفظ، الحذف، والتحديد</small></span>
+      <button class="switch" id="hapticToggle" onclick="toggleHaptic()"></button>
+    </div>
+    <div class="field">
+      <label>عدد أعمدة الشاشة الرئيسية<small>يتحكم في شكل عرض الحافظات وكل عناصر الرئيسية</small></label>
+      <select id="setHomeColumns" onchange="setHomeColumns(this.value)">
+        <option value="2">عمودان</option>
+        <option value="3">ثلاثة أعمدة</option>
+      </select>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">إخفاء عدد العناصر على بطاقات الحافظات</span>
+      <button class="switch" id="hideCountsToggle" onclick="toggleHideCounts()"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">إخفاء الحافظات المقفلة من الرئيسية<small>تبقى محفوظة، ويمكن الوصول إليها من "المزيد ← الحافظات المقفلة"</small></span>
+      <button class="switch" id="hideLockedToggle" onclick="toggleHideLockedFromHome()"></button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      إمكانية الوصول وسهولة الاستخدام
+    </h4>
+    <span class="hint" style="display:block;margin-bottom:8px">خيارات تساعد ذوي الاحتياجات الخاصة ومستخدمي قارئ الشاشة، وتسهّل الاستخدام للجميع.</span>
+    <div class="switch-row">
+      <span class="sr-label">تباين عالٍ<small>ألوان أوضح وأكثر تباينًا لسهولة القراءة</small></span>
+      <button class="switch" id="a11yContrastToggle" onclick="toggleHighContrast()" aria-label="تفعيل أو إيقاف التباين العالي"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تقليل الحركة والانتقالات<small>يوقف الحركات والانتقالات المتحركة قدر الإمكان</small></span>
+      <button class="switch" id="a11yMotionToggle" onclick="toggleReduceMotion()" aria-label="تفعيل أو إيقاف تقليل الحركة"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">تكبير أزرار اللمس<small>يكبّر الأزرار والمفاتيح لتسهيل الضغط عليها</small></span>
+      <button class="switch" id="a11yTargetsToggle" onclick="toggleLargeTargets()" aria-label="تفعيل أو إيقاف تكبير أزرار اللمس"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">نص عريض<small>يجعل النصوص أكثر سماكة ووضوحًا</small></span>
+      <button class="switch" id="a11yBoldToggle" onclick="toggleBoldText()" aria-label="تفعيل أو إيقاف النص العريض"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">إعلانات صوتية لقارئ الشاشة<small>يُعلن قارئ الشاشة عن رسائل التنبيه تلقائيًا</small></span>
+      <button class="switch" id="a11yAnnounceToggle" onclick="toggleAnnounce()" aria-label="تفعيل أو إيقاف إعلانات قارئ الشاشة"></button>
+    </div>
+    <span class="mini-hint">لتغيير حجم الخط، استخدم "حجم الخط العام" في قسم المظهر أعلاه.</span>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="openHelpGuide()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      دليل الاستخدام السريع
+    </button>
+  </div>
+
+  <div class="settings-group">
+    <h4>أدوات الشاشة الرئيسية</h4>
+    <span class="hint" style="display:block;margin-bottom:8px">فعّل ما يفيدك واترك الباقي — الشاشة الرئيسية ليست مقصورة على الحافظات فقط.</span>
+    <div class="switch-row">
+      <span class="sr-label">قسم "أحدث الإضافات"<small>شريط أحدث العناصر المضافة أعلى الرئيسية</small></span>
+      <button class="switch" id="widgetToggle-recent" onclick="toggleWidget('recent')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">الساعة والتاريخ والتحية</span>
+      <button class="switch" id="widgetToggle-clock" onclick="toggleWidget('clock')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">الملاحظات السريعة<small>ملاحظات فورية غير مرتبطة بأي حافظة</small></span>
+      <button class="switch" id="widgetToggle-notes" onclick="toggleWidget('notes')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">قائمة المهام</span>
+      <button class="switch" id="widgetToggle-todo" onclick="toggleWidget('todo')"></button>
+    </div>
+    <div class="switch-row">
+      <span class="sr-label">زر التقاط سريع<small>يلتقط صورة ويحفظها مباشرة في حافظة الصور</small></span>
+      <button class="switch" id="widgetToggle-capture" onclick="toggleWidget('capture')"></button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>النسخ الاحتياطي</h4>
+    <span class="hint" style="display:block;margin-bottom:10px">صدّر نسخة من كل حافظاتك وعناصرك كملف واحد، أو استورد نسخة سابقة.</span>
+    <div class="modal-actions" style="margin-top:0">
+      <button type="button" class="btn btn-ghost" onclick="exportBackup()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تصدير نسخة
+      </button>
+      <button type="button" class="btn btn-ghost" onclick="document.getElementById('backupImportInput').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        استيراد نسخة
+      </button>
+    </div>
+    <input type="file" id="backupImportInput" accept="application/json" class="hidden">
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:10px" onclick="shareBackup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+      مشاركة النسخة عبر البريد أو جوجل درايف
+    </button>
+    <span class="mini-hint">يفتح قائمة المشاركة في جهازك لإرسال ملف النسخة إلى بريدك أو حفظه في تطبيق سحابي مثل Google Drive — هذه مشاركة يدوية وليست نسخًا تلقائيًا مستمرًا.</span>
+    <span class="mini-hint">لتصدير حافظة واحدة فقط، افتح الحافظة ثم اختر "تصدير هذه الحافظة" من قائمة خياراتها.</span>
+    <div class="field" style="margin-top:12px">
+      <label>بريدك الإلكتروني لإرسال النسخ إليه</label>
+      <input id="setBackupEmail" type="email" dir="ltr" placeholder="you@example.com">
+    </div>
+    <div class="mini-save-row">
+      <button type="button" class="mini-save-btn" onclick="saveSettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-top:6px" onclick="emailBackup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+      تنزيل ثم فتح البريد لإرسال النسخة
+    </button>
+    <span class="mini-hint">هذا يُنزّل ملف النسخة أولًا ثم يفتح تطبيق البريد برسالة جاهزة — أرفق الملف الذي تم تنزيله للتو يدويًا قبل الإرسال (المتصفح لا يسمح بإرفاق الملفات تلقائيًا).</span>
+    <div class="switch-row" style="margin-top:10px">
+      <span class="sr-label">تذكير أسبوعي بعمل نسخة احتياطية</span>
+      <button class="switch" id="backupReminderToggle" onclick="toggleBackupReminder()"></button>
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label>استيراد عناصر (ملف حافظة مُصدّر) إلى حافظة موجودة</label>
+      <select id="importTargetFolder"></select>
+      <button type="button" class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="document.getElementById('folderImportInput').click()">اختيار ملف واستيراد العناصر</button>
+    </div>
+    <input type="file" id="folderImportInput" accept="application/json" class="hidden">
+  </div>
+
+  <div class="settings-group">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 5v14c0 1.66-4 3-9 3s-9-1.34-9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+      مساحة التخزين
+    </h4>
+    <div class="switch-row">
+      <span class="sr-label">المساحة المستخدمة تقريبًا<small id="storageInfoLine">جارٍ الحساب...</small></span>
+      <button class="btn btn-ghost" style="flex:none;padding:9px 14px" onclick="refreshStorageInfo()">تحديث</button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      تحليلات الاستخدام
+    </h4>
+    <div id="analyticsBody"></div>
+  </div>
+
+  <div class="settings-group">
+    <h4>حول التطبيق</h4>
+    <div class="field"><label>نبذة عن التطبيق</label><textarea id="setAbout" placeholder="اكتب نبذة عن التطبيق"></textarea></div>
+    <div class="field"><label>الناشر</label><input id="setPublisher" dir="rtl" placeholder="اسم الناشر"></div>
+    <div class="field"><label>الإصدار</label><input id="setVersion" placeholder="1.0.0"></div>
+    <div class="mini-save-row">
+      <button type="button" class="mini-save-btn" onclick="saveSettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>تواصل معنا</h4>
+    <a class="contact-link" href="mailto:alnourmontasir@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/><polyline points="22 6 12 13 2 6"/></svg>
+      <span style="direction:ltr;unicode-bidi:embed">alnourmontasir@gmail.com</span>
+    </a>
+    <a class="contact-link" href="https://www.facebook.com/montasiralnuor" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      <span>صفحتنا على فيسبوك</span>
+    </a>
+    <button type="button" class="contact-link" style="width:100%;text-align:right" onclick="shareApp()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+      <span>مشاركة التطبيق مع صديق</span>
+    </button>
+  </div>
+
+  <div class="settings-group">
+    <h4>الحماية</h4>
+    <div class="switch-row">
+      <span class="sr-label">تفعيل قفل التطبيق</span>
+      <button class="switch" id="pinToggle" onclick="togglePin()"></button>
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>طريقة القفل</label>
+      <div class="lock-method-row mode-row">
+        <button type="button" class="mode-btn" id="lockMethodBtn-pin" onclick="setLockMethod('pin')">رمز PIN</button>
+        <button type="button" class="mode-btn" id="lockMethodBtn-pattern" onclick="setLockMethod('pattern')">نمط الرسم</button>
+      </div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%;margin-top:10px;margin-bottom:12px" id="setLockBtn" onclick="startSetLock()">تعيين / تغيير الرمز</button>
+    <div class="switch-row">
+      <span class="sr-label">فتح ببصمة الإصبع / الوجه<small>يعمل فقط داخل التطبيق المثبّت مع إضافة البصمة</small></span>
+      <button class="switch" id="bioToggle" onclick="toggleBiometric()"></button>
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>القفل التلقائي بعد الخمول</label>
+      <select id="setAutoLock" onchange="saveMiscSetting('autoLockMinutes', Number(this.value))">
+        <option value="0">بدون قفل تلقائي</option>
+        <option value="1">دقيقة واحدة</option>
+        <option value="5">5 دقائق</option>
+        <option value="15">15 دقيقة</option>
+        <option value="30">30 دقيقة</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h4>الإشعارات</h4>
+    <div class="switch-row">
+      <span class="sr-label">تذكير يومي بفتح التطبيق</span>
+      <button class="switch" id="notifToggle" onclick="toggleDailyReminder()"></button>
+    </div>
+  </div>
+
+  <div class="settings-group danger-zone">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      منطقة الخطر
+    </h4>
+    <button type="button" class="btn btn-ghost" style="width:100%" onclick="requestEmptyTrash()">إفراغ سلة المحذوفات</button>
+  </div>
+
+</div>
+
+<div class="modal-backdrop" id="addModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 id="addModalTitle" style="margin:0">إضافة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="addModalBody"></div>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeAddModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" onclick="submitAddItem()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        حفظ
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="folderModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 id="folderModalTitle" style="margin:0">إضافة حافظة جديدة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><label>اسم الحافظة</label><input id="newFolderName" dir="rtl" placeholder="مثال: دراسة"></div>
+    <div class="field"><label>نوع المحتوى</label>
+      <select id="newFolderKind">
+        <option value="note">ملاحظات نصية</option>
+        <option value="text">نصوص</option>
+        <option value="article">مقالات</option>
+        <option value="poem">أشعار</option>
+        <option value="quote">اقتباسات وأقوال</option>
+        <option value="code">أكواد</option>
+        <option value="file">ملفات عامة</option>
+        <option value="document">مستندات</option>
+        <option value="task">قوائم مهام</option>
+        <option value="link">روابط ومواقع</option>
+        <option value="contact">جهات اتصال</option>
+        <option value="event">مواعيد وتذكيرات</option>
+        <option value="recipe">وصفات طبخ</option>
+        <option value="password">حسابات وكلمات مرور</option>
+        <option value="diary">يوميات ومذكرات</option>
+        <option value="idea">أفكار وخواطر</option>
+        <option value="goal">أهداف وعادات</option>
+        <option value="expense">مصروفات ونفقات</option>
+      </select>
+    </div>
+    <div class="color-grid">
+      <div class="field"><label>اللون الأساسي</label><input type="color" id="newFolderColor" value="#5eb1a1"></div>
+      <div class="field"><label>اللون الثانوي</label><input type="color" id="newFolderColor2" value="#2f7d6c"></div>
+    </div>
+    <div class="switch-row" style="padding:4px 0 10px">
+      <span class="sr-label">قفل هذه الحافظة برمز خاص بها<small>رمز من 4 أرقام مستقل لهذه الحافظة، مع سؤال أمان لاستعادته</small></span>
+      <button type="button" class="switch" id="folderLockToggle" onclick="toggleFolderLockInModal()"></button>
+    </div>
+    <div class="field">
+      <label>الأيقونة</label>
+      <div class="icon-tab-row">
+        <button type="button" class="icon-tab-btn" id="iconTabBtn-icons" onclick="switchFolderIconTab('icons')">رموز</button>
+        <button type="button" class="icon-tab-btn" id="iconTabBtn-emoji" onclick="switchFolderIconTab('emoji')">إيموجي</button>
+      </div>
+      <div class="icon-pick-grid" id="folderIconPicker"></div>
+      <div class="emoji-pick-grid hidden" id="folderEmojiPicker"></div>
+    </div>
+    <div class="field">
+      <label>أو استخدم صورة من المعرض كأيقونة</label>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button type="button" class="btn btn-ghost" style="flex:1" onclick="document.getElementById('folderIconImageInput').click()">اختيار صورة</button>
+        <img id="folderIconImagePreview" class="hidden" style="width:44px;height:44px;border-radius:12px;object-fit:cover;flex-shrink:0">
+        <button type="button" class="icon-btn hidden" id="removeFolderIconImageBtn" style="width:38px;height:38px;flex-shrink:0" onclick="removeFolderIconImage()" title="إزالة الصورة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+      <input type="file" id="folderIconImageInput" accept="image/*" class="hidden">
+    </div>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeFolderModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" id="folderSubmitBtn" onclick="submitFolderForm()">إنشاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="folderMenuBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row" style="margin-bottom:4px">
+      <span></span>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeFolderMenu()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="folder-menu-head">
+      <div class="folder-icon" id="menuFolderIcon"></div>
+      <h4 id="menuFolderName"></h4>
+    </div>
+
+    <div class="menu-section-label">الفرز والترتيب</div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" id="sortBtn-newest" onclick="setMenuSort('newest')">الأحدث أولًا</button>
+      <button type="button" class="menu-item" id="sortBtn-oldest" onclick="setMenuSort('oldest')">الأقدم أولًا</button>
+      <button type="button" class="menu-item" id="sortBtn-alpha" onclick="setMenuSort('alpha')">أبجديًا (أ-ي)</button>
+      <button type="button" class="menu-item" id="sortBtn-favorite" onclick="setMenuSort('favorite')">المفضّلة أولًا</button>
+      <button type="button" class="menu-item" id="sortBtn-random" onclick="setMenuSort('random')">ترتيب عشوائي</button>
+    </div>
+
+    <div class="menu-divider"></div>
+    <div class="menu-section-label">طريقة عرض المحتويات</div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" id="viewBtn-list" onclick="setMenuView('list')">عرض كقائمة</button>
+      <button type="button" class="menu-item" id="viewBtn-grid" onclick="setMenuView('grid')">عرض كشبكة</button>
+      <button type="button" class="menu-item" id="viewBtn-compact" onclick="setMenuView('compact')">عرض مضغوط (كثيف)</button>
+      <button type="button" class="menu-item" id="viewBtn-timeline" onclick="setMenuView('timeline')">عرض زمني (حسب التاريخ)</button>
+    </div>
+
+    <div class="menu-divider"></div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" id="pinFolderBtn" onclick="togglePinCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79L16 12V6h1a1 1 0 0 0 0-2H7a1 1 0 0 0 0 2h1v6l-1.89 1.45A2 2 0 0 0 5 15.24z"/></svg>
+        <span id="pinFolderLabel">تثبيت في الأعلى</span>
+      </button>
+      <button type="button" class="menu-item" onclick="enterItemSelectMode()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>
+        تحديد العناصر
+      </button>
+      <button type="button" class="menu-item" onclick="editCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        تعديل الاسم واللون والأيقونة
+      </button>
+      <button type="button" class="menu-item" onclick="duplicateCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        تكرار الحافظة
+      </button>
+      <button type="button" class="menu-item" onclick="exportCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تصدير هذه الحافظة
+      </button>
+      <button type="button" class="menu-item danger" onclick="requestDeleteCurrentFolder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        حذف الحافظة
+      </button>
+    </div>
+
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeFolderMenu()" title="إغلاق">إغلاق</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="moveModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">نقل إلى حافظة أخرى</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeMoveModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="folder-pick-list" id="movePickList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="shareSaveModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">حفظ المحتوى المُشارك</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeShareSaveModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="sharePreviewBox" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px"></div>
+    <p class="mini-hint" style="margin:0 0 8px">اختر الحافظة التي تريد الحفظ فيها</p>
+    <div class="folder-pick-list" id="sharePickList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="addToolBackdrop" role="dialog" aria-modal="true" aria-labelledby="addToolTitle" onclick="if(event.target===this)closeAddToolModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="addToolTitle">إضافة أداة جديدة</h3>
+    <div class="field"><label>نوع الأداة</label>
+      <div class="ct-chips kinds" id="ctKinds">
+        <button type="button" data-k="link" class="on">🌐 رابط موقع</button>
+        <button type="button" data-k="text">📝 نص / ملاحظة</button>
+        <button type="button" data-k="list">🗂️ قائمة (حتى ٥٠)</button>
+      </div>
+    </div>
+    <div class="field"><label>اسم الأداة</label><input id="ctName" dir="rtl" maxlength="24" placeholder="مثال: موقعي المفضل"></div>
+    <div class="field" id="ctLinkField"><label>رابط الموقع</label><input id="ctLink" dir="ltr" inputmode="url" placeholder="example.com"></div>
+    <div class="field hidden" id="ctTextField"><label>النص الذي يظهر عند فتح الأداة</label><textarea id="ctText" dir="rtl" placeholder="اكتب هنا..."></textarea></div>
+    <div class="field"><label>الأيقونة</label><div class="ct-chips" id="ctEmojis"></div></div>
+    <div class="field"><label>اللون</label><div class="ct-chips colors" id="ctColors"></div></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeAddToolModal()">إلغاء</button>
+      <button type="button" class="btn btn-primary" onclick="saveCustomTool()">إضافة</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="addHubBackdrop" role="dialog" aria-modal="true" aria-labelledby="addHubTitle" onclick="if(event.target===this)closeAddHub()">
+  <div class="modal hub-modal">
+    <div class="modal-handle"></div>
+    <div class="hub-head">
+      <div class="hh-ic" aria-hidden="true">✨</div>
+      <div class="hh-t"><h3 id="addHubTitle">إضافة جديدة</h3><p>حافظات وألعاب وأدوات — كل شيء من مكان واحد</p></div>
+      <span class="hub-net on" id="hubNet">متصل</span>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeAddHub()" title="إغلاق" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="hub-hero">
+      <button type="button" style="--h1:#c9a24b;--h2:#8a5a1a" onclick="hubNewFolder()"><i>📁</i><span>حافظة جديدة<small>اختر النوع واللون والأيقونة</small></span></button>
+      <button type="button" style="--h1:#5b8def;--h2:#2f5bb8" onclick="hubNewTool()"><i>🧩</i><span>أداة مخصّصة<small>رابط أو نص أو قائمة حتى ٥٠</small></span></button>
+    </div>
+    <input class="hub-search" id="hubSearch" type="search" dir="rtl" placeholder="ابحث عن لعبة أو أداة أو نوع حافظة..." autocomplete="off">
+    <div class="hub-tabs" id="hubTabs"></div>
+    <div id="hubBody"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="ctListBackdrop" role="dialog" aria-modal="true" aria-labelledby="ctListTitle" onclick="if(event.target===this)closeCtList()">
+  <div class="modal hub-modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row"><h3 id="ctListTitle"></h3><span class="hub-net on" id="ctListCount"></span></div>
+    <div class="ctl-add">
+      <input id="ctlName" dir="rtl" maxlength="40" placeholder="الاسم (مثال: لعبتي المفضلة)">
+      <input id="ctlValue" dir="auto" maxlength="2000" placeholder="رابط موقع أو نص">
+      <button type="button" class="btn btn-primary" onclick="ctListAddEntry()">＋ إضافة للقائمة</button>
+    </div>
+    <div id="ctListBody"></div>
+    <div class="modal-actions"><button type="button" class="btn btn-ghost" onclick="closeCtList()">إغلاق</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="ctViewBackdrop" role="dialog" aria-modal="true" aria-labelledby="ctViewTitle" onclick="if(event.target===this)closeCustomText()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="ctViewTitle"></h3>
+    <p class="ct-text" id="ctViewText"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeCustomText()">إغلاق</button>
+      <button type="button" class="btn btn-primary" onclick="copyCustomText()">نسخ</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop center-modal" id="dayGreetBackdrop" role="dialog" aria-modal="true" aria-labelledby="dayGreetTitle" onclick="if(event.target===this)closeDayGreeting()">
+  <div class="greet-box morning" id="dayGreetBox">
+    <div class="greet-hero">
+      <span id="dayGreetStars"></span>
+      <div class="greet-icon" id="dayGreetIcon"></div>
+      <h2 class="greet-title" id="dayGreetTitle">صباح الخير</h2>
+      <svg class="greet-curve" viewBox="0 0 400 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 26V14C70 0 130 0 200 8s130 12 200 2v16z"/></svg>
+    </div>
+    <div class="greet-body">
+      <p class="greet-eyebrow">تحية طيبة من</p>
+      <p class="greet-brand">تطبيق منتصر النور</p>
+      <div class="greet-sep"></div>
+      <p class="greet-text" id="dayGreetText"></p>
+      <div class="greet-chips"><span>🛠️ أدوات وألعاب</span><span>🗂️ حافظات منظّمة</span><span>🖼️ معرض صور</span><span>🔒 حماية ونسخ احتياطي</span></div>
+      <p class="greet-dev">تطوير وتصميم: منتصر النور حسين</p>
+      <p class="greet-wish" id="dayGreetWish"></p>
+      <span class="greet-date" id="dayGreetDate"></span>
+      <button class="greet-btn" onclick="closeDayGreeting()" id="dayGreetBtn">ابدأ الآن</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop center-modal" id="flQBackdrop" role="dialog" aria-modal="true" style="z-index:1100">
+  <div class="confirm-box" style="text-align:right">
+    <h3 id="flQTitle" style="text-align:center">سؤال الأمان</h3>
+    <p id="flQMsg" style="text-align:center"></p>
+    <div class="field" id="flQSelectWrap">
+      <label>السؤال</label>
+      <select id="flQSelect" onchange="flQSelectChanged()"></select>
+    </div>
+    <div class="field hidden" id="flQCustomWrap">
+      <input id="flQCustom" dir="rtl" placeholder="اكتب سؤالك الخاص" autocomplete="off">
+    </div>
+    <div class="field hidden" id="flQShowWrap">
+      <label>السؤال</label>
+      <div id="flQShow" style="font-weight:700;font-size:calc(14px * var(--font-scale))"></div>
+    </div>
+    <div class="field">
+      <label>الإجابة</label>
+      <input id="flQAnswer" dir="rtl" autocomplete="off" onkeydown="if(event.key==='Enter')flQSubmit()">
+    </div>
+    <div id="flQError" style="color:var(--danger);font-size:calc(13px * var(--font-scale));min-height:18px;text-align:center"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="flQCancel()">إلغاء</button>
+      <button class="btn btn-primary" id="flQOk" onclick="flQSubmit()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop center-modal" id="confirmModalBackdrop" role="dialog" aria-modal="true">
+  <div class="confirm-box">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <h3 id="confirmModalTitle">تأكيد الحذف</h3>
+    <p id="confirmModalMsg"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeConfirmModal()">إلغاء</button>
+      <button class="btn btn-danger" onclick="runConfirmAction()">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="quickNoteModalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">ملاحظة سريعة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeQuickNoteModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field"><textarea id="quickNoteInput" dir="rtl" placeholder="اكتب ملاحظة سريعة هنا... (غير مرتبطة بأي حافظة)" style="min-height:120px"></textarea></div>
+    <div class="modal-actions actions-compact">
+      <button class="btn btn-ghost" onclick="closeQuickNoteModal()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary btn-compact" onclick="submitQuickNote()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="orderBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0" id="orderTitle">ترتيب</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeOrderModal()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <span class="hint" style="display:block;margin-bottom:10px">حرّك أي عنصر بالأسهم. العناصر المحدّدة مؤطّرة بالذهبي.</span>
+    <div class="ord-quick">
+      <button type="button" id="ordTopBtn" onclick="moveSelectedInOrder(true)">المحدد إلى الأعلى</button>
+      <button type="button" id="ordBottomBtn" onclick="moveSelectedInOrder(false)">المحدد إلى الأسفل</button>
+    </div>
+    <div id="orderList"></div>
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeOrderModal()">تم</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolsManagerBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">إدارة الأدوات</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeToolsManager()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="toolsManagerBody"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="hiddenFoldersBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">الحافظات المخفية</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeHiddenFolders()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="hiddenFoldersBody"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="extraMenuBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">المزيد</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeExtraMenu()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="menu-list">
+      <button type="button" class="menu-item" onclick="closeExtraMenu();openProjects()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        مشاريعي
+      </button>
+      <button type="button" class="menu-item" onclick="closeExtraMenu();openToolsHub()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        مركز الأدوات
+      </button>
+      <button type="button" class="menu-item" onclick="closeExtraMenu();openHelpGuide()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        دليل الاستخدام السريع
+      </button>
+    </div>
+    <div id="extraMenuLockedSection"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="helpGuideBackdrop" role="dialog" aria-modal="true" aria-label="دليل الاستخدام السريع">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">مرحبًا بك 👋 دليل سريع للاستخدام</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeHelpGuide()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="help-list">
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <div><h5>الحافظات</h5><p>كل مربع في الرئيسية "حافظة" تجمع نوعًا من العناصر (صور، ملاحظات، روابط...). اضغط عليها لفتحها. اضغط مطوّلًا لتحديدها ثم احذفها أو أخفِها أو اقفلها، أو استمر بالسحب لإعادة ترتيبها. وينطبق الأمر نفسه على أدوات «مركز الأدوات». كل ما تحذفه ينتقل إلى سلة المحذوفات ويمكنك استعادته منها.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div><h5>البحث</h5><p>استخدم مربع البحث أعلى الرئيسية للعثور على أي عنصر أو حافظة بسرعة.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l3 6 6 .9-4.5 4.4 1 6.2L12 16.8 6.5 19.5l1-6.2L3 8.9 9 8z"/></svg></div>
+        <div><h5>المفضلة والسلة</h5><p>زر النجمة في أعلى الرئيسية يعرض عناصرك المفضّلة، وزر سلة المهملات يحفظ ما حذفته مؤقتًا قبل حذفه نهائيًا.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82"/></svg></div>
+        <div><h5>الإعدادات وإمكانية الوصول</h5><p>من زر الإعدادات يمكنك تغيير المظهر، حجم الخط، وتفعيل خيارات إمكانية الوصول مثل التباين العالي وتكبير الأزرار وتقليل الحركة.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div><h5>النسخ الاحتياطي</h5><p>من الإعدادات ← النسخ الاحتياطي، يمكنك تصدير كل بياناتك كملف والاحتفاظ به، أو استيراده لاحقًا.</p></div>
+      </div>
+      <div class="help-row">
+        <div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div><h5>مساعدة إضافية</h5><p>يمكنك فتح هذا الدليل في أي وقت من قائمة "المزيد" أو من الإعدادات ← إمكانية الوصول.</p></div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:16px" onclick="closeHelpGuide()">فهمت، ابدأ الاستخدام</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolPdfBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">مولّد PDF من الصور</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closePdfTool()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <span class="hint" style="display:block;margin-bottom:10px">أضف صورًا وسيتم ترتيبها كصفحات داخل ملف PDF واحد، كل صورة بحجمها الطبيعي.</span>
+    <div class="field"><label>اسم الملف</label><input id="pdfFileName" dir="ltr" placeholder="document"></div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-bottom:10px" onclick="document.getElementById('pdfImagesInput').click()">إضافة صور</button>
+    <input type="file" id="pdfImagesInput" accept="image/*" multiple class="hidden">
+    <div id="pdfImagesPreview" style="margin-bottom:10px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePdfTool()" title="إغلاق">إلغاء</button>
+      <button class="btn btn-primary" id="pdfGenerateBtn" disabled onclick="generatePdfFromImages()">إنشاء PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolCompressBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">ضاغط الصور</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompressTool()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-bottom:10px" onclick="document.getElementById('compressImageInput').click()">اختيار صورة</button>
+    <input type="file" id="compressImageInput" accept="image/*" class="hidden">
+    <div id="compressPreviewBox" class="hidden">
+      <img id="compressPreviewImg" class="preview">
+      <div class="field" style="margin-top:10px">
+        <label>جودة الضغط: <span id="compressQualityVal">70%</span></label>
+        <input type="range" id="compressQuality" min="10" max="95" step="5" value="70">
+      </div>
+      <p class="hint" id="compressResult" style="text-align:center"></p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeCompressTool()" title="إغلاق">إغلاق</button>
+      <button class="btn btn-primary" onclick="downloadCompressedImage()">تنزيل الصورة المضغوطة</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolStopwatchBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">ساعة التوقيت</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeStopwatchTool()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="calc-result" id="swDisplay" style="text-align:center;width:100%;direction:ltr;margin-bottom:14px">00:00.00</div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="swStartBtn" style="flex:1" onclick="toggleStopwatch()">بدء</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="recordLap()">تسجيل لفة</button>
+      <button class="btn btn-danger" style="flex:1" onclick="resetStopwatch()">إعادة ضبط</button>
+    </div>
+    <div class="menu-divider"></div>
+    <div id="swLapsList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="toolCompassBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0">البوصلة</h3>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="closeCompassTool()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;justify-content:center;margin:6px 0 12px">
+      <svg viewBox="0 0 100 100" style="width:180px;height:180px">
+        <circle cx="50" cy="50" r="47" fill="none" stroke="var(--border)" stroke-width="2"/>
+        <text x="50" y="12" text-anchor="middle" fill="var(--text-dim)" font-size="8">ش</text>
+        <text x="50" y="94" text-anchor="middle" fill="var(--text-dim)" font-size="8">ج</text>
+        <text x="10" y="53" text-anchor="middle" fill="var(--text-dim)" font-size="8">غ</text>
+        <text x="90" y="53" text-anchor="middle" fill="var(--text-dim)" font-size="8">ق</text>
+        <g id="compassNeedle" style="transform-origin:50px 50px;transition:transform .15s ease-out">
+          <polygon points="50,10 44,52 50,46 56,52" fill="var(--danger)"/>
+          <polygon points="50,90 44,52 50,58 56,52" fill="var(--text-dim)"/>
+        </g>
+      </svg>
+    </div>
+    <p style="text-align:center;font-weight:800;font-size:calc(18px * var(--font-scale))" id="compassDegrees">—</p>
+    <p class="hint" id="compassStatus" style="text-align:center"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="openCompassLocation()">فتح موقعي في الخرائط</button>
+    </div>
+    <p class="hint" id="compassLocationText" style="text-align:center"></p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<input type="file" id="photoFallbackInput" accept="image/*" capture="environment" class="hidden">
+<input type="file" id="photoUploadInput" accept="image/*" multiple class="hidden">
+<input type="file" id="galleryPickInput" accept="image/*" multiple class="hidden">
+<input type="file" id="videoFallbackInput" accept="video/*" multiple class="hidden">
+<input type="file" id="musicFallbackInput" accept="audio/*" multiple class="hidden">
+<input type="file" id="fileGenericInput" multiple class="hidden">
+
+<div class="modal-backdrop" id="funToolBackdrop" role="dialog" aria-modal="true" aria-labelledby="funToolTitle">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head-row">
+      <h3 style="margin:0" id="funToolTitle"></h3>
+      <button class="icon-btn" style="width:34px;height:34px;margin-inline-start:auto;font-weight:900;font-size:16px" onclick="FUN.guide()" title="دليل الاستخدام" aria-label="دليل الاستخدام">؟</button>
+      <button class="icon-btn" style="width:34px;height:34px" onclick="FUN.close()" title="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="funToolBody"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+  </html>
