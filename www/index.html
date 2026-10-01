@@ -15128,7 +15128,7 @@ function gvInfo(){
     }catch(e){ console.warn('gps pin', e); }
   })();
 })();
-
+ 
 async function boot(){
   try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
   await loadAppData();
