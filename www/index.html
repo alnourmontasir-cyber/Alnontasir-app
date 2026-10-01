@@ -17660,8 +17660,8 @@ function gvInfo() {
             + '.gps-dial{display:flex;justify-content:center;margin:6px 0 4px;padding:0 10px}'
             + '.gps-dial svg{display:block;width:100%;max-width:360px;height:auto;aspect-ratio:1/1;overflow:visible}'
             + '.gps-far{text-align:center;font-weight:900;font-size:calc(40px * var(--font-scale));margin:0;color:#ffe066;text-shadow:0 2px 14px rgba(242,183,5,.35)}'
-            + '.gps-sub{text-align:center;color:#e3d9b4;font-size:calc(13.5px * var(--font-scale));line-height:1.9;margin:4px 0 12px}'
-            + '.gps-dst{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:calc(16px * var(--font-scale));margin:2px 0 6px;color:#ffe066}'
+            + '.gps-sub{min-height:7.2em;text-align:center;color:#e3d9b4;font-size:calc(13.5px * var(--font-scale));line-height:1.9;margin:4px 0 12px}'
+            + '.gps-dst{min-height:1.6em;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:calc(16px * var(--font-scale));margin:2px 0 6px;color:#ffe066}'
             + '.gps-empty{text-align:center;color:var(--text-dim);padding:26px 10px;line-height:2;font-size:calc(14px * var(--font-scale))}'
             + '.gps-note{color:var(--text-dim);font-size:calc(11.5px * var(--font-scale));line-height:1.8;margin:8px 2px 0}'
             + '.gps-perm{padding:13px 14px;border-radius:16px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:12px}'
@@ -17732,7 +17732,9 @@ function gvInfo() {
             + '.gps-item:active{transform:scale(.99)}'
             + '.gps-item .gps-main small{margin-top:2px}'
             + '.gps-item .gps-dist{padding:3px 9px;border-radius:999px;background:var(--bg-elev);font-size:calc(12.5px * var(--font-scale))}'
-            + '.gps-add{border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.1)}';
+            + '.gps-add{border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.1)}'
+            + '.gps-card.new{flex:0 0 100%;max-width:none}'
+            + '.gps-big[hidden],.gps-ed[hidden]{display:none !important}';
         document.head.appendChild(st);
     }
     /* ---------- التخزين: داخل الإعدادات حتى يدخل في النسخ الاحتياطي ---------- */
@@ -17958,11 +17960,15 @@ function gvInfo() {
                 const el = $(id);
                 if (!el)
                     return;
+                if (!isFinite(target))
+                    return;
                 const cur = S.angs[id] == null ? target : S.angs[id];
                 const delta = (((target - cur) % 360) + 540) % 360 - 180;
-                const nv = cur + delta;
+                if (S.angs[id] != null && Math.abs(delta) < 0.4)
+                    return;
+                const nv = ((cur + delta) % 360 + 360) % 360;
                 S.angs[id] = nv;
-                el.style.transform = 'rotate(' + nv + 'deg)';
+                el.setAttribute('transform', 'rotate(' + nv.toFixed(1) + ' 100 100)');
             }
             async function reqOri() {
                 const D = window.DeviceOrientationEvent;
@@ -18217,6 +18223,26 @@ function gvInfo() {
                 else if (r.state === 'denied')
                     toast('الإذن ما زال مرفوضًا — فعّله من إعدادات الهاتف');
             }
+            function permIntro() {
+                return new Promise(function (resolve) {
+                    const ov = document.createElement('div');
+                    ov.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.62)';
+                    ov.innerHTML = '<div dir="rtl" style="width:100%;max-width:360px;padding:22px 18px 16px;border-radius:22px;background:var(--bg-elev);color:var(--text);border:1.5px solid #f2b705;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.5)">'
+                        + '<div style="font-size:44px;line-height:1.2">📍</div>'
+                        + '<p style="margin:8px 0 6px;font-weight:900;font-size:calc(18px * var(--font-scale))">فعّل إذن الموقع</p>'
+                        + '<p style="margin:0 0 16px;line-height:1.9;color:var(--text-dim);font-size:calc(13.5px * var(--font-scale))">يحتاج GBS إذن الموقع ليعرف مكانك ويرسم السهم نحو وجهتك. اضغط «السماح» ثم وافق في النافذة التالية واختر «الموقع الدقيق». موقعك يبقى على جهازك فقط.</p>'
+                        + '<button type="button" class="gps-big" id="gpsIntroOk" style="margin-bottom:8px">السماح بالموقع</button>'
+                        + '<button type="button" class="btn btn-ghost" id="gpsIntroNo" style="width:100%">ليس الآن</button></div>';
+                    document.body.appendChild(ov);
+                    const done = function (v) {
+                        if (ov.parentNode)
+                            ov.parentNode.removeChild(ov);
+                        resolve(v);
+                    };
+                    ov.querySelector('#gpsIntroOk').addEventListener('click', function () { done(true); });
+                    ov.querySelector('#gpsIntroNo').addEventListener('click', function () { done(false); });
+                });
+            }
             async function init() {
                 let p;
                 try {
@@ -18230,6 +18256,24 @@ function gvInfo() {
                 S.perm = p;
                 paintPerm();
                 updStat();
+                if (!opt('permIntro') && p.state !== 'granted' && p.state !== 'unsupported' && p.state !== 'insecure') {
+                    setOpt('permIntro', true);
+                    const ans = await permIntro();
+                    if (S.dead)
+                        return;
+                    if (ans) {
+                        S.asked = true;
+                        try {
+                            p = await GEO.request();
+                        }
+                        catch (e) { }
+                        if (S.dead)
+                            return;
+                        S.perm = p;
+                        paintPerm();
+                        updStat();
+                    }
+                }
                 if (p.state === 'prompt' && p.src === 'cap') {
                     S.asked = true;
                     try {
@@ -18305,18 +18349,8 @@ function gvInfo() {
                     return;
                 const on = !!(S.pos && !S.err && S.fix && (Date.now() - S.fix) <= 15000);
                 const ag = $('gpsLocAge');
-                if (ag) {
-                    if (on) {
-                        const sec = Math.max(0, Math.round((Date.now() - S.fix) / 1000));
-                        const at = sec < 1 ? 'الآن' : 'قبل ' + sec + ' ث';
-                        if (ag.textContent !== at)
-                            ag.textContent = at;
-                        if (ag.hidden)
-                            ag.hidden = false;
-                    }
-                    else if (!ag.hidden)
-                        ag.hidden = true;
-                }
+                if (ag && !ag.hidden)
+                    ag.hidden = true;
                 let t, cc;
                 if (on) {
                     t = 'تم تحديث الموقع';
@@ -18493,7 +18527,7 @@ function gvInfo() {
                 if (!S.pos || S.capBusy)
                     return;
                 S.capBusy = true;
-                const id = kind === 'park' ? 'gpsPark' : 'gpsSave', ms = kind === 'park' ? 5000 : 6000;
+                const id = kind === 'park' ? 'gpsPark' : kind === 'home' ? 'gpsHomeOk' : 'gpsSave', ms = kind === 'park' ? 5000 : 6000;
                 const btn = $(id), old = btn ? btn.innerHTML : '';
                 const r = await captureBest(ms, function (el) { const b = $(id); if (b)
                     b.textContent = 'تثبيت… ' + Math.max(1, Math.ceil((ms - el) / 1000)) + ' ث'; });
@@ -18503,7 +18537,7 @@ function gvInfo() {
                     b2.innerHTML = old;
                 if (S.dead || !r)
                     return;
-                const go = function () { kind === 'park' ? finishPark(r) : finishSave(r); };
+                const go = function () { kind === 'park' ? finishPark(r) : kind === 'home' ? finishHome(r) : finishSave(r); };
                 if (r.acc > 60)
                     showConfirm('دقة الموقع ضعيفة', 'الدقة الحالية ±' + Math.round(r.acc) + ' م — قد يكون المكان المحفوظ بعيدًا عن موقعك الفعلي. الأفضل الانتظار في مكان مكشوف ثم المحاولة. هل تحفظه على أي حال؟', go);
                 else
@@ -18513,6 +18547,29 @@ function gvInfo() {
                 if (S.tab !== 'home' && S.tab !== 'dest')
                     return;
                 openEditor({ title: 'إضافة وجهة — موقعك الحالي', lat: r.lat.toFixed(6), lng: r.lng.toFixed(6), emoji: '📍', acc: r.acc, n: r.n });
+            }
+            function finishHome(r) {
+                const D = db();
+                if (D.dests.length >= MAX) {
+                    toast('وصلت للحد الأقصى (' + MAX + ') من الوجهات — احذف بعضها أولًا');
+                    return;
+                }
+                const inp = $('gpsHomeName');
+                const raw = inp ? inp.value : (S.hName || '');
+                const name = String(raw || '').replace(/\s+/g, ' ').trim().slice(0, 40) || ('موقع ' + (D.dests.length + 1));
+                D.dests.push({ id: newId(), name: name, emoji: '📍', lat: +r.lat.toFixed(6), lng: +r.lng.toFixed(6), t: Date.now(), acc: Math.round(r.acc) });
+                persist();
+                S.hName = '';
+                S.hOpen = false;
+                if (inp)
+                    inp.value = '';
+                showHomeBox();
+                try {
+                    if (navigator.vibrate)
+                        navigator.vibrate(30);
+                }
+                catch (e) { }
+                toast('تم حفظ «' + name + '» (±' + Math.round(r.acc) + ' م) — يظهر أولًا في «الوجهات»');
             }
             function finishPark(r) {
                 const D = db(), la = +r.lat.toFixed(6), lo = +r.lng.toFixed(6), acc = Math.round(r.acc);
@@ -18548,10 +18605,38 @@ function gvInfo() {
                     + '<div class="gps-cell"><small>السرعة</small><b id="gpsSpd">—</b></div></div>'
                     + '<div class="gps-row"><button type="button" class="btn btn-ghost" id="gpsPark" disabled>موقف سيارتي</button><button type="button" class="btn btn-ghost" id="gpsCopy" disabled>نسخ الإحداثيات</button></div>'
                     + '<div class="gps-row"><button type="button" class="btn btn-ghost" id="gpsShare" disabled>مشاركة موقعي</button><button type="button" class="btn btn-ghost" id="gpsMaps" disabled>فتحه في الخرائط</button></div>'
-                    + '<p class="gps-note">«حفظ الموقع» و«موقف سيارتي» يجمعان عدة قراءات لثوانٍ ويحسبان متوسطها المرجّح بالدقة، فيكون المكان المحفوظ أدق من قراءة واحدة.</p>';
+                    + '<p class="gps-note">«حفظ الموقع الحالي» و«موقف سيارتي» يجمعان عدة قراءات لثوانٍ ويحسبان متوسطها المرجّح بالدقة، فيكون المكان المحفوظ أدق من قراءة واحدة.</p>';
+            }
+            function showHomeBox() {
+                const bx = $('gpsHomeBox'), bt = $('gpsHomeSave');
+                if (bx)
+                    bx.hidden = !S.hOpen;
+                if (bt)
+                    bt.hidden = !!S.hOpen;
             }
             function bindHome() {
                 bindNav();
+                $('gpsHomeSave').addEventListener('click', function () {
+                    S.hOpen = true;
+                    showHomeBox();
+                    try {
+                        $('gpsHomeName').focus();
+                    }
+                    catch (e) { }
+                });
+                $('gpsHomeName').addEventListener('input', function () { S.hName = this.value; });
+                $('gpsHomeName').addEventListener('keydown', function (e) { if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (S.pos && !S.capBusy)
+                        doSave('home');
+                } });
+                $('gpsHomeOk').addEventListener('click', function () { doSave('home'); });
+                $('gpsHomeCancel').addEventListener('click', function () {
+                    S.hOpen = false;
+                    S.hName = '';
+                    $('gpsHomeName').value = '';
+                    showHomeBox();
+                });
                 $('gpsPark').addEventListener('click', function () { doSave('park'); });
                 $('gpsCopy').addEventListener('click', function () { if (S.pos)
                     F.copy(lat().toFixed(6) + ', ' + lng().toFixed(6)); });
@@ -18567,7 +18652,7 @@ function gvInfo() {
             function updHome() {
                 updNav();
                 const ok = !!S.pos;
-                ['gpsSave', 'gpsPark', 'gpsCopy', 'gpsShare', 'gpsMaps'].forEach(function (id) {
+                ['gpsSave', 'gpsHomeSave', 'gpsHomeOk', 'gpsPark', 'gpsCopy', 'gpsShare', 'gpsMaps'].forEach(function (id) {
                     const b = $(id);
                     if (b) {
                         if (ok && !S.capBusy)
@@ -19048,14 +19133,19 @@ function gvInfo() {
                     + '<circle cx="100" cy="100" r="96" fill="url(#gpsFace)" stroke="url(#gpsRim)" stroke-width="4"/>'
                     + '<circle cx="100" cy="100" r="70" fill="none" stroke="rgba(242,183,5,.28)" stroke-width="1"/>'
                     + '<circle cx="100" cy="100" r="46" fill="none" stroke="rgba(242,183,5,.16)" stroke-width="1" stroke-dasharray="2 4"/>'
-                    + '<g id="gpsRing" style="transform-origin:100px 100px;transition:transform .2s linear">' + ringSVG() + '</g>'
-                    + '<g id="gpsArrow" style="transform-origin:100px 100px;transition:transform .2s linear" filter="url(#gpsSh)">'
+                    + '<g id="gpsRing">' + ringSVG() + '</g>'
+                    + '<g id="gpsArrow" filter="url(#gpsSh)">'
                     + '<polygon points="100,28 58,154 100,128" fill="url(#gpsL)"/>'
                     + '<polygon points="100,28 142,154 100,128" fill="url(#gpsR)"/>'
                     + '<polygon points="100,28 58,154 100,128 142,154" fill="none" stroke="#6b4a00" stroke-width="2" stroke-linejoin="round"/>'
                     + '<line x1="100" y1="30" x2="100" y2="126" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/></g>'
                     + '<circle cx="100" cy="100" r="7" fill="#1f1500" stroke="#ffe066" stroke-width="2.5"/></svg></div>'
                     + '<p class="gps-far" id="gpsFar">—</p><p class="gps-sub" id="gpsSub"></p></div>'
+                    + '<button type="button" class="gps-big" id="gpsHomeSave" style="margin:0 0 12px"' + (S.hOpen ? ' hidden' : '') + ' disabled>📍 حفظ الموقع الحالي</button>'
+                    + '<div id="gpsHomeBox" class="gps-ed"' + (S.hOpen ? '' : ' hidden') + '>'
+                    + '<p style="margin:0 0 10px;font-weight:900;font-size:calc(15px * var(--font-scale))">اسم الموقع الحالي</p>'
+                    + '<input class="gps-in" id="gpsHomeName" maxlength="40" autocomplete="off" enterkeyhint="done" placeholder="اكتب اسمًا (مثال: البيت، الفندق)" value="' + esc(S.hName || '') + '">'
+                    + '<div class="gps-row"><button type="button" class="btn btn-ghost" id="gpsHomeCancel">إلغاء</button><button type="button" class="btn btn-primary" id="gpsHomeOk" disabled>حفظ</button></div></div>'
                     + '<div id="gpsEdSlot"></div>'
                     + statHTML()
                     + (d
@@ -19089,18 +19179,24 @@ function gvInfo() {
                 const calHint = (hh && hh.src === 's' && S.cAcc != null && (S.cAcc < 0 || S.cAcc > 25)) ? '<br><span style="color:#ffcf6b">البوصلة تحتاج معايرة — حرّك الهاتف على شكل رقم 8.</span>' : '';
                 setAng('gpsRing', -h);
                 if (!d) {
+                    S.navDest = null;
                     ar.style.opacity = '1';
                     setAng('gpsArrow', -h);
                     const t1 = hh ? (Math.round(h) + '° ' + dirLbl(h)) : '—';
                     if (far.textContent !== t1)
                         far.textContent = t1;
-                    sub.innerHTML = 'لم تختر وجهة — السهم يشير إلى الشمال.<br>اختر وجهة من «الوجهات» ليشير إليها السهم.'
+                    const h0 = 'لم تختر وجهة — السهم يشير إلى الشمال.<br>اختر وجهة من «الوجهات» ليشير إليها السهم.'
                         + (!hh && Date.now() - S.started > 3000 ? '<br><span style="color:#ff8a7a">اتجاه الهاتف غير متاح الآن — أدر الهاتف أو امشِ قليلًا.</span>' : '') + calHint;
+                    if (sub.__h !== h0) {
+                        sub.__h = h0;
+                        sub.innerHTML = h0;
+                    }
                     return;
                 }
                 if (!S.pos) {
                     far.textContent = '—';
                     ar.style.opacity = '.25';
+                    sub.__h = 'بانتظار إشارة GPS…';
                     sub.textContent = 'بانتظار إشارة GPS…';
                     return;
                 }
@@ -19147,7 +19243,11 @@ function gvInfo() {
                 }
                 if (!hh && Date.now() - S.started > 3000)
                     lines.push('<span style="color:#ff8a7a">اتجاه الهاتف غير متاح الآن — السهم محسوب بالنسبة للشمال. أدر الهاتف أو امشِ قليلًا.</span>');
-                sub.innerHTML = lines.join('<br>') + calHint;
+                const h1 = lines.join('<br>') + calHint;
+                if (sub.__h !== h1) {
+                    sub.__h = h1;
+                    sub.innerHTML = h1;
+                }
             }
             /* ---------- التبديل بين التبويبات ---------- */
             function paintBody() {
