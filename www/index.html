@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><script>(function(){var box;function show(t){try{if(!box){box=document.createElement("pre");box.style.cssText="position:fixed;z-index:2147483647;left:0;right:0;top:0;max-height:100vh;overflow:auto;margin:0;padding:12px;background:#b00020;color:#fff;font:12px/1.5 monospace;white-space:pre-wrap;direction:ltr;text-align:left";(document.body||document.documentElement).appendChild(box);box.textContent="DEBUG ERROR\n"+navigator.userAgent+"\n\n";}box.textContent+=t+"\n\n";}catch(e){}}window.addEventListener("error",function(e){show((e.message||"error")+"\n"+(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno)});window.addEventListener("unhandledrejection",function(e){show("PROMISE: "+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});})();</script>
+<head><style id="bootFreeze">html.booting *,html.booting *::before,html.booting *::after{transition:none !important;animation:none !important;}</style><script>(function(){var d=document.documentElement;d.classList.add('booting');var rm=function(){d.classList.remove('booting');};var done=function(){setTimeout(rm,900);};if(document.readyState==='complete')done();else window.addEventListener('load',done);setTimeout(rm,6000);})();</script><script>(function(){var box;function show(t){try{if(!box){box=document.createElement("pre");box.style.cssText="position:fixed;z-index:2147483647;left:0;right:0;top:0;max-height:100vh;overflow:auto;margin:0;padding:12px;background:#b00020;color:#fff;font:12px/1.5 monospace;white-space:pre-wrap;direction:ltr;text-align:left";(document.body||document.documentElement).appendChild(box);box.textContent="DEBUG ERROR\n"+navigator.userAgent+"\n\n";}box.textContent+=t+"\n\n";}catch(e){}}window.addEventListener("error",function(e){show((e.message||"error")+"\n"+(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno)});window.addEventListener("unhandledrejection",function(e){show("PROMISE: "+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f2f4f8">
@@ -1195,7 +1195,7 @@ body.a11y-high-contrast .screen,body.a11y-high-contrast .folder-card,body.a11y-h
 <script>
 (function(){
   var raf=0,root=document.documentElement;
-  function upd(){raf=0;root.style.setProperty('--sy',(window.scrollY||0)+'px');}
+  function upd(){raf=0;}
   window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(upd);},{passive:true});
   /* ميلان البطاقة حسب موضع اللمس */
   var cur=null;
@@ -8639,7 +8639,7 @@ function orderedTools() {
 }
 function visibleTools() {
     const p = toolPrefs();
-    return orderedTools().filter(t => !p.hidden.includes(t.id) && !p.deleted.includes(t.id));
+    return orderedTools().filter(t => t.id !== 'fun_aihub' && !p.hidden.includes(t.id) && !p.deleted.includes(t.id));
 }
 /* أيقونة الأداة: إيموجي للأدوات الإبداعية أو SVG للأدوات الأصلية */
 function toolIconHTML(t) {
@@ -12251,6 +12251,121 @@ function maybeShowBackupReminder() {
         ['Deploy / Deployment', 'نشر', 'رفع نسخة جاهزة من برنامجك لتعمل فعليًا على خادم يصل إليه المستخدمون'],
         ['Container (Docker)', 'حاوية', 'بيئة معزولة خفيفة تحزم برنامجك مع كل ما يحتاجه ليعمل بنفس الطريقة في أي جهاز']
     ];
+
+    /* ---------- 🎓 أكاديمية بناء التطبيقات: GitHub + Netlify من الصفر ---------- */
+    function acaShot(url, rows, hi, cap) {
+        var h = 118 + rows.length * 46, y = 92, o = '';
+        rows.forEach(function (r, i) {
+            var on = i === hi;
+            o += '<rect x="34" y="' + y + '" width="262" height="36" rx="10" fill="' + (on ? '#fff3cf' : '#f6f8fb') + '" stroke="' + (on ? '#e0a800' : '#d3d9e3') + '" stroke-width="' + (on ? 3 : 1) + '"/>'
+                + '<text x="170" y="' + (y + 23) + '" text-anchor="middle" font-size="13" font-weight="' + (on ? 800 : 500) + '" fill="#141a26">' + r + '</text>';
+            if (on)
+                o += '<circle cx="22" cy="' + (y + 18) + '" r="14" fill="#e0a800"/><text x="22" y="' + (y + 23) + '" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">' + (i + 1) + '</text>'
+                    + '<text x="288" y="' + (y + 46) + '" font-size="26">👆</text>';
+            y += 46;
+        });
+        return '<svg viewBox="0 0 320 ' + h + '" style="width:100%;border-radius:14px;border:2px solid var(--border);margin:10px 0;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.12)" role="img" aria-label="' + cap + '">'
+            + '<rect width="320" height="36" fill="#e3e7ee"/><circle cx="16" cy="18" r="4" fill="#e05a6d"/><circle cx="30" cy="18" r="4" fill="#e0a800"/><circle cx="44" cy="18" r="4" fill="#3f9d6b"/>'
+            + '<rect x="60" y="8" width="244" height="20" rx="10" fill="#fff"/><text x="182" y="22" text-anchor="middle" font-size="11" fill="#4d576a">🔒 ' + url + '</text>'
+            + '<rect y="36" width="320" height="30" fill="#24292f"/><text x="160" y="56" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">' + cap + '</text>'
+            + '<text x="160" y="84" text-anchor="middle" font-size="11" fill="#946600" font-weight="800">الدائرة الذهبية = اضغط هنا</text>' + o + '</svg>';
+    }
+    const ACA = [
+        { t: '📖 قبل أن نبدأ: كلمات بسيطة', steps: [
+            ['ما هو GitHub؟', 'موقع مجاني تحفظ فيه ملفات مشروعك على الإنترنت، مثل «خزانة» لملفاتك. وتستطيع منه أيضًا نشر موقعك ليراه الناس.', null],
+            ['ما هو المستودع (Repository)؟', 'هو مجلد واحد لمشروعك على GitHub. كل مشروع = مستودع واحد. وسنسمّيه في الشرح «المجلد».', null],
+            ['ما معنى «ملف فارغ»؟', 'ملف جديد بلا أي كتابة. نصنعه ونكتب اسمه، ثم نلصق فيه الكود الجاهز. مثل ورقة بيضاء نكتب عليها.', null],
+            ['ما هو Commit؟', 'هو زر «حفظ». أي شيء تكتبه أو ترفعه لا يُحفظ إلا إذا ضغطت Commit changes. لا تنسَه أبدًا.', null],
+            ['نصيحة للجوال 📱', 'افتح الموقع من متصفح كروم. وإن ظهرت الصفحة صغيرة أو ناقصة: اضغط النقاط الثلاث أعلى المتصفح وفعّل «موقع سطح المكتب».', null]
+        ] },
+        { t: '🐙 الدورة 1: GitHub خطوة بخطوة', steps: [
+            ['الخطوة 1: افتح الموقع', 'في المتصفح اكتب في الأعلى: github.com ثم اضغط فتح. ستظهر لك صفحة فيها زر Sign up.', 'github.com', ['Sign in (دخول)', 'Sign up (إنشاء حساب)', 'Pricing'], 1, 'اضغط Sign up'],
+            ['الخطوة 2: أنشئ الحساب', 'اكتب بريدك، ثم كلمة سر (احفظها في ورقة)، ثم اسمًا لك بالإنجليزية بلا مسافات مثل ahmed123. اضغط Continue بعد كل خانة.', 'github.com/signup', ['Email: بريدك هنا', 'Password: كلمة السر', 'Username: ahmed123', 'Continue'], 3, 'اضغط Continue'],
+            ['الخطوة 3: فعّل بريدك', 'ستصلك رسالة على بريدك فيها رقم (كود). افتح بريدك، انسخ الرقم، واكتبه في الموقع. بعدها يصبح حسابك جاهزًا.', 'github.com/signup', ['افتح بريدك Gmail', 'انسخ الرقم', 'اكتبه في الموقع'], 1, 'نسخ الكود'],
+            ['الخطوة 4: اصنع المجلد (المستودع)', 'اضغط علامة + في أعلى الصفحة، ثم اختر New repository.', 'github.com', ['الصفحة الرئيسية', '+ (أعلى الصفحة)', 'New repository ← اضغطها'], 2, 'New repository'],
+            ['الخطوة 5: اكتب اسم المجلد', 'في خانة Repository name اكتب: my-app (إنجليزي، بلا مسافات). اختر Public. ضع علامة ✔ على Add a README file. ثم اضغط الزر الأخضر Create repository.', 'github.com/new', ['Repository name: my-app', 'اختر: Public', 'علامة ✔ Add a README file', 'Create repository (أخضر)'], 3, 'اضغط الزر الأخضر'],
+            ['الخطوة 6: ابدأ بصنع ملف فارغ', 'أنت الآن داخل مجلدك. اضغط Add file ثم اختر Create new file.', 'github.com/ahmed123/my-app', ['my-app (اسم مجلدك)', 'Add file ▾ ← اضغطها', 'Create new file ← ثم هذه', 'Upload files'], 1, 'Add file'],
+            ['الخطوة 7: اكتب اسم الملف', 'في الخانة الصغيرة بالأعلى اكتب اسم الملف بالضبط: index.html (حروف صغيرة، بلا مسافة). هذا هو الملف الرئيسي لموقعك.', 'github.com/ahmed123/my-app/new', ['my-app /  [ index.html ] ← اكتب هنا', 'مربع كبير أبيض (للكود)', 'Commit changes...'], 0, 'خانة الاسم'],
+            ['الخطوة 8: الصق الكود', 'اضغط داخل المربع الكبير الأبيض. اضغط مطولًا واختر «لصق». سيظهر الكود الذي نسخته. (الكود الجاهز يعطيك إياه معلّمك أو تنسخه من مكانه).', 'github.com/ahmed123/my-app/new', ['index.html', 'اضغط هنا مطولًا ← لصق', 'Commit changes...'], 1, 'الصق الكود'],
+            ['الخطوة 9: احفظ (Commit)', 'اضغط الزر الأخضر Commit changes... ستظهر نافذة صغيرة، اضغط Commit changes مرة ثانية. الآن حُفظ الملف ✔.', 'github.com/ahmed123/my-app/new', ['index.html', 'الكود ملصوق ✔', 'Commit changes... (أخضر)', 'Commit changes (في النافذة)'], 2, 'اضغط للحفظ'],
+            ['الخطوة 10: ملفات أخرى؟ كرر نفس الشيء', 'لكل ملف جديد (مثل style.css أو app.js) كرر: Add file ← Create new file ← اكتب الاسم ← الصق الكود ← Commit. نصيحة: لو كتبت images/logo.png بشرطة مائلة / سيُنشأ مجلد اسمه images تلقائيًا.', null],
+            ['الخطوة 11: ارفع الصورة', 'الصور لا تُكتب، بل تُرفع. اضغط Add file ثم Upload files. اضغط choose your files واختر الصورة من جوالك (مثل icon.png). انتظر حتى تظهر الصورة تحت المربع.', 'github.com/ahmed123/my-app/upload', ['Add file ▾', 'Upload files ← اضغطها', 'choose your files ← اختر الصورة', 'Commit changes'], 2, 'رفع الصورة'],
+            ['الخطوة 12: احفظ الصورة', 'بعد ظهور اسم الصورة، انزل للأسفل واضغط Commit changes الأخضر. تم رفع الصورة ✔.', 'github.com/ahmed123/my-app/upload', ['icon.png ✔ (ظهرت الصورة)', 'Commit changes ← اضغطها'], 1, 'حفظ الصورة'],
+            ['الخطوة 13: شغّل الموقع (Pages)', 'من أعلى مجلدك اضغط Settings، ثم من القائمة الجانبية اضغط Pages. تحت كلمة Branch اختر main ثم اضغط Save.', 'github.com/ahmed123/my-app/settings/pages', ['Settings ← اضغطها', 'Pages ← من القائمة', 'Branch: اختر main', 'Save ← اضغطها'], 3, 'اضغط Save'],
+            ['الخطوة 14: افتح رابط موقعك 🎉', 'انتظر دقيقة ثم حدّث الصفحة. سيظهر رابط موقعك في الأعلى بشكل: ahmed123.github.io/my-app . اضغطه وشاهد موقعك!', 'github.com/ahmed123/my-app/settings/pages', ['Your site is live at ✔', 'ahmed123.github.io/my-app ← اضغطه', 'Visit site'], 1, 'رابط الموقع']
+        ] },
+        { t: '🚀 الدورة 2: Netlify (موقع ثانٍ للنشر)', steps: [
+            ['ما فائدته؟', 'Netlify موقع مجاني آخر ينشر مشروعك برابط أقصر وأسرع، ويتحدث تلقائيًا كلما غيّرت شيئًا في GitHub. تحتاج أن تكون أنهيت الدورة 1 أولًا.', null],
+            ['الخطوة 1: ادخل الموقع', 'اكتب في المتصفح: netlify.com ثم اضغط Sign up.', 'netlify.com', ['Log in', 'Sign up ← اضغطها', 'Pricing'], 1, 'Sign up'],
+            ['الخطوة 2: ادخل بحساب GitHub', 'اضغط Continue with GitHub (استخدم حسابك الذي أنشأته). ثم اضغط Authorize لتسمح بالربط. لا تحتاج بطاقة بنكية.', 'netlify.com/signup', ['Continue with Email', 'Continue with GitHub ← اضغطها', 'Authorize Netlify'], 1, 'GitHub'],
+            ['الخطوة 3: أضف موقعًا جديدًا', 'في لوحتك اضغط Add new site، ثم Import an existing project.', 'app.netlify.com', ['Add new site ▾ ← اضغطها', 'Import an existing project ← ثم هذه', 'Deploy manually'], 1, 'Import'],
+            ['الخطوة 4: اختر GitHub ثم مجلدك', 'اضغط GitHub، ثم اختر من القائمة مجلدك my-app. (إن لم يظهر اضغط Configure the Netlify app واسمح له برؤيته).', 'app.netlify.com/start', ['GitHub ← اضغطها', 'ابحث: my-app', 'my-app ✔ ← اختره'], 2, 'اختر my-app'],
+            ['الخطوة 5: انشر', 'لا تغيّر أي شيء، اترك الخانات كما هي ولا تكتب شيئًا في Build command. انزل للأسفل واضغط Deploy.', 'app.netlify.com/start', ['Build command: (اتركها فارغة)', 'Publish directory: (اتركها)', 'Deploy my-app ← اضغطها'], 2, 'Deploy'],
+            ['الخطوة 6: رابطك جاهز 🎉', 'انتظر نصف دقيقة حتى تظهر كلمة Published. ستجد رابطًا مثل my-app.netlify.app اضغطه لترى موقعك. لتغيير الاسم: Site configuration ثم Change site name.', 'my-app.netlify.app', ['Published ✔ (تم النشر)', 'my-app.netlify.app ← اضغطه', 'Site configuration'], 1, 'رابط الموقع']
+        ] },
+        { t: '🛠️ إذا حدثت مشكلة', steps: [
+            ['الموقع يظهر فارغًا أو خطأ 404', '• تأكد أن اسم الملف الرئيسي index.html بحروف صغيرة\n• انتظر دقيقتين ثم حدّث الصفحة\n• تأكد أنك ضغطت Commit changes بعد اللصق', null],
+            ['الصورة لا تظهر', '• اسم الصورة في الكود يجب أن يطابق الرفع تمامًا (icon.png غير Icon.PNG)\n• تأكد أنها رُفعت وظهرت في قائمة ملفات المجلد', null],
+            ['عدّلت ملفًا وأريد تغييره', 'ادخل المجلد، اضغط على اسم الملف، ثم أيقونة القلم ✏️ في الأعلى، عدّل أو الصق كودًا جديدًا، ثم Commit changes.', null]
+        ] }
+    ];
+    ACA.splice(1, 0, { t: '📦 ملفاتك التجريبية الجاهزة (انسخ والصق)', steps: [
+        ['كيف أستخدم هذا القسم؟', 'هذه ملفات صغيرة جاهزة لتجرّب بها كل خطوات الدرس. اضغط زر «نسخ»، ثم اذهب لـ GitHub وأنشئ ملفًا فارغًا بنفس الاسم المكتوب وألصق الكود.', null],
+        ['ملف 1: index.html', 'اسم الملف: index.html — هذا هو الصفحة الرئيسية.', null, null, null, null, ['<!DOCTYPE html>', '<html lang="ar" dir="rtl">', '<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تطبيقي الأول</title><link rel="manifest" href="manifest.json"></head>', '<body style="font-family:sans-serif;text-align:center;padding:30px">', '<img src="icon.png" width="96" alt="">', '<h1>مرحبا! هذا تطبيقي الأول 🎉</h1>', '<button onclick="this.textContent=\'يعمل! ✔\'" style="padding:12px 24px;font-size:18px">اضغط هنا</button>', '<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js")<\/script>', '</body></html>'].join('\n')],
+        ['ملف 2: manifest.json', 'اسم الملف: manifest.json — يعرّف الجوال باسم تطبيقك وأيقونته.', null, null, null, null, '{"name":"تطبيقي الأول","short_name":"تطبيقي","start_url":"./index.html","display":"standalone","background_color":"#ffffff","theme_color":"#946600","icons":[{"src":"icon.png","sizes":"512x512","type":"image/png"}]}'],
+        ['ملف 3: sw.js', 'اسم الملف: sw.js — ملف صغير يجعل موقعك يعمل كتطبيق.', null, null, null, null, 'self.addEventListener("fetch",function(e){});'],
+        ['ملف 4: icon.png (صورة)', 'الصورة لا تُنسخ. جهّز صورة مربعة بحجم 512×512 وسمّها icon.png، ثم ارفعها بطريقة «ارفع الصورة» في الدورة 1.', null]
+    ] });
+    ACA.splice(ACA.length - 1, 0, { t: '📱 الدورة 3: حوّل موقعك إلى تطبيق APK (PWABuilder)', steps: [
+        ['شروط قبل البدء', 'يجب أن يكون موقعك منشورًا ويفتح برابط (الدورة 1 أو 2)، وأن تكون رفعت الملفات الأربعة: index.html و manifest.json و sw.js و icon.png.', null],
+        ['الخطوة 1: افتح الموقع', 'اكتب في المتصفح: pwabuilder.com ثم الصق رابط موقعك في الخانة الكبيرة واضغط Start.', 'pwabuilder.com', ['الصق رابط موقعك هنا', 'Start ← اضغطها', 'انتظر التحليل'], 1, 'PWABuilder'],
+        ['الخطوة 2: ابدأ التحزيم', 'بعد ظهور النتيجة اضغط Package for stores (حزّم للمتاجر).', 'pwabuilder.com/reportcard', ['نتيجة فحص موقعك ✔', 'Package for stores ← اضغطها', 'Windows / iOS / Android'], 1, 'التحزيم'],
+        ['الخطوة 3: اختر أندرويد', 'اضغط Android ثم Generate Package. اترك الخيارات كما هي، ثم اضغط Download.', 'pwabuilder.com/reportcard', ['Android ← اختره', 'Generate Package', 'Download ← اضغطها'], 2, 'تنزيل الحزمة'],
+        ['الخطوة 4: ثبّت التطبيق', 'سينزل ملف مضغوط (zip). افتحه من الجوال وخذ منه ملف التطبيق بامتداد .apk، اضغط عليه واسمح بالتثبيت من مصدر غير معروف. تطبيقك جاهز ✔', null],
+        ['ملاحظة', 'أسماء الأزرار قد تتغير قليلًا مع الوقت، فاتبع الأزرار الأقرب في المعنى.', null]
+    ] });
+    ACA.splice(ACA.length - 1, 0, { t: '❓ أسئلة شائعة', steps: [
+        ['هل هذا كله مجاني؟', 'نعم: GitHub وNetlify وPWABuilder مجانية للاستخدام الشخصي.', null],
+        ['هل أحتاج لحاسوب؟', 'لا، يمكن عمل كل شيء من الجوال، لكن فعّل «موقع سطح المكتب» في المتصفح ليسهل الأمر.', null],
+        ['هل سأخرب شيئًا لو أخطأت؟', 'لا. GitHub يحفظ كل نسخة قديمة، وتستطيع التعديل والحذف والإعادة بلا خوف.', null],
+        ['كم يستغرق النشر؟', 'عادة من نصف دقيقة إلى دقيقتين بعد الحفظ.', null]
+    ] });
+    F.register({ id: 'academy', cat: 'tool', name: 'أكاديمية بناء التطبيقات', desc: 'من الصفر للمبتدئين: GitHub وNetlify وتحويل موقعك لتطبيق APK، بالصور وملفات جاهزة', emoji: '🎓', c1: '#e0a83a', c2: '#a5731a',
+        render: function (root) {
+            const done = (function () { try { return JSON.parse(localStorage.getItem('acaDone') || '{}'); } catch (e) { return {}; } })();
+            let total = 0;
+            ACA.forEach(function (sec) { total += sec.steps.length; });
+            function pct() { return Math.round(Object.keys(done).filter(function (k) { return done[k]; }).length / total * 100); }
+            let html = '<div class="ai-note">🎓 لا تحتاج أي معرفة سابقة. اتبع الخطوات بالترتيب، خطوة واحدة في كل مرة. الدائرة الذهبية في الصورة 👆 تدلّك على مكان الضغط. علّم ✔ كل خطوة تنتهي منها.</div>'
+                + '<div style="margin:6px 0 4px;font-weight:800" id="acaPct">تقدمك: ' + pct() + '%</div><div style="height:10px;border-radius:6px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)"><div id="acaBar" style="height:100%;width:' + pct() + '%;background:var(--gold);transition:width .3s"></div></div>';
+            ACA.forEach(function (sec, si) {
+                html += '<p class="fg-h" style="margin:16px 0 8px">' + esc(sec.t) + '</p>';
+                sec.steps.forEach(function (st, i) {
+                    const k = si + '_' + i;
+                    html += '<div class="fun-item" style="display:block"><p style="margin:0 0 6px;font-weight:800">' + esc(st[0]) + '</p>'
+                        + '<p style="margin:0;white-space:pre-line;line-height:1.9;color:var(--text-dim)">' + esc(st[1]) + '</p>'
+                        + (st[2] ? acaShot(esc(st[2]), st[3].map(esc), st[4], esc(st[5])) : '')
+                        + (st[6] ? '<pre dir="ltr" style="white-space:pre-wrap;word-break:break-word;margin:8px 0;padding:10px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);font-size:12px;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace">' + esc(st[6]) + '</pre><button type="button" class="btn btn-primary" data-acacopy="' + k + '" style="width:100%;margin-bottom:6px">📋 نسخ الكود</button>' : '')
+                        + '<button type="button" class="btn btn-ghost" data-aca="' + k + '" style="width:100%">' + (done[k] ? '✔ تم' : 'علّمها كمنجزة') + '</button></div>';
+                });
+            });
+            root.innerHTML = html;
+            root.querySelectorAll('[data-acacopy]').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    const p = b.getAttribute('data-acacopy').split('_');
+                    FUN.copy(ACA[+p[0]].steps[+p[1]][6]);
+                });
+            });
+            root.querySelectorAll('[data-aca]').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    const k = b.getAttribute('data-aca'); done[k] = !done[k];
+                    try { localStorage.setItem('acaDone', JSON.stringify(done)); } catch (e) { }
+                    b.textContent = done[k] ? '✔ تم' : 'علّمها كمنجزة';
+                    q(root, '#acaBar').style.width = pct() + '%';
+                    q(root, '#acaPct').textContent = 'تقدمك: ' + pct() + '%';
+                });
+            });
+        } });
     F.register({ id: 'termux', cat: 'ai', name: 'تعلّم Termux', desc: 'دروس عملية بالعربي لأوامر Termux والبرمجة والأتمتة، مع شات ذكي للأسئلة', emoji: '📟', c1: '#2dd4bf', c2: '#0f766e',
         render: function (root) {
             const S = { tab: 'lessons' };
@@ -12295,6 +12410,214 @@ function maybeShowBackupReminder() {
                 }
                 root.querySelectorAll('[data-tmx-tab]').forEach(function (b) {
                     b.addEventListener('click', function () { S.tab = b.getAttribute('data-tmx-tab'); render(); });
+                });
+            }
+            render();
+        } });
+    /* ---------- 🛡️ اكتشاف الثغرات للمبتدئين: قاموس + قراءة نتائج الفحص + مفكّك أسطر + شات ذكي ---------- */
+    const CYB_HIST = [];
+    const CYB_SYSTEM = 'أنت مدرّس أمن سيبراني صبور يشرح بالعربية المبسّطة جدًا لمبتدئ كامل لا يعرف الإنجليزية جيدًا ولا يعرف شيئًا عن الشبكات من قبل. '
+        + 'مهمتك: شرح مصطلحات وأدوات فحص الشبكات (مثل nmap) ونتائجها سطرًا سطرًا، وأنواع الثغرات الشائعة (كلمات مرور افتراضية، برامج غير محدّثة، منافذ مفتوحة بلا داعٍ، UPnP، خدمات غير مشفّرة)، بطريقة تعليمية دفاعية بسيطة جدًا مع أمثلة. '
+        + 'إن أرسل المستخدم سطرًا من نتيجة فحص أو رسالة خطأ، فسّرها له كلمة كلمة بالعربية البسيطة. اقتصر دائمًا على فحص أجهزة المستخدم نفسه أو أجهزة لديه إذن صريح لفحصها، وذكّره بذلك بإيجاز عند الحاجة فقط. '
+        + 'إن طُلب منك خطوات هجوم فعلي أو استغلال ثغرة (exploit) ضد جهاز لا يملكه المستخدم، أو كسر كلمات مرور لأشخاص آخرين، أو أدوات اختراق هجومية، فاعتذر بأدب واشرح أنك تساعد على الفهم والحماية فقط، واقترح بديلاً دفاعيًا (كيف يحمي جهازه بدل ذلك) دون تفاصيل تقنية هجومية.';
+    const CYB_DICT = [
+        ['nmap', 'نمآب (اسم الأداة)', 'برنامج مجاني ومشهور يفحص جهازًا على الشبكة ويخبرك ما المنافذ المفتوحة عليه والخدمات التي تعمل، يُستخدم لفحص أجهزتك الخاصة والتأكد من حمايتها'],
+        ['scan', 'فحص', 'عملية إرسال إشارات صغيرة لجهاز لمعرفة هل يعمل وما البرامج العاملة عليه'],
+        ['target / host', 'الهدف / الجهاز المضيف', 'الجهاز الذي تقوم بفحصه، مثل راوترك أو كاميرا في شبكتك'],
+        ['IP address', 'عنوان IP', 'رقم تعريف الجهاز على الشبكة، مثل 192.168.1.1، يشبه عنوان المنزل بالضبط'],
+        ['port', 'منفذ', 'باب رقمي صغير على الجهاز تمر منه بيانات برنامج معيّن؛ لكل خدمة رقم منفذ مختلف (مثلاً 22 أو 80)'],
+        ['open', 'مفتوح', 'يوجد برنامج يعمل الآن على هذا المنفذ ويستقبل اتصالات — أي أن هناك خدمة حقيقية تستجيب'],
+        ['closed', 'مغلق', 'لا يوجد برنامج يستمع على هذا المنفذ، لكن الجهاز ردّ وقال إنه لا أحد هناك'],
+        ['filtered', 'مُرشَّح / محجوب', 'لم يصلك ردّ واضح من هذا المنفذ، غالبًا بسبب جدار حماية يمنع المرور دون أن يخبرك صراحة'],
+        ['state', 'الحالة', 'العمود الذي يوضح هل المنفذ مفتوح أم مغلق أم مُرشَّح'],
+        ['service', 'الخدمة', 'اسم البرنامج الذي يُفترض أنه يعمل على هذا المنفذ، مثل ssh أو http'],
+        ['version', 'الإصدار', 'رقم نسخة البرنامج العامل؛ يساعدك على معرفة إن كان قديمًا وله ثغرات معروفة'],
+        ['protocol', 'البروتوكول', 'اللغة التي تُرسَل بها البيانات بين الأجهزة؛ أشهرها TCP وUDP'],
+        ['TCP', 'بروتوكول TCP', 'طريقة اتصال موثوقة تتأكد من وصول كل البيانات كاملة، تُستخدم في أغلب الخدمات مثل المواقع'],
+        ['UDP', 'بروتوكول UDP', 'طريقة اتصال أسرع لكن بلا تأكيد استلام، تُستخدم في البث المباشر والألعاب'],
+        ['banner', 'اللافتة التعريفية', 'رسالة ترحيبية يرسلها البرنامج عند الاتصال به، تكشف أحيانًا اسمه ونسخته بوضوح'],
+        ['OS detection', 'اكتشاف نظام التشغيل', 'تخمين nmap لنوع نظام التشغيل (ويندوز، لينكس...) من طريقة ردّ الجهاز، وهو تخمين وليس يقينًا'],
+        ['vulnerability', 'ثغرة أمنية', 'نقطة ضعف في برنامج أو إعداد، يمكن لشخص سيّئ النية استغلالها للدخول أو التخريب إن لم تُصلَح'],
+        ['CVE', 'رمز ثغرة عالمي (CVE)', 'رقم تعريف عالمي موحّد لثغرة معروفة ومُوثّقة رسميًا، مثل CVE-2023-12345'],
+        ['exploit', 'استغلال الثغرة', 'طريقة أو أداة تستخدم ثغرة معينة فعليًا للوصول أو التحكم؛ هدفنا هنا الفهم والحماية فقط وليس استخدامها'],
+        ['patch / update', 'تحديث أمني', 'إصلاح تصدره الشركة المصنّعة يغلق ثغرة معروفة في برنامجها أو جهازها'],
+        ['firmware', 'البرنامج الثابت', 'نظام التشغيل الصغير المدمج داخل الأجهزة، مثل الراوتر أو الكاميرا'],
+        ['default password', 'كلمة مرور افتراضية', 'كلمة المرور التي يأتي بها الجهاز من المصنع (مثل admin/admin) ويجب تغييرها فورًا عند الاستخدام'],
+        ['UPnP', 'التوصيل التلقائي (UPnP)', 'خاصية تسمح لأجهزة داخل شبكتك بفتح منافذ لنفسها تلقائيًا للعالم الخارجي دون إذنك في كل مرة'],
+        ['SSH', 'الدخول الآمن عن بعد (SSH)', 'بروتوكول يتيح التحكم بجهاز عن بعد بشكل مشفّر بالكامل؛ منفذه الافتراضي 22'],
+        ['HTTP', 'تصفح الويب (HTTP)', 'البروتوكول الذي تُعرض به صفحات الإنترنت، غير مشفّر؛ منفذه الافتراضي 80'],
+        ['HTTPS', 'تصفح الويب المشفّر (HTTPS)', 'نفس HTTP لكن مع تشفير يحمي بياناتك أثناء النقل؛ منفذه الافتراضي 443'],
+        ['FTP', 'نقل الملفات (FTP)', 'بروتوكول قديم لنقل الملفات، غالبًا غير مشفّر؛ منفذه الافتراضي 21'],
+        ['Telnet', 'الدخول عن بعد القديم (Telnet)', 'طريقة قديمة جدًا وغير آمنة إطلاقًا للتحكم بجهاز عن بعد؛ وجودها مفتوحة يُعد خطرًا كبيرًا'],
+        ['DNS', 'دليل أسماء المواقع (DNS)', 'الخدمة التي تحوّل أسماء المواقع إلى أرقام IP؛ منفذها الافتراضي 53'],
+        ['firewall', 'جدار الحماية', 'برنامج أو جهاز يراقب حركة البيانات، ويسمح بمرور ما هو مسموح فقط ويمنع الباقي'],
+        ['encryption', 'التشفير', 'تحويل البيانات لشكل غير مفهوم لأي شخص غير المقصود، لحمايتها أثناء النقل أو التخزين']
+    ];
+    const CYB_SERVICE_HINTS = {
+        'ssh': ['SSH — دخول آمن عن بعد', 'يتيح التحكم الكامل بالجهاز عن بُعد بشكل مشفّر. إن لم تكن تحتاجه فعليًا أغلقه، وتأكد دائمًا أن كلمة المرور قوية وليست افتراضية.'],
+        'http': ['HTTP — صفحة ويب غير مشفّرة', 'عادة صفحة إدارة الجهاز (راوتر، كاميرا). إن كانت صفحة دخول بكلمة مرور افتراضية فهذه ثغرة حقيقية. الأفضل أن تكون https بدلًا منها.'],
+        'https': ['HTTPS — صفحة ويب مشفّرة', 'أأمن من http العادي لأن البيانات مشفّرة أثناء النقل. تأكد أيضًا أن كلمة المرور قوية.'],
+        'ftp': ['FTP — نقل ملفات قديم', 'غالبًا غير مشفّر وينقل كلمة المرور كنص واضح يمكن قراءته. إن لم تحتجه أغلقه تمامًا.'],
+        'telnet': ['Telnet — تحكم عن بعد قديم جدًا وغير آمن', '⚠️ خطر: لا يوجد أي تشفير إطلاقًا. إن وجدته مفتوحًا على جهازك أغلقه فورًا واستخدم SSH بدلًا منه.'],
+        'domain': ['DNS — دليل أسماء المواقع', 'عادة خدمة طبيعية من الراوتر لتوزيع عناوين الإنترنت على أجهزة شبكتك.'],
+        'upnp': ['UPnP — توصيل تلقائي للمنافذ', '⚠️ قد يسمح لبرامج داخل شبكتك، وربما حتى لفيروس، بفتح منافذ للخارج دون علمك. عطّله من إعدادات الراوتر إن لم تكن تحتاجه فعليًا.'],
+        'microsoft-ds': ['مشاركة ملفات ويندوز (SMB)', 'تستخدمه أجهزة ويندوز لمشاركة الملفات والطابعات على الشبكة المحلية. لا يجب أن تكون هذه الخدمة مفتوحة على الإنترنت العام أبدًا.'],
+        'netbios-ssn': ['NetBIOS — تعريف أجهزة ويندوز القديم', 'خدمة قديمة لتعريف الأجهزة على الشبكة المحلية، ونادرًا ما تحتاجها اليوم.'],
+        'ms-wbt-server': ['RDP — سطح المكتب البعيد (ويندوز)', 'يتيح التحكم الكامل بجهاز ويندوز عن بعد، وهو هدف شائع جدًا للمهاجمين. احمه بكلمة مرور قوية ولا تفتحه مباشرة على الإنترنت العام.'],
+        'rtsp': ['RTSP — بث فيديو مباشر', 'شائع في كاميرات المراقبة. إن كانت كاميرتك تستخدمه، تأكد من تغيير كلمة المرور الافتراضية فورًا.'],
+        'mysql': ['MySQL — قاعدة بيانات', 'إن ظهرت هذه الخدمة مفتوحة على الإنترنت العام فهذه ثغرة خطيرة؛ يجب أن تكون متاحة فقط من داخل الشبكة المحلية.'],
+        'snmp': ['SNMP — مراقبة وإدارة الأجهزة', 'تُستخدم لإدارة الأجهزة الشبكية عن بعد، وكثيرًا ما تُترك بكلمة مرور افتراضية ضعيفة مثل public أو private.']
+    };
+    function cybDecode(raw) {
+        const line = String(raw || '').trim();
+        if (!line)
+            return '';
+        let m = line.match(/^(\d{1,5})\/(tcp|udp)\s+(open\|filtered|closed\|filtered|open|closed|filtered)\s+([a-zA-Z0-9\-_?]+)(?:\s+(.*))?$/i);
+        if (m) {
+            const port = m[1], proto = m[2].toLowerCase(), state = m[3].toLowerCase(), svc = m[4].toLowerCase(), ver = (m[5] || '').trim();
+            let stateAr, stateExp;
+            if (state === 'open') { stateAr = 'مفتوح ✅'; stateExp = 'هناك برنامج يعمل الآن على هذا المنفذ ويستقبل اتصالات.'; }
+            else if (state === 'closed') { stateAr = 'مغلق'; stateExp = 'الجهاز ردّ، لكن لا يوجد برنامج يستمع هنا الآن. غير خطِر عادة.'; }
+            else { stateAr = 'مُرشَّح / محجوب 🧱'; stateExp = 'لم يصلك ردّ واضح، غالبًا بسبب جدار حماية. لا تعرف بالتأكيد هل هو مفتوح أم لا.'; }
+            const hint = CYB_SERVICE_HINTS[svc];
+            return '🔎 تحليل السطر:\n\n'
+                + '• المنفذ (Port): ' + port + '\n'
+                + '• البروتوكول (Protocol): ' + proto.toUpperCase() + ' — ' + (proto === 'tcp' ? 'اتصال موثوق يتأكد من وصول البيانات كاملة.' : 'اتصال سريع بلا تأكيد استلام.') + '\n'
+                + '• الحالة (State): ' + stateAr + ' — ' + stateExp + '\n'
+                + '• الخدمة (Service): ' + svc + (hint ? ' — ' + hint[0] : '') + '\n'
+                + (ver ? '• الإصدار (Version): ' + ver + ' — قارن هذا الرقم بآخر إصدار رسمي؛ إن كان قديمًا جدًا فقد يحتوي ثغرات معروفة.\n' : '')
+                + (hint ? '\n💡 ' + hint[1] : '');
+        }
+        m = line.match(/^Nmap scan report for (.+)$/i);
+        if (m)
+            return '🔎 هذا سطر عنوان: يخبرك أن نتيجة الفحص التالية خاصة بالجهاز «' + m[1] + '».';
+        if (/^Host is up/i.test(line))
+            return '🔎 هذا يعني: الجهاز يعمل الآن ويستجيب للفحص. الرقم بين القوسين هو زمن الاستجابة؛ كلما كان أصغر كان الجهاز أقرب أو أسرع.';
+        m = line.match(/^Not shown:\s*(\d+)\s+(closed|filtered)\s+ports/i);
+        if (m)
+            return '🔎 هذا يعني: هناك ' + m[1] + ' منفذًا آخر بحالة «' + (m[2].toLowerCase() === 'closed' ? 'مغلق' : 'مُرشَّح') + '» لم يعرضها nmap في القائمة توفيرًا للمساحة، لأنها غير مهمة عادة.';
+        m = line.match(/^MAC Address:\s*([0-9A-Fa-f:]{17})\s*(?:\((.+)\))?/);
+        if (m)
+            return '🔎 هذا هو عنوان MAC الخاص بكرت الشبكة في الجهاز' + (m[2] ? '، والشركة المصنّعة له على الأرجح: ' + m[2] + '.' : '.') + ' يمكن أحيانًا معرفة نوع الجهاز (راوتر، كاميرا...) من اسم الشركة.';
+        if (/^(OS details|Running|Aggressive OS guesses)/i.test(line))
+            return '🔎 هذا السطر تخمين من nmap لنظام التشغيل العامل على الجهاز، بناءً على طريقة ردّه. التخمين ليس مؤكدًا 100%.';
+        const words = line.split(/[^A-Za-z0-9]+/).filter(Boolean);
+        const found = [];
+        words.forEach(function (w) {
+            const wl = w.toLowerCase();
+            CYB_DICT.forEach(function (d) {
+                if (d[0].toLowerCase().indexOf(wl) === 0 && wl.length > 1 && found.indexOf(d) === -1)
+                    found.push(d);
+            });
+        });
+        if (found.length)
+            return '🔎 وجدت كلمات أعرفها في هذا السطر:\n\n' + found.map(function (d) { return '• ' + d[0] + ' (' + d[1] + '): ' + d[2]; }).join('\n');
+        return '🤔 لم أتعرف تلقائيًا على نمط هذا السطر.\n\nجرّب: انسخ كل كلمة إنجليزية فيه بمفردها وابحث عنها في تبويب «القاموس» أعلاه، أو اسأل في تبويب «اسأل» بالأسفل.';
+    }
+    const CYB_LESSONS = [
+        { t: '🧭 قبل أن تبدأ — الأساسيات والقواعد', items: [
+            ['ما الهدف من هذا القسم؟', 'ستتعلم من الصفر: كيف تقرأ نتيجة فحص شبكة (مثل برنامج nmap)، وتفهم كل كلمة إنجليزية تظهر فيها، وتكتشف بنفسك أشهر نقاط الضعف في أي جهاز متصل بشبكتك المنزلية، خطوة بخطوة وبدون أي خبرة سابقة.'],
+            ['⚠️ قاعدة ذهبية لا تتجاوزها', 'افحص فقط أجهزتك الخاصة (راوترك، كاميرتك، جوالك) أو أجهزة شخص أعطاك إذنًا صريحًا بفحصها. فحص أجهزة أو شبكات لا تملكها بدون إذن قد يكون مخالفًا للقانون حتى لو كان الفحص بسيطًا. هدفنا هنا الحماية والفهم، لا الاختراق.'],
+            ['ما هو nmap؟', 'برنامج مجاني ومعروف عالميًا يرسل إشارات صغيرة جدًا لجهاز معيّن على الشبكة، ثم يستمع للردود ليخبرك: هل الجهاز يعمل الآن؟ وما البرامج (الخدمات) التي تعمل عليه وجاهزة لاستقبال اتصالات؟'],
+            ['كيف أشغّل فحصًا بسيطًا؟', 'في Termux (راجع قسم «تعلّم Termux» لتثبيته):\npkg install nmap\n\nثم للفحص الأساسي لجهاز تملكه (مثلًا راوترك):\nnmap 192.168.1.1\n\nانتظر بضع ثوانٍ وستظهر لك النتيجة التي سنتعلم قراءتها في الدرس التالي.'] ] },
+        { t: '📊 قراءة نتيجة الفحص سطرًا بسطر', items: [
+            ['مثال كامل لنتيجة فحص', 'هذا شكل نتيجة حقيقية (بأرقام تجريبية):\n\nStarting Nmap 7.94\nNmap scan report for 192.168.1.1\nHost is up (0.0032s latency).\nNot shown: 996 closed ports\nPORT     STATE   SERVICE   VERSION\n22/tcp   open    ssh       OpenSSH 7.9p1 Debian\n53/tcp   open    domain    dnsmasq 2.80\n80/tcp   open    http      lighttpd 1.4.53\n1900/udp open    upnp      MiniUPnPd 1.9\nMAC Address: AA:BB:CC:00:11:22 (TP-Link)\n\nلا تحفظ هذا، بل افهم كل سطر فيه في الفقرات التالية. ويمكنك لصق أي سطر منه في تبويب «فكّك السطر» بالأسفل ليشرحه لك البرنامج تلقائيًا.'],
+            ['سطر العنوان وحالة الجهاز', '«Nmap scan report for 192.168.1.1» يعني: هذه نتيجة فحص الجهاز صاحب العنوان 192.168.1.1.\n«Host is up (0.0032s latency)» يعني: الجهاز يعمل الآن ويردّ، والرقم بين القوسين هو سرعة الاستجابة.'],
+            ['عمود PORT (المنفذ)', 'رقم قبل خط مائل، مثل 22/tcp. المنفذ باب رقمي صغير — كل خدمة تدخل وتخرج من باب برقم مختلف. بعد الخط المائل تجد اسم البروتوكول (tcp أو udp).'],
+            ['عمود STATE (الحالة)', 'open = مفتوح، يوجد برنامج يستقبل اتصالات الآن. closed = مغلق، الجهاز ردّ لكن لا أحد يستمع. filtered = مُرشَّح، لم يصلك ردّ واضح بسبب جدار حماية غالبًا — الحالة غير مؤكدة.'],
+            ['عمود SERVICE وVERSION', 'SERVICE هو اسم البرنامج المتوقع على هذا المنفذ (ssh، http...). VERSION هو رقم نسخته إن استطاع nmap معرفتها، وهذا الرقم مهم جدًا لأنه يكشف إن كان البرنامج قديمًا وله ثغرات معروفة.'],
+            ['سطر Not shown وسطر MAC Address', '«Not shown: 996 closed ports» يعني: هناك 996 منفذًا آخر مغلقًا لم يعرضهم nmap في القائمة توفيرًا للمساحة. «MAC Address» هو الرقم التعريفي الفريد لكرت شبكة الجهاز، وأحيانًا يكشف اسم الشركة الصانعة.'] ] },
+        { t: '🛡️ أشهر أنواع الثغرات — وكيف تكتشفها بنفسك خطوة بخطوة', items: [
+            ['1) كلمة مرور افتراضية', 'ما هي؟ كثير من الأجهزة (راوتر، كاميرا) تأتي بكلمة مرور معروفة للجميع مثل admin/admin.\nكيف تكتشفها: افتح صفحة الجهاز (غالبًا بكتابة عنوانه مثل 192.168.1.1 في المتصفح)، وجرّب كلمات شائعة، أو ابحث في جوجل: اسم جهازك + default password.\nالحل: غيّرها فورًا إلى كلمة قوية وفريدة.'],
+            ['2) برنامج قديم غير محدَّث', 'ما هي؟ كل برنامج قد تُكتشف فيه ثغرات بمرور الوقت، والشركة تصلحها بتحديثات (patch).\nكيف تكتشفها: انظر لعمود VERSION في نتيجة الفحص، ثم ابحث في جوجل: اسم البرنامج + رقم النسخة + vulnerabilities أو CVE، لترى إن كانت هناك ثغرات معروفة لهذا الإصدار تحديدًا.\nالحل: حدّث البرنامج أو الجهاز (firmware) لآخر نسخة متوفرة من الموقع الرسمي.'],
+            ['3) منافذ مفتوحة بلا داعٍ', 'ما هي؟ كل منفذ مفتوح هو باب إضافي يمكن لأي شخص محاولة الدخول منه، حتى لو كان البرنامج خلفه آمنًا.\nكيف تكتشفها: راجع قائمة SERVICE في نتيجة الفحص، واسأل نفسك عن كل واحدة: هل أستخدم هذه الخدمة فعلًا؟\nالحل: أغلق أي خدمة لا تحتاجها من إعدادات الجهاز أو من جدار الحماية (firewall).'],
+            ['4) UPnP مفعّلة بلا داعٍ', 'ما هي؟ خاصية تسمح لأي برنامج داخل شبكتك بفتح منافذ للعالم الخارجي تلقائيًا، دون أن تطلب إذنك في كل مرة.\nكيف تكتشفها: إن ظهرت خدمة upnp مفتوحة في نتيجة الفحص (غالبًا منفذ 1900/udp)، فهي مفعّلة.\nالحل: إن لم تكن تستخدم أجهزة تحتاجها فعليًا، عطّلها من إعدادات الراوتر.'],
+            ['5) خدمة غير مشفّرة (HTTP بدل HTTPS، Telnet بدل SSH)', 'ما هي؟ بعض الخدمات القديمة ترسل بياناتك، وأحيانًا حتى كلمات المرور، كنص عادي يمكن لأي شخص على نفس الشبكة قراءته.\nكيف تكتشفها: انظر هل الخدمة المفتوحة هي http أو telnet أو ftp بدون أي إشارة لتشفير.\nالحل: استخدم البديل المشفّر دائمًا إن توفر: https بدل http، و ssh بدل telnet.'] ] },
+        { t: '🧩 طريقتك الخاصة لفهم أي سطر إنجليزي بنفسك', items: [
+            ['الخطوة 1: جرّب «فكّك السطر» أولًا', 'افتح تبويب 🔍 فكّك السطر بالأسفل، والصق فيه السطر كما هو تمامًا. البرنامج يتعرّف تلقائيًا على أنماط nmap الشائعة (سطر منفذ، سطر عنوان، سطر MAC...) ويشرحها لك فورًا بلا إنترنت.'],
+            ['الخطوة 2: لم يتعرف عليه؟ افصله لكلمات', 'إن لم يتعرف المفكّك على نمط السطر كاملًا، انسخ كل كلمة إنجليزية فيه منفردة، وابحث عنها في تبويب 📖 القاموس أعلاه — غالبًا ستجد أغلب الكلمات التقنية الشائعة هناك.'],
+            ['الخطوة 3: لا تزال الكلمة غريبة؟ ابحث بذكاء', 'انسخ الكلمة وابحث في جوجل بالضبط هكذا: الكلمة meaning networking (أو security). ستجد شرحًا مبسّطًا غالبًا من أول نتيجة.'],
+            ['الخطوة 4: اسأل الشات الذكي', 'إن احتجت فهمًا أعمق أو شرحًا لسطر كامل أو رسالة خطأ معقّدة، الصقها كاملة في تبويب 💬 اسأل بالأسفل، واطلب شرحها بالتفصيل.'] ] }
+    ];
+    F.register({ id: 'cyberbasics', cat: 'ai', name: 'اكتشاف الثغرات للمبتدئين', desc: 'تعلّم قراءة فحوصات الشبكة (nmap) وفهم الثغرات الشائعة من الصفر، بقاموس ومفكّك أسطر وشات ذكي', emoji: '🛡️', c1: '#3fae6b', c2: '#1e6b3f',
+        render: function (root) {
+            const S = { tab: 'lessons' };
+            const DONE_KEY = 'cybDone';
+            function doneMap() { try { return JSON.parse(localStorage.getItem(DONE_KEY) || '{}'); } catch (e) { return {}; } }
+            function saveDone(d) { try { localStorage.setItem(DONE_KEY, JSON.stringify(d)); } catch (e) { } }
+            function totalSteps() { let n = 0; CYB_LESSONS.forEach(function (s) { n += s.items.length; }); return n; }
+            function pct(done) { const t = totalSteps(); if (!t) return 0; return Math.round(Object.keys(done).filter(function (k) { return done[k]; }).length / t * 100); }
+            function lessonsHTML() {
+                const done = doneMap();
+                let h = '<div class="ai-note">🛡️ ابدأ من الدرس الأول ثم انتقل بالترتيب. علّم ✔ كل فقرة فهمتها لتتابع تقدّمك.</div>'
+                    + '<div style="margin:10px 0 4px;font-weight:800">تقدّمك: ' + pct(done) + '%</div>'
+                    + '<div style="height:10px;border-radius:6px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)"><div style="height:100%;width:' + pct(done) + '%;background:var(--gold);transition:width .3s"></div></div>';
+                CYB_LESSONS.forEach(function (sec, si) {
+                    h += '<p class="fg-h" style="margin:16px 0 8px">' + esc(sec.t) + '</p>';
+                    sec.items.forEach(function (it, i) {
+                        const k = si + '_' + i;
+                        h += '<div class="fun-item" style="display:block"><p style="margin:0 0 6px;font-weight:800">' + esc(it[0]) + '</p>'
+                            + '<p style="margin:0;white-space:pre-line;line-height:1.9;color:var(--text-dim)">' + esc(it[1]) + '</p>'
+                            + '<button type="button" class="btn btn-ghost" data-cybstep="' + k + '" style="width:100%;margin-top:8px">' + (done[k] ? '✔ تم الفهم' : 'علّمها كمفهومة') + '</button></div>';
+                    });
+                });
+                return h;
+            }
+            function dictHTML() {
+                return '<p class="hint" style="margin:0 0 10px">كلمات إنجليزية تظهر كثيرًا في أدوات فحص الشبكات مثل nmap، بمعناها العربي وشرح مبسّط.</p>'
+                    + CYB_DICT.map(function (d) {
+                        return '<div class="fun-item" style="display:block"><p style="margin:0 0 3px"><b dir="ltr" style="display:inline-block">' + esc(d[0]) + '</b> — <span style="color:var(--gold);font-weight:800">' + esc(d[1]) + '</span></p>'
+                            + '<p style="margin:0;color:var(--text-dim);font-size:calc(12.5px * var(--font-scale));line-height:1.8">' + esc(d[2]) + '</p></div>';
+                    }).join('');
+            }
+            function decodeHTML() {
+                return '<div class="ai-note">🔍 الصق أي سطر إنجليزي من نتيجة فحص (nmap أو غيره) وسأشرحه لك كلمة كلمة، بلا حاجة لإنترنت.</div>'
+                    + '<textarea id="cybIn" class="mono" dir="ltr" placeholder="مثال: 22/tcp open ssh OpenSSH 7.9p1 Debian"></textarea>'
+                    + '<button type="button" class="btn btn-primary" id="cybGo" style="width:100%;margin-top:8px">فسّر السطر</button>'
+                    + '<div id="cybOut" style="margin-top:12px"></div>';
+            }
+            function bindLessons() {
+                root.querySelectorAll('[data-cybstep]').forEach(function (b) {
+                    b.addEventListener('click', function () {
+                        const k = b.getAttribute('data-cybstep');
+                        const done = doneMap();
+                        done[k] = !done[k];
+                        saveDone(done);
+                        render();
+                    });
+                });
+            }
+            function bindDecode() {
+                q(root, '#cybGo').addEventListener('click', function () {
+                    const v = q(root, '#cybIn').value;
+                    const out = cybDecode(v);
+                    q(root, '#cybOut').innerHTML = out ? '<div class="fun-item" style="display:block"><p style="margin:0;white-space:pre-line;line-height:1.9">' + esc(out) + '</p></div>' : '';
+                });
+            }
+            function render() {
+                root.innerHTML =
+                    '<div class="chip-row" style="margin-bottom:10px">'
+                    + '<button type="button" class="filter-chip' + (S.tab === 'lessons' ? ' active' : '') + '" data-cyb-tab="lessons">📚 الدروس</button>'
+                    + '<button type="button" class="filter-chip' + (S.tab === 'dict' ? ' active' : '') + '" data-cyb-tab="dict">📖 القاموس</button>'
+                    + '<button type="button" class="filter-chip' + (S.tab === 'decode' ? ' active' : '') + '" data-cyb-tab="decode">🔍 فكّك السطر</button>'
+                    + '<button type="button" class="filter-chip' + (S.tab === 'ask' ? ' active' : '') + '" data-cyb-tab="ask">💬 اسأل</button></div>'
+                    + '<div id="cybBody"></div>';
+                const body = q(root, '#cybBody');
+                if (S.tab === 'lessons') { body.innerHTML = lessonsHTML(); bindLessons(); }
+                else if (S.tab === 'dict') { body.innerHTML = dictHTML(); }
+                else if (S.tab === 'decode') { body.innerHTML = decodeHTML(); bindDecode(); }
+                else {
+                    buildChat(body, {
+                        id: 'cyberbasics', store: CYB_HIST, system: CYB_SYSTEM, speakDefault: false, autoSend: false,
+                        note: '💬 اسأل عن أي سطر أو مصطلح لم تفهمه. يتطلب إنترنت.',
+                        greeting: 'أهلًا بك 👋 أنا هنا لأساعدك تفهم فحوصات الشبكة وأنواع الثغرات خطوة بخطوة، بدون أي تعقيد. ألصق لي أي سطر أو اسأل أي سؤال.',
+                        placeholder: 'مثال: ماذا تعني كلمة filtered؟',
+                        quick: ['ماذا يعني open|filtered؟', 'كيف أعرف إن كان جهازي فيه ثغرة؟', 'ما الفرق بين TCP وUDP؟', 'كيف أحمي راوتري؟'],
+                        offline: function () { return '📴 لا يوجد إنترنت الآن. جرّب تبويب «فكّك السطر» فهو يعمل بلا إنترنت، أو راجع «الدروس» و«القاموس».'; }
+                    });
+                }
+                root.querySelectorAll('[data-cyb-tab]').forEach(function (b) {
+                    b.addEventListener('click', function () { S.tab = b.getAttribute('data-cyb-tab'); render(); });
                 });
             }
             render();
@@ -19497,7 +19820,7 @@ function gvInfo() {
                 const cr = (S.course && now - S.course.t < 4000 && S.course.sp >= 1.2) ? S.course : null;
                 if (cr && (!sensorOk || cr.sp >= 4))
                     return { h: cr.h, src: 'g' };
-                if (sensorOk)
+                if (sensorOk && !(S.rel && S.offN === 0))
                     return { h: GEO.wrap360(S.sh + S.off), src: 's' };
                 if (cr)
                     return { h: cr.h, src: 'g' };
@@ -19513,8 +19836,16 @@ function gvInfo() {
                 }
                 else if (e.alpha != null && (e.type === 'deviceorientationabsolute' || e.absolute === true)) {
                     const r = GEO.headingFromEuler(e.alpha, e.beta, e.gamma, sa);
-                    if (r)
+                    if (r) {
                         h = r.h;
+                        if (S.rel) { S.rel = false; S.off = 0; S.offN = 0; S.sh = null; }
+                        S.absAt = Date.now();
+                    }
+                }
+                else if (e.alpha != null && e.type === 'deviceorientation' && Date.now() - (S.absAt || 0) > 3000) {
+                    /* بعض المتصفحات/WebView لا تعطي بوصلة مطلقة: نستعمل الحساس النسبي ونعايره من اتجاه المشي */
+                    const r2 = GEO.headingFromEuler(e.alpha, e.beta, e.gamma, sa);
+                    if (r2) { h = r2.h; S.rel = true; }
                 }
                 if (h == null || !isFinite(h))
                     return;
@@ -19574,7 +19905,7 @@ function gvInfo() {
                     return;
                 S.offLoaded = true;
                 const o = offKey();
-                if (o && fin(o.v) && fin(o.lat) && fin(o.lng) && dist(lat(), lng(), o.lat, o.lng) < 400000) {
+                if (o && fin(o.v) && Math.abs(o.v) <= 30 && fin(o.lat) && fin(o.lng) && dist(lat(), lng(), o.lat, o.lng) < 400000) {
                     S.off = o.v;
                     S.offN = 3;
                 }
@@ -19583,9 +19914,11 @@ function gvInfo() {
             function calibrate(c, sp, hd) {
                 if (S.sh == null || Date.now() - S.shAt > 1500)
                     return;
-                if (!(fin(sp) && sp >= 2.5 && fin(hd) && (c.accuracy || 99) <= 35))
+                if (!(fin(sp) && sp >= (S.rel ? 1.2 : 2.5) && fin(hd) && (c.accuracy || 99) <= 35))
                     return;
                 const diff = GEO.wrap180(hd - S.sh);
+                if (!S.rel && Math.abs(diff) > 30)
+                    return; /* البوصلة المطلقة لا تحتاج تعويضاً كبيراً: تجاهل الاتجاهات الشاذة */
                 if (S.offN >= 5 && Math.abs(GEO.wrap180(diff - S.off)) > 50)
                     return;
                 if (S.offN === 0)
@@ -19737,6 +20070,8 @@ function gvInfo() {
             function onVis() {
                 if (document.visibilityState === 'visible') {
                     S.wl = null;
+                    S.lastAuto = 0;
+                    S.autoReq = 0;
                     lockScreen();
                     recheck(true, false);
                 }
@@ -19785,7 +20120,7 @@ function gvInfo() {
                 if (manual)
                     toast(p.state === 'granted' ? 'الإذن مفعّل' + (p.precise === false ? ' (تقريبي)' : '') : 'الحالة: ' + permLbl(p.state));
             }
-            async function retryLoc() {
+            async function retryLoc(silent) {
                 S.err = '';
                 S.errKind = '';
                 S.asked = true;
@@ -19801,9 +20136,9 @@ function gvInfo() {
                 updStat();
                 if (r.state === 'granted' || r.state === 'unknown' || (r.state === 'prompt' && r.src === 'web'))
                     startWatch();
-                else if (r.state === 'disabled')
+                else if (r.state === 'disabled' && !silent)
                     toast('خدمة الموقع ما زالت مغلقة');
-                else if (r.state === 'denied')
+                else if (r.state === 'denied' && !silent)
                     toast('الإذن ما زال مرفوضًا — فعّله من إعدادات الهاتف');
             }
             function permIntro() {
@@ -20705,7 +21040,7 @@ function gvInfo() {
                 const d = selDest();
                 return '<div class="gps-panel">'
                     + '<div class="gps-dst"><span>' + (d ? esc(d.name) : 'بدون وجهة') + '</span></div>'
-                    + '<div class="gps-dial"><svg viewBox="-6 -6 212 212" aria-label="سهم الاتجاه نحو الوجهة">'
+                    + '<div class="gps-dial"><svg viewBox="1 1 198 198" aria-label="سهم الاتجاه نحو الوجهة">'
                     + '<defs>'
                     + '<radialGradient id="gpsFace" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#2b2409"/><stop offset="1" stop-color="#0a0803"/></radialGradient>'
                     + '<linearGradient id="gpsRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe680"/><stop offset=".5" stop-color="#b98700"/><stop offset="1" stop-color="#ffd23a"/></linearGradient>'
@@ -20900,7 +21235,23 @@ function gvInfo() {
                     if (!S.pos && (st0 === 'denied' || st0 === 'disabled' || st0 === 'prompt' || st0 === 'unknown' || S.errKind === 'denied' || S.errKind === 'disabled')
                         && document.visibilityState === 'visible' && now - (S.lastAuto || 0) > 2500) {
                         S.lastAuto = now;
-                        recheck(false, false);
+                        recheck(false, false).then(function () {
+                            if (S.dead || S.pos || document.visibilityState !== 'visible')
+                                return;
+                            const st1 = S.perm && S.perm.state;
+                            if (st1 === 'granted')
+                                return;
+                            S.autoReq = (S.autoReq || 0) + 1;
+                            if (S.autoReq > 40)
+                                return;
+                            /* إعادة المحاولة تلقائيًا بدل ضغط الزر: طلب الإذن إن لم يُطلب، وإلا إعادة تشغيل التتبّع */
+                            if ((st1 === 'prompt' || st1 === 'unknown') && !S.reqBusy && S.autoReq <= 6) {
+                                S.reqBusy = true;
+                                retryLoc(true).then(function () { S.reqBusy = false; }, function () { S.reqBusy = false; });
+                            }
+                            else if (!S.reqBusy)
+                                startWatch();
+                        });
                     }
                 }
                 /* حارس: لو توقّفت القراءات رغم الإذن نعيد تشغيل التتبّع */
@@ -24616,7 +24967,7 @@ html body .icon-btn .badge-dot{font-size:11px;min-width:18px;height:18px;}
       }catch(e){}
       return id;
     }
-    function toY(y){ try{ window.scrollTo({top:y,left:0,behavior:'instant'}); }catch(e){ window.scrollTo(0,y); } }
+    function toY(y){ if(Math.abs((window.scrollY||0)-y)<1) return; try{ window.scrollTo({top:y,left:0,behavior:'instant'}); }catch(e){ window.scrollTo(0,y); } }
     function restore(y){
       toY(y);
       requestAnimationFrame(function(){ toY(y); });
@@ -24913,5 +25264,143 @@ html body .icon-btn .badge-dot{font-size:11px;min-width:18px;height:18px;}
     } catch (err) { /* لا تُعطّل التطبيق إن فشلت الميزة */ }
 })();
 </script>
+<style id="jitterFixAndProDark">
+/* ===== 1) إصلاح الارتجاف (كل الأوضاع) =====
+   السبب: الخلفية البارالاكس كانت تُعاد رسمها مع كل إطار تمرير، وحافظات بحركة نابضة/إمالة ثلاثية الأبعاد */
+html body .screen,html body .pro-screen,
+html[data-mode] .screen,html[data-mode] .pro-screen,
+html[data-mode="light"] .pro-screen,html[data-mode="light"] .screen:not(.pro-screen),
+html[data-mode="dark"] .screen{background-position:center top !important;}
+html body .folder-card,html body .item-card,html body .tool-shortcut{
+  transition:transform .15s ease-out,box-shadow .15s ease-out,background-color .15s ease-out,border-color .15s ease-out !important;
+}
+html body .folder-card:active:not(.dragging){transform:scale(.97) !important;}
+@media (hover:hover){html body .folder-card:hover{translate:none !important;}}
+html body .grid>.folder-card,html body .item-card,html body .note-card,html body .recent-card{animation:none !important;translate:none !important;scale:none !important;}
+html body .folder-card::before{display:none !important;}
+
+/* ===== 2) الوضع الداكن الاحترافي: أسود مسطّح + حدود صفراء ===== */
+html[data-mode="dark"]{
+  --bg:#000;--bg-elev:#0a0a0a;--surface:#0d0d0d;--surface-2:#141414;--border:#2a2a2a;
+  --text:#f5f5f5;--text-dim:#a3a3a3;--gold:#FFC400;--on-gold:#000;
+  --k-ink:#f5f5f5;--k-ink-2:#bdbdbd;--k-ink-3:#8f8f8f;--k-accent:#FFC400;
+  --k-glass-solid:#0a0a0a;--k-field:#0d0d0d;--k-field-brd:#2e2e2e;--k-sep:#222;
+  --p-sheet:#050505;--p-sheet-brd:#262626;--p-sheet-shadow:none;
+  --p-hero:none;--p-hero-photo:none;
+}
+html[data-mode="dark"],html[data-mode="dark"] body,
+html[data-mode="dark"] body .screen,html[data-mode="dark"] body .pro-screen,
+html[data-mode="dark"] body #screen-home{
+  background:#000 !important;background-image:none !important;
+}
+html[data-mode="dark"] #statusStrip{background:#000 !important;}
+html[data-mode="dark"] body .pro-sheet{
+  background:#050505 !important;border:1px solid #262626 !important;border-bottom:0 !important;
+  box-shadow:none !important;border-radius:28px 28px 0 0 !important;
+}
+/* البطاقات والحافظات: أسود مسطح بحد رفيع بدل الزجاج والظلال */
+html[data-mode="dark"] body :is(.item-card,.widget-block,.widget-clock,.settings-group,.stats-chip,.recent-card,.note-card,.select-bar,.folder-card,.tool-card){
+  background:#0d0d0d !important;border:1px solid #2a2a2a !important;box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+}
+html[data-mode="dark"] body .folder-card:active{border-color:#FFC400 !important;}
+html[data-mode="dark"] body .folder-card h3{color:#f5f5f5 !important;}
+html[data-mode="dark"] body .folder-card span{color:#8f8f8f !important;}
+/* الأيقونات: مسطحة بلا لمعان ولا وميض */
+html[data-mode="dark"] body :is(.folder-card .folder-icon,.tool-shortcut .t-icon){
+  border:1px solid rgba(255,255,255,.12) !important;box-shadow:none !important;border-radius:26% !important;
+}
+html[data-mode="dark"] body :is(.folder-card .folder-icon,.tool-shortcut .t-icon)::before,
+html[data-mode="dark"] body :is(.folder-card .folder-icon,.tool-shortcut .t-icon)::after,
+html[data-mode="dark"] body .folder-card::after{display:none !important;}
+html[data-mode="dark"] body .folder-card .folder-icon :is(svg,.fun-emoji){filter:none !important;}
+
+/* الصناديق والأزرار المشابهة لـ «إضافة لعبة أو أداة»: أسود بحدود صفراء */
+html[data-mode="dark"] body :is(.add-tool-btn.add-tool-btn,.quick-capture-btn,.widget-add-btn,.btn-ghost,.mini-btn,.hub-tabs button,.tools-head-label){
+  background:#000 !important;color:#FFC400 !important;
+  border:1.5px solid #FFC400 !important;box-shadow:none !important;
+  text-shadow:none !important;
+}
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn::before,
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn::after{content:none !important;display:none !important;}
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn b{color:#FFC400 !important;border-color:#FFC400 !important;background:transparent !important;}
+html[data-mode="dark"] body :is(.add-tool-btn.add-tool-btn,.quick-capture-btn,.widget-add-btn,.btn-ghost,.mini-btn):active{background:#1a1500 !important;}
+html[data-mode="dark"] body .hub-tabs button.on{background:#FFC400 !important;color:#000 !important;}
+/* الزر الرئيسي يبقى أصفر مصمتاً */
+html[data-mode="dark"] body :is(.btn-primary,.fab){background:#FFC400 !important;color:#000 !important;border:0 !important;box-shadow:none !important;}
+html[data-mode="dark"] body .fab svg{color:#000 !important;}
+/* أزرار الرأس */
+html[data-mode="dark"] body :is(.icon-btn,.theme-toggle,.browser-quick-btn){
+  background:#000 !important;color:#FFC400 !important;border:1.5px solid #FFC400 !important;box-shadow:none !important;
+}
+/* النوافذ والحقول */
+html[data-mode="dark"] body .modal,html[data-mode="dark"] body .confirm-box{
+  background:#0a0a0a !important;border:1px solid #FFC400 !important;box-shadow:none !important;
+}
+html[data-mode="dark"] body .modal-backdrop{background:rgba(0,0,0,.82) !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;}
+html[data-mode="dark"] body .modal-backdrop:is(#funToolBackdrop,#toolCompassBackdrop){background:#000 !important;}
+html[data-mode="dark"] body .modal-handle{background:#FFC400 !important;opacity:.6;}
+html[data-mode="dark"] body :is(input,textarea,select){background:#000 !important;border:1px solid #333 !important;color:#f5f5f5 !important;}
+html[data-mode="dark"] body :is(input,textarea,select):focus{border-color:#FFC400 !important;outline:none !important;box-shadow:none !important;}
+html[data-mode="dark"] body .view-actionbar{background:#0a0a0a !important;border-top:1px solid #FFC400 !important;box-shadow:none !important;}
+html[data-mode="dark"] #lockScreen{background:#000 !important;background-image:none !important;}
+</style>
+
+<style id="fixAddBoxesAndGps">
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn.add-tool-btn.add-tool-btn,
+html[data-mode="dark"] body .quick-capture-btn.quick-capture-btn.quick-capture-btn.quick-capture-btn,
+html[data-mode="dark"] body .pro-sheet .quick-capture-btn.quick-capture-btn.quick-capture-btn,
+html[data-mode="dark"] body .pro-sheet .add-tool-btn.add-tool-btn.add-tool-btn{
+  --surface:#000;--surface-2:#141414;--text:#FFC400;--gd-text:#FFC400;
+  background:#000 !important;background-image:none !important;
+  border:2px solid #FFC400 !important;color:#FFC400 !important;
+  box-shadow:none !important;animation:none !important;overflow:visible !important;
+}
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn.add-tool-btn.add-tool-btn svg,
+html[data-mode="dark"] body .quick-capture-btn.quick-capture-btn.quick-capture-btn.quick-capture-btn svg{color:#FFC400 !important;opacity:1 !important;}
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn.add-tool-btn.add-tool-btn b{
+  background:transparent !important;border:2px solid #FFC400 !important;color:#FFC400 !important;box-shadow:none !important;
+}
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn.add-tool-btn.add-tool-btn::before,
+html[data-mode="dark"] body .add-tool-btn.add-tool-btn.add-tool-btn.add-tool-btn::after,
+html[data-mode="dark"] body .quick-capture-btn.quick-capture-btn.quick-capture-btn.quick-capture-btn::before,
+html[data-mode="dark"] body .quick-capture-btn.quick-capture-btn.quick-capture-btn.quick-capture-btn::after{content:none !important;display:none !important;}
+html[data-mode="dark"] body .btn-primary.btn-primary.btn-primary.btn-primary,
+html[data-mode="dark"] body .screen:not(.pro-screen) .btn-primary.btn-primary.btn-primary{
+  background:#FFC400 !important;background-image:none !important;color:#000 !important;border:0 !important;box-shadow:none !important;animation:none !important;
+}
+html[data-mode="dark"] body .btn-ghost.btn-ghost,html[data-mode="dark"] body .btn.btn-ghost{
+  background:#000 !important;color:#FFC400 !important;border:1.5px solid #FFC400 !important;
+}
+html[data-mode="dark"] body input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),
+html[data-mode="dark"] body textarea,html[data-mode="dark"] body select,
+html[data-mode="dark"] body .modal input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),
+html[data-mode="dark"] body .modal textarea,html[data-mode="dark"] body .modal select,
+html[data-mode="dark"] body .gps-in,html[data-mode="dark"] body .hub-search input{
+  background:#000 !important;color:#fff !important;-webkit-text-fill-color:#fff !important;caret-color:#FFC400;
+  border:1.5px solid rgba(255,196,0,.75) !important;box-shadow:none !important;opacity:1 !important;
+}
+html[data-mode="dark"] body input::placeholder,html[data-mode="dark"] body textarea::placeholder{color:#9a9a9a !important;-webkit-text-fill-color:#9a9a9a !important;opacity:1 !important;}
+html[data-mode="dark"] body :is(input,textarea,select):focus{border-color:#FFC400 !important;}
+html[data-mode="dark"] body select option{background:#000;color:#fff;}
+html[data-mode="dark"] body .modal{color:#f5f5f5 !important;}
+html[data-mode="dark"] body :is(.hub-tile,.hub-hero button){border:1.5px solid #FFC400 !important;box-shadow:none !important;}
+html[data-mode="dark"] body .hub-tile{background:#000 !important;color:#f5f5f5 !important;}
+
+html body #funToolBackdrop .modal{padding:calc(var(--status-h) + 2px) 2px calc(60px + env(safe-area-inset-bottom)) !important;border:0 !important;}
+html body #funToolBackdrop .modal-head-row{margin-bottom:4px !important;}
+html body #gpsFrame .gps-tabs{margin:0 0 6px !important;padding:3px !important;gap:4px !important;}
+html body #gpsFrame .gps-tab{padding:7px 4px !important;}
+html body #gpsFrame .gps-panel{padding:4px 0 8px !important;margin-bottom:6px !important;border-radius:18px !important;}
+html body #gpsFrame .gps-dst{margin:0 0 2px !important;min-height:0 !important;font-size:15px !important;}
+html body #gpsFrame .gps-dial{margin:0 !important;padding:0 !important;}
+html body #gpsFrame .gps-dial svg{width:100% !important;max-width:min(100%,82vh) !important;margin-inline:auto;}
+html body #gpsFrame .gps-far{font-size:34px !important;margin:0 !important;line-height:1.2;}
+html body #gpsFrame .gps-sub{min-height:0 !important;margin:2px 8px 2px !important;line-height:1.6 !important;font-size:13px !important;}
+html body #gpsFrame .gps-stat{margin-bottom:6px !important;padding:7px 12px !important;}
+html body #gpsFrame .gps-row{margin:0 0 6px !important;}
+html body #gpsFrame .gps-big,html body #gpsFrame .gps-add{margin-bottom:6px !important;padding:11px !important;}
+html body #gpsFrame .gps-grid{gap:6px !important;margin-bottom:6px !important;}
+</style>
 </body>
   </html>
