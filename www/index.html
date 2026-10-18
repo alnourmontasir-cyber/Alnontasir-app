@@ -3029,6 +3029,7 @@ html body .folder-card:has(.select-check.checked){outline:2px solid var(--k-acce
     <span class="cmdv-count" id="cmdvCount">0</span>
   </div>
   <button type="button" class="add-tool-btn" onclick="cmdvOpenForm()"><b>＋</b> إضافة أمر جديد</button>
+  <div class="cmdv-tabs" id="cmdvTabs"></div>
   <div class="cmdv-bar">
     <input id="cmdvSearch" type="search" dir="rtl" placeholder="ابحث بالعنوان أو نص الأمر…" autocomplete="off">
     <select id="cmdvSort" aria-label="ترتيب الأوامر">
@@ -3066,10 +3067,23 @@ html body .folder-card:has(.select-check.checked){outline:2px solid var(--k-acce
   </div>
 </div>
 
+<div class="modal-backdrop" id="cmdvTabBackdrop" role="dialog" aria-modal="true" onclick="if(event.target===this)closeCmdvTab()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>اسم التبويب</h3>
+    <div class="field"><input id="cmdvTabName" dir="auto" maxlength="14" placeholder="مثال: الشبكة" autocomplete="off"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeCmdvTab()">إلغاء</button>
+      <button type="button" class="btn btn-primary" onclick="cmdvTabSave()">حفظ</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="cmdvModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="cmdvFormTitle" onclick="if(event.target===this)closeCmdvModal()">
   <div class="modal">
     <div class="modal-handle"></div>
     <h3 id="cmdvFormTitle">إضافة أمر</h3>
+    <div class="field"><label for="cmdvTabSel">التبويب</label><select id="cmdvTabSel"></select></div>
     <div class="field"><label for="cmdvTitle">عنوان الأمر</label><input id="cmdvTitle" dir="auto" placeholder="مثال: فحص الاتصال المستمر" autocomplete="off"></div>
     <div class="field"><label for="cmdvCmd">الأمر</label><textarea id="cmdvCmd" dir="ltr" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="ألصق الأمر أو اكتبه هنا"></textarea></div>
     <div class="field"><label for="cmdvDesc">الشرح (اختياري)</label><textarea id="cmdvDesc" dir="auto" placeholder="اكتب شرحًا لوظيفة الأمر"></textarea></div>
@@ -25727,13 +25741,26 @@ html[data-mode="dark"] body :is(#screen-cmdvault,#screen-cmdvview) .cmdv-copy.do
 .cmdv-addfab:active{transform:scale(.92);}
 #cmdvSubCmd{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre;overflow:auto;min-height:130px;}
 html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#000 !important;box-shadow:none !important;}
+
+:is(#screen-cmdvault,#screen-cmdvview) .cmdv-codebox{background:linear-gradient(160deg,#243157,#18223f);border:1px solid #3a4a86;box-shadow:0 4px 14px rgba(24,34,63,.25);}
+:is(#screen-cmdvault,#screen-cmdvview) .cmdv-codebar{background:rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.12);}
+:is(#screen-cmdvault,#screen-cmdvview) .cmdv-codelbl{color:#aebbef;}
+:is(#screen-cmdvault,#screen-cmdvview) pre.cmdv-code{color:#eef2ff;}
+.cmdv-tabs{display:flex;gap:6px;margin:12px 0 0;align-items:stretch;}
+.cmdv-tab{flex:1;min-width:0;padding:10px 6px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-weight:800;font-size:calc(13px * var(--font-scale));color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmdv-tab small{opacity:.75;font-weight:700;margin-inline-start:4px;}
+.cmdv-tab.on{background:var(--gold);color:var(--on-gold);border-color:transparent;}
+.cmdv-tab:active{transform:scale(.97);}
+.cmdv-tab-edit{flex:0 0 40px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:15px;}
+html[data-mode="dark"] body .cmdv-tab,html[data-mode="dark"] body .cmdv-tab-edit{background:#000 !important;border:1px solid #FFC400 !important;color:#FFC400 !important;}
+html[data-mode="dark"] body .cmdv-tab.on{background:#FFC400 !important;color:#000 !important;}
 </style>
 
 <script id="cmdVaultScript">
 (function () {
   'use strict';
   var KEY = 'cmdvault_v1';
-  var store = { items: [], sort: 'manual' };
+  var store = { items: [], sort: 'manual', tab: 0, tabs: ['التبويب 1', 'التبويب 2', 'التبويب 3'] };
   var editId = null, prevScreen = 'screen-tools', q = '', curId = null, editSub = null;
 
   function load() {
@@ -25743,9 +25770,11 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
         var o = JSON.parse(raw);
         if (o && Array.isArray(o.items)) store.items = o.items.filter(function (x) { return x && typeof x.cmd === 'string'; });
         if (o && o.sort) store.sort = o.sort;
+        if (o && Array.isArray(o.tabs) && o.tabs.length === 3) store.tabs = o.tabs.map(function (t, i) { return String(t || '').slice(0, 14) || ('التبويب ' + (i + 1)); });
+        if (o && (o.tab === 0 || o.tab === 1 || o.tab === 2)) store.tab = o.tab;
       }
     } catch (e) { console.warn('cmdvault load', e); }
-    store.items.forEach(function (x) { if (!Array.isArray(x.subs)) x.subs = []; });
+    store.items.forEach(function (x) { if (!Array.isArray(x.subs)) x.subs = []; if (x.tab !== 0 && x.tab !== 1 && x.tab !== 2) x.tab = 0; });
   }
   function persist() {
     try { localStorage.setItem(KEY, JSON.stringify(store)); return true; }
@@ -25822,7 +25851,7 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
 
   /* ---------- قائمة الأوامر ---------- */
   function visible() {
-    var list = store.items.slice();
+    var list = store.items.filter(function (x) { return x.tab === store.tab; });
     if (store.sort === 'new') list.sort(function (a, b) { return (b.created || 0) - (a.created || 0); });
     else if (store.sort === 'old') list.sort(function (a, b) { return (a.created || 0) - (b.created || 0); });
     else if (store.sort === 'title') list.sort(function (a, b) { return String(a.title).localeCompare(String(b.title), 'ar'); });
@@ -25838,10 +25867,12 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
     wrap.textContent = '';
     var list = visible();
     var canMove = store.sort === 'manual' && !q.trim();
-    $('cmdvCount').textContent = store.items.length + ' أمر';
+    var tabN = store.items.filter(function (x) { return x.tab === store.tab; }).length;
+    renderTabs();
+    $('cmdvCount').textContent = tabN + ' أمر';
     if (!list.length) {
       var e = document.createElement('div'); e.className = 'cmdv-empty';
-      e.innerHTML = store.items.length ? '<b>🔍</b>لا نتائج مطابقة للبحث' : '<b>🗄️</b>لا توجد أوامر بعد.<br>اضغط «إضافة أمر جديد» لحفظ أول أمر.';
+      e.innerHTML = tabN ? '<b>🔍</b>لا نتائج مطابقة للبحث' : '<b>🗄️</b>لا توجد أوامر في هذا التبويب بعد.<br>اضغط «إضافة أمر جديد» لحفظ أول أمر.';
       wrap.appendChild(e); return;
     }
     var frag = document.createDocumentFragment();
@@ -25860,9 +25891,12 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
     wrap.appendChild(frag);
   }
   function moveItem(id, dir) {
-    var i = store.items.findIndex(function (x) { return x.id === id; }), j = i + dir;
-    if (i < 0 || j < 0 || j >= store.items.length) return;
-    var t = store.items[i]; store.items[i] = store.items[j]; store.items[j] = t;
+    var i = store.items.findIndex(function (x) { return x.id === id; });
+    if (i < 0) return;
+    var t = store.items[i].tab, j = i + dir;
+    while (j >= 0 && j < store.items.length && store.items[j].tab !== t) j += dir;
+    if (j < 0 || j >= store.items.length) return;
+    var tmp = store.items[i]; store.items[i] = store.items[j]; store.items[j] = tmp;
     persist(); render();
   }
   function del(id) {
@@ -25964,6 +25998,7 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
     $('cmdvTitle').value = it ? it.title : '';
     $('cmdvCmd').value = it ? it.cmd : '';
     $('cmdvDesc').value = it ? (it.desc || '') : '';
+    fillTabSel(it ? it.tab : store.tab);
     $('cmdvModalBackdrop').classList.add('active');
     setTimeout(function () { $('cmdvTitle').focus(); }, 200);
   }
@@ -25972,21 +26007,58 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
     var title = $('cmdvTitle').value.trim();
     var cmd = $('cmdvCmd').value;
     var desc = $('cmdvDesc').value.trim();
+    var tabSel = parseInt($('cmdvTabSel').value, 10) || 0;
     if (!title) { toast('اكتب عنوان الأمر'); return; }
     if (!cmd.trim()) { toast('اكتب الأمر نفسه'); return; }
     var newId = null;
     if (editId) {
       var it = find(editId);
-      if (it) { it.title = title; it.cmd = cmd; it.desc = desc; it.updated = Date.now(); }
+      if (it) { it.title = title; it.cmd = cmd; it.desc = desc; it.tab = tabSel; it.updated = Date.now(); }
     } else {
       newId = uid();
-      store.items.unshift({ id: newId, title: title, cmd: cmd, desc: desc, subs: [], created: Date.now(), updated: Date.now() });
+      store.items.unshift({ id: newId, title: title, cmd: cmd, desc: desc, subs: [], tab: tabSel, created: Date.now(), updated: Date.now() });
     }
     if (!persist()) return;
-    closeForm(); render();
+    store.tab = tabSel; persist(); closeForm(); render();
     if (newId) { toast('تم حفظ الأمر'); openDetail(newId); }
     else { toast('تم تعديل الأمر'); if (activeId() === 'screen-cmdvview') renderDetail(); }
   }
+
+  /* ---------- التبويبات ---------- */
+  function renderTabs() {
+    var box = $('cmdvTabs'); if (!box) return;
+    box.textContent = '';
+    store.tabs.forEach(function (name, i) {
+      var n = store.items.filter(function (x) { return x.tab === i; }).length;
+      var b = document.createElement('button'); b.type = 'button';
+      b.className = 'cmdv-tab' + (i === store.tab ? ' on' : '');
+      b.appendChild(document.createTextNode(name));
+      var sm = document.createElement('small'); sm.textContent = n; b.appendChild(sm);
+      b.addEventListener('click', function () { store.tab = i; persist(); render(); });
+      box.appendChild(b);
+    });
+    var ed = document.createElement('button'); ed.type = 'button'; ed.className = 'cmdv-tab-edit';
+    ed.textContent = '✎'; ed.title = 'تسمية التبويب الحالي'; ed.setAttribute('aria-label', 'تسمية التبويب الحالي');
+    ed.addEventListener('click', function () {
+      $('cmdvTabName').value = store.tabs[store.tab];
+      $('cmdvTabBackdrop').classList.add('active');
+      setTimeout(function () { $('cmdvTabName').focus(); $('cmdvTabName').select(); }, 200);
+    });
+    box.appendChild(ed);
+  }
+  function fillTabSel(v) {
+    var sel = $('cmdvTabSel'); sel.textContent = '';
+    store.tabs.forEach(function (name, i) { var o = document.createElement('option'); o.value = i; o.textContent = name; sel.appendChild(o); });
+    sel.value = String(v || 0);
+  }
+  function tabSave() {
+    var n = $('cmdvTabName').value.trim().slice(0, 14);
+    if (!n) { toast('اكتب اسم التبويب'); return; }
+    store.tabs[store.tab] = n; persist(); closeTab(); render(); toast('تم تغيير اسم التبويب');
+  }
+  function closeTab() { $('cmdvTabBackdrop').classList.remove('active'); }
+  window.closeCmdvTab = closeTab;
+  window.cmdvTabSave = tabSave;
 
   window.closeCmdvModal = closeForm;
   window.cmdvOpenForm = function () { openForm(null); };
@@ -26006,7 +26078,7 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
 
   load();
   /* عزل الكتابة: لا يصل أي حدث لوحة مفاتيح من خانات الأداة إلى بقية التطبيق */
-  ['cmdvTitle', 'cmdvCmd', 'cmdvDesc', 'cmdvSearch', 'cmdvSubTitle', 'cmdvSubCmd'].forEach(function (id) {
+  ['cmdvTitle', 'cmdvCmd', 'cmdvDesc', 'cmdvSearch', 'cmdvSubTitle', 'cmdvSubCmd', 'cmdvTabName'].forEach(function (id) {
     var el = $(id); if (!el) return;
     ['keydown', 'keyup', 'keypress'].forEach(function (ev) { el.addEventListener(ev, function (e) { e.stopPropagation(); }); });
   });
