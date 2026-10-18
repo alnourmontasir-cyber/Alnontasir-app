@@ -25754,6 +25754,41 @@ html[data-mode="dark"] body .cmdv-addfab{background:#FFC400 !important;color:#00
 .cmdv-tab-edit{flex:0 0 40px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:15px;}
 html[data-mode="dark"] body .cmdv-tab,html[data-mode="dark"] body .cmdv-tab-edit{background:#000 !important;border:1px solid #FFC400 !important;color:#FFC400 !important;}
 html[data-mode="dark"] body .cmdv-tab.on{background:#FFC400 !important;color:#000 !important;}
+
+.cmdv-group{display:flex;flex-direction:column;gap:10px;}
+.cmdv-badge-btn{align-self:flex-start;margin:-6px 6px 0;padding:6px 12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);}
+.cmdv-addsub{margin-inline-start:16px;padding:11px 14px;border-radius:12px;border:1.5px dashed var(--gold);background:transparent;color:var(--gold);font-weight:800;font-size:calc(13.5px * var(--font-scale));text-align:center;}
+.cmdv-addsub b{margin-inline-end:4px;font-size:1.2em;}
+.cmdv-addsub:active{transform:scale(.97);}
+html[data-mode="dark"] body .cmdv-addsub{border-color:#FFC400 !important;color:#FFC400 !important;}
+html[data-mode="dark"] body .cmdv-badge-btn{background:#000 !important;border-color:#FFC400 !important;color:#FFC400 !important;}
+
+/* ===== البطاقة الرئيسية: زجاجية شفافة بحواف مستديرة ===== */
+:is(#screen-cmdvault,#screen-cmdvview) .cmdv-card:not(.cmdv-sub){
+  background:linear-gradient(145deg,rgba(255,255,255,.38),rgba(255,255,255,.12)) !important;
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);
+  border:1px solid rgba(148,102,0,.28) !important;
+  border-radius:26px;padding:16px;
+  box-shadow:0 8px 28px rgba(16,24,40,.10),inset 0 1px 0 rgba(255,255,255,.55) !important;
+}
+:is(#screen-cmdvault,#screen-cmdvview) .cmdv-card:not(.cmdv-sub) .cmdv-codebox{
+  border-radius:18px;
+  background:linear-gradient(160deg,rgba(36,49,87,.78),rgba(24,34,63,.62));
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 6px 18px rgba(24,34,63,.18);
+}
+:is(#screen-cmdvault,#screen-cmdvview) .cmdv-card:not(.cmdv-sub) .cmdv-tbtn{
+  background:rgba(255,255,255,.35);border:1px solid rgba(148,102,0,.22);border-radius:12px;
+}
+html[data-mode="dark"] body :is(#screen-cmdvault,#screen-cmdvview) .cmdv-card:not(.cmdv-sub){
+  background:linear-gradient(145deg,rgba(255,196,0,.10),rgba(255,255,255,.03)) !important;
+  border:1px solid rgba(255,196,0,.55) !important;
+  box-shadow:0 8px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+html[data-mode="dark"] body :is(#screen-cmdvault,#screen-cmdvview) .cmdv-card:not(.cmdv-sub) .cmdv-tbtn{
+  background:rgba(255,255,255,.06) !important;border:1px solid rgba(255,196,0,.45) !important;
+}
 </style>
 
 <script id="cmdVaultScript">
@@ -25885,11 +25920,37 @@ html[data-mode="dark"] body .cmdv-tab.on{background:#FFC400 !important;color:#00
       tools.push(tbtn('⤢', 'فتح بشاشة كاملة', function () { openDetail(it.id); }));
       tools.push(tbtn('✎', 'تعديل', function () { openForm(it.id); }));
       tools.push(tbtn('🗑', 'حذف', function () { del(it.id); }));
-      var badge = it.subs.length ? '💬 ' + it.subs.length + ' أوامر تحته — اضغط للفتح' : '';
-      frag.appendChild(entryEl(it, tools, function () { openDetail(it.id); }, badge, false));
+      var group = document.createElement('div'); group.className = 'cmdv-group';
+      var card = entryEl(it, tools, function () { openDetail(it.id); }, '', false);
+      var n = it.subs.length, showSubs = !it.collapsed || !!q.trim();
+      if (n) {
+        var bd = document.createElement('button'); bd.type = 'button'; bd.className = 'cmdv-badge cmdv-badge-btn';
+        bd.textContent = (showSubs ? '▾ ' : '◂ ') + '💬 ' + n + ' أوامر تحته';
+        bd.addEventListener('click', function () { it.collapsed = !it.collapsed; persist(); render(); });
+        card.querySelector('.cmdv-head').after(bd);
+      }
+      group.appendChild(card);
+      if (showSubs) {
+        it.subs.forEach(function (sb, j) {
+          var st = [
+            tbtn('▲', 'تحريك لأعلى', function () { curId = it.id; moveSub(sb.id, -1); }, j === 0),
+            tbtn('▼', 'تحريك لأسفل', function () { curId = it.id; moveSub(sb.id, 1); }, j === n - 1),
+            tbtn('✎', 'تعديل', function () { curId = it.id; loadComposer(sb.id); }),
+            tbtn('🗑', 'حذف', function () { curId = it.id; delSub(sb.id); })
+          ];
+          group.appendChild(entryEl(sb, st, null, '', true));
+        });
+      }
+      var add = document.createElement('button'); add.type = 'button'; add.className = 'cmdv-addsub';
+      add.innerHTML = '<b>＋</b> إضافة أمر تحت «<span></span>»';
+      add.querySelector('span').textContent = it.title || '';
+      add.addEventListener('click', function () { curId = it.id; if (it.collapsed) { it.collapsed = false; persist(); } openSub(); });
+      group.appendChild(add);
+      frag.appendChild(group);
     });
     wrap.appendChild(frag);
   }
+  function refresh() { if (activeId() === 'screen-cmdvview') renderDetail(); else render(); }
   function moveItem(id, dir) {
     var i = store.items.findIndex(function (x) { return x.id === id; });
     if (i < 0) return;
@@ -25970,16 +26031,16 @@ html[data-mode="dark"] body .cmdv-tab.on{background:#FFC400 !important;color:#00
       it.subs.push({ id: uid(), title: title, cmd: cmd, created: Date.now() });
     }
     if (!persist()) return;
-    closeSub(); renderDetail();
+    closeSub(); refresh();
     toast(editing ? 'تم تعديل الأمر' : 'تمت إضافة الأمر');
-    if (!editing) scrollBottom();
+    if (!editing && activeId() === 'screen-cmdvview') scrollBottom();
   }
   function delSub(sid) {
     var it = find(curId); if (!it) return;
     showConfirm('حذف الأمر', 'هل تريد حذف هذا الأمر؟ لا يمكن التراجع.', function () {
       it.subs = it.subs.filter(function (x) { return x.id !== sid; });
       if (editSub === sid) clearComposer();
-      persist(); renderDetail(); toast('تم حذف الأمر');
+      persist(); refresh(); toast('تم حذف الأمر');
     });
   }
   function moveSub(sid, dir) {
@@ -25987,7 +26048,7 @@ html[data-mode="dark"] body .cmdv-tab.on{background:#FFC400 !important;color:#00
     var i = it.subs.findIndex(function (x) { return x.id === sid; }), j = i + dir;
     if (i < 0 || j < 0 || j >= it.subs.length) return;
     var t = it.subs[i]; it.subs[i] = it.subs[j]; it.subs[j] = t;
-    persist(); renderDetail();
+    persist(); refresh();
   }
 
   /* ---------- نموذج إضافة / تعديل الأمر الرئيسي ---------- */
@@ -26020,7 +26081,7 @@ html[data-mode="dark"] body .cmdv-tab.on{background:#FFC400 !important;color:#00
     }
     if (!persist()) return;
     store.tab = tabSel; persist(); closeForm(); render();
-    if (newId) { toast('تم حفظ الأمر'); openDetail(newId); }
+    if (newId) { toast('تم حفظ الأمر — يمكنك إضافة أوامر تحته الآن'); }
     else { toast('تم تعديل الأمر'); if (activeId() === 'screen-cmdvview') renderDetail(); }
   }
 
